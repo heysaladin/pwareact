@@ -7,17 +7,19 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Offline from './components/Offline';
+import Splash from './pages/Splash';
 
 function App() {
   const [items, setItems] = React.useState([]);
   const [offlineStatus, setOfflineStatus] = React.useState(!navigator.onLine);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   function handleOfflineStatus() {
     setOfflineStatus(!navigator.onLine);
   }
 
   React.useEffect(function () {
-     (async function () {
+    (async function () {
       const response = await fetch('https://prod-qore-app.qorebase.io/8ySrll0jkMkSJVk/allItems/rows?limit=7&offset=0&$order=asc', {
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +41,11 @@ function App() {
     window.addEventListener('online', handleOfflineStatus);
     window.addEventListener('offline', handleOfflineStatus);
 
-    return function() {
+    setTimeout(function () {
+      setIsLoading(false);
+    }, 1500);
+
+    return function () {
       window.removeEventListener('online', handleOfflineStatus);
       window.removeEventListener('offline', handleOfflineStatus);
     }
@@ -47,14 +53,18 @@ function App() {
 
   return (
     <div className="App">
-      {offlineStatus && <Offline />}
-      <Header />
-      <Hero />
-      <Browse />
-      <Arrived items={items} />
-      <Clients />
-      <Aside />
-      <Footer />
+      {isLoading === true ? <Splash /> : (
+        <>
+          {offlineStatus && <Offline />}
+          <Header />
+          <Hero />
+          <Browse />
+          <Arrived items={items} />
+          <Clients />
+          <Aside />
+          <Footer />
+        </>
+      )}
     </div>
   );
 }
