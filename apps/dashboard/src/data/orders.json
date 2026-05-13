@@ -1,0 +1,82 @@
+[
+  {
+    "id": "PLN-1071", "createdAt": "March 11, 2026, 01:00 PM", "updatedAt": "March 12, 2026, 02:00 PM",
+    "priority": "LOW", "slaTimeLeft": "22h left", "slaEscalation": "Escalation in 22h 43m", "slaProgress": 75,
+    "aiScore": 93, "customerName": "Mustafa Barakat Adhi", "customerId": "1074404649",
+    "customerPhone": "+966586868658", "customerEmail": "mustafa.barakat@gmail.com",
+    "productName": "Buyout Debt Repayment Product", "productNameAr": "منتج سداد الديون عن طريق شراء الأصول",
+    "status": "Pending", "loanAmount": "﷼ 234,732.5", "apr": "4.45%", "managementFees": "﷼ 2,190.49", "brokerageFees": "﷼ 2,190.49"
+  },
+  {
+    "id": "PLN-1072", "createdAt": "March 10, 2026, 10:00 AM", "updatedAt": "March 11, 2026, 09:00 AM",
+    "priority": "HIGH", "slaTimeLeft": "3h left", "slaEscalation": "Escalation in 3h 15m", "slaProgress": 20,
+    "aiScore": 72, "customerName": "Ahmed Al-Rashidi", "customerId": "1074502311",
+    "customerPhone": "+966512345678", "customerEmail": "ahmed.rashidi@example.com",
+    "productName": "Personal Finance Product", "productNameAr": "منتج التمويل الشخصي",
+    "status": "Under Review", "loanAmount": "﷼ 150,000.0", "apr": "3.99%", "managementFees": "﷼ 1,500.00", "brokerageFees": "﷼ 1,200.00"
+  },
+  {
+    "id": "PLN-1073", "createdAt": "March 09, 2026, 08:30 AM", "updatedAt": "March 10, 2026, 11:00 AM",
+    "priority": "MEDIUM", "slaTimeLeft": "10h left", "slaEscalation": "Escalation in 10h 00m", "slaProgress": 50,
+    "aiScore": 55, "customerName": "Sara Mohammed Al-Otaibi", "customerId": "1085771234",
+    "customerPhone": "+966501112233", "customerEmail": "sara.otaibi@example.com",
+    "productName": "Home Finance Product", "productNameAr": "منتج تمويل المنازل",
+    "status": "Approved", "loanAmount": "﷼ 500,000.0", "apr": "5.10%", "managementFees": "﷼ 4,800.00", "brokerageFees": "﷼ 3,500.00"
+  },
+  {
+    "id": "PLN-1074", "createdAt": "March 08, 2026, 02:00 PM", "updatedAt": "March 09, 2026, 03:00 PM",
+    "priority": "CRITICAL", "slaTimeLeft": "1h left", "slaEscalation": "Escalation in 1h 05m", "slaProgress": 8,
+    "aiScore": 31, "customerName": "Khalid Ibrahim Nasser", "customerId": "1063391847",
+    "customerPhone": "+966598765432", "customerEmail": "khalid.nasser@example.com",
+    "productName": "Car Finance Product", "productNameAr": "منتج تمويل السيارات",
+    "status": "Pending", "loanAmount": "﷼ 90,000.0", "apr": "6.25%", "managementFees": "﷼ 890.00", "brokerageFees": "﷼ 750.00"
+  },
+  {
+    "id": "PLN-1075", "createdAt": "March 07, 2026, 09:00 AM", "updatedAt": "March 08, 2026, 10:15 AM",
+    "priority": "LOW", "slaTimeLeft": "30h left", "slaEscalation": "Escalation in 30h 00m", "slaProgress": 90,
+    "aiScore": 88, "customerName": "Noura Abdullah Al-Shammari", "customerId": "1076661122",
+    "customerPhone": "+966566554433", "customerEmail": "noura.shammari@example.com",
+    "productName": "Buyout Debt Repayment Product", "productNameAr": "منتج سداد الديون عن طريق شراء الأصول",
+    "status": "Completed", "loanAmount": "﷼ 320,000.0", "apr": "4.00%", "managementFees": "﷼ 3,200.00", "brokerageFees": "﷼ 2,800.00"
+  },
+  {
+    "id": "PLN-1076", "createdAt": "March 06, 2026, 11:30 AM", "updatedAt": "March 07, 2026, 01:00 PM",
+    "priority": "MEDIUM", "slaTimeLeft": "8h left", "slaEscalation": "Escalation in 8h 30m", "slaProgress": 40,
+    "aiScore": 61, "customerName": "Faisal Turki Al-Ghamdi", "customerId": "1054438271",
+    "customerPhone": "+966533221100", "customerEmail": "faisal.ghamdi@example.com",
+    "productName": "Personal Finance Product", "productNameAr": "منتج التمويل الشخصي",
+    "status": "Rejected", "loanAmount": "﷼ 75,000.0", "apr": "7.00%", "managementFees": "﷼ 700.00", "brokerageFees": "﷼ 600.00"
+  },
+  {
+    "id": "PLN-1077", "createdAt": "March 05, 2026, 03:00 PM", "updatedAt": "March 06, 2026, 04:00 PM",
+    "priority": "HIGH", "slaTimeLeft": "5h left", "slaEscalation": "Escalation in 5h 20m", "slaProgress": 25,
+    "aiScore": 47, "customerName": "Reem Saad Al-Zahrani", "customerId": "1089990011",
+    "customerPhone": "+966577889900", "customerEmail": "reem.zahrani@example.com",
+    "productName": "Home Finance Product", "productNameAr": "منتج تمويل المنازل",
+    "status": "Under Review", "loanAmount": "﷼ 680,000.0", "apr": "4.75%", "managementFees": "﷼ 6,200.00", "brokerageFees": "﷼ 5,100.00"
+  },
+  {
+    "id": "PLN-1078", "createdAt": "March 04, 2026, 08:00 AM", "updatedAt": "March 05, 2026, 09:00 AM",
+    "priority": "LOW", "slaTimeLeft": "25h left", "slaEscalation": "Escalation in 25h 00m", "slaProgress": 80,
+    "aiScore": 95, "customerName": "Omar Hassan Al-Qahtani", "customerId": "1067772233",
+    "customerPhone": "+966544332211", "customerEmail": "omar.qahtani@example.com",
+    "productName": "Car Finance Product", "productNameAr": "منتج تمويل السيارات",
+    "status": "Approved", "loanAmount": "﷼ 110,000.0", "apr": "3.75%", "managementFees": "﷼ 1,050.00", "brokerageFees": "﷼ 900.00"
+  },
+  {
+    "id": "PLN-1079", "createdAt": "March 03, 2026, 01:00 PM", "updatedAt": "March 04, 2026, 02:30 PM",
+    "priority": "CRITICAL", "slaTimeLeft": "45m left", "slaEscalation": "Escalation in 0h 45m", "slaProgress": 3,
+    "aiScore": 22, "customerName": "Hana Abdulrahman Al-Harbi", "customerId": "1072214567",
+    "customerPhone": "+966555443322", "customerEmail": "hana.harbi@example.com",
+    "productName": "Buyout Debt Repayment Product", "productNameAr": "منتج سداد الديون عن طريق شراء الأصول",
+    "status": "Pending", "loanAmount": "﷼ 195,000.0", "apr": "5.50%", "managementFees": "﷼ 1,800.00", "brokerageFees": "﷼ 1,600.00"
+  },
+  {
+    "id": "PLN-1080", "createdAt": "March 02, 2026, 10:00 AM", "updatedAt": "March 03, 2026, 11:00 AM",
+    "priority": "MEDIUM", "slaTimeLeft": "12h left", "slaEscalation": "Escalation in 12h 00m", "slaProgress": 55,
+    "aiScore": 78, "customerName": "Tariq Saeed Al-Dosari", "customerId": "1058881234",
+    "customerPhone": "+966511223344", "customerEmail": "tariq.dosari@example.com",
+    "productName": "Personal Finance Product", "productNameAr": "منتج التمويل الشخصي",
+    "status": "Under Review", "loanAmount": "﷼ 60,000.0", "apr": "4.25%", "managementFees": "﷼ 580.00", "brokerageFees": "﷼ 490.00"
+  }
+]

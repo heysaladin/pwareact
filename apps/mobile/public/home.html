@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tamweel Pulse</title>
+  <link rel="stylesheet" href="/kit.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <style>
+    body { margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f4f4f5; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="/ios-frame.jsx"></script>
+  <script type="text/babel" src="/Primitives.jsx"></script>
+  <script type="text/babel" src="/Screens.jsx"></script>
+  <script type="text/babel">
+    const { useState } = React;
+
+    /* ---- GTC in-project tabbed shell ---- */
+    function GTCApp({ onBack, showToast }) {
+      const [tab, setTab] = useState('home');
+      const [openTx, setOpenTx] = useState(null);
+      const [notifItem, setNotifItem] = useState(null);
+      const [showSettings, setShowSettings] = useState(false);
+      const [dark, setDark] = useState(false);
+
+      const renderScreen = () => {
+        if (openTx)    return <TransactionDetail tx={openTx} onBack={() => setOpenTx(null)} onDelete={() => setOpenTx(null)} />;
+        if (notifItem) return <NotificationDetail item={notifItem} onBack={() => setNotifItem(null)} />;
+        if (showSettings) return <SettingsScreen onBack={() => setShowSettings(false)} dark={dark} onToggleDark={() => setDark(!dark)} />;
+        switch (tab) {
+          case 'home':    return <HomeScreen onOpenTx={() => {}} onToast={showToast} />;
+          case 'search':  return <SearchScreen />;
+          case 'create':  return <CreateScreen onDone={() => { showToast('Saved'); setTab('home'); }} onCancel={() => setTab('home')} />;
+          case 'inbox':   return <InboxScreen onOpenDetail={setNotifItem} onToast={showToast} />;
+          case 'profile': return <ProfileScreen onOpenSettings={() => setShowSettings(true)} onLogout={() => { showToast('Signed out'); onBack(); }} />;
+          default:        return <HomeScreen onOpenTx={() => {}} onToast={showToast} />;
+        }
+      };
+
+      const hideTabbar = openTx || notifItem || showSettings;
+
+      return (
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--background)', color: 'var(--foreground)', overflow: 'hidden' }}>
+          <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            {renderScreen()}
+          </div>
+          {!hideTabbar && (
+            <nav className="tabbar" style={{ position: 'relative', padding: '10px 8px 28px' }}>
+              {[
+                { id: 'home',    icon: 'home',   label: 'Home' },
+                { id: 'search',  icon: 'search', label: 'Search' },
+                { id: 'create',  icon: 'plus',   label: 'New' },
+                { id: 'inbox',   icon: 'bell',   label: 'Inbox' },
+                { id: 'profile', icon: 'user',   label: 'Profile' },
+              ].map(t => (
+                <button key={t.id} className={cx('tab', tab === t.id && 'active')} onClick={() => setTab(t.id)}>
+                  <Icon name={t.icon} size={22} />
+                  {t.label}
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
+      );
+    }
+
+    /* ---- Root App with landing router ---- */
+    function App() {
+      const [toast, setToast] = useState(null);
+      const [route, setRoute] = useState('landing');   // 'landing' | 'project'
+      const [activeProject, setActiveProject] = useState(null);
+
+      const showToast = (msg) => { setToast({ msg }); setTimeout(() => setToast(null), 2500); };
+
+      const openProject = (p) => { setActiveProject(p); setRoute('project'); };
+      const goBack      = ()  => { setActiveProject(null); setRoute('landing'); };
+
+      const renderContent = () => {
+        if (route === 'project' && activeProject) {
+          return <GTCApp onBack={goBack} showToast={showToast} />;
+        }
+        return <LandingScreen onOpen={openProject} />;
+      };
+
+      const handleClockDoubleClick = route === 'project' ? goBack : undefined;
+
+      return (
+        <div className="device-wrap">
+          <IOSDevice width={390} height={844} onClockDoubleClick={handleClockDoubleClick}>
+            <Toast toast={toast} />
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--background)', color: 'var(--foreground)', overflow: 'hidden' }}>
+              {renderContent()}
+            </div>
+          </IOSDevice>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

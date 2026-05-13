@@ -1,2 +1,0 @@
-# pwareact
-PWA React
