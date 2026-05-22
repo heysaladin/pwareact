@@ -918,6 +918,8 @@ const GTC_SCREENS = [
   { name: 'Component Showcase',  icon: 'layers' },
 ];
 
+const HOME_SCREENS = [];
+
 const PROJECTS = [
   {
     id: 'gtc',
@@ -925,6 +927,14 @@ const PROJECTS = [
     desc: 'General Transaction Console',
     color: '#18181b',
     screens: GTC_SCREENS.length,
+    status: 'Active',
+  },
+  {
+    id: 'home',
+    name: 'Home',
+    desc: 'Home Project',
+    color: '#0063F5',
+    screens: HOME_SCREENS.length,
     status: 'Active',
   },
 ];
