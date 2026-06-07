@@ -1,5 +1,69 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Ultralight.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Thin.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Heavy.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Arabic";
+  src: url("/fonts/sf-arabic/SFArabic-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -28,6 +92,7 @@
   --color-error-600: #d91c1c;
   --color-secondary-light: #ffdd33;
   --font-family-base: "IBM Plex Sans", sans-serif;
+  --font-family-arabic: "SF Arabic", "SF Pro", -apple-system, sans-serif;
   --spacing-0: 0px;
   --spacing-2: 2px;
   --spacing-4: 4px;
@@ -59,6 +124,17 @@ body {
   font-family: var(--font-family-base);
   background-color: var(--color-gray-25);
   color: var(--color-gray-900);
+}
+
+[dir="rtl"] {
+  font-family: var(--font-family-arabic);
+}
+
+/* Numbers and LTR content inside RTL should stay in base font */
+[dir="rtl"] .font-ltr {
+  font-family: var(--font-family-base);
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 @keyframes fade-in-scale {

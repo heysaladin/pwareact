@@ -3,20 +3,19 @@ import { useState } from 'react';
 import { Calendar, Filter, TrendingUp, ChevronDown, Clock, X } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLang } from '@/lib/language-context';
 
 type PanelKey = 'timeFilter' | 'quickInsights' | 'financingVolume' | 'providers';
 
-const TIME_OPTIONS = ['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'This month', 'Last month', 'Year to date'];
-const INSIGHTS_OPTIONS = [
-  '1 Denied — 219,048.60',
-  '2 Servicing — 177,508.40',
-  '0 Disbursed — 0.00',
-  '24 Cancelled — 3,243,072.90',
-  '1 Not eligible — 123,456.00',
-  '3 Rejected — 465,960.60',
-  '2 In review — 307,008.10',
-];
-const FINANCING_OPTIONS = ['Real Estate (617,280.00)', 'Personal Loan (3,918,774.60)'];
+const TIME_OPTIONS     = ['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'This month', 'Last month', 'Year to date'];
+const TIME_OPTIONS_AR  = ['اليوم', 'أمس', 'آخر 7 أيام', 'آخر 30 يومًا', 'هذا الشهر', 'الشهر الماضي', 'من بداية العام'];
+
+const INSIGHTS_OPTIONS    = ['1 Denied — 219,048.60', '2 Servicing — 177,508.40', '0 Disbursed — 0.00', '24 Cancelled — 3,243,072.90', '1 Not eligible — 123,456.00', '3 Rejected — 465,960.60', '2 In review — 307,008.10'];
+const INSIGHTS_OPTIONS_AR = ['1 مرفوض — 219,048.60', '2 خدمة — 177,508.40', '0 صُرف — 0.00', '24 ملغى — 3,243,072.90', '1 غير مؤهل — 123,456.00', '3 رُفض — 465,960.60', '2 قيد المراجعة — 307,008.10'];
+
+const FINANCING_OPTIONS    = ['Real Estate (617,280.00)', 'Personal Loan (3,918,774.60)'];
+const FINANCING_OPTIONS_AR = ['العقارات (617,280.00)', 'قرض شخصي (3,918,774.60)'];
+
 const PROVIDER_OPTIONS = ['FAB Bank (9)', 'Real estate provider (9)', 'Amlak (9)', 'ANB (9)', 'Riyad Bank (9)', 'Social Development Bank (9)', 'SNB (9)', 'Al-Rajhi (9)', 'Bank Albilad (9)'];
 
 function FilterToggleButton({
@@ -92,24 +91,30 @@ function InsightPanel({
 }
 
 export default function FilterBar() {
+  const { lang } = useLang();
+  const isAr = lang === 'ar';
   const [openPanels, setOpenPanels] = useState<Set<PanelKey>>(new Set());
-  const [selectedTime, setSelectedTime] = useState('Last month');
+  const [selectedTimeIdx, setSelectedTimeIdx] = useState(5); // Last month
 
   const toggle = (key: PanelKey) =>
     setOpenPanels((prev) => {
       const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
+      if (next.has(key)) { next.delete(key); } else { next.add(key); }
       return next;
     });
 
   const close = (key: PanelKey) =>
     setOpenPanels((prev) => { const next = new Set(prev); next.delete(key); return next; });
 
+  const timeOpts    = isAr ? TIME_OPTIONS_AR    : TIME_OPTIONS;
+  const insightOpts = isAr ? INSIGHTS_OPTIONS_AR : INSIGHTS_OPTIONS;
+  const financeOpts = isAr ? FINANCING_OPTIONS_AR : FINANCING_OPTIONS;
+
   const panels: { key: PanelKey; options: string[]; activeOption?: string; onSelect?: (v: string) => void }[] = [
-    { key: 'timeFilter',       options: TIME_OPTIONS,      activeOption: selectedTime, onSelect: setSelectedTime },
-    { key: 'quickInsights',    options: INSIGHTS_OPTIONS },
-    { key: 'financingVolume',  options: FINANCING_OPTIONS },
-    { key: 'providers',        options: PROVIDER_OPTIONS },
+    { key: 'timeFilter',      options: timeOpts,    activeOption: timeOpts[selectedTimeIdx], onSelect: (v) => setSelectedTimeIdx(timeOpts.indexOf(v)) },
+    { key: 'quickInsights',   options: insightOpts },
+    { key: 'financingVolume', options: financeOpts },
+    { key: 'providers',       options: PROVIDER_OPTIONS },
   ];
 
   return (
@@ -120,16 +125,18 @@ export default function FilterBar() {
           <div className="flex items-center gap-1.5">
             <Calendar className="w-4 h-4 shrink-0 text-[#4b5565] dark:text-slate-400" />
             <span className="text-[14px] font-semibold text-[#4b5565] dark:text-slate-300">
-              January 01, 2026, 02:00 AM → March 11, 2026, 01:00 PM
+              {isAr
+                ? '1 يناير 2026، 02:00 ص ← 11 مارس 2026، 01:00 م'
+                : 'January 01, 2026, 02:00 AM → March 11, 2026, 01:00 PM'}
             </span>
           </div>
-          <FilterToggleButton icon={Clock} label="Time Filter" active={openPanels.has('timeFilter')} onClick={() => toggle('timeFilter')} />
+          <FilterToggleButton icon={Clock} label={isAr ? 'فلتر الوقت' : 'Time Filter'} active={openPanels.has('timeFilter')} onClick={() => toggle('timeFilter')} />
         </div>
 
         <div className="flex items-center gap-1.5">
-          <FilterToggleButton icon={Filter}      label="Quick Insights"             active={openPanels.has('quickInsights')}   hasChevron onClick={() => toggle('quickInsights')} />
-          <FilterToggleButton icon={TrendingUp}  label="Financing Volume Breakdown"  active={openPanels.has('financingVolume')} hasChevron onClick={() => toggle('financingVolume')} />
-          <FilterToggleButton icon={TrendingUp}  label="Providers"                   active={openPanels.has('providers')}      hasChevron onClick={() => toggle('providers')} />
+          <FilterToggleButton icon={Filter}     label={isAr ? 'رؤى سريعة'           : 'Quick Insights'}             active={openPanels.has('quickInsights')}   hasChevron onClick={() => toggle('quickInsights')} />
+          <FilterToggleButton icon={TrendingUp} label={isAr ? 'تفاصيل حجم التمويل'  : 'Financing Volume Breakdown'}  active={openPanels.has('financingVolume')} hasChevron onClick={() => toggle('financingVolume')} />
+          <FilterToggleButton icon={TrendingUp} label={isAr ? 'مزودون'              : 'Providers'}                   active={openPanels.has('providers')}      hasChevron onClick={() => toggle('providers')} />
         </div>
       </div>
 

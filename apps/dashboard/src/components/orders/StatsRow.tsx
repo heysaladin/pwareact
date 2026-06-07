@@ -1,5 +1,6 @@
 'use client';
 import SARSymbol from '@/components/ui/SARSymbol';
+import { useLang } from '@/lib/language-context';
 
 type StatCardProps = {
   label: string;
@@ -41,15 +42,22 @@ function StatCard({ label, value, variant = 'white', isCurrency = false }: StatC
   );
 }
 
+const labels = {
+  en: ['Total Amount Received', 'Total Orders', 'SLA Breached', 'Critical / High', 'New Queue', 'Avg AI Score'],
+  ar: ['إجمالي المبلغ المستلم', 'إجمالي الطلبات', 'تم اختراق SLA', 'حرج / مرتفع', 'قائمة انتظار جديدة', 'متوسط نتيجة AI'],
+} as const;
+
 export default function StatsRow() {
+  const { lang } = useLang();
+  const l = labels[lang];
   return (
     <div className="flex gap-4 w-full">
-      <StatCard label="Total Amount Received" value="4,536,054.60" isCurrency variant="yellow" />
-      <StatCard label="Total Orders" value="33" variant="blue" />
-      <StatCard label="SLA Breached" value="8" />
-      <StatCard label="Critical / High" value="10" />
-      <StatCard label="New Queue" value="6" />
-      <StatCard label="Avg AI Score" value="80" />
+      <StatCard label={l[0]} value="4,536,054.60" isCurrency variant="yellow" />
+      <StatCard label={l[1]} value="33" variant="blue" />
+      <StatCard label={l[2]} value="8" />
+      <StatCard label={l[3]} value="10" />
+      <StatCard label={l[4]} value="6" />
+      <StatCard label={l[5]} value="80" />
     </div>
   );
 }

@@ -2,7 +2,26 @@
 import { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import { Star, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import SARSymbol from '@/components/ui/SARSymbol';
+import { useLang } from '@/lib/language-context';
+
+const priorityLabel: Record<string, { en: string; ar: string }> = {
+  LOW:      { en: 'LOW',    ar: 'قليل' },
+  MEDIUM:   { en: 'MEDIUM', ar: 'واسطة' },
+  HIGH:     { en: 'HIGH',   ar: 'عالي' },
+  CRITICAL: { en: 'HIGH',   ar: 'عالي' },
+};
+
+function fmtSlaTime(text: string): string {
+  const h = text.match(/^(\d+)h(?:\s*(\d+)m)?\s*left$/);
+  const m = text.match(/^(\d+)m\s*left$/);
+  if (h) return h[2] ? `باقي ${h[1]} ساعة ${h[2]} دقيقة` : `باقي ${h[1]} ساعة`;
+  if (m) return `${m[1]} دقيقة متبقية`;
+  return text;
+}
+
+function fmtSlaEsc(text: string): string {
+  return text.replace(/^Escalation in/, 'تصعيد في');
+}
 
 type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 type OrderStatus = 'Pending' | 'Approved' | 'Rejected' | 'Under Review' | 'Completed';
@@ -51,6 +70,8 @@ export default function ConciseOrderList({
   onSelect: (id: string) => void;
   onClose: () => void;
 }) {
+  const { lang } = useLang();
+  const isAr = lang === 'ar';
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const prevPositions = useRef<Map<string, number>>(new Map());
@@ -104,9 +125,9 @@ export default function ConciseOrderList({
             ? { top: chevronTop, transform: 'translateY(-50%)', transition: 'top 350ms cubic-bezier(0.16, 1, 0.3, 1)' }
             : { top: '50%', transform: 'translateY(-50%)' }
         }
-        className="absolute -right-4 z-30 inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-[#d5d7da] shadow-sm hover:bg-[#f9fafb] text-[#344054] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+        className="absolute -end-4 z-30 inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-[#d5d7da] shadow-sm hover:bg-[#f9fafb] text-[#344054] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="w-4 h-4 rtl:rotate-180" />
       </button>
 
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -118,7 +139,7 @@ export default function ConciseOrderList({
 
         {/* Title */}
         <div className="flex items-center px-4 py-4 bg-white shrink-0 border-b border-[#f2f4f7] dark:bg-slate-950 dark:border-slate-800">
-          <span className="text-[#0063f5] text-2xl font-bold">Orders</span>
+          <span className="text-[#0063f5] text-2xl font-bold">{isAr ? 'طلبات' : 'Orders'}</span>
         </div>
 
         {/* List */}
@@ -149,13 +170,13 @@ export default function ConciseOrderList({
                 )}
               >
                 <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-                  <span className="text-[14px] font-semibold text-[#181d27] leading-snug dark:text-slate-100">{order.id}</span>
+                  <span className="text-[14px] font-semibold text-[#181d27] leading-snug dark:text-slate-100 font-ltr" dir="auto">{order.id}</span>
                   <div className="flex items-center justify-between">
                     <span className={cn('flex items-center gap-1 px-2 py-1 rounded-full border text-[14px] font-semibold', ai.bg, ai.border, ai.text)}>
                       <Star className="w-3 h-3" />{order.aiScore}
                     </span>
                     <span className={cn('flex items-center justify-center h-8 px-3 py-2 rounded-full border text-[14px] font-semibold', pri.bg, pri.border, pri.text)}>
-                      {order.priority}
+                      {isAr ? (priorityLabel[order.priority]?.ar ?? order.priority) : (priorityLabel[order.priority]?.en ?? order.priority)}
                     </span>
                   </div>
                   <div className="flex flex-col gap-0.5">
@@ -163,12 +184,12 @@ export default function ConciseOrderList({
                       <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', isSlaBreached ? 'bg-[#d91c1c]' : 'bg-[#697586]')}>
                         <span className={cn('block w-full h-full rounded-full', slaColor.replace('text-', 'bg-'))} />
                       </span>
-                      <span className={cn('text-[12px] font-medium', slaColor)}>
-                        {isSlaBreached ? 'Breached' : order.slaTimeLeft}
+                      <span className={cn('text-[12px] font-medium', slaColor)} dir="auto">
+                        {isSlaBreached ? (isAr ? 'تم اختراقها' : 'Breached') : (isAr ? fmtSlaTime(order.slaTimeLeft) : order.slaTimeLeft)}
                       </span>
                     </div>
-                    <span className="text-[12px] text-[#697586] dark:text-slate-400">
-                      {isSlaBreached ? 'Escalation now' : order.slaEscalation}
+                    <span className="text-[12px] text-[#697586] dark:text-slate-400" dir="auto">
+                      {isSlaBreached ? (isAr ? 'تصعيد الآن' : 'Escalation now') : (isAr ? fmtSlaEsc(order.slaEscalation) : order.slaEscalation)}
                     </span>
                   </div>
                 </div>
