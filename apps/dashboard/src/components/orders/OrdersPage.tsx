@@ -80,7 +80,7 @@ export default function OrdersPage() {
             />
             <div className={`flex min-w-0 flex-1 ${rightPanel ? 'gap-2 pr-2 pt-2 pb-2' : ''}`}>
               <OrderDetailPanel
-                order={selectedOrder}
+                order={selectedOrder!}
                 onClose={handleClose}
                 onOpenCustomerDetails={() => setRightPanel('customer')}
                 onOpenProductDetails={() => setRightPanel('product')}
@@ -93,14 +93,14 @@ export default function OrdersPage() {
                     : undefined
                 }
               />
-              {rightPanel === 'customer' && (
+              {rightPanel === 'customer' && selectedOrder && (
                 <CustomerDetailsPanel
                   order={selectedOrder}
                   onClose={() => setRightPanel(null)}
                   className={isWide ? undefined : 'flex-1 min-w-0 basis-0 w-auto'}
                 />
               )}
-              {rightPanel === 'product' && (
+              {rightPanel === 'product' && selectedOrder && (
                 <ProductDetailsPanel
                   order={selectedOrder}
                   onClose={() => setRightPanel(null)}

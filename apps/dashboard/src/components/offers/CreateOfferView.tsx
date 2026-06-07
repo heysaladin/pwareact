@@ -285,7 +285,7 @@ function Step5() {
       <div className="border border-[#FEC84B] bg-[#FFFAEB] dark:bg-amber-950/30 dark:border-amber-800 rounded-xl p-4">
         <p className="text-sm font-semibold text-[#b54708] mb-2">⚠ Pre-Launch Checks</p>
         <ul className="text-xs text-[#667085] dark:text-slate-400 space-y-1 leading-relaxed list-disc list-inside">
-          <li>Conflict detected with "High SIMAH Premium Rate" (overlapping segment). Priority will resolve: this offer wins.</li>
+          <li>Conflict detected with &quot;High SIMAH Premium Rate&quot; (overlapping segment). Priority will resolve: this offer wins.</li>
           <li>Budget projected to exhaust by Day 24. Consider increasing budget or tightening targeting.</li>
           <li>Offer will be reviewed by Tamawal admin before activation (est. 2 hours).</li>
         </ul>
