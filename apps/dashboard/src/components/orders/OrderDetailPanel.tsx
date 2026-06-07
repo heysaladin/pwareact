@@ -1,11 +1,12 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle, ChevronRight } from 'lucide-react';
 import SARSymbol from '@/components/ui/SARSymbol';
 import { cn } from '@/lib/utils';
 import OrderStatusOverlay from './OrderStatusOverlay';
 import ConfirmSubmissionModal from './ConfirmSubmissionModal';
 import PipelineStatusOverlay from './PipelineStatusOverlay';
+import MessageHubOverlay from './MessageHubOverlay';
 
 type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 type OrderStatus = 'Pending' | 'Approved' | 'Rejected' | 'Under Review' | 'Completed';
@@ -155,6 +156,7 @@ export default function OrderDetailPanel({
   className?: string;
 }) {
   const [statusOverlayOpen, setStatusOverlayOpen] = useState(false);
+  const [messageHubOpen, setMessageHubOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [activePipeline, setActivePipeline] = useState<{ label: string; value: string } | null>(null);
   const [fillHeight, setFillHeight] = useState(false);
@@ -382,8 +384,13 @@ export default function OrderDetailPanel({
         {/* Right: Tracking Timeline */}
         {!customerPanelOpen && (
           <div className="w-[460px] shrink-0 flex flex-col overflow-y-auto px-6 pt-6 pb-4">
-            <div className="pb-4 shrink-0">
-              <span className="text-[18px] leading-[28px] font-semibold text-[#697586] dark:text-slate-100">Tracking Timeline</span>
+            <div className="pb-4 shrink-0 flex items-center justify-between w-full">
+              <span className="font-semibold text-[16px] leading-normal text-[#697586]">Tracking Timeline</span>
+              <button onClick={() => setMessageHubOpen(true)} className="cursor-pointer flex items-center gap-1 border border-[#d7e7fe] rounded-[8px] px-2 py-2 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] min-w-[120px]">
+                <MessageCircle className="w-5 h-5 text-[#0063f5]" />
+                <span className="text-[14px] font-medium leading-5 tracking-[0.014px] text-[#0063f5] px-0.5">Send messsage</span>
+                <ChevronRight className="w-5 h-5 text-[#0063f5]" />
+              </button>
             </div>
             <div className="relative flex flex-col">
               <span aria-hidden className="absolute left-[18px] top-[26px] bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
@@ -479,6 +486,9 @@ export default function OrderDetailPanel({
     )}
     {activePipeline && (
       <PipelineStatusOverlay item={activePipeline} onClose={() => setActivePipeline(null)} />
+    )}
+    {messageHubOpen && (
+      <MessageHubOverlay onClose={() => setMessageHubOpen(false)} />
     )}
     {confirmModalOpen && (
       <ConfirmSubmissionModal
