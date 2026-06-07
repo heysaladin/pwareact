@@ -27,14 +27,15 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 type RightPanel = 'customer' | 'product' | null;
 
 export default function OrdersPage() {
-  const { orders, justEscalated } = useOrderSimulation();
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [rightPanel, setRightPanel] = useState<RightPanel>(null);
   const windowWidth = useWindowWidth();
   const isWide = windowWidth > 1440;
 
+  const isSplitView = selectedOrderId !== null;
+  const { orders, justEscalated } = useOrderSimulation(isSplitView);
+
   const selectedOrder = orders.find((o) => o.id === selectedOrderId) ?? null;
-  const isSplitView = selectedOrder !== null;
 
   function handleSelectOrder(id: string) {
     setSelectedOrderId(id);
@@ -46,10 +47,26 @@ export default function OrdersPage() {
     setRightPanel(null);
   }
 
+  if (windowWidth < 1024) {
+    return (
+      <div className="w-full min-h-screen bg-[#f8fafc] dark:bg-slate-950 flex flex-col items-center justify-center gap-6 px-8 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-[#fff7ed] border border-[#fed7aa] flex items-center justify-center text-3xl">
+          🖥️
+        </div>
+        <div className="flex flex-col gap-2 max-w-xs">
+          <p className="text-[18px] font-semibold text-[#181d27] dark:text-slate-100">Screen too small</p>
+          <p className="text-[14px] text-[#697586] dark:text-slate-400 leading-6">
+            This dashboard is designed for wide screens. Please open it on a laptop or desktop for the best experience.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+    <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
       <Topbar />
-      <main className="flex-1 px-6 pt-4 flex flex-col gap-4 min-h-0">
+      <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
         {!isSplitView && <FilterBar />}
         {!isSplitView && <StatsRow />}
 
@@ -61,7 +78,7 @@ export default function OrdersPage() {
               onSelect={handleSelectOrder}
               onClose={handleClose}
             />
-            <div className={`flex min-w-0 flex-1 ${rightPanel ? 'gap-2 pr-2' : ''}`}>
+            <div className={`flex min-w-0 flex-1 ${rightPanel ? 'gap-2 pr-2 pt-2 pb-2' : ''}`}>
               <OrderDetailPanel
                 order={selectedOrder}
                 onClose={handleClose}

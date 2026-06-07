@@ -1,5 +1,5 @@
 'use client';
-import { X } from 'lucide-react';
+import { X, Settings } from 'lucide-react';
 import SARSymbol from '@/components/ui/SARSymbol';
 
 const imgProductIcon = '/illustrations/simple-category-icon-perspective---personal.svg';
@@ -36,77 +36,83 @@ export default function ProductDetailsPanel({
   const amount = order.loanAmount.replace(/﷼\s?/, '');
 
   return (
-    <div className="w-[588px] shrink-0 flex flex-col border-l border-[#f2f4f7] overflow-hidden dark:border-slate-800 dark:bg-slate-950">
+    <div className="w-[588px] shrink-0 flex flex-col rounded-[6px] border border-[#e2e3e4] bg-white overflow-hidden dark:border-slate-800 dark:bg-slate-950">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#f2f4f7] shrink-0 dark:border-slate-800">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-[#f2f4f7] shrink-0 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] text-[#667085] dark:text-slate-400">Product ID</span>
-          <span className="text-[18px] font-bold text-[#181d27] dark:text-slate-100">{order.id}</span>
+          <span className="text-[12px] leading-[18px] font-medium text-[#697586] dark:text-slate-400">Product ID</span>
+          <span className="text-[18px] leading-[28px] font-bold text-[#181d27] dark:text-slate-100">PROD4535353</span>
         </div>
         <button
           onClick={onClose}
-          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#f9fafb] transition-colors dark:hover:bg-slate-800"
+          className="flex items-center justify-center w-10 h-10 rounded-full border border-[#fee2e2] text-[#d91c1c] hover:bg-[#fff1f3] transition-colors dark:border-red-900 dark:hover:bg-red-950"
         >
-          <X className="w-4 h-4 text-[#667085] dark:text-slate-400" />
+          <X className="w-4 h-4" />
         </button>
       </div>
 
       <div className="flex flex-col flex-1 overflow-y-auto">
-        {/* Title */}
-        <div className="px-6 py-6">
-          <h2 className="text-[22px] font-bold text-[#181d27] dark:text-slate-100">Product Details</h2>
-        </div>
+        <div className="px-6 pt-6 pb-4 flex flex-col gap-6">
 
-        <div className="px-6 py-4 flex flex-col gap-4">
-          {/* Category card */}
-          <div className="border border-[#e3e8ef] rounded-lg p-4 flex items-center justify-between dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] text-[#697586] font-medium dark:text-slate-400">Product category</span>
-              <span className="text-[28px] font-bold text-[#181d27] leading-tight dark:text-slate-100">Personal Loan</span>
+          {/* Title */}
+          <h2 className="text-[24px] font-bold text-[#181d27] dark:text-slate-100">Product Details</h2>
+
+          {/* Category cards row */}
+          <div className="flex gap-3">
+            {/* Left: category + illustration */}
+            <div className="flex-1 border border-[#e3e8ef] rounded-[8px] p-4 flex items-center justify-between dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex flex-col gap-2">
+                <span className="text-[12px] text-[#697586] font-medium dark:text-slate-400">Product category</span>
+                <span className="text-[28px] font-bold text-[#181d27] leading-tight dark:text-slate-100">Personal Loan</span>
+              </div>
+              <img src={imgProductIcon} alt="" className="w-20 h-20 shrink-0 object-contain" />
             </div>
-            <img src={imgProductIcon} alt="" className="w-16 h-16 shrink-0" />
-            <div className="flex flex-col gap-1 text-right">
-              <span className="text-[11px] text-[#697586] font-medium dark:text-slate-400">DBR percentage</span>
+
+            {/* Right: DBR */}
+            <div className="w-[136px] shrink-0 border border-[#e3e8ef] rounded-[8px] p-4 flex flex-col gap-2 dark:border-slate-800 dark:bg-slate-900">
+              <Settings className="w-5 h-5 text-[#697586] dark:text-slate-400" />
+              <span className="text-[12px] text-[#697586] font-medium dark:text-slate-400">DBR percentage</span>
               <span className="text-[28px] font-bold text-[#181d27] leading-tight dark:text-slate-100">2.64%</span>
             </div>
           </div>
 
           {/* Product name */}
-          <div className="flex flex-col gap-0.5">
-            <p className="text-[18px] font-bold text-[#181d27] dark:text-slate-100">{order.productName}</p>
-            <p className="text-left text-[13px] text-[#667085] dark:text-slate-400" dir="ltr">{order.productNameAr}</p>
+          <div className="flex flex-col gap-2">
+            <p className="text-[24px] leading-[1.35] font-bold text-[#121a26] dark:text-slate-100">{order.productName}</p>
+            <p className="text-left text-[16px] leading-[1.35] text-[#667085] dark:text-slate-400" dir="ltr">{order.productNameAr}</p>
           </div>
 
           {/* Provider / Loan / APR */}
-          <div className="grid grid-cols-3 gap-4 pb-4 border-b border-[#f2f4f7] dark:border-slate-800">
-            <div className="flex flex-col gap-2">
-              <span className="text-[11px] text-[#697586] font-medium uppercase tracking-wide dark:text-slate-400">Provider</span>
+          <div className="grid grid-cols-3 gap-4 pb-6 border-b border-[#f2f4f7] dark:border-slate-800">
+            <div className="flex flex-col gap-3">
+              <span className="text-[14px] font-semibold text-[#697586] dark:text-slate-400">Provider</span>
               <img src={imgBankLogo} alt="Alinma Bank" className="h-10 w-auto object-contain object-left" />
             </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-[11px] text-[#697586] font-medium uppercase tracking-wide dark:text-slate-400">Loan Amount</span>
+            <div className="flex flex-col gap-3">
+              <span className="text-[14px] font-semibold text-[#697586] dark:text-slate-400">Loan Amount</span>
               <span className="text-[22px] font-bold text-[#181d27] flex items-center gap-1 dark:text-slate-100">
                 <SARSymbol className="w-5 h-4" />{amount}
               </span>
             </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-[11px] text-[#697586] font-medium uppercase tracking-wide dark:text-slate-400">APR:</span>
+            <div className="flex flex-col gap-3">
+              <span className="text-[14px] font-semibold text-[#697586] dark:text-slate-400">APR:</span>
               <span className="text-[22px] font-bold text-[#181d27] dark:text-slate-100">{order.apr}</span>
             </div>
           </div>
 
           {/* Specs table */}
-          <div className="flex flex-col">
+          <div className="flex flex-col rounded-[6px] overflow-hidden border border-[#f2f4f7] dark:border-slate-800">
             {PRODUCT_SPECS.map((spec, i) => (
               <div
                 key={spec.label}
-                className={`flex items-center justify-between py-3 ${i < PRODUCT_SPECS.length - 1 ? 'border-b border-[#f2f4f7] dark:border-slate-800' : ''}`}
+                className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? 'bg-[#f9fafb] dark:bg-slate-900' : 'bg-white dark:bg-slate-950'} ${i < PRODUCT_SPECS.length - 1 ? 'border-b border-[#f2f4f7] dark:border-slate-800' : ''}`}
               >
                 <span className="text-[13px] text-[#697586] dark:text-slate-400">{spec.label}</span>
                 <span className="text-[13px] font-semibold text-[#181d27] dark:text-slate-100">{spec.value}</span>
               </div>
             ))}
           </div>
+
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle } from 'lucide-react';
 import SARSymbol from '@/components/ui/SARSymbol';
 import { cn } from '@/lib/utils';
 import OrderStatusOverlay from './OrderStatusOverlay';
@@ -44,52 +44,90 @@ const imgProductIcon = '/illustrations/simple-category-icon-perspective---person
 const imgBrandWatermark = '/illustrations/bg-logo-color.svg';
 const imgSarWatermark = '/illustrations/bg-sar-light.svg';
 
+type TimelineIconType = 'bank' | 'bank-warning' | 'message' | 'provider' | 'phone' | 'review' | 'aml' | 'system' | 'created';
+type ActorType = 'agent' | 'customer' | 'provider' | 'system';
+
 type TimelineEvent = {
   time: string;
-  icon: 'bank' | 'message';
+  icon: TimelineIconType;
   title: string;
   actor: string;
-  text: string;
+  actorType?: ActorType;
+  text?: string;
   action?: string;
   counterOffer?: boolean;
+  recalled?: boolean;
 };
 
+function getDotColor(icon: TimelineIconType): string {
+  switch (icon) {
+    case 'bank':     return 'bg-[#079455]';
+    case 'bank-warning': return 'bg-[#ea8808]';
+    case 'message':  return 'bg-[#ea8808]';
+    case 'provider': return 'bg-[#0063f5]';
+    case 'phone':    return 'bg-[#0063f5]';
+    case 'review':   return 'bg-[#7c3aed]';
+    case 'aml':      return 'bg-[#ea8808]';
+    case 'system':   return 'bg-[#9aa4b2]';
+    case 'created':  return 'bg-[#079455]';
+  }
+}
+
+function getActorColor(actorType?: ActorType): string {
+  switch (actorType) {
+    case 'customer': return 'text-[#0e9384]';
+    case 'provider': return 'text-[#ea8808]';
+    case 'system':   return 'text-[#7c3aed]';
+    default:         return 'text-[#0063f5]';
+  }
+}
+
+const T = '2025-07-13 10:44:22';
+
 const MOCK_TIMELINE: TimelineEvent[] = [
-  {
-    time: '2025-07-13 10:44:22',
-    icon: 'bank',
-    title: 'Brokerage fees Partially Refunded',
-    actor: 'Alyaa',
-    text: 'The partial refund request for {amount} has been successfully submitted. Status updated to Partially Refunded.',
-    action: '+ Refund',
-  },
-  {
-    time: '2025-07-13 10:44:22',
-    icon: 'bank',
-    title: 'Refund',
-    actor: 'Alyaa',
-    text: 'The refund request for {amount} has been successfully submitted. status updated to Refund.',
-  },
-  {
-    time: '2025-07-13 10:44:22',
-    icon: 'message',
-    title: 'Text Message',
-    actor: 'Alyaa',
-    text: '"Updated offer"\n"Your offer has been updated."',
-    counterOffer: true,
-  },
+  { time: T, icon: 'bank', title: 'Brokerage fees Partially Refunded', actor: 'Alyaa', text: 'The partial refund request for {amount} has been successfully submitted. Status updated to Partially Refunded.', action: '+ Refund' },
+  { time: T, icon: 'bank', title: 'Refund', actor: 'Alyaa', text: 'The refund request for {amount} has been successfully submitted. Status updated to Refund.' },
+  { time: T, icon: 'message', title: 'Text Message', actor: 'Alyaa', text: '"Updated offer"\n"Your offer has been updated."', counterOffer: true },
+  { time: T, icon: 'bank', title: 'Brokerage fees paid', actor: 'Customer', actorType: 'customer', text: 'Brokerage fee payment of {amount} failed. The customer has been requested to retry the payment.', action: '+ Refund' },
+  { time: T, icon: 'bank-warning', title: 'Brokerage fees failed', actor: 'Customer', actorType: 'customer', text: 'Brokerage fee payment of {amount} failed. The customer has been requested to retry the payment.' },
+  { time: T, icon: 'bank-warning', title: 'Brokerage fees Scheduled', actor: 'Alyaa', text: 'Brokerage fee payment is pending. The customer needs to review and complete the payment of {amount} to proceed.' },
+  { time: T, icon: 'bank-warning', title: 'RECALLED', actor: 'Alyaa', text: 'Brokerage fee payment is pending. The customer needs to review and complete the payment of {amount} to proceed.', recalled: true },
+  { time: T, icon: 'bank', title: 'Brokerage fees Sent', actor: 'Alyaa', text: 'Brokerage fee payment is pending. The customer needs to review and complete the payment of {amount} to proceed.' },
+  { time: T, icon: 'bank-warning', title: 'Brokerage fees Scheduled', actor: 'Alyaa', text: 'Brokerage fee payment is pending. The customer needs to review and complete the payment of {amount} to proceed.' },
+  { time: T, icon: 'provider', title: 'Text Message', actor: 'provider', actorType: 'provider', text: 'Title for text message\n"The body for text message, this can be so long and takes space so much. Let\'s try to make example of long text here. Yes, so long."' },
+  { time: T, icon: 'provider', title: 'Text Message', actor: 'provider', actorType: 'provider', text: 'Title for text message\n"The body for text message, this can be so long and takes space so much. Let\'s try to make example of long text here. Yes, so long."' },
+  { time: T, icon: 'provider', title: 'Loan Disbursed', actor: 'provider', actorType: 'provider' },
+  { time: T, icon: 'provider', title: 'Provider reviewing the order', actor: 'provider', actorType: 'provider' },
+  { time: T, icon: 'provider', title: 'Text Message', actor: 'provider', actorType: 'provider', text: 'Title for text message\n"The body for text message, this can be so long and takes space so much. Let\'s try to make example of long text here. Yes, so long."' },
+  { time: T, icon: 'review', title: 'Review the customer, Order, and Approve', actor: 'Brokerage Team Agent' },
+  { time: T, icon: 'aml', title: 'AML Team approves order', actor: 'Alyaa' },
+  { time: T, icon: 'phone', title: 'Customer confirms during call', actor: 'Alyaa' },
+  { time: T, icon: 'phone', title: 'No response (Without SLA)', actor: 'Mike' },
+  { time: T, icon: 'phone', title: '3rd call attempt – no response, notification sent', actor: 'Alyaa' },
+  { time: T, icon: 'phone', title: '2nd call attempt – no response', actor: 'Alyaa' },
+  { time: T, icon: 'phone', title: '1st call attempt – no response', actor: 'Alyaa' },
+  { time: T, icon: 'system', title: 'System auto-transitions to Servicing', actor: 'System Automation', actorType: 'system' },
+  { time: T, icon: 'system', title: 'Order assigned to Brokerage Team', actor: 'System Automation', actorType: 'system' },
+  { time: T, icon: 'system', title: 'Order forwarded to AML', actor: 'System Automation', actorType: 'system' },
+  { time: T, icon: 'created', title: 'Order is created', actor: 'System', actorType: 'system' },
 ];
 
-function TimelineIcon({ type }: { type: 'bank' | 'message' }) {
-  if (type === 'message')
-    return (
-      <div className="w-8 h-8 rounded-full bg-[#fff5e7] flex items-center justify-center shrink-0 dark:bg-amber-950">
-        <MessageCircle className="w-4 h-4 text-[#ea8808]" />
-      </div>
-    );
+function TimelineIcon({ type }: { type: TimelineIconType }) {
+  const configs: Record<TimelineIconType, { bg: string; darkBg: string; icon: React.ReactNode }> = {
+    'bank':         { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <Building2 className="w-4 h-4 text-[#079455]" /> },
+    'bank-warning': { bg: 'bg-[#fef3c7]', darkBg: 'dark:bg-amber-950',   icon: <Building2 className="w-4 h-4 text-[#ea8808]" /> },
+    'message':      { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <MessageCircle className="w-4 h-4 text-[#ea8808]" /> },
+    'provider':     { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <Building2 className="w-4 h-4 text-[#0063f5]" /> },
+    'phone':        { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <PhoneCall className="w-4 h-4 text-[#0063f5]" /> },
+    'review':       { bg: 'bg-[#f4f3ff]', darkBg: 'dark:bg-violet-950',  icon: <ShieldCheck className="w-4 h-4 text-[#7c3aed]" /> },
+    'aml':          { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <ShieldCheck className="w-4 h-4 text-[#ea8808]" /> },
+    'system':       { bg: 'bg-[#f2f4f7]', darkBg: 'dark:bg-slate-800',   icon: <Settings className="w-4 h-4 text-[#667085] dark:text-slate-400" /> },
+    'created':      { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <AlertTriangle className="w-4 h-4 text-[#079455]" /> },
+  };
+  const c = configs[type];
   return (
-    <div className="w-8 h-8 rounded-full bg-[#f2f4f7] flex items-center justify-center shrink-0 dark:bg-slate-800">
-      <Building2 className="w-4 h-4 text-[#667085] dark:text-slate-400" />
+    <div className={`w-8 h-8 rounded-full ${c.bg} ${c.darkBg} flex items-center justify-center shrink-0`}>
+      {c.icon}
     </div>
   );
 }
@@ -119,12 +157,24 @@ export default function OrderDetailPanel({
   const [statusOverlayOpen, setStatusOverlayOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [activePipeline, setActivePipeline] = useState<{ label: string; value: string } | null>(null);
+  const [fillHeight, setFillHeight] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(([entry]) => setFillHeight(entry.contentRect.height > 705));
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const pri = priorityConfig[order.priority];
   const ai  = getAiGroup(order.aiScore);
   const isBreached = order.slaProgress <= 10;
+  const slaColor = order.slaProgress >= 60 ? '#079455' : order.slaProgress >= 25 ? '#b54708' : '#fb2c36';
+  const slaTextColor = order.slaProgress >= 60 ? 'text-[#079455]' : order.slaProgress >= 25 ? 'text-[#b54708]' : 'text-[#d91c1c]';
   const amount = order.loanAmount.replace(/﷼\s?/, '');
-  const contentWidthClass = customerPanelOpen ? 'w-[540px]' : 'w-[676px]';
+  const contentWidthClass = 'w-full';
 
   function handlePipelineClick(item: { label: string; value: string; primary?: boolean }) {
     if (item.primary) {
@@ -164,7 +214,7 @@ export default function OrderDetailPanel({
           </span>
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 px-4 py-3 rounded-full border border-[#fee2e2] text-[#d91c1c] text-[14px] font-semibold hover:bg-[#fff1f3] transition-colors"
+            className="flex items-center gap-1.5 px-4 py-3 rounded-full border border-[#fee2e2] dark:border-white/25 text-[#d91c1c] text-[14px] font-semibold hover:bg-[#fff1f3] transition-colors"
           >
             Close <X className="w-3.5 h-3.5" />
           </button>
@@ -175,8 +225,8 @@ export default function OrderDetailPanel({
       <div className="flex flex-1 min-h-0 divide-x divide-[#f2f4f7] overflow-hidden dark:divide-slate-800">
 
         {/* Left: scrollable content */}
-        <div className="flex flex-col flex-1 min-w-0 overflow-y-auto">
-          <div className="flex flex-col gap-4 p-6 items-start">
+        <div ref={scrollRef} className="flex flex-col flex-1 min-w-0 overflow-y-auto">
+          <div className={`flex flex-col gap-4 p-6 items-start ${fillHeight ? 'min-h-full' : ''}`}>
             {/* Priority + SLA + AI Score */}
             <div className={`flex items-start justify-between pb-3 ${contentWidthClass} max-w-full`}>
               <div className="flex items-start gap-6">
@@ -191,11 +241,11 @@ export default function OrderDetailPanel({
                   <span className="text-[12px] leading-[18px] text-[#697586] font-medium truncate dark:text-slate-400">SLA • Escalation in...</span>
                   <div className="h-[6px] rounded-full bg-[#e5e7eb] overflow-hidden w-full dark:bg-slate-800">
                     <div
-                      className={`h-full ${isBreached ? 'bg-[#fb2c36] w-full' : 'bg-[#079455]'}`}
-                      style={!isBreached ? { width: `${order.slaProgress}%` } : undefined}
+                      className="h-full transition-all duration-700"
+                      style={{ width: `${Math.min(100 - order.slaProgress, 98)}%`, backgroundColor: slaColor }}
                     />
                   </div>
-                  <span className={`text-[12px] leading-4 font-medium ${isBreached ? 'text-[#d91c1c]' : 'text-[#079455]'}`}>
+                  <span className={`text-[12px] leading-4 font-medium ${slaTextColor}`}>
                     {isBreached ? 'Breached' : order.slaTimeLeft}
                     <span className="ml-[11px] font-normal text-[#6b7280] dark:text-slate-400">
                       {isBreached ? 'Escalation now' : order.slaEscalation}
@@ -240,7 +290,7 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Customer Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-4 pt-6`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] dark:border-white/25 bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-4 pt-6 ${fillHeight ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgBrandWatermark}
@@ -287,12 +337,12 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Product Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full h-[255px] px-6 pb-4 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full px-6 pb-4 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900 ${fillHeight ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgSarWatermark}
                 alt=""
-                className="absolute -right-8 bottom-[-22px] h-[231px] w-[191px] select-none"
+                className="absolute -right-8 bottom-[-22px] h-[231px] w-[191px] select-none opacity-80 dark:opacity-10"
               />
               <div className="flex items-center justify-between">
                 <div className="relative flex items-center gap-4 min-w-0">
@@ -336,32 +386,39 @@ export default function OrderDetailPanel({
               <span className="text-[18px] leading-[28px] font-semibold text-[#697586] dark:text-slate-100">Tracking Timeline</span>
             </div>
             <div className="relative flex flex-col">
-              <span aria-hidden className="absolute left-[18px] top-5 bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
+              <span aria-hidden className="absolute left-[18px] top-[26px] bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
               {MOCK_TIMELINE.map((event, i) => (
                 <div key={i} className="relative flex gap-5">
-                  <div className="flex flex-col items-center pt-2 shrink-0 w-9">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#d5d7da] shrink-0" />
+                  <div className="flex flex-col items-center pt-[22px] shrink-0 w-9">
+                    <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${getDotColor(event.icon)}`} />
                   </div>
-                  <div className="flex flex-col gap-2 pb-8 flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                  <div className={cn(
+                    'flex flex-col gap-1.5 pb-6 flex-1 min-w-0',
+                    event.recalled && 'bg-[#fef3c7] dark:bg-amber-950/40 rounded-[8px] px-3 py-2 -mx-3'
+                  )}>
+                    <span className="text-[12px] leading-[18px] text-[#9aa4b2] dark:text-slate-400">{event.time}</span>
+                    <div className="flex items-start gap-2">
                       <TimelineIcon type={event.icon} />
-                      <span className="text-[12px] leading-[18px] text-[#9aa4b2] dark:text-slate-400">{event.time}</span>
+                      <p className="text-[14px] text-[#414651] leading-5 dark:text-slate-100 min-w-0 pt-1.5">
+                        <span className="font-semibold">{event.title}</span>
+                        {' '}
+                        <span className="text-[#697586] font-normal dark:text-slate-400">by</span>
+                        {' '}
+                        <span className={`font-semibold ${getActorColor(event.actorType)}`}>{event.actor}</span>
+                      </p>
                     </div>
-                    <p className="text-[14px] text-[#414651] leading-5 dark:text-slate-100">
-                      <span className="font-semibold">{event.title}</span>
-                      {' '}
-                      <span className="text-[#697586] font-normal dark:text-slate-400">by</span>
-                      {' '}
-                      <span className="text-[#0063f5] font-semibold">{event.actor}</span>
-                    </p>
-                    <p className="text-[13px] text-[#414651] leading-[18px] tracking-[0.4px] whitespace-pre-line dark:text-slate-400">{event.text}</p>
+                    {event.text && (
+                      <p className="text-[13px] text-[#414651] leading-[18px] tracking-[0.4px] whitespace-pre-line dark:text-slate-400 pl-10">{event.text}</p>
+                    )}
                     {event.action && (
-                      <button className="self-start flex items-center gap-2 min-w-[103px] justify-center px-4 py-2 rounded-[6px] border border-[#80b1fa] text-[14px] font-semibold text-[#0063f5] hover:bg-[#f8fafc] transition-colors dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
-                        <Plus className="w-4 h-4" /> Refund
-                      </button>
+                      <div className="pl-10">
+                        <button className="self-start flex items-center gap-2 min-w-[103px] justify-center px-4 py-2 rounded-[6px] border border-[#80b1fa] text-[14px] font-semibold text-[#0063f5] hover:bg-[#f8fafc] transition-colors dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                          <Plus className="w-4 h-4" /> Refund
+                        </button>
+                      </div>
                     )}
                     {event.counterOffer && (
-                      <div className="flex flex-col gap-0.5">
+                      <div className="flex flex-col gap-0.5 pl-10">
                         <div className="flex items-center gap-1.5 mb-1">
                           <RotateCcw className="w-3 h-3 text-[#667085] dark:text-slate-400" />
                           <span className="text-[11px] font-medium text-[#667085] dark:text-slate-400">Counter offer</span>

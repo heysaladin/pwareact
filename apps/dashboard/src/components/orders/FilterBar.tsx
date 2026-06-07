@@ -62,7 +62,7 @@ function InsightPanel({
   onClose: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between p-2 border border-[#0063f5] rounded-xl w-full dark:bg-slate-950">
+    <div className="flex items-start justify-between p-2 border border-[#0063f5] rounded-2xl w-full bg-white dark:bg-slate-900">
       <div className="flex items-center gap-1.5 flex-wrap">
         {options.map((opt) => (
           <button

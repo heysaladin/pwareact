@@ -39,13 +39,14 @@ function escalatePriority(priority: Priority, progress: number): Priority {
   return priority;
 }
 
-export function useOrderSimulation() {
+export function useOrderSimulation(paused = false) {
   const [orders, setOrders] = useState<Order[]>(() => sortOrders(ordersData as Order[]));
   const [justEscalated, setJustEscalated] = useState<Set<string>>(new Set());
   const ordersRef = useRef<Order[]>(sortOrders(ordersData as Order[]));
   const escalationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(() => {
       const prev = ordersRef.current;
 
@@ -82,13 +83,13 @@ export function useOrderSimulation() {
         setJustEscalated(escalated);
         escalationTimerRef.current = setTimeout(() => setJustEscalated(new Set()), 2500);
       }
-    }, 1500);
+    }, 5000);
 
     return () => {
       clearInterval(timer);
       if (escalationTimerRef.current) clearTimeout(escalationTimerRef.current);
     };
-  }, []);
+  }, [paused]);
 
   return { orders, justEscalated };
 }

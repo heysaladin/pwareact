@@ -11,6 +11,7 @@ const ibmPlexSans = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: 'OMS - Order Management System',
   description: 'Order Management System',
+  icons: { icon: 'https://www.tamawal.sa/favicon.ico' },
 };
 
 const themeScript = `

@@ -1,18 +1,11 @@
 'use client';
 import { Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
 
-export default function CardHeader({ liveCount }: { liveCount?: number }) {
+export default function CardHeader({ liveCount: _ }: { liveCount?: number }) {
   return (
     <div className="flex items-center justify-between px-6 py-4">
       <div className="flex items-center gap-3">
         <h2 className="text-[#0063f5] text-2xl font-bold">Orders</h2>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#dcfae6] text-[#079455] text-xs font-semibold">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#079455] animate-pulse" />
-          LIVE
-          {liveCount !== undefined && (
-            <span className="ml-0.5 text-[#067a47]">{liveCount}</span>
-          )}
-        </span>
       </div>
 
       <div className="flex items-center gap-3">

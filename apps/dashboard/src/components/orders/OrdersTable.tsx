@@ -41,7 +41,7 @@ function SlaBar({ progress, group }: { progress: number; group: 'success' | 'war
     <div className="h-1.5 rounded-full bg-[#e3e8ef]/50 overflow-hidden w-full">
       <div
         className="h-full rounded-full transition-all duration-700"
-        style={{ width: `${progress}%`, backgroundColor: color }}
+        style={{ width: `${Math.min(100 - progress, 98)}%`, backgroundColor: color }}
       />
     </div>
   );
