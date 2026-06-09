@@ -218,6 +218,324 @@ function SarInput({
   );
 }
 
+function ConsentRequestForm({ onCancel }: { onCancel: () => void }) {
+  const [msgTitle, setMsgTitle] = useState('');
+  const [consentChecked, setConsentChecked] = useState(false);
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+        <div>
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#181d27]">Consent Request</h2>
+          <p className="text-[14px] text-[#535862] mt-1">Create message for User that related to the order</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">Message title</label>
+            <input
+              type="text"
+              value={msgTitle}
+              onChange={e => setMsgTitle(e.target.value)}
+              placeholder="Enter the message title"
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5]"
+            />
+          </div>
+
+          <div className="flex items-start gap-2 border border-[#e2e3e4] rounded-[8px] p-4">
+            <input
+              type="checkbox"
+              checked={consentChecked}
+              onChange={e => setConsentChecked(e.target.checked)}
+              className="w-4 h-4 accent-[#0063f5] mt-0.5 shrink-0"
+            />
+            <p className="text-[13px] text-[#475467] leading-5">
+              I hereby declare that the National ID &amp; Date of Birth I have provided is correct &amp; allow Tamawal to verify it. If DoB is not correct, I will change DoB from profile.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#e2e3e4] mt-6 shrink-0">
+        <button
+          disabled={!consentChecked}
+          className="px-5 py-2.5 bg-[#0063f5] text-white text-[14px] font-medium rounded-[8px] disabled:bg-[#d5d7da] disabled:text-[#9aa4b2] transition-colors cursor-pointer disabled:cursor-not-allowed"
+        >
+          Submit
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-5 py-2.5 border border-[#d5d7da] text-[#181d27] text-[14px] font-medium rounded-[8px] hover:bg-[#f9fafb] transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ExternalLinkForm({ onCancel }: { onCancel: () => void }) {
+  const [msgTitle, setMsgTitle] = useState('');
+  const [hyperlink, setHyperlink] = useState('');
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+        <div>
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#181d27]">External Link</h2>
+          <p className="text-[14px] text-[#535862] mt-1">Create message for User that related to the order</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">Message title</label>
+            <input
+              type="text"
+              value={msgTitle}
+              onChange={e => setMsgTitle(e.target.value)}
+              placeholder="Enter the message title"
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5]"
+            />
+          </div>
+
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">
+              External link <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="url"
+              value={hyperlink}
+              onChange={e => setHyperlink(e.target.value)}
+              placeholder="https://example.com"
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5]"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#e2e3e4] mt-6 shrink-0">
+        <button
+          disabled={!hyperlink}
+          className="px-5 py-2.5 bg-[#0063f5] text-white text-[14px] font-medium rounded-[8px] disabled:bg-[#d5d7da] disabled:text-[#9aa4b2] transition-colors cursor-pointer disabled:cursor-not-allowed"
+        >
+          Submit
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-5 py-2.5 border border-[#d5d7da] text-[#181d27] text-[14px] font-medium rounded-[8px] hover:bg-[#f9fafb] transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RequestPaymentForm({ onCancel }: { onCancel: () => void }) {
+  const [msgTitle, setMsgTitle] = useState('');
+  const [amount, setAmount] = useState('');
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+        <div>
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#181d27]">Request Payment</h2>
+          <p className="text-[14px] text-[#535862] mt-1">Create message for User that related to the order</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">Message title</label>
+            <input
+              type="text"
+              value={msgTitle}
+              onChange={e => setMsgTitle(e.target.value)}
+              placeholder="Enter the message title"
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5]"
+            />
+          </div>
+
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">
+              Loan Amount <span className="text-red-500">*</span>
+            </label>
+            <SarInput value={amount} onChange={setAmount} placeholder="Enter the loan amount" />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#e2e3e4] mt-6 shrink-0">
+        <button
+          disabled={!amount}
+          className="px-5 py-2.5 bg-[#0063f5] text-white text-[14px] font-medium rounded-[8px] disabled:bg-[#d5d7da] disabled:text-[#9aa4b2] transition-colors cursor-pointer disabled:cursor-not-allowed"
+        >
+          Submit
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-5 py-2.5 border border-[#d5d7da] text-[#181d27] text-[14px] font-medium rounded-[8px] hover:bg-[#f9fafb] transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function InternalNoteForm({ onCancel }: { onCancel: () => void }) {
+  const [body, setBody] = useState('');
+  const maxChars = 255;
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+        <div>
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#181d27]">Internal</h2>
+          <p className="text-[14px] text-[#535862] mt-1">Add an internal note visible only to the operations team</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">
+              Note <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={body}
+              onChange={e => setBody(e.target.value.slice(0, maxChars))}
+              placeholder="Enter a description...."
+              rows={5}
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5] resize-none"
+            />
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-[12px] text-[#9aa4b2]">{maxChars - body.length} characters are remaining</span>
+              <button
+                onClick={() => setBody('')}
+                className="flex items-center gap-1 border border-red-400 text-red-500 text-[12px] px-2 py-1 rounded-[6px] hover:bg-red-50 transition-colors"
+              >
+                <X className="w-3 h-3" /> Clear all
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#e2e3e4] mt-6 shrink-0">
+        <button
+          disabled={!body}
+          className="px-5 py-2.5 bg-[#0063f5] text-white text-[14px] font-medium rounded-[8px] disabled:bg-[#d5d7da] disabled:text-[#9aa4b2] transition-colors cursor-pointer disabled:cursor-not-allowed"
+        >
+          Submit
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-5 py-2.5 border border-[#d5d7da] text-[#181d27] text-[14px] font-medium rounded-[8px] hover:bg-[#f9fafb] transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const PROVIDERS = [
+  'FAB Bank',
+  'Real estate provider',
+  'Amlak',
+  'ANB',
+  'Riyad Bank',
+  'Social Development Bank',
+  'SNB',
+  'Al-Rajhi',
+  'Bank Albilad',
+];
+
+function ToProviderForm({ onCancel }: { onCancel: () => void }) {
+  const [msgTitle, setMsgTitle] = useState('');
+  const [provider, setProvider] = useState('');
+  const [body, setBody] = useState('');
+  const maxChars = 255;
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+        <div>
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#181d27]">To Provider</h2>
+          <p className="text-[14px] text-[#535862] mt-1">Create message for User that related to the order</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">Message title</label>
+            <input
+              type="text"
+              value={msgTitle}
+              onChange={e => setMsgTitle(e.target.value)}
+              placeholder="Enter the message title"
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5]"
+            />
+          </div>
+
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">
+              Provider name <span className="text-red-500">*</span>
+            </label>
+            <div className="flex items-center border border-[#d5d7da] rounded-[8px] px-3 py-2.5 focus-within:border-[#0063f5]">
+              <select
+                value={provider}
+                onChange={e => setProvider(e.target.value)}
+                className={cn('flex-1 text-[14px] outline-none bg-transparent appearance-none', !provider ? 'text-[#9aa4b2]' : 'text-[#181d27]')}
+              >
+                <option value="" disabled>Select provider</option>
+                {PROVIDERS.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+              <ChevronDown className="w-4 h-4 text-[#697586] shrink-0" />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[14px] font-semibold text-[#181d27] block mb-1.5">
+              Message body <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={body}
+              onChange={e => setBody(e.target.value.slice(0, maxChars))}
+              placeholder="Enter a description...."
+              rows={5}
+              className="w-full border border-[#d5d7da] rounded-[8px] px-3 py-2.5 text-[14px] text-[#181d27] placeholder:text-[#9aa4b2] outline-none focus:border-[#0063f5] resize-none"
+            />
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-[12px] text-[#9aa4b2]">{maxChars - body.length} characters are remaining</span>
+              <button
+                onClick={() => setBody('')}
+                className="flex items-center gap-1 border border-red-400 text-red-500 text-[12px] px-2 py-1 rounded-[6px] hover:bg-red-50 transition-colors"
+              >
+                <X className="w-3 h-3" /> Clear all
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#e2e3e4] mt-6 shrink-0">
+        <button
+          disabled={!provider || !body}
+          className="px-5 py-2.5 bg-[#0063f5] text-white text-[14px] font-medium rounded-[8px] disabled:bg-[#d5d7da] disabled:text-[#9aa4b2] transition-colors cursor-pointer disabled:cursor-not-allowed"
+        >
+          Submit
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-5 py-2.5 border border-[#d5d7da] text-[#181d27] text-[14px] font-medium rounded-[8px] hover:bg-[#f9fafb] transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ManualCounterOfferForm({
   productName,
   productNameAr,
@@ -459,32 +777,38 @@ function ManualCounterOfferForm({
   );
 }
 
-export default function MessageHubOverlay({ onClose, order }: { onClose: () => void; order?: { productName: string; productNameAr: string } }) {
+export default function MessageHubOverlay({ onClose, order, initialType }: { onClose: () => void; order?: { productName: string; productNameAr: string }; initialType?: string | null }) {
   const [tab, setTab] = useState<'customer' | 'operation'>('customer');
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string | null>(initialType ?? null);
   const items = tab === 'customer' ? TO_CUSTOMER_ITEMS : OPERATION_ITEMS;
 
   function renderForm() {
-    if (selectedType === 'Message with attachments') {
-      return <MessageWithAttachmentsForm onCancel={() => setSelectedType(null)} />;
+    const cancel = () => setSelectedType(null);
+    switch (selectedType) {
+      case 'Message with attachments':
+        return <MessageWithAttachmentsForm onCancel={cancel} />;
+      case 'Manual Counter Offer':
+        return <ManualCounterOfferForm productName={order?.productName ?? ''} productNameAr={order?.productNameAr ?? ''} onCancel={cancel} />;
+      case 'Consent Request':
+        return <ConsentRequestForm onCancel={cancel} />;
+      case 'External Link':
+        return <ExternalLinkForm onCancel={cancel} />;
+      case 'Request Payment':
+        return <RequestPaymentForm onCancel={cancel} />;
+      case 'Internal':
+        return <InternalNoteForm onCancel={cancel} />;
+      case 'To Provider':
+        return <ToProviderForm onCancel={cancel} />;
+      default:
+        return <TextMessageForm title={selectedType!} onCancel={cancel} />;
     }
-    if (selectedType === 'Manual Counter Offer') {
-      return (
-        <ManualCounterOfferForm
-          productName={order?.productName ?? ''}
-          productNameAr={order?.productNameAr ?? ''}
-          onCancel={() => setSelectedType(null)}
-        />
-      );
-    }
-    return <TextMessageForm title={selectedType!} onCancel={() => setSelectedType(null)} />;
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-stretch justify-end">
       <div className="absolute inset-0 backdrop-blur-[20px] bg-black/20" onClick={onClose} />
 
-      <div className="relative z-10 bg-white flex flex-col h-full w-[500px] p-6 gap-6 overflow-hidden animate-slide-in-right">
+      <div className="relative z-10 bg-white flex flex-col h-full w-full max-w-[500px] p-6 gap-6 overflow-hidden animate-slide-in-right">
         {/* Top buttons */}
         <div className="flex gap-2.5 items-center justify-end shrink-0">
           <button

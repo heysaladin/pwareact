@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle, ChevronRight, ChevronUp, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle, ChevronUp, ChevronDown, Maximize2 } from 'lucide-react';
 import SARSymbol from '@/components/ui/SARSymbol';
 import { cn } from '@/lib/utils';
 import OrderStatusOverlay from './OrderStatusOverlay';
@@ -118,17 +118,17 @@ const MOCK_TIMELINE: TimelineEvent[] = [
 ];
 
 const MSG_CUSTOMER_ITEMS = [
-  { label: 'Text message',          active: false, arrow: false },
-  { label: 'Message with customer', active: true,  arrow: false },
-  { label: 'External Link',         active: false, arrow: true  },
-  { label: 'Consent Request',       active: false, arrow: true  },
-  { label: 'Manual Counter Offer',  active: false, arrow: true  },
-  { label: 'Request Payment',       active: false, arrow: true  },
+  'Text message',
+  'Consent Request',
+  'Message with attachments',
+  'Manual Counter Offer',
+  'External Link',
+  'Request Payment',
 ];
 
 const MSG_OPERATION_ITEMS = [
-  { label: 'Internal',    active: false, arrow: true },
-  { label: 'To Provider', active: true,  arrow: true },
+  'Internal',
+  'To Provider',
 ];
 
 function TimelineIcon({ type }: { type: TimelineIconType }) {
@@ -155,6 +155,7 @@ const t = {
   en: {
     orderId: 'Order ID',
     created: 'Created:',
+    updated: 'Updated:',
     close: 'Close',
     priority: 'Priority',
     sla: 'SLA • Escalation in...',
@@ -190,6 +191,7 @@ const t = {
   ar: {
     orderId: 'رقم الطلب',
     created: 'أُنشئ:',
+    updated: 'تم التحديث:',
     close: 'يغلق',
     priority: 'الأولوية',
     sla: 'SLA • التصعيد في...',
@@ -238,13 +240,15 @@ function TimelineItems({
   imgBankLogo: string;
 }) {
   return (
-    <div className="relative flex flex-col">
-      <span aria-hidden className="absolute start-[5px] top-3 bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
+    <div className="flex flex-col">
       {events.map((event, i) => (
         <div key={i} className="relative flex gap-3">
-          {/* Dot */}
+          {/* Dot + connector */}
           <div className="flex flex-col items-center shrink-0 w-3 pt-[9px]">
             <div className={`w-2.5 h-2.5 rounded-full shrink-0 z-10 ${getDotColor(event.icon)}`} />
+            {i < events.length - 1 && (
+              <div className="w-px flex-1 bg-[#e3e8ef] dark:bg-slate-800 mt-1.5" />
+            )}
           </div>
           {/* Content */}
           <div className={cn(
@@ -292,7 +296,7 @@ function TimelineItems({
                   <RotateCcw className="w-3 h-3 text-[#667085] dark:text-slate-400" />
                   <span className="text-[11px] font-medium text-[#667085] dark:text-slate-400">{i18n.counterOffer}</span>
                 </div>
-                <div className="border border-[#e3e8ef] rounded-[6px] p-3 flex flex-col gap-2 dark:border-slate-800 dark:bg-slate-900">
+                <div className="border border-[#e3e8ef] rounded-[6px] p-3 flex flex-col gap-2 w-full max-w-[500px] dark:border-slate-800 dark:bg-slate-900">
                   <div className="flex items-center gap-2">
                     <img src={imgBankLogo} alt="Bank" className="h-6 w-auto object-contain" />
                     <div className="flex flex-col">
@@ -353,15 +357,19 @@ export default function OrderDetailPanel({
 
   const [statusOverlayOpen, setStatusOverlayOpen] = useState(false);
   const [messageHubOpen, setMessageHubOpen] = useState(false);
+  const [messageHubType, setMessageHubType] = useState<string | null>(null);
   const [activeAction, setActiveAction] = useState<string | null>(null);
   const [activePipeline, setActivePipeline] = useState<{ label: string; value: string } | null>(null);
   const [fillHeight, setFillHeight] = useState(false);
+  const [tallViewport, setTallViewport] = useState(() => typeof window !== 'undefined' && window.innerHeight > 1280);
   const [dropupOpen, setDropupOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState<'customer' | 'operation' | null>(null);
+  const [expandedFilterOpen, setExpandedFilterOpen] = useState<'customer' | 'operation' | null>(null);
   const [timelineExpanded, setTimelineExpanded] = useState(false);
   const dropupRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+  const expandedFilterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!dropupOpen) return;
@@ -386,11 +394,28 @@ export default function OrderDetailPanel({
   }, [filterOpen]);
 
   useEffect(() => {
+    if (!expandedFilterOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (expandedFilterRef.current && !expandedFilterRef.current.contains(e.target as Node)) {
+        setExpandedFilterOpen(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [expandedFilterOpen]);
+
+  useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const obs = new ResizeObserver(([entry]) => setFillHeight(entry.contentRect.height > 705));
     obs.observe(el);
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const check = () => setTallViewport(window.innerHeight > 1280);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   const pri = priorityConfig[order.priority];
@@ -426,17 +451,24 @@ export default function OrderDetailPanel({
           <span className="text-[12px] leading-[18px] font-medium text-[#697586] dark:text-slate-400">{i18n.orderId}</span>
           <span className="text-[18px] leading-[28px] font-semibold text-[#202a39] dark:text-slate-100">{order.id}</span>
         </div>
-        <div className="flex items-center gap-2">
-          {!customerPanelOpen && (
-            <span className="flex items-center gap-1.5 text-[13px] text-[#667085] dark:text-slate-400">
-              <Calendar className="w-3.5 h-3.5" />
-              {i18n.created} <strong className="text-[#181d27] dark:text-slate-100">{order.createdAt}</strong>
+        <div className="flex items-center gap-4">
+          {customerPanelOpen ? (
+            <span className="flex items-center gap-[6px] text-[14px] font-medium text-[#202a39] whitespace-nowrap dark:text-slate-100">
+              <Calendar className="w-4 h-4 text-[#697586] shrink-0 dark:text-slate-400" />
+              {order.updatedAt}
             </span>
+          ) : (
+            <>
+              <span className="flex items-center gap-1.5 text-[13px] text-[#667085] whitespace-nowrap dark:text-slate-400">
+                <Calendar className="w-3.5 h-3.5 shrink-0" />
+                {i18n.created} <strong className="font-semibold text-[#181d27] dark:text-slate-100">{order.createdAt}</strong>
+              </span>
+              <span className="flex items-center gap-1.5 text-[13px] text-[#667085] whitespace-nowrap dark:text-slate-400">
+                <Calendar className="w-3.5 h-3.5 shrink-0" />
+                {i18n.updated} <strong className="font-semibold text-[#181d27] dark:text-slate-100">{order.updatedAt}</strong>
+              </span>
+            </>
           )}
-          <span className="flex items-center gap-1.5 min-w-[120px] px-[14px] py-2.5 rounded-[8px] text-[14px] leading-5 font-medium text-[#202a39] dark:text-slate-100">
-            <Calendar className="w-4 h-4 text-[#697586]" />
-            {order.updatedAt}
-          </span>
           <button
             onClick={onClose}
             className="flex items-center gap-1.5 px-4 py-3 rounded-full border border-[#fee2e2] dark:border-white/25 text-[#d91c1c] text-[14px] font-semibold hover:bg-[#fff1f3] transition-colors"
@@ -515,7 +547,7 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Customer Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] dark:border-white/25 bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-4 pt-6 ${fillHeight ? 'flex-1' : ''}`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] dark:border-white/25 bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-4 pt-6 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgBrandWatermark}
@@ -562,7 +594,7 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Product Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full px-6 pb-4 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900 ${fillHeight ? 'flex-1' : ''}`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full px-6 pb-4 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgSarWatermark}
@@ -614,9 +646,9 @@ export default function OrderDetailPanel({
                 <span className="font-semibold text-[16px] leading-normal text-[#697586]">{i18n.trackingTimeline}</span>
                 <button
                   onClick={() => setTimelineExpanded(true)}
-                  className="w-9 h-9 flex items-center justify-center border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800"
+                  className="flex items-center justify-center p-2 border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800"
                 >
-                  <ArrowUpRight className="w-4 h-4 text-[#697586]" />
+                  <Maximize2 className="w-4 h-4 text-[#697586]" />
                 </button>
               </div>
               {/* Row 2: filter dropdowns */}
@@ -633,16 +665,18 @@ export default function OrderDetailPanel({
                       : <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />}
                   </button>
                   {filterOpen === 'customer' && (
-                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_12px_16px_-4px_rgba(10,13,18,0.08),0px_4px_6px_-2px_rgba(10,13,18,0.03)] z-30 py-1 dark:bg-slate-900 dark:border-slate-700">
-                      {MSG_CUSTOMER_ITEMS.map((item) => (
+                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] z-30 py-2 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_CUSTOMER_ITEMS.map((label) => (
                         <button
-                          key={item.label}
-                          onClick={() => setFilterOpen(null)}
-                          className={`w-full flex items-center gap-3 px-3 h-10 text-[14px] font-medium transition-colors ${item.active ? 'bg-[#eff8ff] text-[#0063f5] dark:bg-blue-950 dark:text-blue-300' : 'text-[#414651] hover:bg-[#f5f8ff] dark:text-slate-200 dark:hover:bg-slate-800'}`}
+                          key={label}
+                          onClick={() => { setFilterOpen(null); setMessageHubType(label); setMessageHubOpen(true); }}
+                          className="group w-full flex items-center justify-between px-4 py-[10px] text-[14px] font-semibold transition-colors text-[#202a39] hover:bg-[#f5f9ff] hover:text-[#0063f5] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-300"
                         >
-                          <MessageCircle className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#697586]'}`} />
-                          <span className="flex-1 text-start truncate">{item.label}</span>
-                          {item.arrow && <ChevronRight className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#9aa4b2]'}`} />}
+                          <div className="flex items-center gap-2">
+                            <MessageCircle className="w-5 h-5 shrink-0 text-[#697586] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                            <span>{label}</span>
+                          </div>
+                          <ArrowRight className="w-4 h-4 shrink-0 rtl:rotate-180 text-[#9aa4b2] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
                         </button>
                       ))}
                     </div>
@@ -660,16 +694,18 @@ export default function OrderDetailPanel({
                       : <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />}
                   </button>
                   {filterOpen === 'operation' && (
-                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_12px_16px_-4px_rgba(10,13,18,0.08),0px_4px_6px_-2px_rgba(10,13,18,0.03)] z-30 py-1 dark:bg-slate-900 dark:border-slate-700">
-                      {MSG_OPERATION_ITEMS.map((item) => (
+                    <div className="absolute top-full start-0 mt-1 w-full bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] z-30 py-2 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_OPERATION_ITEMS.map((label) => (
                         <button
-                          key={item.label}
-                          onClick={() => setFilterOpen(null)}
-                          className={`w-full flex items-center gap-3 px-3 h-10 text-[14px] font-medium transition-colors ${item.active ? 'bg-[#eff8ff] text-[#0063f5] dark:bg-blue-950 dark:text-blue-300' : 'text-[#414651] hover:bg-[#f5f8ff] dark:text-slate-200 dark:hover:bg-slate-800'}`}
+                          key={label}
+                          onClick={() => { setFilterOpen(null); setMessageHubType(label); setMessageHubOpen(true); }}
+                          className="group w-full flex items-center justify-between px-4 py-[10px] text-[14px] font-semibold transition-colors text-[#202a39] hover:bg-[#f5f9ff] hover:text-[#0063f5] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-300"
                         >
-                          <MessageCircle className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#697586]'}`} />
-                          <span className="flex-1 text-start truncate">{item.label}</span>
-                          {item.arrow && <ChevronRight className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#9aa4b2]'}`} />}
+                          <div className="flex items-center gap-2">
+                            <MessageCircle className="w-5 h-5 shrink-0 text-[#697586] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                            <span>{label}</span>
+                          </div>
+                          <ArrowRight className="w-4 h-4 shrink-0 rtl:rotate-180 text-[#9aa4b2] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
                         </button>
                       ))}
                     </div>
@@ -733,35 +769,79 @@ export default function OrderDetailPanel({
         <div className="flex-1 bg-black/20" onClick={() => setTimelineExpanded(false)} />
         <div className="w-[1080px] max-w-[calc(100vw-160px)] bg-white dark:bg-slate-950 flex flex-col shadow-[0px_20px_24px_-4px_rgba(10,13,18,0.18),0px_8px_8px_-4px_rgba(10,13,18,0.06)] overflow-hidden">
           {/* Header */}
-          <div className="flex items-start justify-between px-6 pt-6 pb-0 shrink-0">
-            <div className="flex flex-col gap-1">
-              <span className="text-[28px] leading-[34px] font-bold text-[#181d27] dark:text-slate-100">{i18n.trackingTimeline}</span>
-              <span className="text-[14px] text-[#697586] dark:text-slate-400">{i18n.trackingCaption}</span>
+          <div className="flex items-center justify-end pt-6 pb-3 px-6 shrink-0">
+            <div className="flex flex-1 items-center gap-6 min-w-0">
+              <span className="text-[23.5px] leading-[30px] font-semibold text-[#15212f] whitespace-nowrap dark:text-slate-100">{i18n.trackingTimeline}</span>
+              <div ref={expandedFilterRef} className="flex items-center gap-3">
+                {/* Messaging customer */}
+                <div className="relative">
+                  <button
+                    onClick={() => setExpandedFilterOpen(expandedFilterOpen === 'customer' ? null : 'customer')}
+                    className="flex items-center justify-between gap-2 px-[10px] py-[10px] w-[200px] border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] hover:bg-[#f9fafb] transition-colors dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <span className="truncate">{i18n.msgCustomer}</span>
+                    {expandedFilterOpen === 'customer'
+                      ? <ChevronUp className="w-5 h-5 shrink-0 text-[#697586]" />
+                      : <ChevronDown className="w-5 h-5 shrink-0 text-[#697586]" />}
+                  </button>
+                  {expandedFilterOpen === 'customer' && (
+                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] z-30 py-2 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_CUSTOMER_ITEMS.map((label) => (
+                        <button
+                          key={label}
+                          onClick={() => { setExpandedFilterOpen(null); setMessageHubType(label); setMessageHubOpen(true); }}
+                          className="group w-full flex items-center justify-between px-4 py-[10px] text-[14px] font-semibold transition-colors text-[#202a39] hover:bg-[#f5f9ff] hover:text-[#0063f5] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-300"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MessageCircle className="w-5 h-5 shrink-0 text-[#697586] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                            <span>{label}</span>
+                          </div>
+                          <ArrowRight className="w-4 h-4 shrink-0 rtl:rotate-180 text-[#9aa4b2] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {/* Messaging operation */}
+                <div className="relative">
+                  <button
+                    onClick={() => setExpandedFilterOpen(expandedFilterOpen === 'operation' ? null : 'operation')}
+                    className="flex items-center justify-between gap-2 px-[10px] py-[10px] w-[200px] border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] hover:bg-[#f9fafb] transition-colors dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <span className="truncate">{i18n.msgOperation}</span>
+                    {expandedFilterOpen === 'operation'
+                      ? <ChevronUp className="w-5 h-5 shrink-0 text-[#697586]" />
+                      : <ChevronDown className="w-5 h-5 shrink-0 text-[#697586]" />}
+                  </button>
+                  {expandedFilterOpen === 'operation' && (
+                    <div className="absolute top-full start-0 mt-1 w-[200px] bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] z-30 py-2 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_OPERATION_ITEMS.map((label) => (
+                        <button
+                          key={label}
+                          onClick={() => { setExpandedFilterOpen(null); setMessageHubType(label); setMessageHubOpen(true); }}
+                          className="group w-full flex items-center justify-between px-4 py-[10px] text-[14px] font-semibold transition-colors text-[#202a39] hover:bg-[#f5f9ff] hover:text-[#0063f5] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-300"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MessageCircle className="w-5 h-5 shrink-0 text-[#697586] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                            <span>{label}</span>
+                          </div>
+                          <ArrowRight className="w-4 h-4 shrink-0 rtl:rotate-180 text-[#9aa4b2] group-hover:text-[#0063f5] dark:group-hover:text-blue-300" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <button
               onClick={() => setTimelineExpanded(false)}
-              className="w-9 h-9 flex items-center justify-center border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800 shrink-0"
+              className="flex items-center justify-center p-2 border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800 shrink-0"
             >
-              <X className="w-4 h-4 text-[#697586]" />
+              <X className="w-5 h-5 text-[#697586]" />
             </button>
           </div>
-          {/* Filter row */}
-          <div className="flex items-center gap-3 px-6 py-5 shrink-0">
-            <div className="relative">
-              <button className="flex items-center justify-between gap-2 px-3 h-10 w-[200px] border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
-                <span className="truncate">{i18n.msgCustomer}</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />
-              </button>
-            </div>
-            <div className="relative">
-              <button className="flex items-center justify-between gap-2 px-3 h-10 w-[200px] border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
-                <span className="truncate">{i18n.msgOperation}</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />
-              </button>
-            </div>
-          </div>
           {/* Scrollable timeline */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6">
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-6 pb-6">
             <TimelineItems events={MOCK_TIMELINE} isAr={isAr} i18n={i18n} imgBankLogo={imgBankLogo} />
           </div>
         </div>
@@ -775,7 +855,7 @@ export default function OrderDetailPanel({
       <PipelineStatusOverlay item={activePipeline} onClose={() => setActivePipeline(null)} />
     )}
     {messageHubOpen && (
-      <MessageHubOverlay onClose={() => setMessageHubOpen(false)} order={{ productName: order.productName, productNameAr: order.productNameAr }} />
+      <MessageHubOverlay initialType={messageHubType} onClose={() => { setMessageHubOpen(false); setMessageHubType(null); }} order={{ productName: order.productName, productNameAr: order.productNameAr }} />
     )}
     {activeAction && (
       <ActionModal
