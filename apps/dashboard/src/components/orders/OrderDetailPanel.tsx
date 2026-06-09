@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle, ChevronRight, ChevronUp } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, ArrowRight, Flag, Star, Building2, MessageCircle, Plus, RotateCcw, Settings, ShieldCheck, PhoneCall, AlertTriangle, ChevronRight, ChevronUp, ChevronDown, ArrowUpRight } from 'lucide-react';
 import SARSymbol from '@/components/ui/SARSymbol';
 import { cn } from '@/lib/utils';
 import OrderStatusOverlay from './OrderStatusOverlay';
@@ -117,21 +117,35 @@ const MOCK_TIMELINE: TimelineEvent[] = [
   { time: T, icon: 'created', title: 'Order is created', titleAr: 'تم إنشاء الطلب', actor: 'System', actorAr: 'النظام', actorType: 'system' },
 ];
 
+const MSG_CUSTOMER_ITEMS = [
+  { label: 'Text message',          active: false, arrow: false },
+  { label: 'Message with customer', active: true,  arrow: false },
+  { label: 'External Link',         active: false, arrow: true  },
+  { label: 'Consent Request',       active: false, arrow: true  },
+  { label: 'Manual Counter Offer',  active: false, arrow: true  },
+  { label: 'Request Payment',       active: false, arrow: true  },
+];
+
+const MSG_OPERATION_ITEMS = [
+  { label: 'Internal',    active: false, arrow: true },
+  { label: 'To Provider', active: true,  arrow: true },
+];
+
 function TimelineIcon({ type }: { type: TimelineIconType }) {
   const configs: Record<TimelineIconType, { bg: string; darkBg: string; icon: React.ReactNode }> = {
-    'bank':         { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <Building2 className="w-4 h-4 text-[#079455]" /> },
-    'bank-warning': { bg: 'bg-[#fef3c7]', darkBg: 'dark:bg-amber-950',   icon: <Building2 className="w-4 h-4 text-[#ea8808]" /> },
-    'message':      { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <MessageCircle className="w-4 h-4 text-[#ea8808]" /> },
-    'provider':     { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <Building2 className="w-4 h-4 text-[#0063f5]" /> },
-    'phone':        { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <PhoneCall className="w-4 h-4 text-[#0063f5]" /> },
-    'review':       { bg: 'bg-[#f4f3ff]', darkBg: 'dark:bg-violet-950',  icon: <ShieldCheck className="w-4 h-4 text-[#7c3aed]" /> },
-    'aml':          { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <ShieldCheck className="w-4 h-4 text-[#ea8808]" /> },
-    'system':       { bg: 'bg-[#f2f4f7]', darkBg: 'dark:bg-slate-800',   icon: <Settings className="w-4 h-4 text-[#667085] dark:text-slate-400" /> },
-    'created':      { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <AlertTriangle className="w-4 h-4 text-[#079455]" /> },
+    'bank':         { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <Building2 className="w-3.5 h-3.5 text-[#079455]" /> },
+    'bank-warning': { bg: 'bg-[#fef3c7]', darkBg: 'dark:bg-amber-950',   icon: <Building2 className="w-3.5 h-3.5 text-[#ea8808]" /> },
+    'message':      { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <MessageCircle className="w-3.5 h-3.5 text-[#ea8808]" /> },
+    'provider':     { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <Building2 className="w-3.5 h-3.5 text-[#0063f5]" /> },
+    'phone':        { bg: 'bg-[#eff8ff]', darkBg: 'dark:bg-blue-950',    icon: <PhoneCall className="w-3.5 h-3.5 text-[#0063f5]" /> },
+    'review':       { bg: 'bg-[#f4f3ff]', darkBg: 'dark:bg-violet-950',  icon: <ShieldCheck className="w-3.5 h-3.5 text-[#7c3aed]" /> },
+    'aml':          { bg: 'bg-[#fff5e7]', darkBg: 'dark:bg-amber-950',   icon: <ShieldCheck className="w-3.5 h-3.5 text-[#ea8808]" /> },
+    'system':       { bg: 'bg-[#f2f4f7]', darkBg: 'dark:bg-slate-800',   icon: <Settings className="w-3.5 h-3.5 text-[#667085] dark:text-slate-400" /> },
+    'created':      { bg: 'bg-[#dcfae6]', darkBg: 'dark:bg-emerald-950', icon: <AlertTriangle className="w-3.5 h-3.5 text-[#079455]" /> },
   };
   const c = configs[type];
   return (
-    <div className={`w-8 h-8 rounded-full ${c.bg} ${c.darkBg} flex items-center justify-center shrink-0`}>
+    <div className={`w-6 h-6 rounded-full ${c.bg} ${c.darkBg} flex items-center justify-center shrink-0`}>
       {c.icon}
     </div>
   );
@@ -156,6 +170,9 @@ const t = {
     apr: 'APR:',
     trackingTimeline: 'Tracking Timeline',
     sendMessage: 'Send message',
+    trackingCaption: 'Tracking and steps related to the order',
+    msgCustomer: 'Messaging customer',
+    msgOperation: 'Messaging operation',
     by: 'by',
     counterOffer: 'Counter offer',
     productNameLabel: 'Product name',
@@ -188,6 +205,9 @@ const t = {
     apr: 'APR:',
     trackingTimeline: 'تتبع الجدول الزمني',
     sendMessage: 'إرسال رسالة',
+    trackingCaption: 'تتبع الخطوات المتعلقة بالطلب',
+    msgCustomer: 'مراسلة العميل',
+    msgOperation: 'مراسلة العمليات',
     by: 'من',
     counterOffer: 'عرض مضاد',
     productNameLabel: 'اسم المنتج',
@@ -203,6 +223,107 @@ const t = {
     pipeline: ['حالة المراسلة', 'حالة المراسلة', 'حالة العرض المضاد', 'حالة الدفع'],
   },
 } as const;
+
+type TimelineI18n = { by: string; refund: string; counterOffer: string; productNameLabel: string; loanAmountField: string; loanPeriod: string; monthlyInstallment: string };
+
+function TimelineItems({
+  events,
+  isAr,
+  i18n,
+  imgBankLogo,
+}: {
+  events: TimelineEvent[];
+  isAr: boolean;
+  i18n: TimelineI18n;
+  imgBankLogo: string;
+}) {
+  return (
+    <div className="relative flex flex-col">
+      <span aria-hidden className="absolute start-[5px] top-3 bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
+      {events.map((event, i) => (
+        <div key={i} className="relative flex gap-3">
+          {/* Dot */}
+          <div className="flex flex-col items-center shrink-0 w-3 pt-[9px]">
+            <div className={`w-2.5 h-2.5 rounded-full shrink-0 z-10 ${getDotColor(event.icon)}`} />
+          </div>
+          {/* Content */}
+          <div className={cn(
+            'flex flex-col gap-1 pb-5 flex-1 min-w-0',
+            event.recalled && 'bg-[#fef3c7] dark:bg-amber-950/40 rounded-[8px] px-3 py-2 -mx-1 mb-1'
+          )}>
+            {/* Header row: icon + time … title by actor */}
+            {event.recalled ? (
+              <div className="flex items-center flex-wrap gap-x-2 gap-y-0">
+                <RotateCcw className="w-3.5 h-3.5 shrink-0 text-[#b45309]" />
+                <span className="text-[12px] text-[#b45309] dark:text-amber-400 shrink-0">{event.time}</span>
+                <span className="text-[13px] font-bold text-[#b45309] dark:text-amber-300">{isAr && event.titleAr ? event.titleAr : event.title}</span>
+                <span className="text-[12px] text-[#b45309] dark:text-amber-400">{i18n.by}</span>
+                <span className="text-[13px] font-bold text-[#b45309] dark:text-amber-300">{isAr && event.actorAr ? event.actorAr : event.actor}</span>
+              </div>
+            ) : (
+              <div className="flex items-start flex-wrap gap-x-2 gap-y-0.5">
+                <div className="flex items-center gap-2 shrink-0">
+                  <TimelineIcon type={event.icon} />
+                  <span className="text-[12px] leading-[18px] text-[#9aa4b2] dark:text-slate-400 shrink-0">{event.time}</span>
+                </div>
+                <p className="text-[14px] text-[#414651] leading-5 dark:text-slate-100 min-w-0 flex flex-wrap items-baseline gap-x-1 pt-[3px]">
+                  <span className="font-semibold">{isAr && event.titleAr ? event.titleAr : event.title}</span>
+                  <span className="text-[#697586] font-normal dark:text-slate-400">{i18n.by}</span>
+                  <span className={`font-semibold ${getActorColor(event.actorType)}`}>{isAr && event.actorAr ? event.actorAr : event.actor}</span>
+                </p>
+              </div>
+            )}
+            {/* Body */}
+            {event.text && (
+              <p className="text-[13px] text-[#414651] leading-[18px] tracking-[0.4px] whitespace-pre-line dark:text-slate-400 ps-8">{isAr && event.textAr ? event.textAr : event.text}</p>
+            )}
+            {/* Refund action */}
+            {event.action && (
+              <div className="ps-8">
+                <button className="self-start flex items-center gap-2 min-w-[103px] justify-center px-4 py-2 rounded-[6px] border border-[#80b1fa] text-[14px] font-semibold text-[#0063f5] hover:bg-[#f8fafc] transition-colors dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                  <Plus className="w-4 h-4" /> {i18n.refund}
+                </button>
+              </div>
+            )}
+            {/* Counter offer card */}
+            {event.counterOffer && (
+              <div className="flex flex-col gap-0.5 ps-8">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <RotateCcw className="w-3 h-3 text-[#667085] dark:text-slate-400" />
+                  <span className="text-[11px] font-medium text-[#667085] dark:text-slate-400">{i18n.counterOffer}</span>
+                </div>
+                <div className="border border-[#e3e8ef] rounded-[6px] p-3 flex flex-col gap-2 dark:border-slate-800 dark:bg-slate-900">
+                  <div className="flex items-center gap-2">
+                    <img src={imgBankLogo} alt="Bank" className="h-6 w-auto object-contain" />
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-[#697586] dark:text-slate-400">{i18n.productNameLabel}</span>
+                      <span className="text-[12px] font-semibold text-[#181d27] dark:text-slate-100">Personal Loan for Senior Employee</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    {[
+                      { labelEn: 'Loan amount',         labelAr: i18n.loanAmountField,    value: '99,999,999.99' },
+                      { labelEn: 'Loan Period',         labelAr: i18n.loanPeriod,         value: '999 month' },
+                      { labelEn: 'Monthly Installment', labelAr: i18n.monthlyInstallment, value: '83,333.33' },
+                      { labelEn: 'APR',                 labelAr: 'APR',                   value: '99.99%' },
+                      { labelEn: 'Brokerage Fees',      labelAr: 'رسوم الوساطة',          value: '999.99' },
+                      { labelEn: 'Management Fees',     labelAr: 'رسوم الإدارة',          value: '999.99' },
+                    ].map((row) => (
+                      <div key={row.labelEn} className="flex flex-col gap-0.5">
+                        <span className="text-[10px] text-[#697586] dark:text-slate-400">{isAr ? row.labelAr : row.labelEn}</span>
+                        <span className="text-[11px] font-semibold text-[#181d27] dark:text-slate-100">{row.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function OrderDetailPanel({
   order,
@@ -236,8 +357,11 @@ export default function OrderDetailPanel({
   const [activePipeline, setActivePipeline] = useState<{ label: string; value: string } | null>(null);
   const [fillHeight, setFillHeight] = useState(false);
   const [dropupOpen, setDropupOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState<'customer' | 'operation' | null>(null);
+  const [timelineExpanded, setTimelineExpanded] = useState(false);
   const dropupRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!dropupOpen) return;
@@ -249,6 +373,17 @@ export default function OrderDetailPanel({
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [dropupOpen]);
+
+  useEffect(() => {
+    if (!filterOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setFilterOpen(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [filterOpen]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -471,80 +606,81 @@ export default function OrderDetailPanel({
 
         {/* Right: Tracking Timeline */}
         {!customerPanelOpen && (
-          <div className="w-[460px] shrink-0 flex flex-col overflow-y-auto px-6 pt-6 pb-4">
-            <div className="pb-4 shrink-0 flex items-center justify-between w-full">
-              <span className="font-semibold text-[16px] leading-normal text-[#697586]">{i18n.trackingTimeline}</span>
-              <button onClick={() => setMessageHubOpen(true)} className="cursor-pointer flex items-center gap-1 border border-[#d7e7fe] rounded-[8px] px-2 py-2 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] min-w-[120px]">
-                <MessageCircle className="w-5 h-5 text-[#0063f5]" />
-                <span className="text-[14px] font-medium leading-5 tracking-[0.014px] text-[#0063f5] px-0.5">{i18n.sendMessage}</span>
-                <ChevronRight className="w-5 h-5 text-[#0063f5] rtl:rotate-180" />
-              </button>
-            </div>
-            <div className="relative flex flex-col">
-              <span aria-hidden className="absolute start-[18px] top-[26px] bottom-0 w-px bg-[#e3e8ef] dark:bg-slate-800" />
-              {MOCK_TIMELINE.map((event, i) => (
-                <div key={i} className="relative flex gap-5">
-                  <div className="flex flex-col items-center pt-[22px] shrink-0 w-9">
-                    <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${getDotColor(event.icon)}`} />
-                  </div>
-                  <div className={cn(
-                    'flex flex-col gap-1.5 pb-6 flex-1 min-w-0',
-                    event.recalled && 'bg-[#fef3c7] dark:bg-amber-950/40 rounded-[8px] px-3 py-2 -mx-3'
-                  )}>
-                    <span className="text-[12px] leading-[18px] text-[#9aa4b2] dark:text-slate-400">{event.time}</span>
-                    <div className="flex items-start gap-2">
-                      <TimelineIcon type={event.icon} />
-                      <p className="text-[14px] text-[#414651] leading-5 dark:text-slate-100 min-w-0 pt-1.5">
-                        <span className="font-semibold">{isAr && event.titleAr ? event.titleAr : event.title}</span>
-                        {' '}
-                        <span className="text-[#697586] font-normal dark:text-slate-400">{i18n.by}</span>
-                        {' '}
-                        <span className={`font-semibold ${getActorColor(event.actorType)}`}>{isAr && event.actorAr ? event.actorAr : event.actor}</span>
-                      </p>
-                    </div>
-                    {event.text && (
-                      <p className="text-[13px] text-[#414651] leading-[18px] tracking-[0.4px] whitespace-pre-line dark:text-slate-400 ps-10">{isAr && event.textAr ? event.textAr : event.text}</p>
-                    )}
-                    {event.action && (
-                      <div className="ps-10">
-                        <button className="self-start flex items-center gap-2 min-w-[103px] justify-center px-4 py-2 rounded-[6px] border border-[#80b1fa] text-[14px] font-semibold text-[#0063f5] hover:bg-[#f8fafc] transition-colors dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
-                          <Plus className="w-4 h-4" /> {i18n.refund}
+          <div className="w-[460px] shrink-0 flex flex-col overflow-hidden">
+            {/* ── Timeline Header ── */}
+            <div className="px-6 pt-6 shrink-0" ref={filterRef}>
+              {/* Row 1: title + expand */}
+              <div className="flex items-center justify-between mb-5">
+                <span className="font-semibold text-[16px] leading-normal text-[#697586]">{i18n.trackingTimeline}</span>
+                <button
+                  onClick={() => setTimelineExpanded(true)}
+                  className="w-9 h-9 flex items-center justify-center border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800"
+                >
+                  <ArrowUpRight className="w-4 h-4 text-[#697586]" />
+                </button>
+              </div>
+              {/* Row 2: filter dropdowns */}
+              <div className="flex items-center gap-3 pb-4">
+                {/* Messaging customer */}
+                <div className="relative flex-1">
+                  <button
+                    onClick={() => setFilterOpen(filterOpen === 'customer' ? null : 'customer')}
+                    className="w-full flex items-center justify-between gap-2 px-3 h-10 border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white hover:bg-[#f9fafb] text-[14px] font-medium text-[#414651] transition-colors dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <span className="truncate">{i18n.msgCustomer}</span>
+                    {filterOpen === 'customer'
+                      ? <ChevronUp className="w-4 h-4 shrink-0 text-[#697586]" />
+                      : <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />}
+                  </button>
+                  {filterOpen === 'customer' && (
+                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_12px_16px_-4px_rgba(10,13,18,0.08),0px_4px_6px_-2px_rgba(10,13,18,0.03)] z-30 py-1 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_CUSTOMER_ITEMS.map((item) => (
+                        <button
+                          key={item.label}
+                          onClick={() => setFilterOpen(null)}
+                          className={`w-full flex items-center gap-3 px-3 h-10 text-[14px] font-medium transition-colors ${item.active ? 'bg-[#eff8ff] text-[#0063f5] dark:bg-blue-950 dark:text-blue-300' : 'text-[#414651] hover:bg-[#f5f8ff] dark:text-slate-200 dark:hover:bg-slate-800'}`}
+                        >
+                          <MessageCircle className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#697586]'}`} />
+                          <span className="flex-1 text-start truncate">{item.label}</span>
+                          {item.arrow && <ChevronRight className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#9aa4b2]'}`} />}
                         </button>
-                      </div>
-                    )}
-                    {event.counterOffer && (
-                      <div className="flex flex-col gap-0.5 ps-10">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <RotateCcw className="w-3 h-3 text-[#667085] dark:text-slate-400" />
-                          <span className="text-[11px] font-medium text-[#667085] dark:text-slate-400">{i18n.counterOffer}</span>
-                        </div>
-                        <div className="border border-[#e3e8ef] rounded-[6px] p-3 flex flex-col gap-2 dark:border-slate-800 dark:bg-slate-900">
-                          <div className="flex items-center gap-2">
-                            <img src={imgBankLogo} alt="Bank" className="h-6 w-auto object-contain" />
-                            <div className="flex flex-col">
-                              <span className="text-[10px] text-[#697586] dark:text-slate-400">{i18n.productNameLabel}</span>
-                              <span className="text-[12px] font-semibold text-[#181d27] dark:text-slate-100">Personal Loan for Senior Employee</span>
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                            {[
-                              { labelEn: 'Loan amount',         labelAr: i18n.loanAmountField, value: '99,999,999.99' },
-                              { labelEn: 'Loan Period',         labelAr: i18n.loanPeriod,      value: '999 month' },
-                              { labelEn: 'Monthly Installment', labelAr: i18n.monthlyInstallment, value: '83,333.33' },
-                              { labelEn: 'APR',                 labelAr: 'APR',                value: '99.99%' },
-                            ].map((row) => (
-                              <div key={row.labelEn} className="flex flex-col gap-0.5">
-                                <span className="text-[10px] text-[#697586] dark:text-slate-400">{isAr ? row.labelAr : row.labelEn}</span>
-                                <span className="text-[11px] font-semibold text-[#181d27] dark:text-slate-100">{row.value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              ))}
+                {/* Messaging operation */}
+                <div className="relative flex-1">
+                  <button
+                    onClick={() => setFilterOpen(filterOpen === 'operation' ? null : 'operation')}
+                    className="w-full flex items-center justify-between gap-2 px-3 h-10 border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white hover:bg-[#f9fafb] text-[14px] font-medium text-[#414651] transition-colors dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <span className="truncate">{i18n.msgOperation}</span>
+                    {filterOpen === 'operation'
+                      ? <ChevronUp className="w-4 h-4 shrink-0 text-[#697586]" />
+                      : <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />}
+                  </button>
+                  {filterOpen === 'operation' && (
+                    <div className="absolute top-full start-0 mt-1 w-[300px] bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_12px_16px_-4px_rgba(10,13,18,0.08),0px_4px_6px_-2px_rgba(10,13,18,0.03)] z-30 py-1 dark:bg-slate-900 dark:border-slate-700">
+                      {MSG_OPERATION_ITEMS.map((item) => (
+                        <button
+                          key={item.label}
+                          onClick={() => setFilterOpen(null)}
+                          className={`w-full flex items-center gap-3 px-3 h-10 text-[14px] font-medium transition-colors ${item.active ? 'bg-[#eff8ff] text-[#0063f5] dark:bg-blue-950 dark:text-blue-300' : 'text-[#414651] hover:bg-[#f5f8ff] dark:text-slate-200 dark:hover:bg-slate-800'}`}
+                        >
+                          <MessageCircle className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#697586]'}`} />
+                          <span className="flex-1 text-start truncate">{item.label}</span>
+                          {item.arrow && <ChevronRight className={`w-4 h-4 shrink-0 ${item.active ? 'text-[#0063f5]' : 'text-[#9aa4b2]'}`} />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ── Timeline Items ── */}
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-4">
+              <TimelineItems events={MOCK_TIMELINE} isAr={isAr} i18n={i18n} imgBankLogo={imgBankLogo} />
             </div>
           </div>
         )}
@@ -590,6 +726,47 @@ export default function OrderDetailPanel({
         </div>
       </div>
     </div>
+
+    {/* Expanded Timeline Overlay */}
+    {timelineExpanded && (
+      <div className="fixed inset-0 z-50 flex">
+        <div className="flex-1 bg-black/20" onClick={() => setTimelineExpanded(false)} />
+        <div className="w-[1080px] max-w-[calc(100vw-160px)] bg-white dark:bg-slate-950 flex flex-col shadow-[0px_20px_24px_-4px_rgba(10,13,18,0.18),0px_8px_8px_-4px_rgba(10,13,18,0.06)] overflow-hidden">
+          {/* Header */}
+          <div className="flex items-start justify-between px-6 pt-6 pb-0 shrink-0">
+            <div className="flex flex-col gap-1">
+              <span className="text-[28px] leading-[34px] font-bold text-[#181d27] dark:text-slate-100">{i18n.trackingTimeline}</span>
+              <span className="text-[14px] text-[#697586] dark:text-slate-400">{i18n.trackingCaption}</span>
+            </div>
+            <button
+              onClick={() => setTimelineExpanded(false)}
+              className="w-9 h-9 flex items-center justify-center border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] transition-colors dark:border-slate-700 dark:hover:bg-slate-800 shrink-0"
+            >
+              <X className="w-4 h-4 text-[#697586]" />
+            </button>
+          </div>
+          {/* Filter row */}
+          <div className="flex items-center gap-3 px-6 py-5 shrink-0">
+            <div className="relative">
+              <button className="flex items-center justify-between gap-2 px-3 h-10 w-[200px] border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
+                <span className="truncate">{i18n.msgCustomer}</span>
+                <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />
+              </button>
+            </div>
+            <div className="relative">
+              <button className="flex items-center justify-between gap-2 px-3 h-10 w-[200px] border border-[#e9eaeb] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white text-[14px] font-medium text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
+                <span className="truncate">{i18n.msgOperation}</span>
+                <ChevronDown className="w-4 h-4 shrink-0 text-[#697586]" />
+              </button>
+            </div>
+          </div>
+          {/* Scrollable timeline */}
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6">
+            <TimelineItems events={MOCK_TIMELINE} isAr={isAr} i18n={i18n} imgBankLogo={imgBankLogo} />
+          </div>
+        </div>
+      </div>
+    )}
 
     {statusOverlayOpen && (
       <OrderStatusOverlay order={order} onClose={() => setStatusOverlayOpen(false)} />
