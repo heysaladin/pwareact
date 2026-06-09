@@ -547,7 +547,7 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Customer Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] dark:border-white/25 bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-4 pt-6 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#bbd5fb] dark:border-white/25 bg-[#0063f5] ${contentWidthClass} max-w-full flex flex-col gap-6 px-6 pb-7 pt-6 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgBrandWatermark}
@@ -594,7 +594,7 @@ export default function OrderDetailPanel({
             </div>
 
             {/* Product Details */}
-            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full px-6 pb-4 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
+            <div className={`relative overflow-hidden rounded-[6px] border border-[#e2e3e4] bg-white ${contentWidthClass} max-w-full px-6 pb-7 pt-6 flex flex-col ${customerPanelOpen ? 'gap-11' : 'gap-12'} dark:border-slate-800 dark:bg-slate-900 ${fillHeight && !tallViewport ? 'flex-1' : ''}`}>
               <img
                 aria-hidden
                 src={imgSarWatermark}
