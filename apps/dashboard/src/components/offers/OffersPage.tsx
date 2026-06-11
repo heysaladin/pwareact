@@ -19,21 +19,11 @@ export default function OffersPage() {
       <div className="flex flex-1 min-h-0 overflow-hidden">
         <Sidebar activeScreen={screen} onNavigate={setScreen} />
         <main className="flex-1 overflow-auto">
-          {screen === 'dashboard' && (
-            <DashboardView
-              onCreateOffer={() => setScreen('create')}
-              onViewPerformance={() => setScreen('performance')}
-            />
-          )}
-          {screen === 'offers' && (
-            <OffersListView
-              onCreateOffer={() => setScreen('create')}
-              onViewPerformance={() => setScreen('performance')}
-            />
-          )}
-          {screen === 'create' && <CreateOfferView />}
+          {screen === 'dashboard'   && <DashboardView onCreateOffer={() => setScreen('create')} onViewOffer={() => setScreen('performance')} />}
+          {screen === 'offers'      && <OffersListView onCreateOffer={() => setScreen('create')} onViewOffer={() => setScreen('performance')} />}
+          {screen === 'create'      && <CreateOfferView onDone={() => setScreen('offers')} />}
           {screen === 'performance' && <PerformanceView onBack={() => setScreen('offers')} />}
-          {screen === 'conflicts' && <ConflictsView />}
+          {screen === 'conflicts'   && <ConflictsView />}
         </main>
       </div>
     </div>

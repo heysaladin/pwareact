@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Bell, ChevronDown, ChevronUp, Briefcase, Settings2 } from 'lucide-react';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLang } from '@/lib/language-context';
 
 const t = {
@@ -28,6 +29,7 @@ export default function Topbar() {
   const { lang, toggle: toggleLang } = useLang();
   const i18n = t[lang];
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -109,7 +111,10 @@ export default function Topbar() {
               <div className="border-t border-[#e2e7e9] dark:border-slate-800 my-1" />
 
               <div className="px-3 py-1">
-                <button className="flex w-full px-2 py-2 rounded-lg text-[13px] text-[#e7104b] hover:bg-gray-50 dark:hover:bg-slate-800">
+                <button
+                  onClick={() => router.push('/pof')}
+                  className="flex w-full px-2 py-2 rounded-lg text-[13px] text-[#e7104b] hover:bg-gray-50 dark:hover:bg-slate-800"
+                >
                   {i18n.logout}
                 </button>
               </div>
