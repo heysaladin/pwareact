@@ -1,22 +1,38 @@
 'use client';
 import { useState } from 'react';
-import { Calendar, Filter, TrendingUp, ChevronDown, Clock, X } from 'lucide-react';
-import { type LucideIcon } from 'lucide-react';
+import { Calendar, Filter, TrendingUp, ChevronDown, Clock, X, Building2, Search } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLang } from '@/lib/language-context';
+import SARSymbol from '@/components/ui/SARSymbol';
 
 type PanelKey = 'timeFilter' | 'quickInsights' | 'financingVolume' | 'providers';
 
-const TIME_OPTIONS     = ['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'This month', 'Last month', 'Year to date'];
-const TIME_OPTIONS_AR  = ['اليوم', 'أمس', 'آخر 7 أيام', 'آخر 30 يومًا', 'هذا الشهر', 'الشهر الماضي', 'من بداية العام'];
+const TIME_OPTIONS    = ['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'This month', 'Last month', 'Year to date'];
+const TIME_OPTIONS_AR = ['اليوم', 'أمس', 'آخر 7 أيام', 'آخر 30 يومًا', 'هذا الشهر', 'الشهر الماضي', 'من بداية العام'];
 
-const INSIGHTS_OPTIONS    = ['1 Denied — 219,048.60', '2 Servicing — 177,508.40', '0 Disbursed — 0.00', '24 Cancelled — 3,243,072.90', '1 Not eligible — 123,456.00', '3 Rejected — 465,960.60', '2 In review — 307,008.10'];
-const INSIGHTS_OPTIONS_AR = ['1 مرفوض — 219,048.60', '2 خدمة — 177,508.40', '0 صُرف — 0.00', '24 ملغى — 3,243,072.90', '1 غير مؤهل — 123,456.00', '3 رُفض — 465,960.60', '2 قيد المراجعة — 307,008.10'];
+const QUICK_INSIGHTS = [
+  { key: 'servicing',   label: 'Servicing',    labelAr: 'الخدمة',       count: 16,  amount: '177,508.40',   selected: true, icon: 'http://localhost:3845/assets/abe1a74f4163edef560c43358cf74d300b272275.svg' },
+  { key: 'denied',      label: 'Denied',       labelAr: 'مرفوض',        count: 18,  amount: '219,048.60',                  icon: 'http://localhost:3845/assets/0f293c08432f79115b1d81d1bce2ee13d4fa17d2.svg' },
+  { key: 'cancelled',   label: 'Cancelled',    labelAr: 'ملغى',         count: 104, amount: '3,243,072.90',                icon: 'http://localhost:3845/assets/58989a79358e0f51d46bdb1094ea12c9964b4ef8.svg' },
+  { key: 'notEligible', label: 'Not eligible', labelAr: 'غير مؤهل',     count: 25,  amount: '123,456.00',                  icon: 'http://localhost:3845/assets/7eb09902ebf8d53cdd3940094e48ac475fce7d59.svg' },
+  { key: 'rejected',    label: 'Rejected',     labelAr: 'رُفض',         count: 35,  amount: '465,960.60',                  icon: 'http://localhost:3845/assets/cdc76e3d277332d82fcde9ba2266831e67f001df.svg' },
+  { key: 'inReview',    label: 'In review',    labelAr: 'قيد المراجعة', count: 1,   amount: '307,008.10',                  icon: 'http://localhost:3845/assets/7c0cea03436b06a3ff0ae3b0d35fd1c72560c79a.svg' },
+];
 
-const FINANCING_OPTIONS    = ['Real Estate (617,280.00)', 'Personal Loan (3,918,774.60)'];
-const FINANCING_OPTIONS_AR = ['العقارات (617,280.00)', 'قرض شخصي (3,918,774.60)'];
+const FINANCING_VOLUME: { key: string; label: string; labelAr: string; count: number; amount: string; selected?: boolean; icon: string }[] = [
+  { key: 'personalLoan', label: 'Personal Loan',  labelAr: 'قرض شخصي',    count: 178, amount: '3,918,774.60', selected: true, icon: 'http://localhost:3845/assets/5a77256f055552e9e79886dc3440c85820f950e3.svg' },
+  { key: 'carLoan',      label: 'Car Loan',       labelAr: 'قرض سيارة',   count: 125, amount: '3,918,774.60',                icon: 'http://localhost:3845/assets/614cce53f191707412e73ad28452e03a14bea37c.svg' },
+  { key: 'realEstate',   label: 'Real Estate',    labelAr: 'عقارات',      count: 39,  amount: '3,918,774.60',                icon: 'http://localhost:3845/assets/5b10f29a9e39f969c7e172d18fb18f24e8fbc685.svg' },
+  { key: 'cardFinance',  label: 'Card Financing', labelAr: 'تمويل بطاقة', count: 64,  amount: '3,918,774.60',                icon: 'http://localhost:3845/assets/b4907e3706dbcc571a8a4593022af68334ffe4ab.svg' },
+];
 
-const PROVIDER_OPTIONS = ['FAB Bank (9)', 'Real estate provider (9)', 'Amlak (9)', 'ANB (9)', 'Riyad Bank (9)', 'Social Development Bank (9)', 'SNB (9)', 'Al-Rajhi (9)', 'Bank Albilad (9)'];
+const PROVIDERS = [
+  { key: 'sab',     label: 'SAB',     count: 69, amount: '3,918,774.60', selected: true, logo: 'http://localhost:3845/assets/6f09b218246cc00404f015a32e9f61bd88d67bc5.png' },
+  { key: 'alahli',  label: 'Alahli',  count: 38, amount: '3,918,774.60',                logo: 'http://localhost:3845/assets/28aa3cef0af1c883e0caeaccb858bf841e5ae9be.png' },
+  { key: 'albilad', label: 'Albilad', count: 24, amount: '3,918,774.60',                logo: 'http://localhost:3845/assets/ebc2dd5515877664b5557b9cbc6a2ca92a6ede94.png' },
+  { key: 'alrajhi', label: 'Alrajhi', count: 16, amount: '3,918,774.60',                logo: 'http://localhost:3845/assets/04c44eb30fe8eafb10f6e8717923e709ea74449c.svg' },
+];
 
 function FilterToggleButton({
   icon: Icon,
@@ -49,16 +65,85 @@ function FilterToggleButton({
   );
 }
 
-function InsightPanel({
+function PanelHeader({
+  title,
+  icon: Icon,
+  onClose,
+  isAr,
+}: {
+  title: string;
+  icon: LucideIcon;
+  onClose: () => void;
+  isAr: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center gap-1.5">
+        <Icon className="w-4 h-4 shrink-0 text-[#667085] dark:text-slate-400" />
+        <span className="text-[14px] font-semibold text-[#121a26] dark:text-slate-100 whitespace-nowrap">{title}</span>
+      </div>
+      <button
+        onClick={onClose}
+        className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#d5d7da] bg-white text-[#414651] text-[12px] font-medium hover:bg-gray-50 transition-colors dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 shrink-0"
+      >
+        <X className="w-3 h-3" />
+        {isAr ? 'مسح' : 'Clear'}
+      </button>
+    </div>
+  );
+}
+
+function DataRow({
+  count,
+  label,
+  amount,
+  selected,
+  children,
+}: {
+  count: number;
+  label: string;
+  amount: string;
+  selected?: boolean;
+  children?: React.ReactNode;
+}) {
+  return (
+    <button
+      className={cn(
+        'w-full flex items-center rounded-lg border text-left transition-colors overflow-hidden',
+        selected
+          ? 'border-[#0063f5] bg-white dark:bg-slate-900'
+          : 'border-[#e9eaeb] bg-transparent hover:bg-white dark:border-slate-700 dark:hover:bg-slate-800'
+      )}
+    >
+      <span className="px-2.5 py-2.5 text-[13px] font-semibold text-[#121a26] dark:text-slate-100 shrink-0 min-w-[36px] text-center">
+        {count}
+      </span>
+      <span className={cn(
+        'border-l border-[#e9eaeb] dark:border-slate-700 px-2.5 py-2.5 text-[13px] text-[#181d27] dark:text-slate-200 flex-1 flex items-center gap-1.5 min-w-0 text-left',
+      )}>
+        {children}
+        {label}
+      </span>
+      <span className="flex items-center gap-1 px-2.5 py-2.5 text-[13px] font-medium text-[#121a26] dark:text-slate-100 shrink-0 whitespace-nowrap">
+        <SARSymbol className="w-3 h-3 shrink-0" />
+        {amount}
+      </span>
+    </button>
+  );
+}
+
+function TimePanel({
   options,
   activeOption,
   onSelect,
   onClose,
+  isAr,
 }: {
   options: string[];
   activeOption?: string;
   onSelect?: (opt: string) => void;
   onClose: () => void;
+  isAr: boolean;
 }) {
   return (
     <div className="flex items-start justify-between p-2 border border-[#0063f5] rounded-2xl w-full bg-white dark:bg-slate-900">
@@ -94,7 +179,8 @@ export default function FilterBar() {
   const { lang } = useLang();
   const isAr = lang === 'ar';
   const [openPanels, setOpenPanels] = useState<Set<PanelKey>>(new Set());
-  const [selectedTimeIdx, setSelectedTimeIdx] = useState(5); // Last month
+  const [selectedTimeIdx, setSelectedTimeIdx] = useState(5);
+  const [providerSearch, setProviderSearch] = useState('');
 
   const toggle = (key: PanelKey) =>
     setOpenPanels((prev) => {
@@ -106,16 +192,11 @@ export default function FilterBar() {
   const close = (key: PanelKey) =>
     setOpenPanels((prev) => { const next = new Set(prev); next.delete(key); return next; });
 
-  const timeOpts    = isAr ? TIME_OPTIONS_AR    : TIME_OPTIONS;
-  const insightOpts = isAr ? INSIGHTS_OPTIONS_AR : INSIGHTS_OPTIONS;
-  const financeOpts = isAr ? FINANCING_OPTIONS_AR : FINANCING_OPTIONS;
+  const timeOpts = isAr ? TIME_OPTIONS_AR : TIME_OPTIONS;
 
-  const panels: { key: PanelKey; options: string[]; activeOption?: string; onSelect?: (v: string) => void }[] = [
-    { key: 'timeFilter',      options: timeOpts,    activeOption: timeOpts[selectedTimeIdx], onSelect: (v) => setSelectedTimeIdx(timeOpts.indexOf(v)) },
-    { key: 'quickInsights',   options: insightOpts },
-    { key: 'financingVolume', options: financeOpts },
-    { key: 'providers',       options: PROVIDER_OPTIONS },
-  ];
+  const activeSidePanels = (
+    (['quickInsights', 'financingVolume', 'providers'] as PanelKey[]).filter((k) => openPanels.has(k))
+  );
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -134,23 +215,121 @@ export default function FilterBar() {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <FilterToggleButton icon={Filter}     label={isAr ? 'رؤى سريعة'           : 'Quick Insights'}             active={openPanels.has('quickInsights')}   hasChevron onClick={() => toggle('quickInsights')} />
-          <FilterToggleButton icon={TrendingUp} label={isAr ? 'تفاصيل حجم التمويل'  : 'Financing Volume Breakdown'}  active={openPanels.has('financingVolume')} hasChevron onClick={() => toggle('financingVolume')} />
-          <FilterToggleButton icon={TrendingUp} label={isAr ? 'مزودون'              : 'Providers'}                   active={openPanels.has('providers')}      hasChevron onClick={() => toggle('providers')} />
+          <FilterToggleButton icon={Filter}     label={isAr ? 'رؤى سريعة'          : 'Quick Insights'}            active={openPanels.has('quickInsights')}   hasChevron onClick={() => toggle('quickInsights')} />
+          <FilterToggleButton icon={TrendingUp} label={isAr ? 'تفاصيل حجم التمويل' : 'Financing Volume Breakdown'} active={openPanels.has('financingVolume')} hasChevron onClick={() => toggle('financingVolume')} />
+          <FilterToggleButton icon={Building2}  label={isAr ? 'مزودون'             : 'Providers'}                  active={openPanels.has('providers')}      hasChevron onClick={() => toggle('providers')} />
         </div>
       </div>
 
-      {/* Expandable panels */}
-      {panels.map(({ key, options, activeOption, onSelect }) =>
-        openPanels.has(key) ? (
-          <InsightPanel
-            key={key}
-            options={options}
-            activeOption={activeOption}
-            onSelect={onSelect}
-            onClose={() => close(key)}
-          />
-        ) : null
+      {/* Time filter panel */}
+      {openPanels.has('timeFilter') && (
+        <TimePanel
+          options={timeOpts}
+          activeOption={timeOpts[selectedTimeIdx]}
+          onSelect={(v) => setSelectedTimeIdx(timeOpts.indexOf(v))}
+          onClose={() => close('timeFilter')}
+          isAr={isAr}
+        />
+      )}
+
+      {/* Side-by-side panels: Quick Insights | Financing Volume | Providers */}
+      {activeSidePanels.length > 0 && (
+        <div className="flex flex-row gap-4 w-full bg-[#fcfcfd] border-t border-l border-r border-[#e3e8ef] rounded-t-xl p-4 dark:bg-slate-900/50 dark:border-slate-700">
+
+          {/* Quick Insights */}
+          {openPanels.has('quickInsights') && (
+            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+              <PanelHeader
+                title={isAr ? 'رؤى سريعة' : 'Quick Insights'}
+                icon={Filter}
+                onClose={() => close('quickInsights')}
+                isAr={isAr}
+              />
+              {QUICK_INSIGHTS.map((item) => (
+                <DataRow
+                  key={item.key}
+                  count={item.count}
+                  label={isAr ? item.labelAr : item.label}
+                  amount={item.amount}
+                  selected={item.selected}
+                >
+                  <img src={item.icon} alt="" className="w-5 h-5 shrink-0" />
+                </DataRow>
+              ))}
+            </div>
+          )}
+
+          {/* Divider */}
+          {openPanels.has('quickInsights') && openPanels.has('financingVolume') && (
+            <div className="w-px bg-[#e3e8ef] dark:bg-slate-700 self-stretch shrink-0" />
+          )}
+
+          {/* Financing Volume Breakdown */}
+          {openPanels.has('financingVolume') && (
+            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+              <PanelHeader
+                title={isAr ? 'تفاصيل حجم التمويل' : 'Financing Volume Breakdown'}
+                icon={TrendingUp}
+                onClose={() => close('financingVolume')}
+                isAr={isAr}
+              />
+              {FINANCING_VOLUME.map((item) => (
+                <DataRow
+                  key={item.key}
+                  count={item.count}
+                  label={isAr ? item.labelAr : item.label}
+                  amount={item.amount}
+                  selected={item.selected}
+                >
+                  <img src={item.icon} alt="" className="w-5 h-5 shrink-0 object-contain" />
+                </DataRow>
+              ))}
+            </div>
+          )}
+
+          {/* Divider */}
+          {openPanels.has('financingVolume') && openPanels.has('providers') && (
+            <div className="w-px bg-[#e3e8ef] dark:bg-slate-700 self-stretch shrink-0" />
+          )}
+
+          {/* Providers */}
+          {openPanels.has('providers') && (
+            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+              <PanelHeader
+                title={isAr ? 'مزودون' : 'Providers'}
+                icon={Building2}
+                onClose={() => close('providers')}
+                isAr={isAr}
+              />
+
+              {/* Provider search */}
+              <div className="relative mb-1.5">
+                <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9aa4b2] dark:text-slate-500 pointer-events-none" />
+                <input
+                  value={providerSearch}
+                  onChange={(e) => setProviderSearch(e.target.value)}
+                  placeholder={isAr ? 'بحث واختيار المزود' : 'Search & select the provider'}
+                  className="w-full h-10 ps-9 pe-9 border border-[#d5d7da] rounded-lg text-sm bg-white placeholder:text-[#697586] focus:outline-none focus:ring-1 focus:ring-[#0063f5] dark:border-slate-700 dark:bg-slate-900 dark:placeholder:text-slate-500 dark:text-slate-100"
+                />
+                <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9aa4b2] dark:text-slate-500 pointer-events-none" />
+              </div>
+
+              {PROVIDERS.filter((p) =>
+                !providerSearch || p.label.toLowerCase().includes(providerSearch.toLowerCase())
+              ).map((item) => (
+                <DataRow
+                  key={item.key}
+                  count={item.count}
+                  label={item.label}
+                  amount={item.amount}
+                  selected={item.selected}
+                >
+                  <img src={item.logo} alt={item.label} className="w-5 h-5 shrink-0 object-contain rounded" />
+                </DataRow>
+              ))}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

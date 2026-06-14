@@ -1,8 +1,16 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { Search, SlidersHorizontal, ChevronDown, X, Settings2, Check } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, ChevronUp, X, Settings2, Check, LayoutGrid, Table2 } from 'lucide-react';
 import { useLang } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
+
+const ASSIGNEE_LIST = [
+  { id: 'au', name: 'Abdullah Umar AlOtaiby',      count: 24, img: 'http://localhost:3845/assets/3b4b62b075fd7b9c39b4fa9c40c1ea3f883ea484.png' },
+  { id: 'ma', name: 'Mustofa Abdel Aziz AlOtaiby', count: 18, img: 'http://localhost:3845/assets/68ba01e276a047dd281410070732fd01c8894a61.png' },
+  { id: 'fi', name: 'Fatimah Ibrahim AlOtaiby',    count: 16, img: 'http://localhost:3845/assets/a1e15821ef264ec1b49b2f072a534cb6189fc8f9.png' },
+  { id: 'ya', name: 'yazid Abdel Aziz Jahz',       count: 12, img: 'http://localhost:3845/assets/ff7348847a43367f387178a2465535b287e2a1d3.png' },
+  { id: 'am', name: 'Aminah Abdel Aziz AlOtaiby',  count: 10, img: 'http://localhost:3845/assets/694fd1465c187828e4918d80682381c0b2c621b0.png' },
+];
 
 const FILTER_FIELDS = [
   {
@@ -130,16 +138,38 @@ function FilterDropdown({
   );
 }
 
-export default function CardHeader({ liveCount: _liveCount }: { liveCount?: number }) {
+export default function CardHeader({ liveCount: _liveCount, view: viewProp, onViewChange }: {
+  liveCount?: number;
+  view?: 'board' | 'table';
+  onViewChange?: (v: 'board' | 'table') => void;
+}) {
   const { lang } = useLang();
   const isAr = lang === 'ar';
 
+  const [internalView, setInternalView]   = useState<'board' | 'table'>('board');
+  const view = viewProp ?? internalView;
+  function setView(v: 'board' | 'table') {
+    setInternalView(v);
+    onViewChange?.(v);
+  }
   const [colConfigOpen, setColConfigOpen] = useState(false);
   const [filterOpen, setFilterOpen]       = useState(false);
   const [searchValue, setSearchValue]     = useState('');
   const [openFilterKey, setOpenFilterKey] = useState<FilterKey | null>(null);
   const [filterValues, setFilterValues]   = useState<Partial<Record<FilterKey, string>>>({});
   const [appliedValues, setAppliedValues] = useState<Partial<Record<FilterKey, string>>>({});
+  const [assigneeOpen, setAssigneeOpen]   = useState(false);
+  const [selectedAssigneeId, setSelectedAssigneeId] = useState<string | null>('ma');
+  const assigneeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!assigneeOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (assigneeRef.current && !assigneeRef.current.contains(e.target as Node)) setAssigneeOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [assigneeOpen]);
 
   const [colVisibility, setColVisibility] = useState<Record<ColKey, boolean>>(
     Object.fromEntries(COLUMNS.map((c) => [c.key, c.on])) as Record<ColKey, boolean>
@@ -176,61 +206,169 @@ export default function CardHeader({ liveCount: _liveCount }: { liveCount?: numb
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-[#0063f5] text-2xl font-bold">{isAr ? 'طلبات' : 'Orders'}</h2>
+        {/* Left: Title + Board/Table toggle + Columns */}
+        <div className="flex items-center gap-10">
+          <h2 className="text-[color:var(--brand\/600,#0063f5)] text-[23.5px] font-semibold leading-[30px] whitespace-nowrap">
+            {isAr ? 'طلبات' : 'Orders'}
+          </h2>
+          <div className="flex items-center gap-3">
+            {/* Board / Table view toggle group */}
+            <div className="flex border border-[#d5d7da] rounded-lg overflow-hidden shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:border-slate-700">
+              <button
+                onClick={() => setView('board')}
+                className={cn(
+                  'flex items-center gap-2 pl-[14px] pr-4 py-[10px] text-[14px] font-medium border-r border-[#d5d7da] transition-colors dark:border-slate-700',
+                  view === 'board'
+                    ? 'bg-white text-[#414651] dark:bg-slate-900 dark:text-slate-100'
+                    : 'bg-white text-[#a4a7ae] hover:text-[#414651] dark:bg-slate-900 dark:text-slate-500 dark:hover:text-slate-300'
+                )}
+              >
+                <LayoutGrid className="w-5 h-5 shrink-0" />
+                {isAr ? 'بورد' : 'Board'}
+              </button>
+              <button
+                onClick={() => setView('table')}
+                className={cn(
+                  'flex items-center gap-2 pl-[14px] pr-4 py-[10px] text-[14px] font-medium transition-colors',
+                  view === 'table'
+                    ? 'bg-white text-[#414651] dark:bg-slate-900 dark:text-slate-100'
+                    : 'bg-white text-[#a4a7ae] hover:text-[#414651] dark:bg-slate-900 dark:text-slate-500 dark:hover:text-slate-300'
+                )}
+              >
+                <Table2 className="w-5 h-5 shrink-0" />
+                {isAr ? 'جدول' : 'Table'}
+              </button>
+            </div>
+
+            {/* Columns button */}
+            <div className="relative">
+              <button
+                onClick={() => colConfigOpen ? setColConfigOpen(false) : openColConfig()}
+                className={cn(
+                  'flex items-center gap-2 pl-[13px] pr-[14px] py-[10px] rounded-lg bg-white border text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] dark:bg-slate-900',
+                  colConfigOpen
+                    ? 'border-[#d92d20] text-[#d92d20]'
+                    : 'border-[#d5d7da] text-[#181d27] hover:bg-[#f9fafb] dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800'
+                )}
+              >
+                <Settings2 className="w-5 h-5 shrink-0 text-[#667085] dark:text-slate-400" />
+                {isAr ? 'أعمدة' : 'Columns'}
+              </button>
+
+              {colConfigOpen && (
+                <div className="absolute top-[calc(100%+8px)] start-0 z-50 w-[300px] bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] dark:bg-slate-900 dark:border-slate-700">
+                  <div className="px-2 py-[11px] border-b border-[#eef1f6] dark:border-slate-700">
+                    <p className="text-sm text-[#717680] leading-6 dark:text-slate-400">
+                      {isAr ? 'تكوين أعمدة الجدول للعرض' : "Configure the table's column to show"}
+                    </p>
+                    <p className="text-xs text-[#9aa4b2] mt-0.5 dark:text-slate-500">
+                      {isAr ? 'هذا نص تلميح للمساعدة.' : 'This is a hint text to help user.'}
+                    </p>
+                  </div>
+                  {COLUMNS.map(({ key, label, labelAr }) => (
+                    <button
+                      key={key}
+                      onClick={() => setPendingVisibility((prev) => ({ ...prev, [key]: !prev[key] }))}
+                      className="flex items-center gap-3 px-2 py-[11px] w-full hover:bg-[#fafafa] dark:hover:bg-slate-800"
+                    >
+                      <Toggle
+                        on={pendingVisibility[key]}
+                        onToggle={() => setPendingVisibility((prev) => ({ ...prev, [key]: !prev[key] }))}
+                      />
+                      <span className="text-sm font-semibold text-[#1e2228] dark:text-slate-100">
+                        {isAr ? labelAr : label}
+                      </span>
+                    </button>
+                  ))}
+                  <div className="flex items-center justify-end gap-3 px-2 py-[11px] border-t border-[#eef1f6] dark:border-slate-700">
+                    <button onClick={resetColConfig} className="px-4 py-2 rounded-md border border-[#d92d20] text-[#d92d20] text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/30">
+                      {isAr ? 'إعادة تعيين' : 'Reset'}
+                    </button>
+                    <button onClick={applyColConfig} className="px-4 py-2 rounded-md bg-[#0063f5] text-white text-sm font-medium hover:bg-[#0052d4]">
+                      {isAr ? 'تطبيق' : 'Apply'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
+        {/* Right: Assignees + Search + Filter */}
         <div className="flex items-center gap-3">
-          {/* Settings / column config */}
-          <div className="relative">
+          {/* Assignee dropdown */}
+          <div ref={assigneeRef} className="relative">
             <button
-              onClick={() => colConfigOpen ? setColConfigOpen(false) : openColConfig()}
-              className={cn(
-                'flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-sm dark:bg-slate-900',
-                colConfigOpen
-                  ? 'border border-[#d92d20]'
-                  : 'border border-[#d5d7da] hover:bg-[#f9fafb] dark:border-slate-700 dark:hover:bg-slate-800'
-              )}
+              onClick={() => setAssigneeOpen((v) => !v)}
+              className="flex items-center gap-1 pr-1 rounded-lg hover:bg-[#f9fafb] dark:hover:bg-slate-800 transition-colors"
             >
-              {colConfigOpen
-                ? <X className="w-4 h-4 text-[#d92d20]" />
-                : <Settings2 className="w-4 h-4 text-[#667085] dark:text-slate-400" />
+              <div className="flex items-center isolate">
+                {selectedAssigneeId && !assigneeOpen
+                  ? (() => {
+                      const a = ASSIGNEE_LIST.find((x) => x.id === selectedAssigneeId)!;
+                      return (
+                        <img
+                          key={a.id}
+                          src={a.img}
+                          alt={a.name}
+                          className="w-8 h-8 rounded-full object-cover border-2 border-white dark:border-slate-900 shrink-0"
+                        />
+                      );
+                    })()
+                  : ASSIGNEE_LIST.map((a, i) => (
+                      <img
+                        key={a.id}
+                        src={a.img}
+                        alt={a.name}
+                        className={cn(
+                          'w-8 h-8 rounded-full object-cover border-2 border-white dark:border-slate-900 shrink-0',
+                          i > 0 && '-ml-2'
+                        )}
+                        style={{ zIndex: ASSIGNEE_LIST.length - i }}
+                      />
+                    ))
+                }
+              </div>
+              {assigneeOpen
+                ? <ChevronUp className="w-5 h-5 text-[#667085] dark:text-slate-400 shrink-0" />
+                : <ChevronDown className="w-5 h-5 text-[#667085] dark:text-slate-400 shrink-0" />
               }
             </button>
 
-            {colConfigOpen && (
-              <div className="absolute top-[calc(100%+8px)] start-0 z-50 w-[300px] bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] dark:bg-slate-900 dark:border-slate-700">
-                <div className="px-2 py-[11px] border-b border-[#eef1f6] dark:border-slate-700">
-                  <p className="text-sm text-[#717680] leading-6 dark:text-slate-400">
-                    {isAr ? 'تكوين أعمدة الجدول للعرض' : "Configure the table's column to show"}
-                  </p>
-                  <p className="text-xs text-[#9aa4b2] mt-0.5 dark:text-slate-500">
-                    {isAr ? 'هذا نص تلميح للمساعدة.' : 'This is a hint text to help user.'}
-                  </p>
-                </div>
-                {COLUMNS.map(({ key, label, labelAr }) => (
-                  <button
-                    key={key}
-                    onClick={() => setPendingVisibility((prev) => ({ ...prev, [key]: !prev[key] }))}
-                    className="flex items-center gap-3 px-2 py-[11px] w-full hover:bg-[#fafafa] dark:hover:bg-slate-800"
-                  >
-                    <Toggle
-                      on={pendingVisibility[key]}
-                      onToggle={() => setPendingVisibility((prev) => ({ ...prev, [key]: !prev[key] }))}
-                    />
-                    <span className="text-sm font-semibold text-[#1e2228] dark:text-slate-100">
-                      {isAr ? labelAr : label}
-                    </span>
-                  </button>
-                ))}
-                <div className="flex items-center justify-end gap-3 px-2 py-[11px] border-t border-[#eef1f6] dark:border-slate-700">
-                  <button onClick={resetColConfig} className="px-4 py-2 rounded-md border border-[#d92d20] text-[#d92d20] text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/30">
-                    {isAr ? 'إعادة تعيين' : 'Reset'}
-                  </button>
-                  <button onClick={applyColConfig} className="px-4 py-2 rounded-md bg-[#0063f5] text-white text-sm font-medium hover:bg-[#0052d4]">
-                    {isAr ? 'تطبيق' : 'Apply'}
-                  </button>
-                </div>
+            {assigneeOpen && (
+              <div className="absolute end-0 top-[calc(100%+4px)] z-50 flex flex-col gap-1 w-[293px] bg-white dark:bg-slate-900 rounded-lg shadow-[0px_12px_16px_-4px_rgba(10,13,18,0.08),0px_4px_6px_-2px_rgba(10,13,18,0.03)] border border-[#e3e8ef] dark:border-slate-700 p-1">
+                {ASSIGNEE_LIST.map((assignee) => {
+                  const isSelected = assignee.id === selectedAssigneeId;
+                  return (
+                    <button
+                      key={assignee.id}
+                      onClick={() => {
+                        setSelectedAssigneeId(isSelected ? null : assignee.id);
+                        setAssigneeOpen(false);
+                      }}
+                      className={cn(
+                        'w-full flex items-center bg-white dark:bg-slate-900 rounded-lg overflow-hidden transition-colors',
+                        isSelected
+                          ? 'border border-[#0063f5]'
+                          : 'border border-transparent hover:bg-[#fafafa] dark:hover:bg-slate-800'
+                      )}
+                    >
+                      <span className="px-3 py-2 text-[14px] font-medium text-[#697586] dark:text-slate-400 shrink-0 min-w-[44px] text-center whitespace-nowrap">
+                        {assignee.count}
+                      </span>
+                      <span className="border-l border-[#e3e8ef] dark:border-slate-700 flex items-center gap-2.5 px-3 py-2 flex-1 min-w-0">
+                        <img
+                          src={assignee.img}
+                          alt={assignee.name}
+                          className="w-8 h-8 rounded-full object-cover shrink-0"
+                        />
+                        <span className="text-[14px] font-medium text-[#697586] dark:text-slate-400 text-left leading-5">
+                          {assignee.name}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -241,10 +379,10 @@ export default function CardHeader({ liveCount: _liveCount }: { liveCount?: numb
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               className={cn(
-                'w-full h-10 ps-9 pe-8 border border-[#d5d7da] rounded-lg text-sm bg-white shadow-sm focus:outline-none focus:ring-1 focus:ring-[#0063f5] dark:border-slate-700 dark:bg-slate-900 dark:placeholder:text-slate-500',
-                searchValue ? 'text-[#121a26] dark:text-slate-100' : 'text-[#717680] dark:text-slate-400'
+                'w-full h-10 ps-9 pe-8 border border-[#d5d7da] rounded-lg text-sm bg-white shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] focus:outline-none focus:ring-1 focus:ring-[#0063f5] dark:border-slate-700 dark:bg-slate-900 dark:placeholder:text-slate-500',
+                searchValue ? 'text-[#121a26] dark:text-slate-100' : 'text-[#697586] dark:text-slate-400'
               )}
-              placeholder={isAr ? 'البحث باستخدام رقم الطلب، رقم العميل، الاسم...' : 'Search by Order ID, Customer ID, Name...'}
+              placeholder={isAr ? 'البحث برقم الطلب، العميل، المنتج، مبلغ التمويل...' : 'Search by Order ID, Customer Details, Product Details, Loan Amount...'}
             />
             <Search className="absolute start-3 top-3 w-4 h-4 text-[#9aa4b2] dark:text-slate-500" />
             {searchValue
@@ -259,16 +397,17 @@ export default function CardHeader({ liveCount: _liveCount }: { liveCount?: numb
           <button
             onClick={() => setFilterOpen((v) => !v)}
             className={cn(
-              'flex items-center gap-1.5 px-4 py-2.5 bg-white border rounded-lg text-sm font-medium text-[#344054] shadow-sm dark:bg-slate-900 dark:text-slate-100',
+              'flex items-center gap-1.5 px-4 py-[10px] bg-white border rounded-lg text-sm font-medium text-[#364152] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:bg-slate-900 dark:text-slate-100',
               filterOpen
                 ? 'border-[#d5d7da] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05),0px_0px_0px_2px_white,0px_0px_0px_4px_#77a6ed] dark:border-slate-600'
-                : 'border-[#d5d7da] hover:bg-[#f9fafb] dark:border-slate-700 dark:hover:bg-slate-800'
+                : 'border-[#cdd4df] hover:bg-[#f9fafb] dark:border-slate-700 dark:hover:bg-slate-800'
             )}
           >
             <SlidersHorizontal className="w-4 h-4 text-[#667085] dark:text-slate-400" />
             {isAr ? 'فلتر' : 'Filter'}{appliedFilterCount > 0 && ` (${appliedFilterCount})`}
             <ChevronDown className="w-4 h-4 text-[#667085] dark:text-slate-400" />
           </button>
+
         </div>
       </div>
 

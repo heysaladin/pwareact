@@ -22,6 +22,8 @@ import OrderDetailPanel from './OrderDetailPanel';
 import ConciseOrderList from './ConciseOrderList';
 import CustomerDetailsPanel from './CustomerDetailsPanel';
 import ProductDetailsPanel from './ProductDetailsPanel';
+import DataGroupHeader from './DataGroupHeader';
+import OrdersBoardView from './OrdersBoardView';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
 type RightPanel = 'customer' | 'product' | null;
@@ -29,6 +31,7 @@ type RightPanel = 'customer' | 'product' | null;
 export default function OrdersPage() {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [rightPanel, setRightPanel] = useState<RightPanel>(null);
+  const [view, setView] = useState<'board' | 'table'>('board');
   const windowWidth = useWindowWidth();
   const isWide = windowWidth > 1440;
 
@@ -63,14 +66,63 @@ export default function OrdersPage() {
     );
   }
 
-  return (
-    <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
-      <Topbar />
-      <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
-        {!isSplitView && <FilterBar />}
-        {!isSplitView && <StatsRow />}
+  // Board mode with selected order: show board + detail panel side by side
+  if (view === 'board' && selectedOrderId) {
+    return (
+      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+        <Topbar />
+        <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
+          <Card className="flex-1 flex flex-row overflow-visible min-h-0">
+            <div className="relative w-fit shrink-0 overflow-visible">
+              <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={selectedOrderId} />
+              <button
+                onClick={handleClose}
+                className="absolute top-1/2 -translate-y-1/2 -right-4 z-10 flex items-center justify-center w-8 h-8 bg-white border border-[#e3e8ef] rounded-full shadow-sm hover:shadow-md transition-shadow"
+              >
+                <img src="http://localhost:3845/assets/52176b705278184b5827f59d7bcd6a9d1dacebfd.svg" alt="" className="w-4 h-4" />
+              </button>
+            </div>
+            <div className={`flex min-w-0 flex-1 ${rightPanel ? 'gap-2 pr-2 pt-2 pb-2' : ''}`}>
+              <OrderDetailPanel
+                order={selectedOrder!}
+                onClose={handleClose}
+                onOpenCustomerDetails={() => setRightPanel('customer')}
+                onOpenProductDetails={() => setRightPanel('product')}
+                customerPanelOpen={rightPanel !== null}
+                className={
+                  rightPanel
+                    ? isWide
+                      ? 'flex-1 min-w-0 rounded-[6px] border border-[#e2e3e4] dark:border-slate-800'
+                      : 'flex-1 min-w-0 basis-0 rounded-[6px] border border-[#e2e3e4] dark:border-slate-800'
+                    : undefined
+                }
+              />
+              {rightPanel === 'customer' && selectedOrder && (
+                <CustomerDetailsPanel
+                  order={selectedOrder}
+                  onClose={() => setRightPanel(null)}
+                  className={isWide ? undefined : 'flex-1 min-w-0 basis-0 w-auto'}
+                />
+              )}
+              {rightPanel === 'product' && selectedOrder && (
+                <ProductDetailsPanel
+                  order={selectedOrder}
+                  onClose={() => setRightPanel(null)}
+                />
+              )}
+            </div>
+          </Card>
+        </main>
+      </div>
+    );
+  }
 
-        {isSplitView ? (
+  // Table mode split view
+  if (view === 'table' && isSplitView) {
+    return (
+      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+        <Topbar />
+        <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
           <Card className="flex-1 flex flex-row overflow-visible min-h-0">
             <ConciseOrderList
               orders={orders}
@@ -108,17 +160,33 @@ export default function OrdersPage() {
               )}
             </div>
           </Card>
-        ) : (
-          <Card className="flex-1 orders-card">
-            <OrdersTableHeader liveCount={orders.length} />
-            <CardContent>
-              <OrdersTable orders={orders} justEscalated={justEscalated} onSelectOrder={setSelectedOrderId} />
-            </CardContent>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+      <Topbar />
+      <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
+        <DataGroupHeader />
+        <StatsRow />
+        <FilterBar />
+
+        <Card className="flex-1 orders-card">
+          <OrdersTableHeader liveCount={orders.length} view={view} onViewChange={setView} />
+          <CardContent className="flex-1 overflow-hidden">
+            {view === 'board'
+              ? <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={null} />
+              : <OrdersTable orders={orders} justEscalated={justEscalated} onSelectOrder={setSelectedOrderId} />
+            }
+          </CardContent>
+          {view === 'table' && (
             <CardFooter>
               <OrdersFooter currentPage={1} totalPages={50} />
             </CardFooter>
-          </Card>
-        )}
+          )}
+        </Card>
       </main>
     </div>
   );
