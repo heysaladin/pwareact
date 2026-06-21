@@ -31,7 +31,7 @@ type RightPanel = 'customer' | 'product' | null;
 export default function OrdersPage() {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [rightPanel, setRightPanel] = useState<RightPanel>(null);
-  const [view, setView] = useState<'board' | 'table'>('board');
+  const [view, setView] = useState<'board' | 'table'>('table');
   const windowWidth = useWindowWidth();
   const isWide = windowWidth > 1440;
 
@@ -74,13 +74,7 @@ export default function OrdersPage() {
         <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
           <Card className="flex-1 flex flex-row overflow-visible min-h-0">
             <div className="relative w-fit shrink-0 overflow-visible">
-              <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={selectedOrderId} />
-              <button
-                onClick={handleClose}
-                className="absolute top-1/2 -translate-y-1/2 -right-4 z-10 flex items-center justify-center w-8 h-8 bg-white border border-[#e3e8ef] rounded-full shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img src="http://localhost:3845/assets/52176b705278184b5827f59d7bcd6a9d1dacebfd.svg" alt="" className="w-4 h-4" />
-              </button>
+              <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={selectedOrderId} onClose={handleClose} />
             </div>
             <div className={`flex min-w-0 flex-1 ${rightPanel ? 'gap-2 pr-2 pt-2 pb-2' : ''}`}>
               <OrderDetailPanel
@@ -171,22 +165,23 @@ export default function OrdersPage() {
       <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
         <DataGroupHeader />
         <StatsRow />
-        <FilterBar />
-
-        <Card className="flex-1 orders-card">
-          <OrdersTableHeader liveCount={orders.length} view={view} onViewChange={setView} />
-          <CardContent className="flex-1 overflow-hidden">
-            {view === 'board'
-              ? <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={null} />
-              : <OrdersTable orders={orders} justEscalated={justEscalated} onSelectOrder={setSelectedOrderId} />
-            }
-          </CardContent>
-          {view === 'table' && (
-            <CardFooter>
-              <OrdersFooter currentPage={1} totalPages={50} />
-            </CardFooter>
-          )}
-        </Card>
+        <div className="flex flex-col flex-1 min-h-0">
+          <FilterBar />
+          <Card className="flex-1 orders-card">
+            <OrdersTableHeader liveCount={orders.length} view={view} onViewChange={setView} />
+            <CardContent className="flex-1 overflow-hidden">
+              {view === 'board'
+                ? <OrdersBoardView orders={orders} onSelectOrder={handleSelectOrder} selectedOrderId={null} />
+                : <OrdersTable orders={orders} justEscalated={justEscalated} onSelectOrder={setSelectedOrderId} />
+              }
+            </CardContent>
+            {view === 'table' && (
+              <CardFooter>
+                <OrdersFooter currentPage={1} totalPages={50} />
+              </CardFooter>
+            )}
+          </Card>
+        </div>
       </main>
     </div>
   );

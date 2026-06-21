@@ -1,5 +1,5 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useRef, useLayoutEffect, useEffect, useState, useCallback } from 'react';
 import type { Order, OrderStatus } from '@/hooks/useOrderSimulation';
 import SARSymbol from '@/components/ui/SARSymbol';
 import { cn } from '@/lib/utils';
@@ -22,9 +22,10 @@ interface Props {
   orders: Order[];
   onSelectOrder: (id: string) => void;
   selectedOrderId?: string | null;
+  onClose?: () => void;
 }
 
-export default function OrdersBoardView({ orders, onSelectOrder, selectedOrderId }: Props) {
+export default function OrdersBoardView({ orders, onSelectOrder, selectedOrderId, onClose }: Props) {
   const { lang } = useLang();
   const isAr = lang === 'ar';
 
@@ -40,19 +41,43 @@ export default function OrdersBoardView({ orders, onSelectOrder, selectedOrderId
     ? BOARD_COLUMNS.filter(({ status }) => grouped[status]?.some((o) => o.id === selectedOrderId))
     : BOARD_COLUMNS;
 
+  const selectedCardRef = useRef<HTMLButtonElement>(null);
+  const columnRef = useRef<HTMLDivElement>(null);
+  const cardListRef = useRef<HTMLDivElement>(null);
+  const [chevronTop, setChevronTop] = useState<number | null>(null);
+
+  const updateChevronTop = useCallback(() => {
+    const card = selectedCardRef.current;
+    const cardList = cardListRef.current;
+    if (!card || !cardList) { setChevronTop(null); return; }
+    setChevronTop(cardList.offsetTop + card.offsetTop - cardList.scrollTop + card.offsetHeight / 2);
+  }, []);
+
+  useLayoutEffect(() => {
+    updateChevronTop();
+  }, [selectedOrderId, orders, updateChevronTop]);
+
+  useEffect(() => {
+    const el = cardListRef.current;
+    if (!el || !selectedOrderId) return;
+    el.addEventListener('scroll', updateChevronTop, { passive: true });
+    return () => el.removeEventListener('scroll', updateChevronTop);
+  }, [selectedOrderId, updateChevronTop]);
+
   return (
-    <div className="flex flex-row gap-2 h-full overflow-x-auto pb-2">
+    <div className={`flex flex-row gap-2 h-full py-2 ${selectedOrderId ? 'overflow-visible' : 'overflow-x-auto'}`}>
       {visibleColumns.map(({ status, dotColor }) => {
         const col = grouped[status] ?? [];
         const label = isAr ? statusLabelAr[status] : status;
+        const hasSelectedCard = !!selectedOrderId && col.some((o) => o.id === selectedOrderId);
         return (
           <div
             key={status}
-            className="flex flex-col gap-2 bg-[#fcfcfd] dark:bg-slate-800/50 rounded-xl p-2 shrink-0 w-[216px]"
+            ref={hasSelectedCard ? columnRef : undefined}
+            className="relative flex flex-col gap-2 bg-[#fcfcfd] dark:bg-slate-800/50 rounded-xl p-2 shrink-0 w-[216px]"
           >
             {/* Column header */}
             <div className="flex items-center gap-2 px-3 py-1 shrink-0">
-              {/* Double-circle status dot */}
               <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
                 <span className="absolute inset-0 rounded-full bg-[#697586]" />
                 <span className="absolute inset-0 rounded-full" style={{ backgroundColor: dotColor }} />
@@ -65,11 +90,15 @@ export default function OrdersBoardView({ orders, onSelectOrder, selectedOrderId
               </span>
             </div>
 
-            {/* Cards + gradient overlay */}
-            <div className="relative flex flex-col gap-2 overflow-y-auto flex-1 min-h-0">
+            {/* Cards */}
+            <div
+              ref={hasSelectedCard ? cardListRef : undefined}
+              className="relative flex flex-col gap-2 overflow-y-auto flex-1 min-h-0"
+            >
               {col.map((order) => (
                 <button
                   key={order.id}
+                  ref={selectedOrderId === order.id ? selectedCardRef : undefined}
                   onClick={() => onSelectOrder(order.id)}
                   className={cn(
                     'w-[200px] text-left bg-white dark:bg-slate-900 border rounded-lg px-4 py-2 drop-shadow-[0px_1px_1px_rgba(10,13,18,0.05)] transition-colors shrink-0',
@@ -111,6 +140,17 @@ export default function OrdersBoardView({ orders, onSelectOrder, selectedOrderId
                 />
               )}
             </div>
+
+            {/* Chevron — rendered outside the overflow-y-auto card list, positioned via measured offsetTop */}
+            {hasSelectedCard && onClose && chevronTop !== null && (
+              <button
+                onClick={onClose}
+                style={{ top: chevronTop }}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border bg-white shadow-sm hover:bg-[#f9fafb] text-[#344054] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 rounded-full w-8 h-8 border-[#e2e3e4] absolute -translate-y-1/2 -right-4 z-10"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right w-4 h-4 rtl:rotate-180" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+              </button>
+            )}
           </div>
         );
       })}

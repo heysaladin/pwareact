@@ -5,6 +5,7 @@ import { useLang } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 
 const ASSIGNEE_LIST = [
+  { id: 'om', name: 'Omar Khalid Al-Rashidi',       count: 31, img: '/img/avatar.png' },
   { id: 'au', name: 'Abdullah Umar AlOtaiby',      count: 24, img: 'http://localhost:3845/assets/3b4b62b075fd7b9c39b4fa9c40c1ea3f883ea484.png' },
   { id: 'ma', name: 'Mustofa Abdel Aziz AlOtaiby', count: 18, img: 'http://localhost:3845/assets/68ba01e276a047dd281410070732fd01c8894a61.png' },
   { id: 'fi', name: 'Fatimah Ibrahim AlOtaiby',    count: 16, img: 'http://localhost:3845/assets/a1e15821ef264ec1b49b2f072a534cb6189fc8f9.png' },
@@ -241,7 +242,7 @@ export default function CardHeader({ liveCount: _liveCount, view: viewProp, onVi
             </div>
 
             {/* Columns button */}
-            <div className="relative">
+            {view === 'table' && <div className="relative">
               <button
                 onClick={() => colConfigOpen ? setColConfigOpen(false) : openColConfig()}
                 className={cn(
@@ -290,7 +291,7 @@ export default function CardHeader({ liveCount: _liveCount, view: viewProp, onVi
                   </div>
                 </div>
               )}
-            </div>
+            </div>}
           </div>
         </div>
 
