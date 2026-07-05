@@ -1,69 +1,38 @@
 import Link from 'next/link';
-import TamawalLogo from '@/components/ui/TamawalLogo';
+import TamawalLogo from './components/ui/TamawalLogo';
 
 const projects = [
   {
-    id: 'pof',
-    name: 'Portal Auth Flow',
-    description: 'Manage and configure authentication flows for the portal.',
-    href: '/pof',
-    tag: 'POF',
-    accentColor: '#0D9488',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="12" cy="16" r="1.25" fill="currentColor"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'oms',
-    name: 'Order Management',
-    description: 'Track, manage and process customer orders in real time.',
-    href: '/oms',
-    tag: 'OMS',
+    id: 'web',
+    name: 'Landing',
+    description: 'The public-facing website for Tamawal — bilingual Arabic and English.',
+    href: '/web',
+    tag: 'WEB',
     accentColor: '#0063F5',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9 12h6M9 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 12h18M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
   {
-    id: 'ode',
-    name: 'Offer & Discount Engine',
-    description: 'Create and manage offers, discounts, and promotions across your platform.',
-    href: '/ode',
-    tag: 'ODE',
+    id: 'app',
+    name: 'App',
+    description: 'Mobile application design for the customer-facing Tamawal experience.',
+    href: '/app',
+    tag: 'APP',
     accentColor: '#7C3AED',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'sla',
-    name: 'Service Level Agreement',
-    description: 'Monitor and manage service level agreements and performance metrics.',
-    href: '/sla',
-    tag: 'SLA',
-    accentColor: '#D97706',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="18" r="1" fill="currentColor"/>
       </svg>
     ),
   },
 ];
 
-export default function LandingPage() {
+export default function HubPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#080d14] flex flex-col">
 
@@ -73,7 +42,7 @@ export default function LandingPage() {
           <TamawalLogo />
           <nav className="flex items-center gap-6">
             <span className="text-xs font-medium text-[#667085] dark:text-white/40 px-2 py-0.5 rounded-full border border-[#eef1f6] dark:border-white/[0.08]">
-              Internal
+              Design
             </span>
           </nav>
         </div>
@@ -84,13 +53,13 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="pt-20 pb-16 border-b border-[#eef1f6] dark:border-white/[0.06]">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-4">
-            Platform
+            Projects
           </p>
           <h1 className="text-4xl font-bold tracking-tight text-[#101828] dark:text-white leading-[1.15] mb-4 max-w-xl">
-            Operations at your fingertips.
+            Design at a glance.
           </h1>
           <p className="text-base text-[#667085] dark:text-white/50 max-w-md leading-relaxed">
-            A unified workspace for order management, offers, and discounts — built for speed and clarity.
+            A unified view of all Tamawal design projects — from the public landing to the customer app.
           </p>
         </section>
 
@@ -145,7 +114,7 @@ export default function LandingPage() {
       <footer className="border-t border-[#eef1f6] dark:border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
           <p className="text-xs text-[#9aa4b2] dark:text-white/25">
-            Tamweel Platform
+            Tamawal Design
           </p>
           <p className="text-xs text-[#9aa4b2] dark:text-white/25">
             {new Date().getFullYear()}

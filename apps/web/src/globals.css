@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
+}
+
+:lang(ar), [dir="rtl"] {
+  font-family: "SF Arabic", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
+}
+
+.duration-400 { transition-duration: 400ms; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes badge-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Theme toggle icons — CSS drives visibility, no JS state needed */
+#icon-sun  { display: none; }
+#icon-moon { display: block; }
+.dark #icon-sun  { display: block; }
+.dark #icon-moon { display: none; }

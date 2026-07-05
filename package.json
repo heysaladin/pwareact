@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev --filter=landing",
+    "dev:web": "turbo run dev --filter=web",
     "dev:dashboard": "turbo run dev --filter=dashboard",
     "dev:mobile": "turbo run dev --filter=mobile",
     "dev:all": "turbo run dev",

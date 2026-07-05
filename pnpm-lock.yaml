@@ -76,7 +76,7 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  apps/landing:
+  apps/mobile:
     dependencies:
       next:
         specifier: ^15.5.15
@@ -113,7 +113,7 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  apps/mobile:
+  apps/web:
     dependencies:
       next:
         specifier: ^15.5.15
