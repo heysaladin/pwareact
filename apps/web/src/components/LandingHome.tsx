@@ -11,8 +11,10 @@ const imgIcon = "http://localhost:3845/assets/b132fd916e53d0ab6d7a8e2c3e6a207eca
 const imgIcon1 = "http://localhost:3845/assets/497877c4d3459bd9c7cc111573e1ed6314396def.svg";
 const imgIcon2 = "http://localhost:3845/assets/d0eb584f28b2e49512e9a57fc36342dc9a03aae4.svg";
 const imgIcon3 = "http://localhost:3845/assets/4b9da7577497222f032976351799034eac9f0e43.svg";
-const imgArrowUpCircle = "http://localhost:3845/assets/2aaba8a0dd13363a3c0900a8ca3d07cec3c26b35.svg";
-const imgArrowDownCircle = "http://localhost:3845/assets/254ba3a52e458076c0b9b38ffa93a79a9e4459ca.svg";
+const imgArrowUpCircle = "/arrow-up-circle.svg";
+const imgArrowDownCircle = "/arrow-down-circle.svg";
+const imgAppStore = "/appstore.svg";
+const imgPlayStore = "/playstore.svg";
 const imgArrowNextDark = "http://localhost:3845/assets/d599a04f31ff42f2b327c0ae48aa92c0f0950b27.svg";
 const imgGfpDjkmXwAAxREe5 = "http://localhost:3845/assets/12ea0e34d475c9cfab4b54498538dc99014d3758.png";
 const imgGfpDjkmXwAAxREe4 = "http://localhost:3845/assets/844bdeede3c251e261a3c42370873c6c84c670a0.png";
@@ -398,6 +400,15 @@ function Footer() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+                <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+                <img src={imgPlayStore} alt="Google Play" className="w-full h-full object-contain" />
+              </a>
             </div>
           </div>
         </div>
