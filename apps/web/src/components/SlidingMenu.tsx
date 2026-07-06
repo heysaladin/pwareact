@@ -1,0 +1,50 @@
+'use client';
+
+import { useEffect } from 'react';
+
+const imgVuesaxLinearAdd = "http://localhost:3845/assets/833129c4b4814d6b3aae51f14cb48704f8eb2630.svg";
+
+const navLinks = [
+  { label: 'App', active: true },
+  { label: 'Tamawal', active: false },
+  { label: 'Services', active: false },
+  { label: 'About us', active: false },
+  { label: 'Contact us', active: false },
+];
+
+export default function SlidingMenu({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative ml-auto w-full max-w-sm bg-[#1e2228] flex flex-col items-center p-6 h-full">
+        <div className="flex items-center justify-end w-full shrink-0">
+          <button
+            onClick={onClose}
+            className="border border-white/[0.16] rounded-3xl p-1.5 flex items-center cursor-pointer"
+          >
+            <img alt="Close" className="size-[18px]" src={imgVuesaxLinearAdd} />
+          </button>
+        </div>
+        <div className="flex flex-col gap-4 items-start w-full px-2 mt-4">
+          {navLinks.map(({ label, active }) => (
+            <div key={label} className="flex flex-col gap-0.5 items-start w-full">
+              <div className="flex items-center px-3 py-2 rounded-lg w-full">
+                <span
+                  className="font-bold text-[32px] leading-normal"
+                  style={{ color: active ? '#fff' : 'rgba(255,255,255,0.64)' }}
+                >
+                  {label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -3,7 +3,7 @@ import '../globals.css';
 export const metadata = {
   title: 'Tamawal',
   description: 'Tamawal Design Hub',
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: 'https://www.tamawal.sa/favicon.ico' },
 }
 
 export default function RootLayout({

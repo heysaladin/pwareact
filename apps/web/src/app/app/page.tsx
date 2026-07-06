@@ -8,7 +8,7 @@ const imgLogo        = "/logo-tamawal-web.svg";
 const imgNavArrow    = "http://localhost:3845/assets/4c4ae62485902829fc9e816c9e3b6272289709e3.svg";
 const imgSlider      = "http://localhost:3845/assets/958c958b4083704331e66b3ea7f73fca9a8beb0b.svg";
 const imgChevron     = "http://localhost:3845/assets/b132fd916e53d0ab6d7a8e2c3e6a207ecab2b392.svg";
-const imgArrowRight  = "http://localhost:3845/assets/4b9da7577497222f032976351799034eac9f0e43.svg";
+const imgArrowRight  = "/arrow-right.svg";
 const imgPhoneImg    = "/mockup.png";
 const imgAppStore    = "http://localhost:3845/assets/d546918b9349f2d2f6f0c33b97fe51ad05199e4c.svg";
 const imgGooglePlay  = "http://localhost:3845/assets/74a1f08e8001561fb28ceb1da93da2a164455551.svg";
@@ -32,26 +32,33 @@ const imgSubAfc        = "/logos/subafc.png";
 const imgWataniya1     = "/logos/wataniya.png";
 
 // ── Form ─────────────────────────────────────────────────────────────────────
-const imgTrash           = "http://localhost:3845/assets/ace3f68d24ea8babe50a7a497bc24d96bba94d67.svg";
-const imgArrowDisabled   = "http://localhost:3845/assets/0bdd08fb6f83cb08aeba8b34dbe77a7696174726.svg";
-const imgPhoneIconBlue   = "http://localhost:3845/assets/497877c4d3459bd9c7cc111573e1ed6314396def.svg";
-const imgCheckGreen      = "http://localhost:3845/assets/d0eb584f28b2e49512e9a57fc36342dc9a03aae4.svg";
+const imgArrowDisabled   = "/arrow-right.svg";
+const imgPhoneIconBlue   = "/icon-phone-white.svg";
+const imgCheckGreen      = "/icon-check.svg";
 
 // ── FAQ ──────────────────────────────────────────────────────────────────────
 const imgArrowDownCircle = "http://localhost:3845/assets/254ba3a52e458076c0b9b38ffa93a79a9e4459ca.svg";
 const imgArrowUpCircle   = "http://localhost:3845/assets/2aaba8a0dd13363a3c0900a8ca3d07cec3c26b35.svg";
-const imgViewMoreArrow   = "http://localhost:3845/assets/4ed1ddc826f477bf8089254b418f8ea3f2d6fdb4.svg";
+const imgViewMoreArrow   = "/arrow-right.svg";
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 const imgFooterBadge     = "/badge-small.svg";
-const imgArrowNext       = "http://localhost:3845/assets/81d50a7431408fc46e51730d5aa34428f1b83b28.svg";
-const imgEmailIcon       = "http://localhost:3845/assets/7f2ee257638afd72a51f249195d3f921e359d8f3.svg";
-const imgPhoneIcon       = "http://localhost:3845/assets/bb37c2c33523f4a34c420e251c2f11c79a1149a5.svg";
+const imgArrowNext       = "/arrow-next-dark.svg";
+const imgEmailIcon       = "/icon-email.svg";
+const imgPhoneIcon       = "/icon-phone.svg";
 const imgLocationIcon    = "/pinlocation.svg";
-const imgLinkedIn        = "http://localhost:3845/assets/cb3a7fab272340302ba86f6a820b28b780a29371.svg";
-const imgTwitterX        = "http://localhost:3845/assets/ad2931524412784cfe16d2c27d020156912b9fcb.svg";
+const imgLinkedIn        = "/icon-linkedin.svg";
+const imgTwitterX        = "/icon-twitter.svg";
 
 // ─────────────────────────────────────────────────────────────────────────────
+
+function ArrowRight({ color = '#414651', className = 'w-5 h-5' }: { color?: string; className?: string }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke={color} strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
 
 const faqs = [
   {
@@ -70,54 +77,141 @@ const faqs = [
 
 const MIN = 1000;
 const MAX = 100000;
+const RULER_PX = 6000;
+const EXTRA_PX = 500;
+const TOTAL_PX = EXTRA_PX + RULER_PX + EXTRA_PX;
+
+function drawRuler(canvas: HTMLCanvasElement) {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = TOTAL_PX * dpr;
+  canvas.height = 36 * dpr;
+  canvas.style.width  = TOTAL_PX + 'px';
+  canvas.style.height = '36px';
+  const ctx = canvas.getContext('2d')!;
+  ctx.scale(dpr, dpr);
+
+  const N    = 700;
+  const step = TOTAL_PX / N;
+  const cy   = 18;
+
+  for (let i = 0; i <= N; i++) {
+    const x     = i * step;
+    const major = i % 10 === 0;
+    const mid   = i % 5  === 0;
+    const h     = major ? 18 : mid ? 11 : 6;
+    const inRange = x >= EXTRA_PX && x <= EXTRA_PX + RULER_PX;
+    const alpha   = inRange ? 1 : 0.12;
+
+    ctx.beginPath();
+    ctx.moveTo(x, cy - h / 2);
+    ctx.lineTo(x, cy + h / 2);
+    ctx.strokeStyle = major
+      ? `rgba(153,153,153,${alpha})`
+      : `rgba(204,204,204,${alpha})`;
+    ctx.lineWidth = major ? 1.5 : 1;
+    ctx.stroke();
+  }
+}
+
+function valToCanvasX(val: number) {
+  return EXTRA_PX + ((val - MIN) / (MAX - MIN)) * RULER_PX;
+}
 
 function SalarySlider() {
-  const [value, setValue]   = useState(7500);
+  const [value, setValue]     = useState(7000);
   const [editing, setEditing] = useState(false);
   const [inputStr, setInputStr] = useState('');
-  const trackRef   = useRef<HTMLDivElement>(null);
-  const dragging   = useRef(false);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const canvasRef   = useRef<HTMLCanvasElement>(null);
+  const txRef       = useRef(0);
+  const dragging    = useRef(false);
+  const startClientX = useRef(0);
+  const startTx      = useRef(0);
 
-  const pct = ((value - MIN) / (MAX - MIN)) * 100;
-
-  function clamp(raw: number) {
-    return Math.min(MAX, Math.max(MIN, Math.round(raw / 500) * 500));
+  function needleX() {
+    return (viewportRef.current?.offsetWidth ?? 0) / 2;
   }
 
-  function valueFromClientX(clientX: number) {
-    if (!trackRef.current) return value;
-    const rect  = trackRef.current.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    return clamp(MIN + ratio * (MAX - MIN));
+  function clampTx(tx: number) {
+    const nx = needleX();
+    return Math.min(nx - EXTRA_PX, Math.max(nx - EXTRA_PX - RULER_PX, tx));
   }
 
-  function handleTrackMouseDown(e: React.MouseEvent) {
-    e.preventDefault();
-    dragging.current = true;
-    setValue(valueFromClientX(e.clientX));
+  function currentValue(tx: number) {
+    const cx  = needleX() - tx;
+    const val = MIN + ((cx - EXTRA_PX) / RULER_PX) * (MAX - MIN);
+    return Math.min(MAX, Math.max(MIN, val));
   }
+
+  function setTxFromValue(val: number) {
+    txRef.current = needleX() - valToCanvasX(val);
+  }
+
+  function applyTx(tx: number) {
+    txRef.current = clampTx(tx);
+    if (canvasRef.current) {
+      canvasRef.current.style.transform = `translateX(${txRef.current}px)`;
+    }
+    setValue(currentValue(txRef.current));
+  }
+
+  useEffect(() => {
+    if (!canvasRef.current || !viewportRef.current) return;
+    drawRuler(canvasRef.current);
+    setTxFromValue(7000);
+    applyTx(txRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     function onMove(e: MouseEvent) {
       if (!dragging.current) return;
-      setValue(valueFromClientX(e.clientX));
+      applyTx(startTx.current + (e.clientX - startClientX.current));
     }
     function onUp() { dragging.current = false; }
+    function onTouchMove(e: TouchEvent) {
+      if (!dragging.current) return;
+      applyTx(startTx.current + (e.touches[0].clientX - startClientX.current));
+    }
+    function onTouchEnd() { dragging.current = false; }
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('touchend', onTouchEnd);
     return () => {
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleViewportMouseDown(e: React.MouseEvent) {
+    e.preventDefault();
+    dragging.current   = true;
+    startClientX.current = e.clientX;
+    startTx.current    = txRef.current;
+  }
+
+  function handleViewportTouchStart(e: React.TouchEvent) {
+    dragging.current   = true;
+    startClientX.current = e.touches[0].clientX;
+    startTx.current    = txRef.current;
+  }
+
   function handleDisplayClick() {
-    setInputStr(String(value));
+    setInputStr(String(Math.round(value)));
     setEditing(true);
   }
 
   function commitInput() {
-    setValue(clamp(Number(inputStr) || MIN));
+    const raw = parseFloat(inputStr.replace(/,/g, ''));
+    if (!isNaN(raw)) {
+      const clamped = Math.min(MAX, Math.max(MIN, raw));
+      setTxFromValue(clamped);
+      applyTx(txRef.current);
+    }
     setEditing(false);
   }
 
@@ -134,7 +228,7 @@ function SalarySlider() {
 
       {/* Editable display */}
       <div
-        className="border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text w-full"
+        className="border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text"
         onClick={!editing ? handleDisplayClick : undefined}
       >
         <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
@@ -147,40 +241,34 @@ function SalarySlider() {
             onChange={(e) => setInputStr(e.target.value.replace(/[^0-9]/g, ''))}
             onBlur={commitInput}
             onKeyDown={handleKeyDown}
-            className="text-[#101828] text-[24px] font-bold outline-none w-full"
+            className="text-[#101828] text-[24px] font-bold outline-none min-w-[120px]"
           />
         ) : (
           <span className="text-[#101828] text-[24px] font-bold">{formatted}</span>
         )}
       </div>
 
-      {/* Drag track row */}
-      <div className="flex items-center gap-3 w-full mt-1" style={{ userSelect: 'none' }}>
+      {/* Canvas ruler row */}
+      <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
         <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
           <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
         </span>
 
-        {/* Custom drag track — ruler image + draggable bar */}
+        {/* Viewport: ruler scrolls inside, needle fixed at center */}
         <div
-          ref={trackRef}
-          onMouseDown={handleTrackMouseDown}
-          className="flex-1 relative h-[32px] cursor-pointer"
+          ref={viewportRef}
+          className="flex-1 relative h-[36px] overflow-hidden cursor-grab"
+          onMouseDown={handleViewportMouseDown}
+          onTouchStart={handleViewportTouchStart}
         >
-          {/* Ruler image from Figma */}
-          <img
-            src={imgSlider}
-            alt=""
-            className="absolute inset-0 w-full h-full object-fill pointer-events-none"
+          <canvas
+            ref={canvasRef}
+            style={{ position: 'absolute', top: 0, left: 0, height: '36px', imageRendering: 'pixelated' }}
           />
-          {/* Blue fill overlay (left of bar) */}
+          {/* Fixed needle at center */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 h-[3px] bg-[#0063F5] rounded-full pointer-events-none"
-            style={{ width: `${pct}%`, left: 0 }}
-          />
-          {/* Vertical bar handle */}
-          <div
-            className="absolute top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#0063F5] rounded-full cursor-grab pointer-events-none"
-            style={{ left: `calc(${pct}% - 1.5px)` }}
+            className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-[3px] h-[28px] bg-[#2563EB] rounded-[2px] pointer-events-none z-[2]"
+            style={{ left: '50%' }}
           />
         </div>
 
@@ -309,9 +397,6 @@ function CommitmentRow({ value, onChange, onClear }: {
 
   return (
     <div className="flex items-center gap-3 w-full px-12">
-      <button type="button" onClick={onClear} className="flex-shrink-0">
-        <img src={imgTrash} alt="Remove" className="w-5 h-5" />
-      </button>
       <div className="flex-1 border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center gap-2">
         <img src="/SAR.svg" alt="SAR" className="w-5 h-5 object-contain flex-shrink-0" />
         <input
@@ -370,7 +455,7 @@ function OtpInput({ digits, onChange }: {
 }
 
 export default function AppPage() {
-  const [openFaq, setOpenFaq]           = useState(0);
+  const [openFaq, setOpenFaq]           = useState(-1);
   const [activeLoan, setActiveLoan]     = useState<'YES' | 'NO' | null>(null);
   const [commitment, setCommitment]     = useState('');
   const [loanPurpose, setLoanPurpose]   = useState('');
@@ -387,10 +472,16 @@ export default function AppPage() {
     return () => clearTimeout(t);
   }, [formStep, countdown]);
 
+
   function handleLoanToggle(val: 'YES' | 'NO') {
     if (activeLoan === val) return;
     setActiveLoan(val);
     if (val === 'NO') setCommitment('');
+  }
+
+  function handleCancel() {
+    setFormStep('form');
+    setPhoneNum('');
   }
 
   function handleContinueToPhone() {
@@ -410,17 +501,12 @@ export default function AppPage() {
     <div className="min-w-[1440px] bg-[#f9f8fd]">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative h-[844px]">
+      <section className="relative bg-[#F9F8FD] flex justify-center">
 
-        {/* Dark gradient background — full bleed */}
-        <div className="absolute inset-0 bg-[#021945]" />
-        <div className="absolute -top-[159px] left-1/2 -translate-x-1/2 w-[1440px] h-[838px] pointer-events-none">
-          <img src={imgBg} alt="" className="absolute inset-0 w-full h-full" />
-        </div>
+        {/* Dark shape background */}
+        <img src="/bg-shape.svg" alt="" className="absolute top-0 left-0 w-full h-[680px] pointer-events-none" style={{ objectFit: 'fill' }} />
 
-        {/* Centered content container */}
-        <div className="absolute inset-0 flex justify-center">
-        <div className="relative w-[1440px]">
+        <div className="relative w-[1440px] min-h-[844px]">
 
         {/* Navbar */}
         <div className="absolute top-[25px] left-0 w-full px-[75px]">
@@ -433,12 +519,7 @@ export default function AppPage() {
               <nav className="flex items-center gap-[40px]">
                 <a href="#" className="text-white text-[16px] font-medium">App</a>
                 <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Tamawal</a>
-                <div className="flex items-center gap-1">
-                  <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Services</a>
-                  <div className="w-[12px] h-[12px] ml-1 rotate-180">
-                    <img src={imgNavArrow} alt="" className="w-full h-full" />
-                  </div>
-                </div>
+                <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Services</a>
                 <a href="#" className="text-[#98A2B3] text-[16px] font-medium">About us</a>
                 <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Contact us</a>
               </nav>
@@ -490,23 +571,24 @@ export default function AppPage() {
         <div className="absolute top-[598px] left-[509px] flex flex-col items-end gap-5">
           <p className="text-[#D1DAE8] text-[16px]">Install our app now!</p>
           <div className="flex flex-col gap-3">
-            <div className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+            <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
               <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
-            </div>
-            <div className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
               <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
-            </div>
+            </a>
           </div>
         </div>
 
         {/* Loan form */}
-        <div className="absolute top-[150px] left-[736px] w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)]">
+        <div className={`ml-[736px] pt-[150px] ${formStep === 'form' ? 'pb-[100px]' : 'pb-[280px]'}`}>
+        <div className="w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white">
           {/* Header */}
           <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
             <p className="text-[#021945] text-[20px] font-bold text-center">Find the best loan for you</p>
           </div>
           {/* Body */}
-          <div className={`px-6 py-10 flex flex-col items-center gap-8 transition-opacity ${formStep !== 'form' ? 'bg-transparent opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
+          <div className={`px-6 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
             {/* Salary */}
             <SalarySlider />
             {/* Active loans */}
@@ -550,7 +632,7 @@ export default function AppPage() {
             <LoanPurposeSelect selected={loanPurpose} onSelect={setLoanPurpose} />
           </div>
           {/* Footer */}
-          <div className={`flex justify-center items-start relative ${formStep === 'form' ? 'bg-white px-6 pb-10 pt-4 rounded-b-[32px]' : 'bg-[#0063F5] pt-4 pb-12'}`}>
+          <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start relative">
             {formStep === 'form' && (
               <button
                 disabled={!isComplete}
@@ -560,14 +642,14 @@ export default function AppPage() {
                 }`}
               >
                 <span className={`text-[16px] font-semibold ${isComplete ? 'text-[#171717]' : 'text-[#9AA4B2]'}`}>Continue</span>
-                <img src={isComplete ? imgArrowRight : imgArrowDisabled} alt="" className="w-5 h-5" />
+                <ArrowRight color={isComplete ? '#414651' : '#9AA4B2'} />
               </button>
             )}
 
             {/* Phone panel — state 05/06 */}
             {(formStep === 'phone' || formStep === 'otp') && (
-              <div className="w-full flex flex-col gap-[25px] items-center px-[22px]">
-                <div className="flex flex-col gap-[25px] items-center w-full">
+              <div className="relative h-[163px] w-full">
+                <div className="absolute -translate-x-1/2 left-1/2 top-0 bg-[#0063F5] rounded-[24px] overflow-clip pb-[48px] pt-[16px] px-[22px] w-[517px] flex flex-col gap-[25px] items-center">
 
                   {/* Inner content */}
                   <div className="flex flex-col gap-[18px] items-center p-6 w-full rounded-[12px]">
@@ -597,7 +679,6 @@ export default function AppPage() {
 
                     {formStep === 'otp' && (
                       <>
-                        {/* Verified phone display */}
                         <div className="flex flex-col gap-2 items-center w-full">
                           <p className="text-white text-[13px]">Mobile Number</p>
                           <div className="flex items-center gap-2 justify-center">
@@ -611,9 +692,7 @@ export default function AppPage() {
                         <p className="text-[#92baf6] text-[12px] text-center leading-[1.5] w-full">
                           Please enter verification code from inbox in your mobile number!
                         </p>
-                        {/* OTP boxes */}
                         <OtpInput digits={otpDigits} onChange={setOtpDigits} />
-                        {/* Resend countdown */}
                         <p className="text-[12px] text-center tracking-[0.4px]">
                           <span className="text-[#92baf6]">Resend Code? </span>
                           <span className="text-[#FFDD33]">{countdownStr}</span>
@@ -622,24 +701,32 @@ export default function AppPage() {
                     )}
                   </div>
 
-                  {/* Action button */}
+                  {/* Action buttons */}
                   {formStep === 'phone' && (
-                    <button
-                      onClick={phoneNum.length >= 9 ? handleContinueToOtp : undefined}
-                      className={`rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px] transition-colors ${
-                        phoneNum.length >= 9 ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#92baf6] cursor-not-allowed'
-                      }`}
-                    >
-                      <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
-                      <img src={imgArrowRight} alt="" className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-[16px] items-center">
+                      <button
+                        onClick={handleCancel}
+                        className="border border-[#77a6ed] rounded-[56px] px-[48px] py-[16px] flex items-center justify-center"
+                      >
+                        <span className="text-[#92baf6] text-[16px] font-semibold">Cancel</span>
+                      </button>
+                      <button
+                        onClick={phoneNum.length >= 9 ? handleContinueToOtp : undefined}
+                        className={`rounded-[56px] px-[48px] py-[16px] flex items-center gap-[10px] transition-colors ${
+                          phoneNum.length >= 9 ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#92baf6] cursor-not-allowed'
+                        }`}
+                      >
+                        <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
+                        <ArrowRight />
+                      </button>
+                    </div>
                   )}
 
                   {formStep === 'otp' && (
-                    <button className="bg-[#FFDD33] rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px]">
-                      <span className="text-[#171717] text-[16px] font-semibold">Process</span>
-                      <img src={imgArrowRight} alt="" className="w-5 h-5" />
-                    </button>
+                    <a href="/results" className="bg-[#FFDD33] rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px]">
+                      <span className="text-[#171717] text-[16px] font-semibold">Tamawal</span>
+                      <ArrowRight />
+                    </a>
                   )}
                 </div>
               </div>
@@ -647,8 +734,8 @@ export default function AppPage() {
           </div>
         </div>
 
+        </div>{/* /form wrapper ml */}
         </div>{/* /w-[1440px] */}
-        </div>{/* /flex justify-center */}
 
       </section>
 
@@ -658,11 +745,11 @@ export default function AppPage() {
         <div className="w-full overflow-hidden">
           {/* Duplicate logos so the loop is seamless (translateX -50% = one full set) */}
           <div
-            className="flex items-center gap-10 w-max"
+            className="flex items-center gap-[64px] w-max"
             style={{ animation: 'marquee 30s linear infinite' }}
           >
             {[0, 1].map((set) => (
-              <div key={set} className="flex items-center gap-10">
+              <div key={set} className="flex items-center gap-[64px]">
                 <img src={imgBadaya}        alt="" className="h-[65px] w-auto object-contain flex-shrink-0" />
                 <img src={imgPartner2}      alt="" className="h-[94px] w-auto object-contain flex-shrink-0" />
                 <img src={imgAsoul}         alt="" className="h-[60px] w-auto object-contain flex-shrink-0" />
@@ -684,7 +771,7 @@ export default function AppPage() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="py-[94px] px-[75px] flex items-center justify-center">
+      <section className="bg-white py-[94px] px-[75px] flex items-center justify-center">
         <div className="w-[1290px] flex flex-col items-center gap-[40px]">
           <h2 className="text-[#141414] text-[32px] font-bold">F.A.Q</h2>
 
@@ -714,7 +801,7 @@ export default function AppPage() {
           <div className="pt-6">
             <button className="bg-[#FED644] border border-[#EAECF0] rounded-[50px] px-8 py-6 flex items-center gap-3">
               <span className="text-[#141414] text-[16px]">View more</span>
-              <img src={imgViewMoreArrow} alt="" className="w-6 h-6" />
+              <ArrowRight className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -822,9 +909,7 @@ export default function AppPage() {
                 <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
                 <div className="flex gap-2 items-center">
                   <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
-                  <div className="border border-white/24 rounded-full w-[45px] h-[45px] flex items-center justify-center overflow-hidden">
-                    <img src={imgTwitterX} alt="X" className="w-5 h-[15px]" />
-                  </div>
+                  <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                 </div>
               </div>
             </div>

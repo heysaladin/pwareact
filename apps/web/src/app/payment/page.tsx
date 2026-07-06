@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function PaymentPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
@@ -13,7 +15,7 @@ export default function PaymentPage() {
       <div className="bg-white rounded-[16px] shadow-lg w-[512px] p-8 flex flex-col gap-6">
 
         {/* Apple Pay button */}
-        <button className="bg-black text-white rounded-[8px] py-4 w-full flex items-center justify-center gap-3 text-[18px] font-medium">
+        <button onClick={() => router.push('/code')} className="bg-black text-white rounded-[8px] py-4 w-full flex items-center justify-center gap-3 text-[18px] font-medium">
           <svg width="22" height="27" viewBox="0 0 22 27" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M18.175 14.0459C18.1521 11.3789 20.3438 10.082 20.4453 10.0205C19.1855 8.14648 17.1934 7.89648 16.4941 7.87305C14.8076 7.69922 13.1797 8.87305 12.3223 8.87305C11.4473 8.87305 10.1016 7.89258 8.68164 7.92188C6.84766 7.95117 5.14453 9.00195 4.20508 10.6348C2.27344 13.9629 3.72852 18.8867 5.58008 21.5977C6.50195 22.9258 7.58984 24.4141 9.01758 24.3613C10.4102 24.3027 10.9453 23.4805 12.6309 23.4805C14.2988 23.4805 14.7988 24.3613 16.2559 24.3262C17.7539 24.3027 18.6934 22.9727 19.5859 21.6328C20.6504 20.1035 21.0879 18.5977 21.1055 18.5215C21.0703 18.5098 18.2012 17.459 18.175 14.0459Z"
@@ -28,7 +30,7 @@ export default function PaymentPage() {
         </button>
 
         {/* STC Pay button */}
-        <button className="bg-[#7B2D8B] text-white rounded-[8px] py-4 w-full flex items-center justify-center text-[18px] font-medium">
+        <button onClick={() => router.push('/code')} className="bg-[#7B2D8B] text-white rounded-[8px] py-4 w-full flex items-center justify-center text-[18px] font-medium">
           <span className="font-bold tracking-tight">stc</span>
           <sup className="text-[#FFD700] text-[12px] ml-[2px] font-normal">pay</sup>
         </button>
@@ -103,7 +105,7 @@ export default function PaymentPage() {
         </div>
 
         {/* Pay button */}
-        <button className="bg-[#1A3C8F] text-white rounded-[8px] py-4 w-full text-[18px] font-semibold text-center">
+        <button onClick={() => router.push('/code')} className="bg-[#1A3C8F] text-white rounded-[8px] py-4 w-full text-[18px] font-semibold text-center">
           Pay SAR 200.00
         </button>
 

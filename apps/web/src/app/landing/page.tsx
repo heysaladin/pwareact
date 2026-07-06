@@ -1,5 +1,5 @@
-import Landing from "../../components/landing";
+import LandingHome from "../../components/LandingHome";
 
 export default function Page() {
-  return <Landing lang="ar" />;
+  return <LandingHome />;
 }

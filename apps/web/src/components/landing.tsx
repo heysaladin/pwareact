@@ -597,7 +597,7 @@ export default function Landing({ lang }: { lang: Lang }) {
                         {/* <a id="footer-form-open" className="footer-list-body footer-button-ghost" href="javascript:void(0)">ارسل رسالة</a> */}
                       </li>
                       <li>
-                        <a href="https://tamawal-sa.web.app/faq.html" className="btn ghost-btn dark ar" dir="rtl"> الأسئلة الشائعة &nbsp; <span className="dark ar"></span> </a>
+                        <a href="https://tamawal-sa.web.app/faq.html" className="btn ghost-btn dark ar" dir="rtl"> الأسئلة الشائعة &nbsp; <span className="dark ar"><i className="lni lni-chevron-right"></i></span> </a>
                       </li>
                     </ul>
                   <p></p>
@@ -700,7 +700,7 @@ export default function Landing({ lang }: { lang: Lang }) {
                           <span className="footer-list-body ar" style={{ fontSize: "13px" }}>يمكنك تقديم اقتراحات أو شكوى لتحسين تموّل</span>
                         </li>
                         <li style={{ marginTop: "100px" }}>
-                          <a href="https://tamawal-sa.web.app/faq.html" className="btn ghost-btn dark ar" dir="rtl"> الأسئلة الشائعة &nbsp; <span className="dark ar"></span> </a>
+                          <a href="https://tamawal-sa.web.app/faq.html" className="btn ghost-btn dark ar" dir="rtl"> الأسئلة الشائعة &nbsp; <span className="dark ar"><i className="lni lni-chevron-right"></i></span> </a>
                         </li>
                       </ul>
                     <p></p>
