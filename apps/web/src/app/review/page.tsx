@@ -12,6 +12,7 @@ const imgBackArrow    = "/arrow-narrow-left.svg";
 const imgFavorite     = "/icon-favorite.svg";
 const imgPayoutTime   = "/icon-payout-time.svg";
 const imgBadge        = "/badge.svg";
+const imgHeroBadge    = "/badge.svg";
 const imgBadgeCenter  = "/badge-center.svg";
 const imgAppStore     = "/appstore.svg";
 const imgGooglePlay   = "/playstore.svg";
@@ -21,6 +22,7 @@ const imgPhoneIcon    = "/icon-phone.svg";
 const imgLocationIcon = "/pinlocation.svg";
 const imgLinkedIn     = "/icon-linkedin.svg";
 const imgTwitterX     = "/icon-twitter.svg";
+const imgArrowNext    = "/arrow-next-dark.svg";
 
 function SARIcon({ className = "w-4 h-4" }: { className?: string }) {
   return <img src="/SAR.svg" alt="SAR" className={`${className} object-contain flex-shrink-0`} />;
@@ -350,27 +352,30 @@ export default function ReviewPage() {
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <footer className="bg-[#000921]">
+      <footer className="bg-[#202a39]">
         <div className="max-w-[1440px] mx-auto px-[24px] lg:px-[75px] pt-[60px] lg:pt-[90px] flex flex-col gap-[48px]">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-[64px] w-full">
+          <div className="flex flex-col lg:flex-row lg:items-start w-full gap-[40px] lg:gap-[64px]">
 
             {/* Left: logo + SAMA badge + desc */}
-            <div className="flex flex-col items-start gap-[16px] lg:flex-1 lg:justify-between lg:self-stretch">
-              <img src={imgLogo} alt="Tamawal" className="h-[32px] w-auto" />
+            <div className="flex flex-col items-start gap-[40px] lg:gap-0 lg:justify-between lg:self-stretch lg:flex-1">
+              <div className="flex items-center">
+                <img src={imgLogo} alt="Tamawal" className="h-[32px] w-auto" />
+              </div>
               <div className="flex flex-col gap-[16px]">
-                <div className="relative w-[80px] h-[100px]">
-                  <img src={imgBadge} alt="" className="absolute inset-0 w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
-                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 w-full h-full" />
+                <div className="relative size-[100px]">
+                  <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
                 </div>
-                <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[280px]">
+                <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
                   Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
                 </p>
               </div>
             </div>
 
             {/* Right: link columns */}
-            <div className="flex flex-col gap-[32px]">
-              <div className="grid grid-cols-2 gap-8 lg:flex lg:gap-[30px]">
+            <div className="flex flex-col gap-[32px] shrink-0">
+              {/* Top row */}
+              <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
@@ -383,8 +388,8 @@ export default function ReviewPage() {
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
                     <span>Terms and Conditions</span>
-                    <span>Data Protection and Privacy</span>
-                    <span>Customer Protection Principles</span>
+                    <span>Data Protection<br />and Privacy</span>
+                    <span>Customer Protection<br />Principles</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
@@ -405,73 +410,91 @@ export default function ReviewPage() {
                 </div>
               </div>
 
-              <div className="border-t border-[rgba(255,255,255,0.1)]" />
+              {/* Divider */}
+              <div className="border-t border-white/10" />
 
-              <div className="grid grid-cols-2 gap-8 lg:flex lg:gap-[30px]">
+              {/* Bottom row */}
+              <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
                   <div className="flex flex-col gap-[8px]">
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgEmailIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.64)] text-[16px]">info@tamawal.sa</span>
+                      <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">info@tamawal.sa</span>
                     </div>
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgPhoneIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.64)] text-[16px]">011 512 3870</span>
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">011 512 3870</span>
                     </div>
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgPhoneIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.64)] text-[16px]">800 100 0276</span>
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">800 100 0276</span>
                     </div>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
-                  <div className="flex items-start gap-[8px]">
-                    <img src={imgLocationIcon} alt="" className="w-[13px] mt-1 flex-shrink-0" />
-                    <span className="text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
-                  </div>
-                </div>
-                <div className="lg:w-[190px] flex flex-col gap-[16px]">
-                  <div>
-                    <p className="text-white text-[16px] font-semibold">Working hours</p>
-                    <p className="text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
-                  </div>
-                  <div>
-                    <p className="text-white text-[16px] font-semibold">Working days</p>
-                    <p className="text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                  <div className="flex gap-[8px] items-start">
+                    <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
+                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="text-white text-[16px] font-semibold">Working hours</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
+                  </div>
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="text-white text-[16px] font-semibold">Working days</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[8px]">
                   <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
-                  <div className="flex items-center gap-[8px]">
+                  <div className="flex gap-[8px] items-center">
                     <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
                     <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                   </div>
+                  <button className="flex items-center gap-[2px] py-[12px]">
+                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Mobile: App download section */}
-          <div className="lg:hidden flex flex-col gap-[16px] items-center border-t border-[rgba(255,255,255,0.1)] pt-[32px]">
-            <p className="text-white text-[16px] font-semibold">Download our App!</p>
-            <div className="flex gap-[12px]">
-              <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
-                <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
-              </a>
-              <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
-                <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
-              </a>
-            </div>
-          </div>
-
           {/* Bottom bar */}
-          <div className="flex flex-col gap-6 pb-6">
-            <div className="border-t border-[rgba(255,255,255,0.1)]" />
-            <p className="text-[rgba(255,255,255,0.32)] text-[16px] text-center leading-[1.7]">
-              © All right reserved to Tamawal 2026
-            </p>
+          <div className="flex flex-col gap-[24px] pb-[24px]">
+            <div className="border-t border-white/10" />
+            {/* Mobile: stacked centered */}
+            <div className="flex flex-col gap-[12px] items-center lg:hidden">
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <div className="flex gap-[12px]">
+                <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+                </a>
+              </div>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+            </div>
+            {/* Desktop: copyright left, download right */}
+            <div className="hidden lg:flex items-center justify-between w-full">
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <div className="flex items-center gap-[16px]">
+                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <div className="flex gap-[12px]">
+                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                    <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                    <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

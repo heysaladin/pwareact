@@ -287,18 +287,18 @@ function SalarySlider() {
 }
 
 const loanOptions = [
-  'Personal Loan',
-  'Car Financing',
-  'Real Estate',
-  'Credit Card',
-  'New House Building Loan',
-  'Home Renovation Loan',
-  'Land Purchase Loan',
-  'Business Loan',
-  'Education Loan',
-  'Medical Loan',
-  'Debt Consolidation',
-  'Wedding Loan',
+  'Education Fees',
+  'Furniture & Durable Goods',
+  'Hotel / Rentals',
+  'Maintenance work',
+  'Marriage',
+  'Medical Fees',
+  'Purchase Goods or Commodities',
+  'Renovation & Home Improvements',
+  'Tourism & Travel',
+  'Utilities payments',
+  'Vehicles & Private Transportation needs',
+  'Other',
 ];
 
 function LoanPurposeSelect({ selected, onSelect }: { selected: string; onSelect: (v: string) => void }) {
@@ -463,6 +463,7 @@ function OtpInput({ digits, onChange }: {
 export default function AppPage() {
   const [menuOpen, setMenuOpen]         = useState(false);
   const [openFaq, setOpenFaq]           = useState(-1);
+  const [loanType, setLoanType]         = useState<'personal' | 'car' | 'card' | 'mortgage' | null>(null);
   const [activeLoan, setActiveLoan]     = useState<'YES' | 'NO' | null>(null);
   const [commitment, setCommitment]     = useState('');
   const [loanPurpose, setLoanPurpose]   = useState('');
@@ -507,7 +508,7 @@ export default function AppPage() {
   return (
     <div className="bg-[#f9f8fd]">
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
-      <Navbar onMenuOpen={() => setMenuOpen(true)} />
+      <Navbar onMenuOpen={() => setMenuOpen(true)} dark />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative bg-[#F9F8FD] overflow-hidden">
@@ -579,6 +580,35 @@ export default function AppPage() {
                 </div>
                 {/* Body */}
                 <div className={`px-10 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
+                  {/* Loan Type */}
+                  <div className="flex flex-col items-center gap-[16px] px-[48px] w-full">
+                    <p className="text-[#475467] text-[13px]">Select Loan Type</p>
+                    <div className="flex gap-[12px] items-center justify-center w-full">
+                      {([
+                        { key: 'personal', label: 'Personal loan',  icon: '/types/simple-category-icon-perspective---personal.svg' },
+                        { key: 'car',      label: 'Car loan',        icon: '/types/simple-category-icon-perspective---car.svg' },
+                        { key: 'card',     label: 'Card Financing',  icon: '/types/simple-category-icon-perspective---card.svg' },
+                        { key: 'mortgage', label: 'Mortgage Loan',   icon: '/types/simple-category-icon-perspective---mortgage.svg' },
+                      ] as const).map(({ key, label, icon }) => {
+                        const selected = loanType === key;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => setLoanType(selected ? null : key)}
+                            className={`flex items-center rounded-[48px] shrink-0 transition-all duration-200 bg-[#eef1f6] ${
+                              selected ? 'py-2 px-4 gap-2 border border-[#0063F5]' : 'py-2 px-2'
+                            }`}
+                          >
+                            <img src={icon} alt={label} className="w-[48px] h-[48px] shrink-0" />
+                            {selected && (
+                              <span className="text-[12px] font-semibold text-[#0063F5] whitespace-nowrap">{label}</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                   {/* Salary */}
                   <SalarySlider />
                   {/* Active loans */}
