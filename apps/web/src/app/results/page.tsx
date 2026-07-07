@@ -1,17 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SlidingMenu from '../../components/SlidingMenu';
+import Navbar from '../../components/Navbar';
 
 // ── Asset constants ───────────────────────────────────────────────────────────
 const imgLogo        = "/logo-tamawal-web.svg";
 const imgLogoBlue    = "/logo-tamawal-web-blue.svg";
 const imgNavArrow    = "http://localhost:3845/assets/4c4ae62485902829fc9e816c9e3b6272289709e3.svg";
-const imgMenuIcon    = "http://localhost:3845/assets/0d52496e764f968ea0912e51471c5f8c5908af05.svg";
-const imgBackArrow   = "http://localhost:3845/assets/67f5db18250fc0c82561f27c9243549fffa2aa9f.svg";
-const imgSortIcon    = "http://localhost:3845/assets/ae028277d0aeaf0e5f751509272522cee029790a.svg";
-const imgCheckIcon   = "http://localhost:3845/assets/42d1556b4be07854c0c4eba577e6f40b2a823338.svg";
+const imgMenuIcon    = "/icon-menu.svg";
+const imgBackArrow   = "/arrow-narrow-left.svg";
+const imgSortIcon    = "/icon-sort.png";
+const imgCheckIcon   = "/icon-check-blue.svg";
 const imgPhoneImg    = "/mockup.png";
 const imgAppStore    = "/appstore.svg";
 const imgGooglePlay  = "/playstore.svg";
@@ -71,37 +72,378 @@ function StarRating({ rating, size = 16, numSize = '20.747px' }: { rating: numbe
   );
 }
 
+// ── Accordion section ─────────────────────────────────────────────────────────
+function AccordionSection({ title, isOpen, onToggle, children }: {
+  title: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="border border-[#eef1f6] rounded-[8px] overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-[16px] py-[14px]"
+      >
+        <span className="text-[15.5px] font-semibold text-[#202a39]">{title}</span>
+        <svg
+          width="20" height="20" viewBox="0 0 20 20" fill="none"
+          className={`transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+        >
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="#667085" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+      {isOpen && (
+        <div className="px-[16px] pb-[16px]">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Product Details Modal ─────────────────────────────────────────────────────
+function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; onClose: () => void }) {
+  const [activeTab, setActiveTab] = useState<'max' | 'calculate'>('max');
+  const [selectedPeriod, setSelectedPeriod] = useState(18);
+  const [preferredAmount, setPreferredAmount] = useState(75000);
+  const PREF_MIN = 2000;
+  const PREF_MAX = 150000;
+  const [openSections, setOpenSections] = useState({ greatFor: true, beware: true, docs: true, conditions: true });
+
+  const periods = [12, 18, 24, 30, 36, 42, 54, 60];
+  const disabledPeriods = [42, 54, 60];
+  const toggle = (key: keyof typeof openSections) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+
+  const InfoIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="6.5" stroke="#9aa4b2"/>
+      <path d="M7 6.5v3.5M7 4.5v.5" stroke="#9aa4b2" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const statsRows = [
+    { label: 'Monthly installment', value: 'Up to SAR 50' },
+    { label: 'APR', value: 'Start from 2%', info: true },
+    { label: 'You saved', value: 'SAR 50', badge: '-86%' },
+    { label: 'Management fees', value: 'Start from SAR 50', info: true },
+    { label: 'Brokerage fees', value: 'Start from SAR 50', info: true },
+  ];
+
+  const statsTableJSX = (
+    <div className="rounded-[8px] overflow-hidden border border-[#eef1f6]">
+      {statsRows.map(({ label, value, badge, info }, i) => (
+        <div
+          key={label}
+          className={`flex items-center justify-between px-[12px] h-[36px] ${i % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white'}`}
+        >
+          <div className="flex items-center gap-[4px]">
+            <span className="text-[13.5px] text-[#667085]">{label}</span>
+            {info && <InfoIcon />}
+          </div>
+          <div className="flex items-center gap-[6px]">
+            <span className="text-[13.5px] font-bold text-[#0041a3]">{value}</span>
+            {badge && (
+              <span className="bg-[#079455] text-white text-[11px] font-semibold rounded-[4px] px-[5px] py-[1px]">
+                {badge}
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const payoutCardJSX = (
+    <div className="bg-white border border-[#eef1f6] rounded-[8px] p-[16px] flex items-center gap-[20px]">
+      <img src="/icon-payout-time.svg" alt="" className="w-[56px] h-[56px] shrink-0" />
+      <p className="text-[15.5px] font-semibold text-[#202a39]">Finalization &amp; Disbursement immediately</p>
+    </div>
+  );
+
+  const descriptionJSX = (
+    <p className="text-[15.5px] text-[#4b5565] leading-[1.6]">
+      Profit rates starting from 2.25%, Payment holiday for first installment (up to 120 days), High financing amounts of up to SAR 4 Million for KSA Nationals, Quick and easy approval process
+    </p>
+  );
+
+  const carouselJSX = (
+    <div className="rounded-[8px] overflow-hidden" style={{ aspectRatio: '16/9' }}>
+      <iframe
+        src="https://www.youtube.com/embed/84pYi-vjXhw"
+        title="Tamawal"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="w-full h-full"
+      />
+    </div>
+  );
+
+  const accordionsJSX = (
+    <div className="flex flex-col gap-[8px] mt-[24px]">
+      <AccordionSection title="Great for" isOpen={openSections.greatFor} onToggle={() => toggle('greatFor')}>
+        <div className="flex flex-col gap-[10px]">
+          {[
+            'Low profit fees starting from 2.25% for KSA nationals',
+            'Deferred payment of the first installment for up to 120 days',
+            'Flexible repayment periods up to 25 years',
+            'Fast and simple application process',
+            'Competitive financing solutions tailored to your needs',
+            'Sharia-compliant financing options',
+          ].map((item) => (
+            <div key={item} className="flex gap-[12px] items-start">
+              <div className="mt-[2px] shrink-0">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#D1FADF"/>
+                  <path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <p className="text-[13.5px] text-[#475467] leading-[1.6]">{item}</p>
+            </div>
+          ))}
+        </div>
+      </AccordionSection>
+      <AccordionSection title="Beware" isOpen={openSections.beware} onToggle={() => toggle('beware')}>
+        <div className="flex gap-[12px] items-start">
+          <div className="mt-[2px] shrink-0">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="8" fill="#FEE4E2"/>
+              <path d="M8 5v3" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round"/>
+              <circle cx="8" cy="11" r="0.75" fill="#F04438"/>
+            </svg>
+          </div>
+          <p className="text-[13.5px] text-[#475467] leading-[1.6]">Applicable only for KSA Nationals</p>
+        </div>
+      </AccordionSection>
+      <AccordionSection title="Required documents" isOpen={openSections.docs} onToggle={() => toggle('docs')}>
+        <div className="flex flex-col gap-[10px]">
+          {['Passport (pdf or jpg)', 'Salary Evidence Document (pdf or jpg)'].map((doc) => (
+            <div key={doc} className="flex gap-[12px] items-center">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M9.33 1.33H4a1.33 1.33 0 0 0-1.33 1.34v10.66A1.33 1.33 0 0 0 4 14.67h8a1.33 1.33 0 0 0 1.33-1.34V5.33L9.33 1.33Z" stroke="#667085" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9.33 1.33v4h4" stroke="#667085" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <p className="text-[13.5px] text-[#475467]">{doc}</p>
+            </div>
+          ))}
+        </div>
+      </AccordionSection>
+      <AccordionSection title="Conditions" isOpen={openSections.conditions} onToggle={() => toggle('conditions')}>
+        <div className="flex flex-col gap-[10px]">
+          {['The borrower is of legal age', 'The borrower has his permanent residence in Saudi Arabia'].map((cond) => (
+            <div key={cond} className="flex gap-[12px] items-start">
+              <div className="mt-[2px] shrink-0 w-4 h-4 rounded-[3px] border border-[#fdb022] bg-[#fffaeb] flex items-center justify-center">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 5l2 2 4-4" stroke="#fdb022" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <p className="text-[13.5px] text-[#475467] leading-[1.6]">{cond}</p>
+            </div>
+          ))}
+        </div>
+      </AccordionSection>
+    </div>
+  );
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-[6px] overflow-y-auto"
+      onClick={onClose}
+    >
+      <div className="min-h-full flex items-start justify-center py-6 px-4">
+        <div
+          className="bg-white rounded-[8px] w-full max-w-[960px] flex flex-col gap-[32px] p-[24px]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-start justify-between gap-[10px]">
+            <div className="flex flex-col gap-[4px]">
+              <p className="text-[22px] lg:text-[26px] font-semibold text-[#15212f]">Product Details</p>
+              <p className="text-[14px] lg:text-[16px] text-[#6d7989]">{loan.bank} • {loan.type}</p>
+            </div>
+            <button onClick={onClose} className="border border-[#d5d7da] rounded-[8px] p-[8px] shrink-0">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M15 5L5 15M5 5l10 10" stroke="#667085" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Product title */}
+          <h2 className="text-[28px] lg:text-[40px] font-bold text-[#0063f5] leading-[1.2]">
+            Real Estate Financing for Home Buyers
+          </h2>
+
+          {/* Two-column layout */}
+          <div className="flex flex-col lg:flex-row gap-[48px]">
+
+            {/* ── Left column ── */}
+            <div className="flex-1 flex flex-col gap-[24px]">
+              {/* Tab switcher */}
+              <div className="bg-[#f8fafc] rounded-[11px] p-[3px] flex">
+                {(['max', 'calculate'] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`flex-1 text-[13.5px] font-semibold py-[10px] rounded-[8px] transition-colors
+                      ${activeTab === tab ? 'bg-white border border-[#eef1f6] text-[#0063f5]' : 'text-[#697586]'}`}
+                  >
+                    {tab === 'max' ? 'Max loan' : 'Calculate'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Loan period */}
+              <div className="flex flex-col gap-[12px]">
+                <p className="text-[15.5px] font-semibold text-[#202a39]">Select Loan Period (Months)</p>
+                <div className="flex flex-wrap gap-[8px]">
+                  {periods.map((p) => {
+                    const disabled = disabledPeriods.includes(p);
+                    const active = selectedPeriod === p && !disabled;
+                    return (
+                      <button
+                        key={p}
+                        disabled={disabled}
+                        onClick={() => setSelectedPeriod(p)}
+                        className={`w-[48px] h-[48px] rounded-[12px] text-[13.5px] font-semibold tracking-[0.5px] transition-colors
+                          ${disabled
+                            ? 'bg-[#f8fafc] text-[#9aa4b2] cursor-not-allowed'
+                            : active
+                              ? 'bg-[#0063f5] text-white'
+                              : 'bg-[#eef1f6] text-[#4b5565] hover:bg-[#e0e8f9]'
+                          }`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Loan amount — Max loan tab */}
+              {activeTab === 'max' && (
+                <div className="flex flex-col gap-[4px]">
+                  <p className="text-[15.5px] font-semibold text-[#202a39]">Loan amount (Received)</p>
+                  <span className="text-[12.5px] text-[#697586]">up to</span>
+                  <p className="text-[33.5px] font-bold text-[#0041a3] leading-[1.1]">SAR 99,999,999.99</p>
+                  <span className="text-[12.5px] text-[#697586]">for {selectedPeriod} months</span>
+                </div>
+              )}
+
+              {/* Preferred amount slider — Calculate tab */}
+              {activeTab === 'calculate' && (
+                <div className="flex flex-col gap-[16px]">
+                  <p className="text-[15.5px] font-semibold text-[#202a39]">Your Preferred Amount</p>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MIN.toLocaleString()}</span>
+                    <span className="text-[22px] font-bold text-[#0041a3]">SAR {preferredAmount.toLocaleString()}</span>
+                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MAX.toLocaleString()}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={PREF_MIN}
+                    max={PREF_MAX}
+                    step={1000}
+                    value={preferredAmount}
+                    onChange={(e) => setPreferredAmount(Number(e.target.value))}
+                    className="w-full h-[8px] rounded-full cursor-pointer"
+                    style={{ accentColor: '#0063f5' }}
+                  />
+                </div>
+              )}
+
+              {/* Stats + payout — mobile only (between loan amount and accordions) */}
+              <div className="lg:hidden flex flex-col gap-[16px]">
+                {statsTableJSX}
+                {payoutCardJSX}
+              </div>
+
+              {/* Accordions */}
+              {accordionsJSX}
+
+              {/* Description + carousel — mobile only */}
+              <div className="lg:hidden flex flex-col gap-[16px]">
+                {descriptionJSX}
+                {carouselJSX}
+              </div>
+            </div>
+
+            {/* ── Right column — desktop only ── */}
+            <div className="hidden lg:flex flex-1 flex-col gap-[16px]">
+              {statsTableJSX}
+              {payoutCardJSX}
+              {descriptionJSX}
+              {carouselJSX}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Loan Card ─────────────────────────────────────────────────────────────────
-function LoanCard({ loan }: { loan: typeof loans[number] }) {
+function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: () => void }) {
   return (
     <div className="border border-[#dadee3] rounded-[16px] bg-white overflow-hidden mb-4">
 
       {/* ── Mobile layout ── */}
       <div className="lg:hidden p-5 flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-[18px] font-bold text-[#121a26] leading-[1.25]">{loan.type}</p>
-          <StarRating rating={loan.rating} size={14} numSize="14px" />
+        {/* Title + arrow */}
+        <div className="flex items-start gap-[16px] w-full">
+          <p className="text-[20px] font-bold text-[#121a26] leading-[1.25] flex-1">{loan.type}</p>
+          <button onClick={onDetails} className="shrink-0 mt-[1px]">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="#414651" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
-        <div className="h-[40px]">
-          <img src={loan.logo} alt={loan.bank} className="max-h-[40px] object-contain" />
+        {/* Logo + Rating */}
+        <div className="flex items-center justify-between w-full">
+          <div className="h-[40px] w-[135px]">
+            <img src={loan.logo} alt={loan.bank} className="h-full object-contain object-left" />
+          </div>
+          <StarRating rating={loan.rating} size={19} numSize="20.747px" />
         </div>
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <p className="text-[11px] text-[#667085]">Loan amount</p>
-            <p className="text-[15px] font-bold text-[#101828]">SAR {loan.amount >= 1000 ? `${(loan.amount/1000).toFixed(0)}k` : loan.amount}</p>
+        {/* Loan amount */}
+        <div className="flex flex-col items-start w-full">
+          <div className="flex gap-[4px] items-baseline text-[#667085]">
+            <span className="text-[12px] font-semibold">Loan amount</span>
+            <span className="text-[10px]">up to</span>
           </div>
-          <div>
-            <p className="text-[11px] text-[#667085]">APR</p>
-            <p className="text-[15px] font-bold text-[#101828]">{loan.rate}%</p>
-          </div>
-          <div>
-            <p className="text-[11px] text-[#667085]">Period</p>
-            <p className="text-[15px] font-bold text-[#101828]">{loan.months} mo</p>
+          <div className="flex gap-[2px] items-baseline text-[#101828]">
+            <span className="text-[32px] font-bold">SAR</span>
+            <span className="text-[24px] font-bold">{loan.amount.toLocaleString()}</span>
           </div>
         </div>
-        <button onClick={() => window.location.href = '/payment'} className="bg-[#0063f5] rounded-[24px] py-3 flex items-center justify-center w-full">
-          <span className="text-white text-[14px] font-bold">Tamawal</span>
-        </button>
+        {/* APR + Loan period */}
+        <div className="flex gap-[5px] items-start w-full">
+          <div className="flex-1 flex flex-col">
+            <span className="text-[12px] font-semibold text-[#667085]">APR</span>
+            <span className="text-[24px] font-bold text-[#101828]">{loan.rate}%</span>
+            <span className="text-[12px] text-[#667085]">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
+          </div>
+          <div className="flex flex-col items-end w-[129px]">
+            <div className="flex gap-[4px] items-baseline text-[#667085]">
+              <span className="text-[12px] font-semibold">Loan period</span>
+              <span className="text-[10px]">for</span>
+            </div>
+            <span className="text-[24px] font-bold text-[#101828] text-right">{loan.months} month</span>
+          </div>
+        </div>
+        {/* Bottom row: time icon + favorite + button */}
+        <div className="flex gap-[48px] items-center w-full">
+          <div className="shrink-0">
+            <img src="/icon-payout-time.svg" alt="" className="w-[40px] h-[40px]" />
+          </div>
+          <div className="flex flex-1 gap-[16px] items-center min-w-0">
+            <button className="shrink-0">
+              <img src="/icon-favorite.svg" alt="Favorite" className="w-6 h-6" />
+            </button>
+            <button onClick={() => window.location.href = '/review'} className="flex-1 bg-[#0063f5] rounded-[24px] py-[10px] flex items-center justify-center">
+              <span className="text-white text-[13px] font-bold">Tamawal</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* ── Desktop layout ── */}
@@ -141,7 +483,7 @@ function LoanCard({ loan }: { loan: typeof loans[number] }) {
               <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Applicable only for KSA Nationals</p>
             </div>
           </div>
-          <button className="border border-[rgba(0,99,245,0.32)] rounded-[24px] h-[44px] px-[24px] py-[10px] flex items-center justify-center gap-[8px] w-full bg-white mt-[24px]">
+          <button onClick={onDetails} className="border border-[rgba(0,99,245,0.32)] rounded-[24px] h-[44px] px-[24px] py-[10px] flex items-center justify-center gap-[8px] w-full bg-white mt-[24px]">
             <span className="text-[13px] font-bold text-[#0063f5]">Details</span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
@@ -183,7 +525,7 @@ function LoanCard({ loan }: { loan: typeof loans[number] }) {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#98A2B3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               <span className="text-[16px]">Add to favorite</span>
             </button>
-            <button onClick={() => window.location.href = '/payment'} className="bg-[#0063f5] rounded-[24px] px-[12px] py-[10px] flex items-center justify-center flex-1">
+            <button onClick={() => window.location.href = '/review'} className="bg-[#0063f5] rounded-[24px] px-[12px] py-[10px] flex items-center justify-center flex-1">
               <span className="text-white text-[13px] font-bold text-center w-[357px]">Tamawal</span>
             </button>
           </div>
@@ -231,59 +573,41 @@ export default function ResultsPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState('Most Relevant');
+  const [selectedLoanIdx, setSelectedLoanIdx] = useState<number | null>(null);
 
   return (
     <div className="bg-white">
+      {selectedLoanIdx !== null && (
+        <ProductDetailsModal loan={loans[selectedLoanIdx]} onClose={() => setSelectedLoanIdx(null)} />
+      )}
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
 
-      {/* ── Navbar ───────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-50 bg-white border-b border-[#EAECF0]">
-        {/* Desktop */}
-        <div className="hidden lg:block max-w-[1440px] mx-auto px-[75px]">
-          <div className="flex items-center justify-between h-[45px] py-[25px]">
-            <div className="flex items-center gap-[56px]">
-              <img src={imgLogoBlue} alt="Tamawal" className="h-[33px] w-auto" />
-              <nav className="flex items-center gap-[40px]">
-                <a href="/app" className="text-[#021945] text-[16px] font-bold">App</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Tamawal</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Services</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">About us</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Contact us</a>
-              </nav>
-            </div>
-            <div className="flex items-center gap-8">
-              <div className="w-[104px] h-[45px]" />
-              <div className="border border-[#EAECF0] rounded-full w-[44px] h-[44px] flex items-center justify-center">
-                <span className="text-[#344054] text-[13px] font-medium">عربي</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Mobile */}
-        <div className="flex lg:hidden items-center justify-between px-6 py-5">
-          <button onClick={() => setMenuOpen(true)} className="shrink-0 size-6 cursor-pointer">
-            <img src={imgMenuIcon} alt="Menu" className="size-6" />
-          </button>
-          <img src={imgLogoBlue} alt="Tamawal" className="h-8 w-auto" />
-          <div className="border border-[#EAECF0] rounded-full w-11 h-11 flex items-center justify-center">
-            <span className="text-[#344054] text-[13px] font-medium">عربي</span>
-          </div>
-        </div>
-      </div>
+      <Navbar onMenuOpen={() => setMenuOpen(true)} />
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div>
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[75px]">
 
-          {/* Header section */}
-          <div className="pt-10 pb-6 flex flex-col gap-6">
-            {/* Back button */}
+          {/* Header section — mobile */}
+          <div className="lg:hidden flex flex-col gap-[24px] py-[24px]">
+            <button onClick={() => router.back()} className="flex items-center gap-[8px] text-[#717680] w-fit">
+              <img src={imgBackArrow} alt="" className="size-5" />
+              <span className="text-[16px] font-semibold">Back</span>
+            </button>
+            <div className="flex flex-col gap-[8px]">
+              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
+              <p className="text-[16px] text-[#525252] leading-[1.5]">
+                This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
+              </p>
+            </div>
+          </div>
+
+          {/* Header section — desktop */}
+          <div className="hidden lg:flex flex-col gap-6 pt-10 pb-6">
             <button onClick={() => router.back()} className="flex items-center gap-2 text-[#717680] w-fit">
               <img src={imgBackArrow} alt="" className="size-5" />
               <span className="text-[16px] font-semibold">Back</span>
             </button>
-
-            {/* Search results + Sort */}
             <div className="flex items-center gap-[64px]">
               <div className="flex flex-col gap-[2px] flex-1">
                 <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
@@ -291,11 +615,8 @@ export default function ResultsPage() {
                   This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
                 </p>
               </div>
-              {/* Sort button + dropdown */}
               <div className="relative flex-shrink-0">
-                {sortOpen && (
-                  <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />
-                )}
+                {sortOpen && <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />}
                 <button
                   onClick={() => setSortOpen(!sortOpen)}
                   className="relative z-50 border border-[#0063f5] rounded-[56px] px-[24px] py-[16px] flex items-center gap-[10px] bg-white"
@@ -303,23 +624,47 @@ export default function ResultsPage() {
                   <img src={imgSortIcon} alt="" className="size-5" />
                   <span className="text-[16px] font-bold text-[#0063f5]">Sort</span>
                 </button>
-                {sortOpen && (
-                  <SortDropdown
-                    selected={sortBy}
-                    onSelect={(v) => { setSortBy(v); setSortOpen(false); }}
-                  />
-                )}
+                {sortOpen && <SortDropdown selected={sortBy} onSelect={(v) => { setSortBy(v); setSortOpen(false); }} />}
               </div>
+            </div>
+          </div>
+
+          {/* Offers count + Sort row — mobile only */}
+          <div className="lg:hidden flex items-center gap-[8px] pb-4">
+            <p className="flex-1 text-[18px] text-[#525252]">{loans.length} offers for you</p>
+            <div className="relative shrink-0">
+              {sortOpen && <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />}
+              <button
+                onClick={() => setSortOpen(!sortOpen)}
+                className="relative z-50 bg-white border border-[#0063f5] rounded-[56px] px-[20px] py-[12px] flex items-center gap-[10px]"
+              >
+                <img src={imgSortIcon} alt="" className="size-5" />
+                <span className="text-[16px] text-[#0063f5]">Sort</span>
+              </button>
+              {sortOpen && <SortDropdown selected={sortBy} onSelect={(v) => { setSortBy(v); setSortOpen(false); }} />}
             </div>
           </div>
 
           {/* Loan cards */}
           <div className="pb-6">
             {loans.map((loan, i) => (
-              <LoanCard key={i} loan={loan} />
+              <LoanCard key={i} loan={loan} onDetails={() => setSelectedLoanIdx(i)} />
             ))}
           </div>
 
+        </div>
+
+        {/* Install app — mobile only */}
+        <div className="lg:hidden bg-[#f9f8fd] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
+          <p className="text-[16px] text-[#121a26] text-center">Install our app now!</p>
+          <div className="flex gap-[12px]">
+            <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+              <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+              <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+            </a>
+          </div>
         </div>
 
         {/* CTA Section — desktop only */}
@@ -337,10 +682,10 @@ export default function ResultsPage() {
                   <StarRating rating={4.75} size={21} numSize="0px" />
                 </div>
                 <div className="flex gap-[8px]">
-                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="rounded-[6px] h-[40px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
                   </a>
-                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="rounded-[6px] w-[128px] h-[40px] overflow-hidden">
+                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="rounded-[6px] h-[40px] overflow-hidden">
                     <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                   </a>
                 </div>
@@ -427,7 +772,7 @@ export default function ResultsPage() {
 
           <div className="flex flex-col gap-6 pb-6">
             <div className="border-t border-white/10" />
-            <p className="text-white/32 text-[16px] text-center leading-[1.7]">
+            <p className="text-white/64 text-[16px] text-center leading-[1.7]">
               Tamawal Digital Brokerage Company operates under the supervision and regulation of the Saudi Arabian Monetary Authority (SAMA)
             </p>
           </div>

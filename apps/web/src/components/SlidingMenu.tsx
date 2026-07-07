@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-const imgVuesaxLinearAdd = "http://localhost:3845/assets/833129c4b4814d6b3aae51f14cb48704f8eb2630.svg";
+const imgClose = "/icon-x.svg";
 
 const navLinks = [
   { label: 'App', active: true },
@@ -19,15 +19,15 @@ export default function SlidingMenu({ onClose }: { onClose: () => void }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex">
+    <div className="fixed inset-0 z-[9999] flex">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative ml-auto w-full max-w-sm bg-[#1e2228] flex flex-col items-center p-6 h-full">
+      <div className="relative mr-auto w-full max-w-sm bg-[#1e2228] flex flex-col items-center p-6 h-full">
         <div className="flex items-center justify-end w-full shrink-0">
           <button
             onClick={onClose}
-            className="border border-white/[0.16] rounded-3xl p-1.5 flex items-center cursor-pointer"
+            className="flex items-center cursor-pointer"
           >
-            <img alt="Close" className="size-[18px]" src={imgVuesaxLinearAdd} />
+            <img alt="Close" className="size-[30px]" src={imgClose} />
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start w-full px-2 mt-4">

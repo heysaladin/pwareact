@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Navbar from '@/components/Navbar';
+import SlidingMenu from '@/components/SlidingMenu';
 
 // ── Hero assets ──────────────────────────────────────────────────────────────
 const imgBg          = "http://localhost:3845/assets/99f675afb55c489754593b085eb84d227ae42bf5.svg";
@@ -62,16 +64,20 @@ function ArrowRight({ color = '#414651', className = 'w-5 h-5' }: { color?: stri
 
 const faqs = [
   {
-    q: "What types of financial services does Tamawal® offer?",
-    a: "Tamawal® offers various types of financial services, including personal loans, credit cards, car financing, and real estate financing.",
+    q: "What types of financial services does Tamawal offer?",
+    a: "Tamawal® is a one-stop shop for getting financial help. They currently offer personal loans and are expanding to include credit cards, car financing, and real estate financing soon.",
   },
   {
-    q: "Can you provide an overview of Tamawal®'s product range?",
-    a: "",
+    q: "Can you provide an overview of Tamawal's product range?",
+    a: "Tamawal's product range includes personal loans, credit cards, car financing, and real estate financing, ensuring that products are compliant with Islamic principles.",
   },
   {
-    q: "Is Tamawal®'s financing model compliant with Sharia law?",
-    a: "",
+    q: "How does Tamawal assist customers in obtaining financing?",
+    a: "Tamawal acts as a digital financial intermediary, connecting customers with licensed financial institutions to facilitate the process of obtaining financing in a convenient and cost-effective manner.",
+  },
+  {
+    q: "Is Tamawal's financing model compliant with Sharia law?",
+    a: "Tamawal follows a financing model that is in accordance with Sharia law, ensuring that its services are compliant with Islamic principles.",
   },
 ];
 
@@ -343,7 +349,7 @@ function LoanPurposeSelect({ selected, onSelect }: { selected: string; onSelect:
   const displayed = selected || loanOptions[cycleIdx];
 
   return (
-    <div className="flex flex-col items-center gap-2 w-full px-12" ref={containerRef}>
+    <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12" ref={containerRef}>
       <p className="text-[#475467] text-[13px]">Select Loan Purpose</p>
       <div className="relative w-full">
         <button
@@ -396,7 +402,7 @@ function CommitmentRow({ value, onChange, onClear }: {
       : '';
 
   return (
-    <div className="flex items-center gap-3 w-full px-12">
+    <div className="flex items-center gap-3 w-full px-4 lg:px-12">
       <div className="flex-1 border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center gap-2">
         <img src="/SAR.svg" alt="SAR" className="w-5 h-5 object-contain flex-shrink-0" />
         <input
@@ -455,6 +461,7 @@ function OtpInput({ digits, onChange }: {
 }
 
 export default function AppPage() {
+  const [menuOpen, setMenuOpen]         = useState(false);
   const [openFaq, setOpenFaq]           = useState(-1);
   const [activeLoan, setActiveLoan]     = useState<'YES' | 'NO' | null>(null);
   const [commitment, setCommitment]     = useState('');
@@ -498,249 +505,261 @@ export default function AppPage() {
   const countdownStr = `${String(Math.floor(countdown / 60)).padStart(2, '0')}:${String(countdown % 60).padStart(2, '0')}`;
 
   return (
-    <div className="min-w-[1440px] bg-[#f9f8fd]">
+    <div className="bg-[#f9f8fd]">
+      {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
+      <Navbar onMenuOpen={() => setMenuOpen(true)} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative bg-[#F9F8FD] flex justify-center">
+      <section className="relative bg-[#F9F8FD] overflow-hidden">
 
         {/* Dark shape background */}
-        <img src="/bg-shape.svg" alt="" className="absolute top-0 left-0 w-full h-[680px] pointer-events-none" style={{ objectFit: 'fill' }} />
+        <img src="/bg-shape.svg" alt="" className="absolute top-0 left-0 w-full h-full min-h-[500px] lg:min-h-[250px] pointer-events-none" style={{ objectFit: 'fill', maxHeight: '80%' }} />
 
-        <div className="relative w-[1440px] min-h-[844px]">
+        <div className="relative max-w-[1440px] mx-auto">
 
-        {/* Navbar */}
-        <div className="absolute top-[25px] left-0 w-full px-[75px]">
-          <div className="flex items-center justify-between h-[45px]">
-            {/* Logo + nav */}
-            <div className="flex items-center gap-[56px]">
-              <div className="flex items-center">
-                <img src={imgLogo} alt="Tamawal" className="h-[33px] w-auto" />
+          {/* Hero body: stacked on mobile, side-by-side on desktop */}
+          <div className="flex flex-col lg:flex-row lg:items-start">
+
+            {/* Left column: headline + phone visual */}
+            <div className="lg:w-[736px] lg:flex-shrink-0 lg:relative lg:min-h-[844px] flex flex-col gap-6 lg:gap-0 px-6 lg:px-0 pt-8 lg:pt-0 pb-8 lg:pb-0">
+
+              {/* Headline — in flow on mobile, absolute on desktop */}
+              <div className="flex flex-col gap-[16px] lg:absolute lg:top-[150px] lg:left-[129px] lg:w-[577px]">
+                <h1 className="text-white text-[32px] lg:text-[48px] font-bold leading-[1.1]">
+                  Get the Best Loan, Instantly.
+                </h1>
+                <p className="text-[#98A2B3] text-[16px] leading-[1.7]">
+                  A fully automated way to compare, apply, and track loans across trusted banks — all in one platform, all in real time.
+                </p>
               </div>
-              <nav className="flex items-center gap-[40px]">
-                <a href="#" className="text-white text-[16px] font-medium">App</a>
-                <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Tamawal</a>
-                <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Services</a>
-                <a href="#" className="text-[#98A2B3] text-[16px] font-medium">About us</a>
-                <a href="#" className="text-[#98A2B3] text-[16px] font-medium">Contact us</a>
-              </nav>
-            </div>
-            {/* Right */}
-            <div className="flex items-center gap-8">
-              <div className="w-[104px] h-[45px]" />
-              <div className="border border-[#344054] rounded-full w-[44px] h-[44px] flex items-center justify-center">
-                <span className="text-[#98A2B3] text-[13px] font-medium">عربي</span>
+
+              {/* Blue rectangle (behind phone) — desktop only */}
+              <div className="hidden lg:block absolute top-[419px] left-[108px] w-[598px] h-[363px] bg-[#0063F5] rounded-[32px]" />
+
+              {/* Phone mockup — desktop only */}
+              <div className="hidden lg:block absolute top-[357px] left-[72px] w-[426px] h-[467px]">
+                <img src={imgPhoneImg} alt="Tamawal App" className="w-full h-full object-contain" />
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Headline */}
-        <div className="absolute top-[150px] left-[129px] w-[577px] flex flex-col gap-[16px]">
-          <h1 className="text-white text-[48px] font-bold leading-[1.1]">
-            Get the Best Loan, Instantly.
-          </h1>
-          <p className="text-[#98A2B3] text-[16px] leading-[1.7]">
-            A fully automated way to compare, apply, and track loans across trusted banks — all in one platform, all in real time.
-          </p>
-        </div>
-
-        {/* Blue rectangle (behind phone) */}
-        <div className="absolute top-[419px] left-[108px] w-[598px] h-[363px] bg-[#0063F5] rounded-[32px]" />
-
-        {/* Phone mockup */}
-        <div className="absolute top-[357px] left-[72px] w-[426px] h-[467px]">
-          <img src={imgPhoneImg} alt="Tamawal App" className="w-full h-full object-contain" />
-        </div>
-
-        {/* SAMA badge — outer ring spins, center stays */}
-        <div className="absolute top-[395px] left-[515px] w-[157px] h-[157px]">
-          <img
-            src={imgHeroBadge}
-            alt=""
-            className="w-full h-full"
-            style={{ animation: 'badge-spin 18s linear infinite' }}
-          />
-          <img
-            src={imgBadgeCenter}
-            alt="Licensed by SAMA"
-            className="absolute inset-0 w-full h-full"
-          />
-        </div>
-
-        {/* Install app */}
-        <div className="absolute top-[598px] left-[509px] flex flex-col items-end gap-5">
-          <p className="text-[#D1DAE8] text-[16px]">Install our app now!</p>
-          <div className="flex flex-col gap-3">
-            <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
-              <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] w-[128px] h-[40px] overflow-hidden">
-              <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
-            </a>
-          </div>
-        </div>
-
-        {/* Loan form */}
-        <div className={`ml-[736px] pt-[150px] ${formStep === 'form' ? 'pb-[100px]' : 'pb-[280px]'}`}>
-        <div className="w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white">
-          {/* Header */}
-          <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
-            <p className="text-[#021945] text-[20px] font-bold text-center">Find the best loan for you</p>
-          </div>
-          {/* Body */}
-          <div className={`px-6 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
-            {/* Salary */}
-            <SalarySlider />
-            {/* Active loans */}
-            <div className="flex flex-col items-center gap-2 w-full">
-              <p className="text-[#475467] text-[13px]">Do you have active loans?</p>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleLoanToggle('YES')}
-                  className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
-                    activeLoan === 'YES'
-                      ? 'bg-[#0063F5] border border-[#004FC6] text-white'
-                      : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
-                  }`}
-                >YES</button>
-                <button
-                  type="button"
-                  onClick={() => handleLoanToggle('NO')}
-                  className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
-                    activeLoan === 'NO'
-                      ? 'bg-[#0063F5] border border-[#004FC6] text-white'
-                      : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
-                  }`}
-                >NO</button>
-              </div>
-            </div>
-
-            {/* Monthly commitments — only when YES */}
-            {activeLoan === 'YES' && (
-              <div className="flex flex-col items-center gap-2 w-full">
-                <p className="text-[#475467] text-[13px]">Monthly commitments</p>
-                <CommitmentRow
-                  value={commitment}
-                  onChange={setCommitment}
-                  onClear={() => setCommitment('')}
+              {/* SAMA badge — desktop only */}
+              <div className="hidden lg:block absolute top-[395px] left-[515px] w-[157px] h-[157px]">
+                <img
+                  src={imgHeroBadge}
+                  alt=""
+                  className="w-full h-full"
+                  style={{ animation: 'badge-spin 18s linear infinite' }}
+                />
+                <img
+                  src={imgBadgeCenter}
+                  alt="Licensed by SAMA"
+                  className="absolute inset-0 w-full h-full"
                 />
               </div>
-            )}
 
-            {/* Loan purpose */}
-            <LoanPurposeSelect selected={loanPurpose} onSelect={setLoanPurpose} />
-          </div>
-          {/* Footer */}
-          <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start relative">
-            {formStep === 'form' && (
-              <button
-                disabled={!isComplete}
-                onClick={isComplete ? handleContinueToPhone : undefined}
-                className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${
-                  isComplete ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'
-                }`}
-              >
-                <span className={`text-[16px] font-semibold ${isComplete ? 'text-[#171717]' : 'text-[#9AA4B2]'}`}>Continue</span>
-                <ArrowRight color={isComplete ? '#414651' : '#9AA4B2'} />
-              </button>
-            )}
+              {/* Install app — desktop only */}
+              <div className="hidden lg:flex lg:absolute lg:top-[598px] lg:left-[509px] lg:flex-col lg:items-end gap-5">
+                <p className="text-[#D1DAE8] text-[16px]">Install our app now!</p>
+                <div className="flex flex-col gap-3">
+                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] h-[40px] overflow-hidden">
+                    <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] h-[40px] overflow-hidden">
+                    <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+                  </a>
+                </div>
+              </div>
+            </div>
 
-            {/* Phone panel — state 05/06 */}
-            {(formStep === 'phone' || formStep === 'otp') && (
-              <div className="relative h-[163px] w-full">
-                <div className="absolute -translate-x-1/2 left-1/2 top-0 bg-[#0063F5] rounded-[24px] overflow-clip pb-[48px] pt-[16px] px-[22px] w-[517px] flex flex-col gap-[25px] items-center">
-
-                  {/* Inner content */}
-                  <div className="flex flex-col gap-[18px] items-center p-6 w-full rounded-[12px]">
-
-                    {formStep === 'phone' && (
-                      <>
-                        <div className="flex flex-col gap-2 items-center w-full px-12">
-                          <p className="text-white text-[13px]">Mobile Number</p>
-                          <div className="bg-[#0041a3] border border-[#0041a3] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full">
-                            <span className="text-white text-[24px] font-bold mr-1">+</span>
-                            <input
-                              autoFocus
-                              type="tel"
-                              inputMode="numeric"
-                              placeholder="Enter your mobile number"
-                              value={phoneNum}
-                              onChange={e => setPhoneNum(e.target.value.replace(/[^0-9 ]/g, ''))}
-                              className="bg-transparent outline-none text-[24px] font-bold text-white placeholder:text-[#77a6ed] placeholder:font-normal w-full"
-                            />
-                          </div>
-                        </div>
-                        <p className="text-[#92baf6] text-[12px] text-center leading-[1.5]">
-                          Please enter your mobile number so we can send you a verification code!
-                        </p>
-                      </>
-                    )}
-
-                    {formStep === 'otp' && (
-                      <>
-                        <div className="flex flex-col gap-2 items-center w-full">
-                          <p className="text-white text-[13px]">Mobile Number</p>
-                          <div className="flex items-center gap-2 justify-center">
-                            <img src={imgPhoneIconBlue} alt="" className="w-5 h-5 flex-shrink-0" />
-                            <span className="text-white text-[24px] font-bold">+{phoneNum}</span>
-                            <div className="bg-white rounded-full p-[2px] flex-shrink-0">
-                              <img src={imgCheckGreen} alt="" className="w-3 h-3 block" />
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-[#92baf6] text-[12px] text-center leading-[1.5] w-full">
-                          Please enter verification code from inbox in your mobile number!
-                        </p>
-                        <OtpInput digits={otpDigits} onChange={setOtpDigits} />
-                        <p className="text-[12px] text-center tracking-[0.4px]">
-                          <span className="text-[#92baf6]">Resend Code? </span>
-                          <span className="text-[#FFDD33]">{countdownStr}</span>
-                        </p>
-                      </>
-                    )}
+            {/* Right column: Loan form */}
+            <div className={`flex-1 min-w-0 px-6 lg:px-0 lg:pt-[150px] ${formStep === 'form' ? 'pb-8 lg:pb-[100px]' : 'pb-[320px] lg:pb-[280px]'}`}>
+              <div className="w-full lg:w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white">
+                {/* Header */}
+                <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
+                  <p className="text-[#021945] text-[20px] font-bold text-center">Find the best loan for you</p>
+                </div>
+                {/* Body */}
+                <div className={`px-10 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
+                  {/* Salary */}
+                  <SalarySlider />
+                  {/* Active loans */}
+                  <div className="flex flex-col items-center gap-2 w-full">
+                    <p className="text-[#475467] text-[13px]">Do you have active loans?</p>
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        onClick={() => handleLoanToggle('YES')}
+                        className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
+                          activeLoan === 'YES'
+                            ? 'bg-[#0063F5] border border-[#004FC6] text-white'
+                            : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
+                        }`}
+                      >YES</button>
+                      <button
+                        type="button"
+                        onClick={() => handleLoanToggle('NO')}
+                        className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
+                          activeLoan === 'NO'
+                            ? 'bg-[#0063F5] border border-[#004FC6] text-white'
+                            : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
+                        }`}
+                      >NO</button>
+                    </div>
                   </div>
 
-                  {/* Action buttons */}
-                  {formStep === 'phone' && (
-                    <div className="flex gap-[16px] items-center">
-                      <button
-                        onClick={handleCancel}
-                        className="border border-[#77a6ed] rounded-[56px] px-[48px] py-[16px] flex items-center justify-center"
-                      >
-                        <span className="text-[#92baf6] text-[16px] font-semibold">Cancel</span>
-                      </button>
-                      <button
-                        onClick={phoneNum.length >= 9 ? handleContinueToOtp : undefined}
-                        className={`rounded-[56px] px-[48px] py-[16px] flex items-center gap-[10px] transition-colors ${
-                          phoneNum.length >= 9 ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#92baf6] cursor-not-allowed'
-                        }`}
-                      >
-                        <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
-                        <ArrowRight />
-                      </button>
+                  {/* Monthly commitments — only when YES */}
+                  {activeLoan === 'YES' && (
+                    <div className="flex flex-col items-center gap-2 w-full">
+                      <p className="text-[#475467] text-[13px]">Monthly commitments</p>
+                      <CommitmentRow
+                        value={commitment}
+                        onChange={setCommitment}
+                        onClear={() => setCommitment('')}
+                      />
                     </div>
                   )}
 
-                  {formStep === 'otp' && (
-                    <a href="/results" className="bg-[#FFDD33] rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px]">
-                      <span className="text-[#171717] text-[16px] font-semibold">Tamawal</span>
-                      <ArrowRight />
-                    </a>
+                  {/* Loan purpose */}
+                  <LoanPurposeSelect selected={loanPurpose} onSelect={setLoanPurpose} />
+                </div>
+                {/* Footer */}
+                <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start relative">
+                  {formStep === 'form' && (
+                    <button
+                      disabled={!isComplete}
+                      onClick={isComplete ? handleContinueToPhone : undefined}
+                      className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${
+                        isComplete ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'
+                      }`}
+                    >
+                      <span className={`text-[16px] font-semibold ${isComplete ? 'text-[#171717]' : 'text-[#9AA4B2]'}`}>Continue</span>
+                      <ArrowRight color={isComplete ? '#414651' : '#9AA4B2'} />
+                    </button>
+                  )}
+
+                  {/* Phone panel — state 05/06 */}
+                  {(formStep === 'phone' || formStep === 'otp') && (
+                    <div className="relative h-[163px] w-full">
+                      <div className="absolute -translate-x-1/2 left-1/2 top-0 bg-[#0063F5] rounded-[24px] overflow-clip pb-[48px] pt-[16px] px-[22px] w-full max-w-[517px] flex flex-col gap-[25px] items-center">
+
+                        {/* Inner content */}
+                        <div className="flex flex-col gap-[18px] items-center p-6 w-full rounded-[12px]">
+
+                          {formStep === 'phone' && (() => {
+                            const hasLeadingZero = phoneNum.startsWith('0');
+                            const inputValue = hasLeadingZero ? phoneNum.slice(1) : phoneNum;
+                            return (
+                              <>
+                                <div className="flex flex-col gap-2 items-center w-full">
+                                  <p className="text-white text-[13px]">Mobile Number</p>
+                                  <div className="bg-[#0041a3] border border-[#0041a3] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full gap-[2px]">
+                                    <span className="text-white text-[24px] font-bold mr-1 shrink-0">+966</span>
+                                    {hasLeadingZero && (
+                                      <span className="text-[#77a6ed] text-[24px] font-bold">0</span>
+                                    )}
+                                    <input
+                                      autoFocus
+                                      type="tel"
+                                      inputMode="numeric"
+                                      placeholder={!phoneNum ? "Enter your mobile number" : ""}
+                                      value={inputValue}
+                                      onChange={e => {
+                                        const raw = e.target.value.replace(/[^0-9 ]/g, '');
+                                        setPhoneNum(hasLeadingZero ? '0' + raw : raw);
+                                      }}
+                                      onKeyDown={e => {
+                                        if (e.key === 'Backspace' && hasLeadingZero && phoneNum === '0') {
+                                          setPhoneNum('');
+                                        }
+                                      }}
+                                      className="bg-transparent outline-none text-[24px] font-bold text-white placeholder:text-[#77a6ed] placeholder:font-normal flex-1 min-w-0"
+                                    />
+                                  </div>
+                                </div>
+                                <p className="text-[#92baf6] text-[12px] text-center leading-[1.5]">
+                                  Please enter your mobile number so we can send you a verification code!
+                                </p>
+                              </>
+                            );
+                          })()}
+
+                          {formStep === 'otp' && (
+                            <>
+                              <div className="flex flex-col gap-2 items-center w-full">
+                                <p className="text-white text-[13px]">Mobile Number</p>
+                                <div className="flex items-center gap-2 justify-center">
+                                  <img src={imgPhoneIconBlue} alt="" className="w-5 h-5 flex-shrink-0" />
+                                  <span className="text-white text-[24px] font-bold">+966 {phoneNum.startsWith('0') ? phoneNum.slice(1) : phoneNum}</span>
+                                  <div className="bg-white rounded-full p-[2px] flex-shrink-0">
+                                    <img src={imgCheckGreen} alt="" className="w-3 h-3 block" />
+                                  </div>
+                                </div>
+                              </div>
+                              <p className="text-[#92baf6] text-[12px] text-center leading-[1.5] w-full">
+                                Please enter verification code from inbox in your mobile number!
+                              </p>
+                              <OtpInput digits={otpDigits} onChange={setOtpDigits} />
+                              <p className="text-[12px] text-center tracking-[0.4px]">
+                                <span className="text-[#92baf6]">Resend Code? </span>
+                                <span className="text-[#FFDD33]">{countdownStr}</span>
+                              </p>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Action buttons */}
+                        {formStep === 'phone' && (
+                          <div className="flex flex-wrap gap-3 lg:gap-[16px] items-center justify-center">
+                            <button
+                              onClick={handleCancel}
+                              className="border border-[#77a6ed] rounded-[56px] px-[32px] lg:px-[48px] py-[16px] flex items-center justify-center"
+                            >
+                              <span className="text-[#92baf6] text-[16px] font-semibold">Cancel</span>
+                            </button>
+                            <button
+                              onClick={(phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length) >= 9 ? handleContinueToOtp : undefined}
+                              className={`rounded-[56px] px-[32px] lg:px-[48px] py-[16px] flex items-center gap-[10px] transition-colors ${
+                                (phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length) >= 9 ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#92baf6] cursor-not-allowed'
+                              }`}
+                            >
+                              <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
+                              <ArrowRight />
+                            </button>
+                          </div>
+                        )}
+
+                        {formStep === 'otp' && (
+                          <a href="/results" className="bg-[#FFDD33] rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px]">
+                            <span className="text-[#171717] text-[16px] font-semibold">Tamawal</span>
+                            <ArrowRight />
+                          </a>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
-            )}
+            </div>
+
           </div>
         </div>
 
-        </div>{/* /form wrapper ml */}
-        </div>{/* /w-[1440px] */}
+      </section>
 
+      {/* ── Install app — mobile only ────────────────────────────────────── */}
+      <section className="lg:hidden bg-[#f9f8fd] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
+        <p className="text-[16px] text-[#121a26] text-center">Install our app now!</p>
+        <div className="flex gap-[12px]">
+          <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+            <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+            <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+          </a>
+        </div>
       </section>
 
       {/* ── Partners ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#f9f8fd] py-[94px] flex flex-col items-center gap-8 overflow-hidden">
+      <section className="bg-[#f9f8fd] py-[60px] lg:py-[94px] flex flex-col items-center gap-8 overflow-hidden">
         <h2 className="text-[#101828] text-[32px] font-bold tracking-[0.15px]">Our Partners</h2>
         <div className="w-full overflow-hidden">
           {/* Duplicate logos so the loop is seamless (translateX -50% = one full set) */}
@@ -808,122 +827,151 @@ export default function AppPage() {
       </section>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer className="bg-[#0063F5]">
-        <div className="max-w-[1440px] mx-auto px-[75px] pt-[90px] flex flex-col gap-[48px]">
-        <div className="flex items-start justify-between w-full">
+      <footer className="bg-[#202a39]">
+        <div className="max-w-[1440px] mx-auto px-[24px] lg:px-[75px] pt-[60px] lg:pt-[90px] flex flex-col gap-[48px]">
+          <div className="flex flex-col lg:flex-row lg:items-start w-full gap-[40px] lg:gap-[64px]">
 
-          {/* Left: logo + SAMA */}
-          <div className="flex flex-col justify-between self-stretch w-[280px]">
-            <div className="flex items-center">
-              <img src={imgLogo} alt="Tamawal" className="h-[33px] w-auto" />
+            {/* Left: logo + SAMA badge + desc */}
+            <div className="flex flex-col items-start gap-[40px] lg:gap-0 lg:justify-between lg:self-stretch lg:flex-1">
+              <div className="flex items-center">
+                <img src={imgLogo} alt="Tamawal" className="h-[32px] w-auto" />
+              </div>
+              <div className="flex flex-col gap-[16px]">
+                <div className="relative size-[100px]">
+                  <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
+                </div>
+                <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
+                  Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
-              <img src={imgFooterBadge} alt="SAMA" className="w-[81px] h-[81px]" />
-              <p className="text-white/80 text-[18px] font-semibold leading-[1.72]">
-                Tamawal is under the supervision and authority of Saudi Central Bank (SAMA)
-              </p>
+
+            {/* Right: link columns */}
+            <div className="flex flex-col gap-[32px] shrink-0">
+              {/* Top row */}
+              <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
+                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                    <span>Who we are</span>
+                    <span>Our products</span>
+                    <span>Our values</span>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
+                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                    <span>Terms and Conditions</span>
+                    <span>Data Protection<br />and Privacy</span>
+                    <span>Customer Protection<br />Principles</span>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
+                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                    <span>Be a partner</span>
+                    <span>Be a customer</span>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
+                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                    <span>Suggestion</span>
+                    <span>Complaint</span>
+                    <span>Report a Violation</span>
+                    <span>Report Financial Fraud</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-white/10" />
+
+              {/* Bottom row */}
+              <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
+                  <div className="flex flex-col gap-[8px]">
+                    <div className="flex items-center gap-[8px]">
+                      <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">info@tamawal.sa</span>
+                    </div>
+                    <div className="flex items-center gap-[8px]">
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">011 512 3870</span>
+                    </div>
+                    <div className="flex items-center gap-[8px]">
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
+                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">800 100 0276</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
+                  <div className="flex gap-[8px] items-start">
+                    <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
+                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[12px]">
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="text-white text-[16px] font-semibold">Working hours</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
+                  </div>
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="text-white text-[16px] font-semibold">Working days</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                  </div>
+                </div>
+                <div className="lg:w-[190px] flex flex-col gap-[8px]">
+                  <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
+                  <div className="flex gap-[8px] items-center">
+                    <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
+                    <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
+                  </div>
+                  <button className="flex items-center gap-[2px] py-[12px]">
+                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right: link columns */}
-          <div className="flex flex-col gap-8 flex-1 ml-[60px]">
-            {/* Top row */}
-            <div className="flex gap-[30px]">
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
-                <div className="flex flex-col gap-2 text-white/64 text-[16px]">
-                  <span>Who we are</span>
-                  <span>Our products</span>
-                  <span>Our values</span>
-                </div>
-              </div>
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
-                <div className="flex flex-col gap-2 text-white/64 text-[16px]">
-                  <span>Terms and Conditions</span>
-                  <span>Data Protection and Privacy</span>
-                  <span>Customer Protection Principles</span>
-                </div>
-              </div>
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
-                <div className="flex flex-col gap-2 text-white/64 text-[16px]">
-                  <span>Be a partner</span>
-                  <span>Be a customer</span>
-                </div>
-              </div>
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
-                <p className="text-white/64 text-[14px] leading-[1.45]">You can give suggestions or a complaint for better Tamawal!</p>
-                <div className="flex flex-col">
-                  <button className="flex items-center gap-1 py-3 text-white/86 text-[16px]">
-                    Send a message <img src={imgArrowNext} alt="" className="w-6 h-6" />
-                  </button>
-                  <button className="flex items-center gap-1 py-3 text-white/86 text-[16px]">
-                    FAQs <img src={imgArrowNext} alt="" className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Divider */}
+          {/* Bottom bar */}
+          <div className="flex flex-col gap-[24px] pb-[24px]">
             <div className="border-t border-white/10" />
-
-            {/* Bottom row */}
-            <div className="flex gap-[30px]">
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <img src={imgEmailIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                    <span className="text-white/64 text-[16px]">info@tamawal.sa</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img src={imgPhoneIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                    <span className="text-white/64 text-[16px]">011 512 3870</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img src={imgPhoneIcon} alt="" className="w-4 h-4 flex-shrink-0" />
-                    <span className="text-white/64 text-[16px]">800 100 0276</span>
-                  </div>
-                </div>
+            {/* Mobile: stacked centered */}
+            <div className="flex flex-col gap-[12px] items-center lg:hidden">
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <div className="flex gap-[12px]">
+                <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+                </a>
               </div>
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
-                <div className="flex gap-2 items-start">
-                  <img src={imgLocationIcon} alt="" className="w-[13px] mt-1 flex-shrink-0" />
-                  <span className="text-white/64 text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
-                </div>
-              </div>
-              <div className="w-[190px] flex flex-col gap-4">
-                <div>
-                  <p className="text-white text-[16px] font-semibold">Working hours</p>
-                  <p className="text-white/64 text-[14px]">09:00 – 17:00</p>
-                </div>
-                <div>
-                  <p className="text-white text-[16px] font-semibold">Working days</p>
-                  <p className="text-white/64 text-[14px]">Sunday - Thursday</p>
-                </div>
-              </div>
-              <div className="w-[190px] flex flex-col gap-3">
-                <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
-                <div className="flex gap-2 items-center">
-                  <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
-                  <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+            </div>
+            {/* Desktop: copyright left, download right */}
+            <div className="hidden lg:flex items-center justify-between w-full">
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <div className="flex items-center gap-[16px]">
+                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <div className="flex gap-[12px]">
+                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                    <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+                  </a>
+                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                    <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="flex flex-col gap-6 pb-6">
-          <div className="border-t border-white/10" />
-          <p className="text-white/32 text-[16px] text-center leading-[1.7]">
-            Tamawal Digital Brokerage Company operates under the supervision and regulation of the Saudi Arabian Monetary Authority (SAMA)
-          </p>
-        </div>
-        </div>{/* /max-w-[1440px] */}
       </footer>
 
     </div>

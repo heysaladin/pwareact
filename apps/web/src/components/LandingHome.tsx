@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import SlidingMenu from './SlidingMenu';
 
-const imgVuesaxLinearMenu = "http://localhost:3845/assets/0d52496e764f968ea0912e51471c5f8c5908af05.svg";
+const imgVuesaxLinearMenu = "/icon-menu.svg";
 const imgLogoTamawal = "http://localhost:3845/assets/d6ab76e93e15e1974de93e9daae1ca561132b113.svg";
 const imgRectangle1400 = "http://localhost:3845/assets/9c533ed6c905ce00e10eeb227412792e08f0dc10.svg";
 const imgFrame6512 = "http://localhost:3845/assets/491f991cdcc35afa6a95b3fb3d9e59fde4fdc86e.svg";
@@ -13,6 +13,8 @@ const imgIcon2 = "http://localhost:3845/assets/d0eb584f28b2e49512e9a57fc36342dc9
 const imgIcon3 = "http://localhost:3845/assets/4b9da7577497222f032976351799034eac9f0e43.svg";
 const imgArrowUpCircle = "/arrow-up-circle.svg";
 const imgArrowDownCircle = "/arrow-down-circle.svg";
+const imgAppStore = "/appstore.svg";
+const imgPlayStore = "/playstore.svg";
 const imgArrowNextDark = "http://localhost:3845/assets/d599a04f31ff42f2b327c0ae48aa92c0f0950b27.svg";
 const imgGfpDjkmXwAAxREe5 = "http://localhost:3845/assets/12ea0e34d475c9cfab4b54498538dc99014d3758.png";
 const imgGfpDjkmXwAAxREe4 = "http://localhost:3845/assets/844bdeede3c251e261a3c42370873c6c84c670a0.png";
@@ -398,6 +400,15 @@ function Footer() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] h-[40px] overflow-hidden">
+                <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] h-[40px] overflow-hidden">
+                <img src={imgPlayStore} alt="Google Play" className="w-full h-full object-contain" />
+              </a>
             </div>
           </div>
         </div>

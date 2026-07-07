@@ -2,11 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+const REFERRAL_CODE = 'twl.app/web?ref=6114378a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t';
+
 import SlidingMenu from '../../components/SlidingMenu';
+import Navbar from '../../components/Navbar';
 
 const imgLogo         = "/logo-tamawal-web.svg";
 const imgLogoBlue     = "/logo-tamawal-web-blue.svg";
-const imgMenuIcon     = "http://localhost:3845/assets/0d52496e764f968ea0912e51471c5f8c5908af05.svg";
+const imgMenuIcon     = "/icon-menu.svg";
 const imgFooterBadge  = "/badge-small.svg";
 const imgArrowNext    = "/arrow-next-dark.svg";
 const imgEmailIcon    = "/icon-email.svg";
@@ -23,65 +27,97 @@ export default function CodePage() {
     <div className="bg-white min-h-screen flex flex-col">
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
 
-      {/* ── Navbar ───────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-50 bg-white border-b border-[#EAECF0]">
-        {/* Desktop */}
-        <div className="hidden lg:block max-w-[1440px] mx-auto px-[75px]">
-          <div className="flex items-center justify-between h-[45px] py-[25px]">
-            <div className="flex items-center gap-[56px]">
-              <img src={imgLogoBlue} alt="Tamawal" className="h-[33px] w-auto" />
-              <nav className="flex items-center gap-[40px]">
-                <a href="/app" className="text-[#021945] text-[16px] font-bold">App</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Tamawal</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Services</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">About us</a>
-                <a href="#" className="text-[#344054] text-[16px] font-medium">Contact us</a>
-              </nav>
-            </div>
-            <div className="flex items-center gap-8">
-              <div className="w-[104px] h-[45px]" />
-              <div className="border border-[#EAECF0] rounded-full w-[44px] h-[44px] flex items-center justify-center">
-                <span className="text-[#344054] text-[13px] font-medium">عربي</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Mobile */}
-        <div className="flex lg:hidden items-center justify-between px-6 py-5">
-          <button onClick={() => setMenuOpen(true)} className="shrink-0 size-6 cursor-pointer">
-            <img src={imgMenuIcon} alt="Menu" className="size-6" />
-          </button>
-          <img src={imgLogoBlue} alt="Tamawal" className="h-8 w-auto" />
-          <div className="border border-[#EAECF0] rounded-full w-11 h-11 flex items-center justify-center">
-            <span className="text-[#344054] text-[13px] font-medium">عربي</span>
-          </div>
-        </div>
-      </div>
+      <Navbar onMenuOpen={() => setMenuOpen(true)} />
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <main className="flex-1 bg-[#f5f7fa]">
         <div className="max-w-[1290px] mx-auto my-6 lg:my-10 px-4 lg:px-0">
-          <div className="bg-white rounded-[24px] shadow p-6 lg:py-16 lg:px-12 flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-16">
 
-            {/* Left / top on mobile */}
-            <div className="w-full lg:flex-1 flex flex-col gap-5 lg:gap-6">
-              <img src="/payment_success.svg" alt="" className="w-[86px] h-[86px] lg:w-[188px] lg:h-[188px]" />
-              <div>
-                <h2 className="text-[22px] lg:text-[36px] font-bold text-[#101828] mb-3 lg:mb-4 leading-[1.3]">
-                  Scan QR Code for continue
+          {/* Mobile card — matches Figma 2389:47031 */}
+          <div className="lg:hidden bg-white rounded-[16px] shadow-sm flex flex-col gap-[24px] px-[24px] py-[24px]">
+            <img src="/payment_success.svg" alt="" className="w-[86px] h-[86px]" />
+            <div className="flex flex-col gap-[16px]">
+              <h2 className="text-[22px] font-bold text-[#101828] leading-[1.3]">
+                Scan QR Code to continue
+              </h2>
+              <p className="text-[14px] text-[#667085] leading-[1.6]">
+                Payment completed successfully. To continue and access the full range of Tamawal services, please scan the QR code below to proceed in the Tamawal mobile application.
+              </p>
+            </div>
+            <img src="/qr-code.svg" alt="QR Code" className="w-[279px] h-[279px] self-center" />
+            {/* Referral link row */}
+            <div className="border border-[#EAECF0] rounded-[8px] px-[12px] py-[13px] flex items-center gap-[8px]">
+              <button
+                onClick={() => navigator.clipboard.writeText(REFERRAL_CODE)}
+                className="shrink-0 cursor-pointer"
+                title="Copy link"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.66667 13.3333C5.74619 13.3333 5 12.5871 5 11.6667V5C5 4.07952 5.74619 3.33333 6.66667 3.33333H13.3333C14.2538 3.33333 15 4.07952 15 5" stroke="#667085" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <rect x="6.66667" y="6.66667" width="10" height="10" rx="1.66667" stroke="#667085" strokeWidth="1.5"/>
+                </svg>
+              </button>
+              <div className="relative flex-1 min-w-0 overflow-hidden">
+                <span className="text-[14px] text-[#667085] whitespace-nowrap">{REFERRAL_CODE}</span>
+                <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+              </div>
+            </div>
+            {/* Continue button */}
+            <button className="border border-[#0063F5] rounded-[56px] px-[24px] py-[16px] flex items-center justify-center gap-[8px] w-full">
+              <span className="text-[16px] font-semibold text-[#0063F5]">Continue in mobile app</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="#0063F5" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Desktop card */}
+          <div className="hidden lg:flex bg-white rounded-[24px] shadow-sm items-center w-full min-h-[671px] px-6 py-6">
+            {/* Left — icon + text */}
+            <div className="flex-1 flex flex-col gap-6 px-[56px] py-[142px]">
+              <img src="/payment_success.svg" alt="" className="w-[188px] h-[188px]" />
+              <div className="flex flex-col gap-[16px]">
+                <h2 className="text-[36px] font-bold text-[#101828] leading-[1.25]">
+                  Scan QR Code to continue
                 </h2>
-                <p className="text-[14px] lg:text-[16px] text-[#667085] leading-[1.6]">
+                <p className="text-[16px] text-[#667085] leading-[1.6] max-w-[558px]">
                   Payment completed successfully. To continue and access the full range of Tamawal services, please scan the QR code below to proceed in the Tamawal mobile application.
                 </p>
               </div>
             </div>
 
-            {/* Right / bottom on mobile: QR Code */}
-            <div className="flex-shrink-0 self-center">
-              <img src="/qr-code.svg" alt="QR Code" className="w-[279px] h-[279px] lg:w-[500px] lg:h-[500px]" />
+            {/* Right — QR + link + button */}
+            <div className="flex-shrink-0 flex flex-col gap-[10px] w-[500px] py-6">
+              <img src="/qr-code.svg" alt="QR Code" className="w-[500px] h-[500px]" />
+              {/* Referral link */}
+              <div className="border border-[#EAECF0] rounded-[8px] px-[16px] py-[13px] flex items-center gap-[8px]">
+                <button
+                  onClick={() => navigator.clipboard.writeText(REFERRAL_CODE)}
+                  className="shrink-0 cursor-pointer"
+                  title="Copy link"
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.66667 13.3333C5.74619 13.3333 5 12.5871 5 11.6667V5C5 4.07952 5.74619 3.33333 6.66667 3.33333H13.3333C14.2538 3.33333 15 4.07952 15 5" stroke="#667085" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <rect x="6.66667" y="6.66667" width="10" height="10" rx="1.66667" stroke="#667085" strokeWidth="1.5"/>
+                  </svg>
+                </button>
+                <div className="relative flex-1 min-w-0 overflow-hidden">
+                  <span className="text-[14px] text-[#667085] whitespace-nowrap">{REFERRAL_CODE}</span>
+                  <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+                </div>
+              </div>
+              {/* Continue button */}
+              <div className="flex justify-center pt-[1px]">
+                <button className="border border-[#0063F5] rounded-[56px] px-[24px] py-[16px] flex items-center gap-[8px]">
+                  <span className="text-[16px] font-semibold text-[#0063F5]">Continue in mobile app</span>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="#0063F5" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
             </div>
-
           </div>
+
         </div>
       </main>
 
