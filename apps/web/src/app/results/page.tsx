@@ -13,8 +13,8 @@ const imgBackArrow   = "http://localhost:3845/assets/67f5db18250fc0c82561f27c924
 const imgSortIcon    = "http://localhost:3845/assets/ae028277d0aeaf0e5f751509272522cee029790a.svg";
 const imgCheckIcon   = "http://localhost:3845/assets/42d1556b4be07854c0c4eba577e6f40b2a823338.svg";
 const imgPhoneImg    = "/mockup.png";
-const imgAppStore    = "http://localhost:3845/assets/d546918b9349f2d2f6f0c33b97fe51ad05199e4c.svg";
-const imgGooglePlay  = "http://localhost:3845/assets/74a1f08e8001561fb28ceb1da93da2a164455551.svg";
+const imgAppStore    = "/appstore.svg";
+const imgGooglePlay  = "/playstore.svg";
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 const imgFooterBadge  = "/badge-small.svg";

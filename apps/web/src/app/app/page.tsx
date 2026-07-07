@@ -10,8 +10,8 @@ const imgSlider      = "http://localhost:3845/assets/958c958b4083704331e66b3ea7f
 const imgChevron     = "http://localhost:3845/assets/b132fd916e53d0ab6d7a8e2c3e6a207ecab2b392.svg";
 const imgArrowRight  = "/arrow-right.svg";
 const imgPhoneImg    = "/mockup.png";
-const imgAppStore    = "http://localhost:3845/assets/d546918b9349f2d2f6f0c33b97fe51ad05199e4c.svg";
-const imgGooglePlay  = "http://localhost:3845/assets/74a1f08e8001561fb28ceb1da93da2a164455551.svg";
+const imgAppStore    = "/appstore.svg";
+const imgGooglePlay  = "/playstore.svg";
 const imgHeroBadge   = "/badge.svg";
 const imgBadgeCenter = "/badge-center.svg";
 
@@ -37,8 +37,8 @@ const imgPhoneIconBlue   = "/icon-phone-white.svg";
 const imgCheckGreen      = "/icon-check.svg";
 
 // ── FAQ ──────────────────────────────────────────────────────────────────────
-const imgArrowDownCircle = "http://localhost:3845/assets/254ba3a52e458076c0b9b38ffa93a79a9e4459ca.svg";
-const imgArrowUpCircle   = "http://localhost:3845/assets/2aaba8a0dd13363a3c0900a8ca3d07cec3c26b35.svg";
+const imgArrowDownCircle = "/arrow-down-circle.svg";
+const imgArrowUpCircle   = "/arrow-up-circle.svg";
 const imgViewMoreArrow   = "/arrow-right.svg";
 
 // ── Footer ───────────────────────────────────────────────────────────────────
@@ -771,18 +771,18 @@ export default function AppPage() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white py-[94px] px-[75px] flex items-center justify-center">
-        <div className="w-[1290px] flex flex-col items-center gap-[40px]">
+      <section className="bg-white py-10 md:py-[94px] px-6 md:px-[75px] flex items-center justify-center">
+        <div className="w-full max-w-[1290px] flex flex-col items-center gap-8 md:gap-[40px]">
           <h2 className="text-[#141414] text-[32px] font-bold">F.A.Q</h2>
 
-          <div className="w-[1070px]">
+          <div className="w-full md:w-[1070px]">
             {faqs.map((faq, i) => (
               <div key={i} className="border-b border-[#E0E0E0]">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
-                  className="w-full flex items-center gap-[30px] py-8 text-left"
+                  className="w-full flex items-center gap-4 md:gap-[30px] py-5 md:py-8 text-left"
                 >
-                  <span className="flex-1 text-[#130F26] text-[30px] font-bold leading-normal">{faq.q}</span>
+                  <span className="flex-1 text-[#130F26] text-lg md:text-[30px] font-bold leading-normal">{faq.q}</span>
                   <img
                     src={openFaq === i ? imgArrowUpCircle : imgArrowDownCircle}
                     alt=""
@@ -790,7 +790,7 @@ export default function AppPage() {
                   />
                 </button>
                 {openFaq === i && faq.a && (
-                  <div className="pb-8">
+                  <div className="pb-5 md:pb-8">
                     <p className="text-[#525252] text-[16px] leading-[1.72]">{faq.a}</p>
                   </div>
                 )}
