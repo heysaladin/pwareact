@@ -111,9 +111,9 @@ function CtaBanner({ className = "" }: { className?: string }) {
   return (
     <div className={`relative flex flex-col items-center justify-end h-[64px] rounded-[8px] w-full ${className}`}>
       <div className="absolute top-0 right-0 bg-[#d91c1c] text-white text-[12px] rounded-full px-[8px] py-[2px] flex items-center gap-[4px] z-10">
-        <span>Enjoy up to </span>
+        <span>استمتع بخصم يصل إلى </span>
         <img src="/SAR-white.svg" alt="SAR" className="w-3 h-3 object-contain flex-shrink-0" />
-        <span>100 discount</span>
+        <span>100 ريال</span>
         <div className="absolute -bottom-[5px] right-[14px] w-0 h-0 border-l-[5px] border-r-[5px] border-t-[5px] border-l-transparent border-r-transparent border-t-[#d91c1c]" />
       </div>
       <div className="bg-[#fef2f2] border border-[#fee2e2] rounded-[8px] flex items-center p-[12px] w-full">
@@ -121,7 +121,7 @@ function CtaBanner({ className = "" }: { className?: string }) {
           <div className="w-[20px] h-[20px] flex-shrink-0 flex items-center justify-center">
             <SARIcon className="w-5 h-5" />
           </div>
-          <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px] whitespace-nowrap">Redeem your discount points</span>
+          <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px] whitespace-nowrap">استبدل نقاط الخصم الخاصة بك</span>
         </div>
         <IconChevronRight />
       </div>
@@ -133,24 +133,24 @@ export default function ReviewPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="bg-[#f9f8fd] min-h-screen flex flex-col">
-      {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
+    <div dir="rtl" className="bg-[#f9f8fd] min-h-screen flex flex-col">
+      {menuOpen && <SlidingMenu lang="ar" onClose={() => setMenuOpen(false)} />}
 
-      <Navbar onMenuOpen={() => setMenuOpen(true)} langHref="/review/ar" />
+      <Navbar onMenuOpen={() => setMenuOpen(true)} langHref="/review" langLabel="EN" lang="ar" />
 
       {/* ── Page Content ───────────────────────────────────────────────── */}
       <div className="flex-1 bg-[#f9f8fd] py-[24px] flex flex-col gap-[32px]">
 
         {/* Header */}
         <div className="flex flex-col gap-[24px] px-[24px] lg:px-[75px]">
-          <Link href="/results" className="flex items-center gap-[8px] w-fit">
+          <Link href="/results/ar" className="flex items-center gap-[8px] w-fit">
             <img src={imgBackArrow} alt="" className="w-[20px] h-[20px]" />
-            <span className="text-[#717680] text-[16px] font-semibold leading-[24px]">Back</span>
+            <span className="text-[#717680] text-[16px] font-semibold leading-[24px]">رجوع</span>
           </Link>
           <div className="flex flex-col gap-[2px] w-full">
-            <h1 className="text-[#101828] text-[24px] lg:text-[32px] font-bold tracking-[0.15px]">Review Eligibility Order</h1>
+            <h1 className="text-[#101828] text-[24px] lg:text-[32px] font-bold tracking-[0.15px]">مراجعة طلب الأهلية</h1>
             <p className="text-[#525252] text-[16px] leading-[1.72]">
-              Confirm your offer and pay the one-time eligibility fee so we can retrieve your official data and match you with accurate financing offers.
+              أكّد عرضك وادفع رسوم الأهلية لمرة واحدة حتى نتمكن من استرداد بياناتك الرسمية ومطابقتك مع عروض التمويل الدقيقة.
             </p>
           </div>
         </div>
@@ -166,15 +166,15 @@ export default function ReviewPage() {
 
               {/* Mobile layout */}
               <div className="lg:hidden p-[20px] flex flex-col gap-[16px]">
-                <h2 className="text-[#121a26] text-[16px] font-bold leading-[1.25]">Real Estate Financing for Home Buyers</h2>
+                <h2 className="text-[#121a26] text-[16px] font-bold leading-[1.25]">تمويل عقاري لمشتري المنازل</h2>
                 <div className="flex items-center justify-between">
                   <img src={imgLogoBank} alt="Bank" className="h-[40px] w-auto object-contain" />
                   <StarRating value={4.5} />
                 </div>
                 <div className="flex flex-col gap-[2px]">
                   <div className="flex items-baseline gap-[4px] text-[#667085]">
-                    <span className="text-[16px] font-semibold">Loan amount</span>
-                    <span className="text-[12px]">up to</span>
+                    <span className="text-[16px] font-semibold">مبلغ القرض</span>
+                    <span className="text-[12px]">يصل إلى</span>
                   </div>
                   <div className="flex items-baseline gap-[4px]">
                     <SARIcon className="w-5 h-5" />
@@ -183,29 +183,29 @@ export default function ReviewPage() {
                 </div>
                 <div className="flex gap-[24px]">
                   <div className="flex flex-col">
-                    <span className="text-[#667085] text-[16px] font-semibold">APR</span>
+                    <span className="text-[#667085] text-[16px] font-semibold">معدل النسبة السنوية</span>
                     <span className="text-[#101828] text-[24px] font-bold">2.21%</span>
-                    <span className="text-[#667085] text-[12px]">Up to 5.13% *</span>
+                    <span className="text-[#667085] text-[12px]">حتى 5.13% *</span>
                   </div>
                   <div className="flex flex-col">
                     <div className="flex items-baseline gap-[4px] text-[#667085]">
-                      <span className="text-[16px] font-semibold">Loan period</span>
-                      <span className="text-[12px]">for</span>
+                      <span className="text-[16px] font-semibold">مدة القرض</span>
+                      <span className="text-[12px]">لمدة</span>
                     </div>
-                    <span className="text-[#101828] text-[24px] font-bold">48 month</span>
+                    <span className="text-[#101828] text-[24px] font-bold">48 شهراً</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-[12px]">
                   <img src={imgPayoutTime} alt="" className="w-[40px] h-[40px] flex-shrink-0" />
                   <img src={imgFavorite} alt="Favorite" className="w-[24px] h-[24px] flex-shrink-0" />
-                  <button className="flex-1 bg-[#0063f5] text-white rounded-[24px] py-[10px] text-[14px] font-semibold">Tamawal</button>
+                  <button className="flex-1 bg-[#0063f5] text-white rounded-[24px] py-[10px] text-[14px] font-semibold">تمويل</button>
                 </div>
               </div>
 
               {/* Desktop layout */}
               <div className="hidden lg:flex h-[318px]">
                 <div className="border-r border-[#eef1f6] flex flex-col justify-between px-[24px] py-[28px] w-[284px] flex-shrink-0">
-                  <h2 className="text-[#121a26] text-[24px] font-bold leading-[1.25]">Real Estate Financing for Home Buyers</h2>
+                  <h2 className="text-[#121a26] text-[24px] font-bold leading-[1.25]">تمويل عقاري لمشتري المنازل</h2>
                   <img src={imgLogoBank} alt="Bank" className="h-[60px] w-[203px] object-contain" />
                   <StarRating value={4.5} />
                 </div>
@@ -213,8 +213,8 @@ export default function ReviewPage() {
                   <div className="flex gap-[5px] w-full">
                     <div className="flex-1 flex flex-col">
                       <div className="flex items-baseline gap-[4px] text-[#667085]">
-                        <span className="text-[16px] font-semibold">Loan amount</span>
-                        <span className="text-[12px]">up to</span>
+                        <span className="text-[16px] font-semibold">مبلغ القرض</span>
+                        <span className="text-[12px]">يصل إلى</span>
                       </div>
                       <div className="flex items-baseline gap-[4px]">
                         <SARIcon className="w-5 h-5" />
@@ -223,27 +223,27 @@ export default function ReviewPage() {
                     </div>
                     <div className="flex-1 flex flex-col items-end">
                       <div className="flex items-baseline gap-[4px] text-[#667085]">
-                        <span className="text-[16px] font-semibold">Loan period</span>
-                        <span className="text-[12px]">for</span>
+                        <span className="text-[16px] font-semibold">مدة القرض</span>
+                        <span className="text-[12px]">لمدة</span>
                       </div>
-                      <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">48 month</span>
+                      <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">48 شهراً</span>
                     </div>
                   </div>
                   <div className="flex gap-[5px] items-center w-full">
                     <div className="flex-1 flex flex-col">
-                      <span className="text-[#667085] text-[16px] font-semibold">APR</span>
+                      <span className="text-[#667085] text-[16px] font-semibold">معدل النسبة السنوية</span>
                       <span className="text-[#101828] text-[32px] font-bold">2.21%</span>
-                      <span className="text-[#667085] text-[12px]">Up to 5.13% *</span>
+                      <span className="text-[#667085] text-[12px]">حتى 5.13% *</span>
                     </div>
                     <div className="flex-1 flex flex-col items-end gap-[8px]">
                       <img src={imgPayoutTime} alt="" className="w-[40px] h-[40px]" />
-                      <span className="text-[#667085] text-[12px] text-right w-[156px] leading-[1.4]">Finalization & Disbursement within 1 to 2 working days</span>
+                      <span className="text-[#667085] text-[12px] text-right w-[156px] leading-[1.4]">الإنهاء والصرف خلال 1 إلى 2 يوم عمل</span>
                     </div>
                   </div>
                   <div className="flex items-center w-full">
                     <button className="flex items-center gap-[4px]">
                       <img src={imgFavorite} alt="" className="w-[24px] h-[24px]" />
-                      <span className="text-[#98a2b3] text-[16px]">Add to favorite</span>
+                      <span className="text-[#98a2b3] text-[16px]">أضف إلى المفضلة</span>
                     </button>
                   </div>
                 </div>
@@ -253,9 +253,9 @@ export default function ReviewPage() {
             {/* Why do I need to pay card */}
             <div className="bg-white border border-[#eef1f6] rounded-[24px] p-[24px] flex flex-col gap-[24px]">
               <div className="flex flex-col gap-[12px]">
-                <h2 className="text-[#101828] text-[24px] font-bold tracking-[0.15px]">Why do I need to pay?</h2>
+                <h2 className="text-[#101828] text-[24px] font-bold tracking-[0.15px]">لماذا يجب أن أدفع؟</h2>
                 <p className="text-[#525252] text-[16px] leading-[1.72]">
-                  We charge a non-refundable eligibility fee to access and process your credit and financial data from trusted data provider sources
+                  نفرض رسوم أهلية غير قابلة للاسترداد للوصول إلى بياناتك الائتمانية والمالية ومعالجتها من مصادر موثوقة
                 </p>
               </div>
               <div className="flex flex-col gap-[12px]">
@@ -263,19 +263,19 @@ export default function ReviewPage() {
                   <div className="bg-[#f5f9ff] rounded-[8px] p-[8px] flex-shrink-0">
                     <IconSimah />
                   </div>
-                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">Retrieving your credit report from SIMAH</p>
+                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">استرداد تقرير الائتمان الخاص بك من سمه</p>
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <div className="bg-[#f5f9ff] rounded-[8px] p-[8px] flex-shrink-0">
                     <IconShield />
                   </div>
-                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">Verifying your KYC, employment and income information</p>
+                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">التحقق من هويتك ومعلومات التوظيف والدخل</p>
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <div className="bg-[#f5f9ff] rounded-[8px] p-[8px] flex-shrink-0">
                     <IconTarget />
                   </div>
-                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">Analyzing your profile to match the most accurate financing offers for you</p>
+                  <p className="text-[#4b5565] text-[16px] flex-1 tracking-[0.5px]">تحليل ملفك الشخصي لمطابقتك مع أدق عروض التمويل</p>
                 </div>
               </div>
               <div className="bg-[#fffcf5] border border-[#fedf89] rounded-[8px] p-[8px] flex gap-[6px] items-start">
@@ -283,7 +283,7 @@ export default function ReviewPage() {
                   <IconAlert />
                 </div>
                 <p className="text-[#b54708] text-[12px] leading-[1.5] flex-1">
-                  Please note! Paying the eligibility fee does not guarantee loan approval. It ensures secure and official data retrieval for your eligibility assessment.
+                  يرجى الملاحظة! لا يضمن دفع رسوم الأهلية الحصول على موافقة القرض. بل يضمن الاسترداد الآمن والرسمي للبيانات لتقييم أهليتك.
                 </p>
               </div>
             </div>
@@ -297,10 +297,10 @@ export default function ReviewPage() {
               {/* Payment details */}
               <div className="border border-[#eef1f6] rounded-[8px] overflow-hidden">
                 <div className="bg-white p-[12px]">
-                  <span className="text-[#121a26] text-[17px] font-bold leading-[26px]">Payment Details</span>
+                  <span className="text-[#121a26] text-[17px] font-bold leading-[26px]">تفاصيل الدفع</span>
                 </div>
                 <div className="bg-[#f8fafc] flex items-center gap-[24px] px-[12px] py-[6px]">
-                  <span className="flex-1 text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">Eligibility Fees</span>
+                  <span className="flex-1 text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">رسوم الأهلية</span>
                   <div className="flex items-center gap-[2px]">
                     <SARIcon className="w-3 h-3" />
                     <span className="text-[#121a26] text-[15px]">950</span>
@@ -308,9 +308,9 @@ export default function ReviewPage() {
                 </div>
                 <div className="bg-white flex items-start gap-[24px] px-[12px] py-[6px]">
                   <div className="flex-1 flex flex-col gap-[2px]">
-                    <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">VAT (15%)</span>
+                    <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">ضريبة القيمة المضافة (15%)</span>
                     <span className="text-[#697586] text-[13px] tracking-[0.5px]">
-                      VAT Number:{' '}
+                      رقم ضريبة القيمة المضافة:{' '}
                       <span className="text-[#0063f5] underline decoration-solid">310131935400</span>
                     </span>
                   </div>
@@ -322,8 +322,8 @@ export default function ReviewPage() {
                 <div className="border-t border-[#eef1f6]" />
                 <div className="bg-[#f8fafc] flex items-center gap-[24px] px-[12px] pt-[12px] pb-[8px]">
                   <div className="flex-1 flex items-baseline gap-[4px]">
-                    <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">Total </span>
-                    <span className="text-[#697586] text-[10px] tracking-[0.5px]">(VAT Inclusive)</span>
+                    <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">المجموع </span>
+                    <span className="text-[#697586] text-[10px] tracking-[0.5px]">(شامل ضريبة القيمة المضافة)</span>
                   </div>
                   <div className="flex items-center gap-[2px]">
                     <SARIcon className="w-3 h-3" />
@@ -335,15 +335,15 @@ export default function ReviewPage() {
               {/* Action area */}
               <div className="flex flex-col gap-[24px] p-[24px]">
                 <p className="text-[#364152] text-[13px] text-center leading-[18px] tracking-[0.4px]">
-                  By paying, you acknowledge the payment is non-refundable.{' '}
-                  <span className="text-[#0063f5]">Read More</span>
+                  بالدفع، تقر بأن الدفع غير قابل للاسترداد.{' '}
+                  <span className="text-[#0063f5]">اقرأ المزيد</span>
                 </p>
-                <button onClick={() => window.location.href = '/payment'} className="bg-[#ffdd33] border-2 border-[rgba(255,255,255,0.12)] rounded-[24px] py-[12px] px-[16px] flex items-center justify-center min-h-[46px] w-full cursor-pointer">
-                  <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">Pay now</span>
+                <button onClick={() => window.location.href = '/payment/ar'} className="bg-[#ffdd33] border-2 border-[rgba(255,255,255,0.12)] rounded-[24px] py-[12px] px-[16px] flex items-center justify-center min-h-[46px] w-full cursor-pointer">
+                  <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">ادفع الآن</span>
                 </button>
                 <div className="flex items-center justify-center gap-[6px]">
                   <IconLock />
-                  <span className="text-[#717680] text-[12px] tracking-[0.012px]">Secure checkout · Powered by Moyasar</span>
+                  <span className="text-[#717680] text-[12px] tracking-[0.012px]">دفع آمن · مدعوم من Moyasar</span>
                 </div>
               </div>
             </div>
@@ -364,10 +364,10 @@ export default function ReviewPage() {
               <div className="flex flex-col gap-[16px]">
                 <div className="relative size-[100px]">
                   <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
-                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
+                  <img src={imgBadgeCenter} alt="مرخص من ساما" className="absolute inset-0 size-full" />
                 </div>
                 <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
-                  Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
+                  تمويل® تحت إشراف ورقابة البنك المركزي السعودي بموجب ترخيص رقم 98/N M/202504
                 </p>
               </div>
             </div>
@@ -377,35 +377,35 @@ export default function ReviewPage() {
               {/* Top row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">معلومات عنا</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Who we are</span>
-                    <span>Our products</span>
-                    <span>Our values</span>
+                    <span>من نحن</span>
+                    <span>منتجاتنا</span>
+                    <span>قيمنا</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">قانوني</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Terms and Conditions</span>
-                    <span>Data Protection<br />and Privacy</span>
-                    <span>Customer Protection<br />Principles</span>
+                    <span>الشروط والأحكام</span>
+                    <span>حماية البيانات<br />والخصوصية</span>
+                    <span>حماية العميل<br />المبادئ</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">اتخذ إجراءً</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Be a partner</span>
-                    <span>Be a customer</span>
+                    <span>كن شريكاً</span>
+                    <span>كن عميلاً</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">رعاية العملاء</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Suggestion</span>
-                    <span>Complaint</span>
-                    <span>Report a Violation</span>
-                    <span>Report Financial Fraud</span>
+                    <span>اقتراح</span>
+                    <span>شكوى</span>
+                    <span>الإبلاغ عن مخالفة</span>
+                    <span>الإبلاغ عن احتيال مالي</span>
                   </div>
                 </div>
               </div>
@@ -416,7 +416,7 @@ export default function ReviewPage() {
               {/* Bottom row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">تواصل معنا</p>
                   <div className="flex flex-col gap-[8px]">
                     <div className="flex items-center gap-[8px]">
                       <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
@@ -433,30 +433,30 @@ export default function ReviewPage() {
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">العنوان</p>
                   <div className="flex gap-[8px] items-start">
                     <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
-                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
+                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">شارع العليا (403)، الرياض، المملكة العربية السعودية</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working hours</p>
+                    <p className="text-white text-[16px] font-semibold">ساعات العمل</p>
                     <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
                   </div>
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working days</p>
-                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                    <p className="text-white text-[16px] font-semibold">أيام العمل</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">الأحد – الخميس</p>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[8px]">
-                  <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
+                  <p className="text-white text-[16px] font-semibold leading-[1.72]">وسائل التواصل الاجتماعي</p>
                   <div className="flex gap-[8px] items-center">
                     <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
                     <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                   </div>
                   <button className="flex items-center gap-[2px] py-[12px]">
-                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">الأسئلة الشائعة</span>
                     <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
                   </button>
                 </div>
@@ -469,7 +469,7 @@ export default function ReviewPage() {
             <div className="border-t border-white/10" />
             {/* Mobile: stacked centered */}
             <div className="flex flex-col gap-[12px] items-center lg:hidden">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">حمّل تطبيقنا!</p>
               <div className="flex gap-[12px]">
                 <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                   <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -478,13 +478,13 @@ export default function ReviewPage() {
                   <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                 </a>
               </div>
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
             </div>
             {/* Desktop: copyright left, download right */}
             <div className="hidden lg:flex items-center justify-between w-full">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
               <div className="flex items-center gap-[16px]">
-                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">حمّل تطبيقنا!</p>
                 <div className="flex gap-[12px]">
                   <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />

@@ -4,15 +4,24 @@ import { useEffect } from 'react';
 
 const imgClose = "/icon-x.svg";
 
-const navLinks = [
-  { label: 'App', active: true },
-  { label: 'Tamawal', active: false },
-  { label: 'Services', active: false },
-  { label: 'About us', active: false },
-  { label: 'Contact us', active: false },
+const navLinksEn = [
+  { label: 'App',        href: '/app',    active: true  },
+  { label: 'Tamawal',   href: '#',       active: false },
+  { label: 'Services',  href: '#',       active: false },
+  { label: 'About us',  href: '#',       active: false },
+  { label: 'Contact us',href: '#',       active: false },
 ];
 
-export default function SlidingMenu({ onClose }: { onClose: () => void }) {
+const navLinksAr = [
+  { label: 'التطبيق',     href: '/app/ar', active: true  },
+  { label: 'تمويل',       href: '#',       active: false },
+  { label: 'خدمات',       href: '#',       active: false },
+  { label: 'معلومات عنا', href: '#',       active: false },
+  { label: 'تواصل معنا',  href: '#',       active: false },
+];
+
+export default function SlidingMenu({ onClose, lang = 'en' }: { onClose: () => void; lang?: 'en' | 'ar' }) {
+  const navLinks = lang === 'ar' ? navLinksAr : navLinksEn;
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
@@ -31,16 +40,16 @@ export default function SlidingMenu({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         <div className="flex flex-col gap-4 items-start w-full px-2 mt-4">
-          {navLinks.map(({ label, active }) => (
+          {navLinks.map(({ label, href, active }) => (
             <div key={label} className="flex flex-col gap-0.5 items-start w-full">
-              <div className="flex items-center px-3 py-2 rounded-lg w-full">
+              <a href={href} className="flex items-center px-3 py-2 rounded-lg w-full">
                 <span
                   className="font-bold text-[32px] leading-normal"
                   style={{ color: active ? '#fff' : 'rgba(255,255,255,0.64)' }}
                 >
                   {label}
                 </span>
-              </div>
+              </a>
             </div>
           ))}
         </div>

@@ -6,15 +6,24 @@ const imgLogoBlue  = "/logo-tamawal-web-blue.svg";
 const imgLogoWhite = "/logo-tamawal-web.svg";
 const imgMenuIcon  = "/icon-menu.svg";
 
-const navLinks = [
-  { label: 'App',        href: '/app',  active: true  },
-  { label: 'Tamawal',    href: '#',     active: false },
-  { label: 'Services',   href: '#',     active: false },
-  { label: 'About us',   href: '#',     active: false },
-  { label: 'Contact us', href: '#',     active: false },
+const navLinksEn = [
+  { label: 'App',        href: '/app',     active: true  },
+  { label: 'Tamawal',    href: '#',        active: false },
+  { label: 'Services',   href: '#',        active: false },
+  { label: 'About us',   href: '#',        active: false },
+  { label: 'Contact us', href: '#',        active: false },
 ];
 
-export default function Navbar({ onMenuOpen, dark = false }: { onMenuOpen: () => void; dark?: boolean }) {
+const navLinksAr = [
+  { label: 'التطبيق',      href: '/app/ar',  active: true  },
+  { label: 'تمويل',        href: '#',        active: false },
+  { label: 'خدمات',        href: '#',        active: false },
+  { label: 'معلومات عنا',  href: '#',        active: false },
+  { label: 'تواصل معنا',   href: '#',        active: false },
+];
+
+export default function Navbar({ onMenuOpen, dark = false, langHref, langLabel = 'عربي', lang = 'en' }: { onMenuOpen: () => void; dark?: boolean; langHref?: string; langLabel?: string; lang?: 'en' | 'ar' }) {
+  const navLinks = lang === 'ar' ? navLinksAr : navLinksEn;
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -50,9 +59,15 @@ export default function Navbar({ onMenuOpen, dark = false }: { onMenuOpen: () =>
           </div>
           <div className="flex items-center gap-8">
             <div className="w-[104px] h-[45px]" />
-            <div className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
-              <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>عربي</span>
-            </div>
+            {langHref ? (
+              <a href={langHref} className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+                <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
+              </a>
+            ) : (
+              <div className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+                <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -62,9 +77,15 @@ export default function Navbar({ onMenuOpen, dark = false }: { onMenuOpen: () =>
           <img src={imgMenuIcon} alt="Menu" className="size-6" style={dark ? { filter: 'brightness(0) invert(1)' } : undefined} />
         </button>
         <img src={dark ? imgLogoWhite : imgLogoBlue} alt="Tamawal" className="h-8 w-auto" />
-        <div className={`border rounded-full w-11 h-11 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
-          <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>عربي</span>
-        </div>
+        {langHref ? (
+          <a href={langHref} className={`border rounded-full w-11 h-11 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+            <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
+          </a>
+        ) : (
+          <div className={`border rounded-full w-11 h-11 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+            <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
+          </div>
+        )}
       </div>
     </div>
   );

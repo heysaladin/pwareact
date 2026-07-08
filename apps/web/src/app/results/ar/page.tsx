@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import SlidingMenu from '../../components/SlidingMenu';
-import Navbar from '../../components/Navbar';
+import SlidingMenu from '../../../components/SlidingMenu';
+import Navbar from '../../../components/Navbar';
 
 // ── Asset constants ───────────────────────────────────────────────────────────
 const imgLogo        = "/logo-tamawal-web.svg";
@@ -29,14 +29,14 @@ const imgTwitterX     = "/icon-twitter.svg";
 
 // ── Mock loan data ────────────────────────────────────────────────────────────
 const loans = [
-  { bank: 'Alinma Bank',   logo: '/logos/alinma.png',  type: 'Personal Loan',          rate: 2.1, amount: 120000, months: 60,  rating: 4.5 },
-  { bank: 'Al Rajhi Bank', logo: '/logos/rasheed.png', type: 'Car Financing',           rate: 2.5, amount: 85000,  months: 48,  rating: 4.2 },
-  { bank: 'ANB',           logo: '/logos/anb.png',     type: 'Real Estate Financing',   rate: 1.8, amount: 500000, months: 120, rating: 4.7 },
-  { bank: 'Nayifat',       logo: '/logos/nayifat.png', type: 'Personal Loan',           rate: 3.2, amount: 50000,  months: 36,  rating: 3.9 },
-  { bank: 'Taajeer',       logo: '/logos/taajeer.png', type: 'Car Financing',           rate: 2.8, amount: 95000,  months: 60,  rating: 4.0 },
-  { bank: 'Badaya',        logo: '/logos/badaya.png',  type: 'Business Loan',           rate: 3.5, amount: 300000, months: 84,  rating: 4.1 },
-  { bank: 'Alyusr',        logo: '/logos/alyusr.png',  type: 'Home Renovation',         rate: 2.2, amount: 150000, months: 72,  rating: 4.3 },
-  { bank: 'Kuwara',        logo: '/logos/kuwara.png',  type: 'Personal Loan',           rate: 2.9, amount: 75000,  months: 48,  rating: 4.0 },
+  { bank: 'Alinma Bank',   logo: '/logos/alinma.png',  type: 'قرض شخصي',        rate: 2.1, amount: 120000, months: 60,  rating: 4.5 },
+  { bank: 'Al Rajhi Bank', logo: '/logos/rasheed.png', type: 'تمويل سيارة',      rate: 2.5, amount: 85000,  months: 48,  rating: 4.2 },
+  { bank: 'ANB',           logo: '/logos/anb.png',     type: 'تمويل عقاري',      rate: 1.8, amount: 500000, months: 120, rating: 4.7 },
+  { bank: 'Nayifat',       logo: '/logos/nayifat.png', type: 'قرض شخصي',         rate: 3.2, amount: 50000,  months: 36,  rating: 3.9 },
+  { bank: 'Taajeer',       logo: '/logos/taajeer.png', type: 'تمويل سيارة',      rate: 2.8, amount: 95000,  months: 60,  rating: 4.0 },
+  { bank: 'Badaya',        logo: '/logos/badaya.png',  type: 'قرض تجاري',        rate: 3.5, amount: 300000, months: 84,  rating: 4.1 },
+  { bank: 'Alyusr',        logo: '/logos/alyusr.png',  type: 'تجديد منزلي',      rate: 2.2, amount: 150000, months: 72,  rating: 4.3 },
+  { bank: 'Kuwara',        logo: '/logos/kuwara.png',  type: 'قرض شخصي',         rate: 2.9, amount: 75000,  months: 48,  rating: 4.0 },
 ];
 
 // ── Star rating helper ────────────────────────────────────────────────────────
@@ -124,11 +124,11 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   );
 
   const statsRows = [
-    { label: 'Monthly installment', value: 'Up to SAR 50' },
-    { label: 'APR', value: 'Start from 2%', info: true },
-    { label: 'You saved', value: 'SAR 50', badge: '-86%' },
-    { label: 'Management fees', value: 'Start from SAR 50', info: true },
-    { label: 'Brokerage fees', value: 'Start from SAR 50', info: true },
+    { label: 'القسط الشهري', value: 'حتى 50 ريال' },
+    { label: 'معدل النسبة السنوية', value: 'يبدأ من 2%', info: true },
+    { label: 'وفرت', value: '50 ريال', badge: '-86%' },
+    { label: 'رسوم الإدارة', value: 'يبدأ من 50 ريال', info: true },
+    { label: 'رسوم الوساطة', value: 'يبدأ من 50 ريال', info: true },
   ];
 
   const statsTableJSX = (
@@ -158,13 +158,13 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   const payoutCardJSX = (
     <div className="bg-white border border-[#eef1f6] rounded-[8px] p-[16px] flex items-center gap-[20px]">
       <img src="/icon-payout-time.svg" alt="" className="w-[56px] h-[56px] shrink-0" />
-      <p className="text-[15.5px] font-semibold text-[#202a39]">Finalization &amp; Disbursement immediately</p>
+      <p className="text-[15.5px] font-semibold text-[#202a39]">الإنهاء والصرف فوراً</p>
     </div>
   );
 
   const descriptionJSX = (
     <p className="text-[15.5px] text-[#4b5565] leading-[1.6]">
-      Profit rates starting from 2.25%, Payment holiday for first installment (up to 120 days), High financing amounts of up to SAR 4 Million for KSA Nationals, Quick and easy approval process
+      معدلات ربح تبدأ من 2.25%، إجازة سداد للقسط الأول (حتى 120 يوماً)، مبالغ تمويل عالية تصل إلى 4 ملايين ريال للمواطنين السعوديين، عملية موافقة سريعة وسهلة
     </p>
   );
 
@@ -172,7 +172,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
     <div className="rounded-[8px] overflow-hidden" style={{ aspectRatio: '16/9' }}>
       <iframe
         src="https://www.youtube.com/embed/84pYi-vjXhw"
-        title="Tamawal"
+        title="تمويل"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
         className="w-full h-full"
@@ -182,15 +182,15 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 
   const accordionsJSX = (
     <div className="flex flex-col gap-[8px] mt-[24px]">
-      <AccordionSection title="Great for" isOpen={openSections.greatFor} onToggle={() => toggle('greatFor')}>
+      <AccordionSection title="مناسب لـ" isOpen={openSections.greatFor} onToggle={() => toggle('greatFor')}>
         <div className="flex flex-col gap-[10px]">
           {[
-            'Low profit fees starting from 2.25% for KSA nationals',
-            'Deferred payment of the first installment for up to 120 days',
-            'Flexible repayment periods up to 25 years',
-            'Fast and simple application process',
-            'Competitive financing solutions tailored to your needs',
-            'Sharia-compliant financing options',
+            'رسوم ربح منخفضة تبدأ من 2.25% للمواطنين السعوديين',
+            'تأجيل دفع القسط الأول لمدة تصل إلى 120 يوماً',
+            'فترات سداد مرنة تصل إلى 25 عاماً',
+            'عملية تقديم سريعة وبسيطة',
+            'حلول تمويل تنافسية مصممة لاحتياجاتك',
+            'خيارات تمويل متوافقة مع الشريعة الإسلامية',
           ].map((item) => (
             <div key={item} className="flex gap-[12px] items-start">
               <div className="mt-[2px] shrink-0">
@@ -204,7 +204,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
           ))}
         </div>
       </AccordionSection>
-      <AccordionSection title="Beware" isOpen={openSections.beware} onToggle={() => toggle('beware')}>
+      <AccordionSection title="انتبه" isOpen={openSections.beware} onToggle={() => toggle('beware')}>
         <div className="flex gap-[12px] items-start">
           <div className="mt-[2px] shrink-0">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -213,12 +213,12 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
               <circle cx="8" cy="11" r="0.75" fill="#F04438"/>
             </svg>
           </div>
-          <p className="text-[13.5px] text-[#475467] leading-[1.6]">Applicable only for KSA Nationals</p>
+          <p className="text-[13.5px] text-[#475467] leading-[1.6]">ينطبق فقط على المواطنين السعوديين</p>
         </div>
       </AccordionSection>
-      <AccordionSection title="Required documents" isOpen={openSections.docs} onToggle={() => toggle('docs')}>
+      <AccordionSection title="المستندات المطلوبة" isOpen={openSections.docs} onToggle={() => toggle('docs')}>
         <div className="flex flex-col gap-[10px]">
-          {['Passport (pdf or jpg)', 'Salary Evidence Document (pdf or jpg)'].map((doc) => (
+          {['جواز السفر (pdf أو jpg)', 'وثيقة إثبات الراتب (pdf أو jpg)'].map((doc) => (
             <div key={doc} className="flex gap-[12px] items-center">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M9.33 1.33H4a1.33 1.33 0 0 0-1.33 1.34v10.66A1.33 1.33 0 0 0 4 14.67h8a1.33 1.33 0 0 0 1.33-1.34V5.33L9.33 1.33Z" stroke="#667085" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -229,9 +229,9 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
           ))}
         </div>
       </AccordionSection>
-      <AccordionSection title="Conditions" isOpen={openSections.conditions} onToggle={() => toggle('conditions')}>
+      <AccordionSection title="الشروط" isOpen={openSections.conditions} onToggle={() => toggle('conditions')}>
         <div className="flex flex-col gap-[10px]">
-          {['The borrower is of legal age', 'The borrower has his permanent residence in Saudi Arabia'].map((cond) => (
+          {['المقترض في سن قانونية', 'المقترض لديه إقامة دائمة في المملكة العربية السعودية'].map((cond) => (
             <div key={cond} className="flex gap-[12px] items-start">
               <div className="mt-[2px] shrink-0 w-4 h-4 rounded-[3px] border border-[#fdb022] bg-[#fffaeb] flex items-center justify-center">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -259,7 +259,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
           {/* Header */}
           <div className="flex items-start justify-between gap-[10px]">
             <div className="flex flex-col gap-[4px]">
-              <p className="text-[22px] lg:text-[26px] font-semibold text-[#15212f]">Product Details</p>
+              <p className="text-[22px] lg:text-[26px] font-semibold text-[#15212f]">تفاصيل المنتج</p>
               <p className="text-[14px] lg:text-[16px] text-[#6d7989]">{loan.bank} • {loan.type}</p>
             </div>
             <button onClick={onClose} className="border border-[#d5d7da] rounded-[8px] p-[8px] shrink-0">
@@ -271,7 +271,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 
           {/* Product title */}
           <h2 className="text-[28px] lg:text-[40px] font-bold text-[#0063f5] leading-[1.2]">
-            Real Estate Financing for Home Buyers
+            تمويل عقاري لمشتري المنازل
           </h2>
 
           {/* Two-column layout */}
@@ -288,14 +288,14 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
                     className={`flex-1 text-[13.5px] font-semibold py-[10px] rounded-[8px] transition-colors
                       ${activeTab === tab ? 'bg-white border border-[#eef1f6] text-[#0063f5]' : 'text-[#697586]'}`}
                   >
-                    {tab === 'max' ? 'Max loan' : 'Calculate'}
+                    {tab === 'max' ? 'أقصى قرض' : 'احسب'}
                   </button>
                 ))}
               </div>
 
               {/* Loan period */}
               <div className="flex flex-col gap-[12px]">
-                <p className="text-[15.5px] font-semibold text-[#202a39]">Select Loan Period (Months)</p>
+                <p className="text-[15.5px] font-semibold text-[#202a39]">اختر مدة القرض (بالأشهر)</p>
                 <div className="flex flex-wrap gap-[8px]">
                   {periods.map((p) => {
                     const disabled = disabledPeriods.includes(p);
@@ -323,21 +323,21 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
               {/* Loan amount — Max loan tab */}
               {activeTab === 'max' && (
                 <div className="flex flex-col gap-[4px]">
-                  <p className="text-[15.5px] font-semibold text-[#202a39]">Loan amount (Received)</p>
-                  <span className="text-[12.5px] text-[#697586]">up to</span>
-                  <p className="text-[33.5px] font-bold text-[#0041a3] leading-[1.1]">SAR 99,999,999.99</p>
-                  <span className="text-[12.5px] text-[#697586]">for {selectedPeriod} months</span>
+                  <p className="text-[15.5px] font-semibold text-[#202a39]">مبلغ القرض (المستلم)</p>
+                  <span className="text-[12.5px] text-[#697586]">يصل إلى</span>
+                  <p className="text-[33.5px] font-bold text-[#0041a3] leading-[1.1]">99,999,999.99 ريال</p>
+                  <span className="text-[12.5px] text-[#697586]">لـ {selectedPeriod} شهراً</span>
                 </div>
               )}
 
               {/* Preferred amount slider — Calculate tab */}
               {activeTab === 'calculate' && (
                 <div className="flex flex-col gap-[16px]">
-                  <p className="text-[15.5px] font-semibold text-[#202a39]">Your Preferred Amount</p>
+                  <p className="text-[15.5px] font-semibold text-[#202a39]">المبلغ المفضل لك</p>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MIN.toLocaleString()}</span>
-                    <span className="text-[22px] font-bold text-[#0041a3]">SAR {preferredAmount.toLocaleString()}</span>
-                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MAX.toLocaleString()}</span>
+                    <span className="text-[12.5px] text-[#697586]">{PREF_MIN.toLocaleString()} ريال</span>
+                    <span className="text-[22px] font-bold text-[#0041a3]">{preferredAmount.toLocaleString()} ريال</span>
+                    <span className="text-[12.5px] text-[#697586]">{PREF_MAX.toLocaleString()} ريال</span>
                   </div>
                   <input
                     type="range"
@@ -352,7 +352,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
                 </div>
               )}
 
-              {/* Stats + payout — mobile only (between loan amount and accordions) */}
+              {/* Stats + payout — mobile only */}
               <div className="lg:hidden flex flex-col gap-[16px]">
                 {statsTableJSX}
                 {payoutCardJSX}
@@ -408,27 +408,27 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
         {/* Loan amount */}
         <div className="flex flex-col items-start w-full">
           <div className="flex gap-[4px] items-baseline text-[#667085]">
-            <span className="text-[12px] font-semibold">Loan amount</span>
-            <span className="text-[10px]">up to</span>
+            <span className="text-[12px] font-semibold">مبلغ القرض</span>
+            <span className="text-[10px]">يصل إلى</span>
           </div>
           <div className="flex gap-[2px] items-baseline text-[#101828]">
-            <span className="text-[32px] font-bold">SAR</span>
+            <span className="text-[32px] font-bold">ريال</span>
             <span className="text-[24px] font-bold">{loan.amount.toLocaleString()}</span>
           </div>
         </div>
         {/* APR + Loan period */}
         <div className="flex gap-[5px] items-start w-full">
           <div className="flex-1 flex flex-col">
-            <span className="text-[12px] font-semibold text-[#667085]">APR</span>
+            <span className="text-[12px] font-semibold text-[#667085]">معدل النسبة السنوية</span>
             <span className="text-[24px] font-bold text-[#101828]">{loan.rate}%</span>
-            <span className="text-[12px] text-[#667085]">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
+            <span className="text-[12px] text-[#667085]">حتى {(loan.rate + 2.9).toFixed(2)}% *</span>
           </div>
           <div className="flex flex-col items-end w-[129px]">
             <div className="flex gap-[4px] items-baseline text-[#667085]">
-              <span className="text-[12px] font-semibold">Loan period</span>
-              <span className="text-[10px]">for</span>
+              <span className="text-[12px] font-semibold">مدة القرض</span>
+              <span className="text-[10px]">لمدة</span>
             </div>
-            <span className="text-[24px] font-bold text-[#101828] text-right">{loan.months} month</span>
+            <span className="text-[24px] font-bold text-[#101828] text-right">{loan.months} شهر</span>
           </div>
         </div>
         {/* Bottom row: time icon + favorite + button */}
@@ -438,10 +438,10 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
           </div>
           <div className="flex flex-1 gap-[16px] items-center min-w-0">
             <button className="shrink-0">
-              <img src="/icon-favorite.svg" alt="Favorite" className="w-6 h-6" />
+              <img src="/icon-favorite.svg" alt="المفضلة" className="w-6 h-6" />
             </button>
-            <button onClick={() => window.location.href = '/review'} className="flex-1 bg-[#0063f5] rounded-[24px] py-[10px] flex items-center justify-center">
-              <span className="text-white text-[13px] font-bold">Tamawal</span>
+            <button onClick={() => window.location.href = '/review/ar'} className="flex-1 bg-[#0063f5] rounded-[24px] py-[10px] flex items-center justify-center">
+              <span className="text-white text-[13px] font-bold">تمويل</span>
             </button>
           </div>
         </div>
@@ -461,31 +461,31 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
         {/* Middle col */}
         <div className="border-r border-[#dadee3] flex flex-col justify-between px-[32px] py-[28px] w-[375px] flex-shrink-0">
           <div className="flex flex-col gap-[10px]">
-            <p className="text-[13px] font-bold text-[#1d2939]">Great for</p>
+            <p className="text-[13px] font-bold text-[#1d2939]">مناسب لـ</p>
             <div className="flex flex-col gap-[8px]">
               <div className="flex gap-[12px] items-start">
                 <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#D1FADF"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Low profit fees starting from 2.25% for KSA Nationals</p>
+                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">رسوم ربح منخفضة تبدأ من 2.25% للمواطنين السعوديين</p>
               </div>
               <div className="flex gap-[12px] items-start">
                 <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#D1FADF"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Deferred payment of the first installment for up to 120 days</p>
+                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">تأجيل دفع القسط الأول لمدة تصل إلى 120 يوماً</p>
               </div>
             </div>
-            <p className="text-[13px] font-bold text-[#1d2939]">Be aware</p>
+            <p className="text-[13px] font-bold text-[#1d2939]">انتبه</p>
             <div className="flex gap-[12px] items-start">
               <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FEE4E2"/><path d="M8 5v3" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round"/><circle cx="8" cy="11" r="0.75" fill="#F04438"/></svg>
               </div>
-              <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Applicable only for KSA Nationals</p>
+              <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">ينطبق فقط على المواطنين السعوديين</p>
             </div>
           </div>
           <button onClick={onDetails} className="border border-[rgba(0,99,245,0.32)] rounded-[24px] h-[44px] px-[24px] py-[10px] flex items-center justify-center gap-[8px] w-full bg-white mt-[24px]">
-            <span className="text-[13px] font-bold text-[#0063f5]">Details</span>
+            <span className="text-[13px] font-bold text-[#0063f5]">التفاصيل</span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
         </div>
@@ -495,39 +495,39 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
           <div className="flex gap-[5px] items-start w-full">
             <div className="flex flex-col flex-1">
               <div className="flex gap-[4px] items-baseline text-[#667085]">
-                <span className="text-[16px] font-semibold">Loan amount</span>
-                <span className="text-[12px]">up to</span>
+                <span className="text-[16px] font-semibold">مبلغ القرض</span>
+                <span className="text-[12px]">يصل إلى</span>
               </div>
               <div className="flex gap-[2px] items-baseline text-[#101828] text-[32px]">
-                <span className="font-bold">SAR</span>
+                <span className="font-bold">ريال</span>
                 <span className="font-bold">{loan.amount.toLocaleString()}</span>
               </div>
             </div>
             <div className="flex flex-col flex-1 items-end">
               <div className="flex gap-[4px] items-baseline text-[#667085]">
-                <span className="text-[16px] font-semibold">Loan period</span>
-                <span className="text-[12px]">for</span>
+                <span className="text-[16px] font-semibold">مدة القرض</span>
+                <span className="text-[12px]">لمدة</span>
               </div>
-              <span className="text-[32px] font-bold text-[#101828]">{loan.months} month</span>
+              <span className="text-[32px] font-bold text-[#101828]">{loan.months} شهر</span>
             </div>
           </div>
           <div className="flex gap-[5px] items-center w-full">
             <div className="flex flex-col flex-1">
-              <span className="text-[16px] font-semibold text-[#667085]">APR</span>
+              <span className="text-[16px] font-semibold text-[#667085]">معدل النسبة السنوية</span>
               <span className="text-[32px] font-bold text-[#101828]">{loan.rate}%</span>
-              <span className="text-[12px] text-[#667085]">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
+              <span className="text-[12px] text-[#667085]">حتى {(loan.rate + 2.9).toFixed(2)}% *</span>
             </div>
             <div className="flex flex-col items-end flex-1">
-              <p className="text-[12px] text-[#667085] text-right w-[156px] leading-[normal]">Finalization &amp; Disbursement within 1 to 2 working days</p>
+              <p className="text-[12px] text-[#667085] text-right w-[156px] leading-[normal]">الإنهاء والصرف خلال 1 إلى 2 يوم عمل</p>
             </div>
           </div>
           <div className="flex gap-[48px] items-center w-full">
             <button className="flex items-center gap-[4px] text-[#98a2b3]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#98A2B3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              <span className="text-[16px]">Add to favorite</span>
+              <span className="text-[16px]">أضف إلى المفضلة</span>
             </button>
-            <button onClick={() => window.location.href = '/review'} className="bg-[#0063f5] rounded-[24px] px-[12px] py-[10px] flex items-center justify-center flex-1">
-              <span className="text-white text-[13px] font-bold text-center w-[357px]">Tamawal</span>
+            <button onClick={() => window.location.href = '/review/ar'} className="bg-[#0063f5] rounded-[24px] px-[12px] py-[10px] flex items-center justify-center flex-1">
+              <span className="text-white text-[13px] font-bold text-center w-[357px]">تمويل</span>
             </button>
           </div>
         </div>
@@ -568,25 +568,25 @@ function SortIconBtn({ icon, selected, onClick }: {
 const sortRows = [
   {
     key: 'apr' as const,
-    label: 'APR',
+    label: 'معدل النسبة السنوية',
     minIcon: '/sort/noun-small-percentage-230121.svg',
     maxIcon: '/sort/noun-small-percentage-230121-2.svg',
   },
   {
     key: 'monthly' as const,
-    label: 'Monthly Installment',
+    label: 'القسط الشهري',
     minIcon: '/sort/noun-deposit-4409293.svg',
     maxIcon: '/sort/noun-deposit-4409293-2.svg',
   },
   {
     key: 'saved' as const,
-    label: 'You Saved',
+    label: 'وفرت',
     minIcon: '/sort/vuesax/direct-inbox.svg',
     maxIcon: '/sort/vuesax/direct-send.svg',
   },
   {
     key: 'rating' as const,
-    label: 'Rating',
+    label: 'التقييم',
     minIcon: '/sort/vuesax/star-slash.svg',
     maxIcon: '/sort/vuesax/star.svg',
   },
@@ -605,9 +605,9 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
     <div className="absolute right-0 top-[calc(100%+8px)] z-50 bg-white rounded-[24px] shadow-[0px_12px_24px_-4px_rgba(10,13,18,0.12),0px_4px_8px_-2px_rgba(10,13,18,0.06)] w-[375px] overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-[24px] pt-[24px] pb-[24px]">
-        <p className="text-[#121a26] text-[23.5px] font-semibold">Sort</p>
+        <p className="text-[#121a26] text-[23.5px] font-semibold">ترتيب</p>
         <button onClick={onClose} className="border border-[#eef1f6] rounded-[24px] p-[6px]">
-          <img src="/sort/close-x.svg" alt="Close" className="w-[18px] h-[18px]" />
+          <img src="/sort/close-x.svg" alt="إغلاق" className="w-[18px] h-[18px]" />
         </button>
       </div>
 
@@ -616,10 +616,10 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
         {/* Column headers */}
         <div className="flex items-center justify-end gap-[16px]">
           <div className="w-[40px] flex items-center justify-center">
-            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">Min.</span>
+            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">الأقل</span>
           </div>
           <div className="w-[40px] flex items-center justify-center">
-            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">Max.</span>
+            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">الأكبر</span>
           </div>
         </div>
 
@@ -641,7 +641,7 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
             hasSelection ? 'bg-[#0063f5] text-white cursor-pointer' : 'bg-[#e2e9f3] text-[#9aa4b2] cursor-not-allowed'
           }`}
         >
-          Apply
+          تطبيق
         </button>
       </div>
     </div>
@@ -650,20 +650,20 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function ResultsPage() {
+export default function ResultsPageAr() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedLoanIdx, setSelectedLoanIdx] = useState<number | null>(null);
 
   return (
-    <div className="bg-white">
+    <div className="bg-white" dir="rtl">
       {selectedLoanIdx !== null && (
         <ProductDetailsModal loan={loans[selectedLoanIdx]} onClose={() => setSelectedLoanIdx(null)} />
       )}
-      {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
+      {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} lang="ar" />}
 
-      <Navbar onMenuOpen={() => setMenuOpen(true)} langHref="/results/ar" />
+      <Navbar onMenuOpen={() => setMenuOpen(true)} langHref="/results" langLabel="EN" lang="ar" />
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div>
@@ -673,12 +673,12 @@ export default function ResultsPage() {
           <div className="lg:hidden flex flex-col gap-[24px] py-[24px]">
             <button onClick={() => router.back()} className="flex items-center gap-[8px] text-[#717680] w-fit">
               <img src={imgBackArrow} alt="" className="size-5" />
-              <span className="text-[16px] font-semibold">Back</span>
+              <span className="text-[16px] font-semibold">رجوع</span>
             </button>
             <div className="flex flex-col gap-[8px]">
-              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
+              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">نتائج البحث</p>
               <p className="text-[16px] text-[#525252] leading-[1.5]">
-                This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
+                سيؤدي هذا إلى منتج أقل دقة، وليس بالضرورة مؤهلاً لك. تحتاج إلى تسجيل الدخول للحصول على نتائج أكثر دقة!
               </p>
             </div>
           </div>
@@ -687,13 +687,13 @@ export default function ResultsPage() {
           <div className="hidden lg:flex flex-col gap-6 pt-10 pb-6">
             <button onClick={() => router.back()} className="flex items-center gap-2 text-[#717680] w-fit">
               <img src={imgBackArrow} alt="" className="size-5" />
-              <span className="text-[16px] font-semibold">Back</span>
+              <span className="text-[16px] font-semibold">رجوع</span>
             </button>
             <div className="flex items-center gap-[64px]">
               <div className="flex flex-col gap-[2px] flex-1">
-                <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
+                <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">نتائج البحث</p>
                 <p className="text-[16px] text-[#525252] leading-[1.72]">
-                  This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
+                  سيؤدي هذا إلى منتج أقل دقة، وليس بالضرورة مؤهلاً لك. تحتاج إلى تسجيل الدخول للحصول على نتائج أكثر دقة!
                 </p>
               </div>
               <div className="relative flex-shrink-0">
@@ -703,7 +703,7 @@ export default function ResultsPage() {
                   className="relative z-50 border border-[#0063f5] rounded-[56px] px-[24px] py-[16px] flex items-center gap-[10px] bg-white"
                 >
                   <img src={imgSortIcon} alt="" className="size-5" />
-                  <span className="text-[16px] font-bold text-[#0063f5]">Sort</span>
+                  <span className="text-[16px] font-bold text-[#0063f5]">ترتيب</span>
                 </button>
                 {sortOpen && <SortPanel onClose={() => setSortOpen(false)} onApply={() => setSortOpen(false)} />}
               </div>
@@ -712,7 +712,7 @@ export default function ResultsPage() {
 
           {/* Offers count + Sort row — mobile only */}
           <div className="lg:hidden flex items-center gap-[8px] pb-4">
-            <p className="flex-1 text-[18px] text-[#525252]">{loans.length} offers for you</p>
+            <p className="flex-1 text-[18px] text-[#525252]">{loans.length} عرض لك</p>
             <div className="relative shrink-0">
               {sortOpen && <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />}
               <button
@@ -720,7 +720,7 @@ export default function ResultsPage() {
                 className="relative z-50 bg-white border border-[#0063f5] rounded-[56px] px-[20px] py-[12px] flex items-center gap-[10px]"
               >
                 <img src={imgSortIcon} alt="" className="size-5" />
-                <span className="text-[16px] text-[#0063f5]">Sort</span>
+                <span className="text-[16px] text-[#0063f5]">ترتيب</span>
               </button>
               {sortOpen && <SortPanel onClose={() => setSortOpen(false)} onApply={() => setSortOpen(false)} />}
             </div>
@@ -737,7 +737,7 @@ export default function ResultsPage() {
 
         {/* Install app — mobile only */}
         <div className="lg:hidden bg-[#f9f8fd] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
-          <p className="text-[16px] text-[#121a26] text-center">Install our app now!</p>
+          <p className="text-[16px] text-[#121a26] text-center">حمّل تطبيقنا الآن!</p>
           <div className="flex gap-[12px]">
             <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
               <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -750,13 +750,13 @@ export default function ResultsPage() {
 
         {/* CTA Section — desktop only */}
         <div className="hidden lg:block max-w-[1440px] mx-auto relative" style={{ paddingTop: '150px', paddingBottom: '128px' }}>
-          <img src={imgPhoneImg} alt="Tamawal App" className="absolute z-10 object-contain pointer-events-none" style={{ height: '620px', width: 'auto', top: '53px', left: '129px' }} />
+          <img src={imgPhoneImg} alt="تطبيق تمويل" className="absolute z-10 object-contain pointer-events-none" style={{ height: '620px', width: 'auto', top: '53px', left: '129px' }} />
           <div className="mx-[75px] bg-[#000921] rounded-[32px] overflow-hidden" style={{ height: '465px' }}>
             <div className="h-full flex items-center" style={{ paddingLeft: '757px', paddingRight: '67px' }}>
               <div className="flex flex-col justify-between" style={{ width: '466px', height: '265px' }}>
                 <div className="flex flex-col gap-[16px]">
-                  <h2 className="text-[32px] font-bold text-white leading-[1.35]">Tamawal App Download</h2>
-                  <p className="text-[16px] text-[#98A2B3] leading-[1.72]">Saudi's best comparisons for on the go — now even easier to compare, switch and save. So you can load the Tamawal app directly onto your mobile phone.</p>
+                  <h2 className="text-[32px] font-bold text-white leading-[1.35]">تحميل تطبيق تمويل</h2>
+                  <p className="text-[16px] text-[#98A2B3] leading-[1.72]">أفضل المقارنات في المملكة أثناء التنقل — الآن أسهل من أي وقت مضى للمقارنة والتبديل والتوفير. حمّل تطبيق تمويل مباشرة على هاتفك المحمول.</p>
                 </div>
                 <div className="flex items-center gap-[16px]">
                   <span className="text-[16px] font-bold text-white">4.75</span>
@@ -790,10 +790,10 @@ export default function ResultsPage() {
               <div className="flex flex-col gap-[16px]">
                 <div className="relative size-[100px]">
                   <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
-                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
+                  <img src={imgBadgeCenter} alt="مرخص من ساما" className="absolute inset-0 size-full" />
                 </div>
                 <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
-                  Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
+                  تمويل® تحت إشراف ورقابة البنك المركزي السعودي بموجب ترخيص رقم 98/N M/202504
                 </p>
               </div>
             </div>
@@ -803,35 +803,35 @@ export default function ResultsPage() {
               {/* Top row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">معلومات عنا</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Who we are</span>
-                    <span>Our products</span>
-                    <span>Our values</span>
+                    <span>من نحن</span>
+                    <span>منتجاتنا</span>
+                    <span>قيمنا</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">قانوني</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Terms and Conditions</span>
-                    <span>Data Protection<br />and Privacy</span>
-                    <span>Customer Protection<br />Principles</span>
+                    <span>الشروط والأحكام</span>
+                    <span>حماية البيانات<br />والخصوصية</span>
+                    <span>مبادئ حماية<br />العميل</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">اتخذ إجراءً</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Be a partner</span>
-                    <span>Be a customer</span>
+                    <span>كن شريكاً</span>
+                    <span>كن عميلاً</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">رعاية العملاء</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Suggestion</span>
-                    <span>Complaint</span>
-                    <span>Report a Violation</span>
-                    <span>Report Financial Fraud</span>
+                    <span>اقتراح</span>
+                    <span>شكوى</span>
+                    <span>الإبلاغ عن مخالفة</span>
+                    <span>الإبلاغ عن احتيال مالي</span>
                   </div>
                 </div>
               </div>
@@ -842,7 +842,7 @@ export default function ResultsPage() {
               {/* Bottom row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">تواصل معنا</p>
                   <div className="flex flex-col gap-[8px]">
                     <div className="flex items-center gap-[8px]">
                       <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
@@ -859,30 +859,30 @@ export default function ResultsPage() {
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">العنوان</p>
                   <div className="flex gap-[8px] items-start">
                     <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
-                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
+                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">شارع العليا (403)، الرياض، المملكة العربية السعودية</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working hours</p>
+                    <p className="text-white text-[16px] font-semibold">ساعات العمل</p>
                     <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
                   </div>
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working days</p>
-                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                    <p className="text-white text-[16px] font-semibold">أيام العمل</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">الأحد – الخميس</p>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[8px]">
-                  <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
+                  <p className="text-white text-[16px] font-semibold leading-[1.72]">وسائل التواصل الاجتماعي</p>
                   <div className="flex gap-[8px] items-center">
                     <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
                     <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                   </div>
                   <button className="flex items-center gap-[2px] py-[12px]">
-                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">الأسئلة الشائعة</span>
                     <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
                   </button>
                 </div>
@@ -895,7 +895,7 @@ export default function ResultsPage() {
             <div className="border-t border-white/10" />
             {/* Mobile: stacked centered */}
             <div className="flex flex-col gap-[12px] items-center lg:hidden">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">حمّل تطبيقنا!</p>
               <div className="flex gap-[12px]">
                 <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                   <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -904,13 +904,13 @@ export default function ResultsPage() {
                   <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                 </a>
               </div>
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
             </div>
             {/* Desktop: copyright left, download right */}
             <div className="hidden lg:flex items-center justify-between w-full">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
               <div className="flex items-center gap-[16px]">
-                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">حمّل تطبيقنا!</p>
                 <div className="flex gap-[12px]">
                   <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />

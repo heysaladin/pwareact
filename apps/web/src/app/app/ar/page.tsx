@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import SlidingMenu from '@/components/SlidingMenu';
 
-// ── Hero assets ──────────────────────────────────────────────────────────────
+// ── Hero assets ───────────────────────────────────────────────────────────────
 const imgBg          = "http://localhost:3845/assets/99f675afb55c489754593b085eb84d227ae42bf5.svg";
 const imgLogo        = "/logo-tamawal-web.svg";
 const imgNavArrow    = "http://localhost:3845/assets/4c4ae62485902829fc9e816c9e3b6272289709e3.svg";
@@ -17,7 +17,7 @@ const imgGooglePlay  = "/playstore.svg";
 const imgHeroBadge   = "/badge.svg";
 const imgBadgeCenter = "/badge-center.svg";
 
-// ── Partners ─────────────────────────────────────────────────────────────────
+// ── Partners ──────────────────────────────────────────────────────────────────
 const imgBadaya        = "/logos/badaya.png";
 const imgPartner2      = "/logos/partner2.png";
 const imgAsoul         = "/logos/asoul.png";
@@ -33,17 +33,17 @@ const imgLogo2x        = "/logos/logo2x.png";
 const imgSubAfc        = "/logos/subafc.png";
 const imgWataniya1     = "/logos/wataniya.png";
 
-// ── Form ─────────────────────────────────────────────────────────────────────
+// ── Form ──────────────────────────────────────────────────────────────────────
 const imgArrowDisabled   = "/arrow-right.svg";
 const imgPhoneIconBlue   = "/icon-phone-white.svg";
 const imgCheckGreen      = "/icon-check.svg";
 
-// ── FAQ ──────────────────────────────────────────────────────────────────────
+// ── FAQ ───────────────────────────────────────────────────────────────────────
 const imgArrowDownCircle = "/arrow-down-circle.svg";
 const imgArrowUpCircle   = "/arrow-up-circle.svg";
 const imgViewMoreArrow   = "/arrow-right.svg";
 
-// ── Footer ───────────────────────────────────────────────────────────────────
+// ── Footer ────────────────────────────────────────────────────────────────────
 const imgFooterBadge     = "/badge-small.svg";
 const imgArrowNext       = "/arrow-next-dark.svg";
 const imgEmailIcon       = "/icon-email.svg";
@@ -64,20 +64,20 @@ function ArrowRight({ color = '#414651', className = 'w-5 h-5' }: { color?: stri
 
 const faqs = [
   {
-    q: "What types of financial services does Tamawal offer?",
-    a: "Tamawal® is a one-stop shop for getting financial help. They currently offer personal loans and are expanding to include credit cards, car financing, and real estate financing soon.",
+    q: "ما أنواع الخدمات المالية التي تقدمها تمويل؟",
+    a: "تمويل® هي وجهتك الشاملة للحصول على المساعدة المالية. تقدم حالياً القروض الشخصية وتتوسع لتشمل بطاقات الائتمان وتمويل السيارات والتمويل العقاري قريباً.",
   },
   {
-    q: "Can you provide an overview of Tamawal's product range?",
-    a: "Tamawal's product range includes personal loans, credit cards, car financing, and real estate financing, ensuring that products are compliant with Islamic principles.",
+    q: "هل يمكنك تقديم نظرة عامة على مجموعة منتجات تمويل؟",
+    a: "تشمل مجموعة منتجات تمويل القروض الشخصية وبطاقات الائتمان وتمويل السيارات والتمويل العقاري، مع ضمان توافق المنتجات مع مبادئ الشريعة الإسلامية.",
   },
   {
-    q: "How does Tamawal assist customers in obtaining financing?",
-    a: "Tamawal acts as a digital financial intermediary, connecting customers with licensed financial institutions to facilitate the process of obtaining financing in a convenient and cost-effective manner.",
+    q: "كيف تساعد تمويل العملاء في الحصول على التمويل؟",
+    a: "تعمل تمويل كوسيط مالي رقمي، يربط العملاء بالمؤسسات المالية المرخصة لتسهيل عملية الحصول على التمويل بطريقة مريحة وفعّالة من حيث التكلفة.",
   },
   {
-    q: "Is Tamawal's financing model compliant with Sharia law?",
-    a: "Tamawal follows a financing model that is in accordance with Sharia law, ensuring that its services are compliant with Islamic principles.",
+    q: "هل نموذج التمويل في تمويل متوافق مع الشريعة الإسلامية؟",
+    a: "تتبع تمويل نموذج تمويل وفق أحكام الشريعة الإسلامية، مما يضمن أن خدماتها متوافقة مع المبادئ الإسلامية.",
   },
 ];
 
@@ -230,7 +230,7 @@ function SalarySlider() {
 
   return (
     <div className="flex flex-col items-center gap-2 w-full">
-      <p className="text-[#475467] text-[13px]">Your Monthly Salary</p>
+      <p className="text-[#475467] text-[13px]">راتبك الشهري</p>
 
       {/* Editable display */}
       <div
@@ -287,18 +287,18 @@ function SalarySlider() {
 }
 
 const loanOptions = [
-  'Education Fees',
-  'Furniture & Durable Goods',
-  'Hotel / Rentals',
-  'Maintenance work',
-  'Marriage',
-  'Medical Fees',
-  'Purchase Goods or Commodities',
-  'Renovation & Home Improvements',
-  'Tourism & Travel',
-  'Utilities payments',
-  'Vehicles & Private Transportation needs',
-  'Other',
+  'رسوم تعليمية',
+  'أثاث وسلع معمرة',
+  'فنادق / إيجارات',
+  'أعمال صيانة',
+  'زواج',
+  'رسوم طبية',
+  'شراء بضائع أو سلع',
+  'تجديد وتحسينات منزلية',
+  'سياحة وسفر',
+  'مدفوعات المرافق',
+  'احتياجات المركبات والنقل الخاص',
+  'أخرى',
 ];
 
 function LoanPurposeSelect({ selected, onSelect }: { selected: string; onSelect: (v: string) => void }) {
@@ -350,13 +350,13 @@ function LoanPurposeSelect({ selected, onSelect }: { selected: string; onSelect:
 
   return (
     <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12" ref={containerRef}>
-      <p className="text-[#475467] text-[13px]">Select Loan Purpose</p>
+      <p className="text-[#475467] text-[13px]">اختر غرض القرض</p>
       <div className="relative w-full">
         <button
           ref={buttonRef}
           type="button"
           onClick={handleOpen}
-          className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left"
+          className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-right"
         >
           <span
             className="text-[#101828] text-[18px] font-bold transition-opacity duration-400"
@@ -376,7 +376,7 @@ function LoanPurposeSelect({ selected, onSelect }: { selected: string; onSelect:
                 key={opt}
                 type="button"
                 onClick={() => { onSelect(opt); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 text-[16px] hover:bg-[#F5F9FF] transition-colors ${selected === opt ? 'text-[#0063F5] font-bold' : 'text-[#101828]'}`}
+                className={`w-full text-right px-4 py-3 text-[16px] hover:bg-[#F5F9FF] transition-colors ${selected === opt ? 'text-[#0063F5] font-bold' : 'text-[#101828]'}`}
               >
                 {opt}
               </button>
@@ -460,7 +460,7 @@ function OtpInput({ digits, onChange }: {
   );
 }
 
-export default function AppPage() {
+export default function AppPageAr() {
   const [menuOpen, setMenuOpen]         = useState(false);
   const [openFaq, setOpenFaq]           = useState(-1);
   const [loanType, setLoanType]         = useState<'personal' | 'car' | 'card' | 'mortgage' | null>(null);
@@ -506,9 +506,9 @@ export default function AppPage() {
   const countdownStr = `${String(Math.floor(countdown / 60)).padStart(2, '0')}:${String(countdown % 60).padStart(2, '0')}`;
 
   return (
-    <div className="bg-[#f9f8fd]">
+    <div className="bg-[#f9f8fd]" dir="rtl">
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
-      <Navbar onMenuOpen={() => setMenuOpen(true)} dark langHref="/app/ar" />
+      <Navbar onMenuOpen={() => setMenuOpen(true)} dark langHref="/app" langLabel="EN" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative bg-[#F9F8FD] overflow-hidden">
@@ -527,10 +527,10 @@ export default function AppPage() {
               {/* Headline — in flow on mobile, absolute on desktop */}
               <div className="flex flex-col gap-[16px] lg:absolute lg:top-[150px] lg:left-[129px] lg:w-[577px]">
                 <h1 className="text-white text-[32px] lg:text-[48px] font-bold leading-[1.1]">
-                  Get the Best Loan, Instantly.
+                  احصل على أفضل قرض، فوراً.
                 </h1>
                 <p className="text-[#98A2B3] text-[16px] leading-[1.7]">
-                  A fully automated way to compare, apply, and track loans across trusted banks — all in one platform, all in real time.
+                  طريقة آلية بالكامل لمقارنة القروض والتقديم ومتابعتها عبر البنوك الموثوقة — كل ذلك في منصة واحدة، في الوقت الفعلي.
                 </p>
               </div>
 
@@ -552,14 +552,14 @@ export default function AppPage() {
                 />
                 <img
                   src={imgBadgeCenter}
-                  alt="Licensed by SAMA"
+                  alt="مرخص من ساما"
                   className="absolute inset-0 w-full h-full"
                 />
               </div>
 
               {/* Install app — desktop only */}
               <div className="hidden lg:flex lg:absolute lg:top-[598px] lg:left-[509px] lg:flex-col lg:items-end gap-5">
-                <p className="text-[#D1DAE8] text-[16px]">Install our app now!</p>
+                <p className="text-[#D1DAE8] text-[16px]">حمّل تطبيقنا الآن!</p>
                 <div className="flex flex-col gap-3">
                   <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448F] rounded-[6px] h-[40px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -576,19 +576,19 @@ export default function AppPage() {
               <div className="w-full lg:w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white">
                 {/* Header */}
                 <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
-                  <p className="text-[#021945] text-[20px] font-bold text-center">Find the best loan for you</p>
+                  <p className="text-[#021945] text-[20px] font-bold text-center">اعثر على أفضل قرض لك</p>
                 </div>
                 {/* Body */}
                 <div className={`px-10 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
                   {/* Loan Type */}
                   <div className="flex flex-col items-center gap-[16px] px-[48px] w-full">
-                    <p className="text-[#475467] text-[13px]">Select Loan Type</p>
+                    <p className="text-[#475467] text-[13px]">اختر نوع القرض</p>
                     <div className="flex gap-[12px] items-center justify-center w-full">
                       {([
-                        { key: 'personal', label: 'Personal loan',  icon: '/types/simple-category-icon-perspective---personal.svg' },
-                        { key: 'car',      label: 'Car loan',        icon: '/types/simple-category-icon-perspective---car.svg' },
-                        { key: 'card',     label: 'Card Financing',  icon: '/types/simple-category-icon-perspective---card.svg' },
-                        { key: 'mortgage', label: 'Mortgage Loan',   icon: '/types/simple-category-icon-perspective---mortgage.svg' },
+                        { key: 'personal', label: 'قرض شخصي',  icon: '/types/simple-category-icon-perspective---personal.svg' },
+                        { key: 'car',      label: 'قرض سيارة',  icon: '/types/simple-category-icon-perspective---car.svg' },
+                        { key: 'card',     label: 'تمويل بطاقة', icon: '/types/simple-category-icon-perspective---card.svg' },
+                        { key: 'mortgage', label: 'قرض عقاري',  icon: '/types/simple-category-icon-perspective---mortgage.svg' },
                       ] as const).map(({ key, label, icon }) => {
                         const selected = loanType === key;
                         return (
@@ -613,7 +613,7 @@ export default function AppPage() {
                   <SalarySlider />
                   {/* Active loans */}
                   <div className="flex flex-col items-center gap-2 w-full">
-                    <p className="text-[#475467] text-[13px]">Do you have active loans?</p>
+                    <p className="text-[#475467] text-[13px]">هل لديك قروض نشطة؟</p>
                     <div className="flex gap-3">
                       <button
                         type="button"
@@ -623,7 +623,7 @@ export default function AppPage() {
                             ? 'bg-[#0063F5] border border-[#004FC6] text-white'
                             : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
                         }`}
-                      >YES</button>
+                      >نعم</button>
                       <button
                         type="button"
                         onClick={() => handleLoanToggle('NO')}
@@ -632,14 +632,14 @@ export default function AppPage() {
                             ? 'bg-[#0063F5] border border-[#004FC6] text-white'
                             : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
                         }`}
-                      >NO</button>
+                      >لا</button>
                     </div>
                   </div>
 
                   {/* Monthly commitments — only when YES */}
                   {activeLoan === 'YES' && (
                     <div className="flex flex-col items-center gap-2 w-full">
-                      <p className="text-[#475467] text-[13px]">Monthly commitments</p>
+                      <p className="text-[#475467] text-[13px]">الالتزامات الشهرية</p>
                       <CommitmentRow
                         value={commitment}
                         onChange={setCommitment}
@@ -661,7 +661,7 @@ export default function AppPage() {
                         isComplete ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'
                       }`}
                     >
-                      <span className={`text-[16px] font-semibold ${isComplete ? 'text-[#171717]' : 'text-[#9AA4B2]'}`}>Continue</span>
+                      <span className={`text-[16px] font-semibold ${isComplete ? 'text-[#171717]' : 'text-[#9AA4B2]'}`}>متابعة</span>
                       <ArrowRight color={isComplete ? '#414651' : '#9AA4B2'} />
                     </button>
                   )}
@@ -680,7 +680,7 @@ export default function AppPage() {
                             return (
                               <>
                                 <div className="flex flex-col gap-2 items-center w-full">
-                                  <p className="text-white text-[13px]">Mobile Number</p>
+                                  <p className="text-white text-[13px]">رقم الجوال</p>
                                   <div className="bg-[#0041a3] border border-[#0041a3] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full gap-[2px]">
                                     <span className="text-white text-[24px] font-bold mr-1 shrink-0">+966</span>
                                     {hasLeadingZero && (
@@ -690,7 +690,7 @@ export default function AppPage() {
                                       autoFocus
                                       type="tel"
                                       inputMode="numeric"
-                                      placeholder={!phoneNum ? "Enter your mobile number" : ""}
+                                      placeholder={!phoneNum ? "أدخل رقم جوالك" : ""}
                                       value={inputValue}
                                       onChange={e => {
                                         const raw = e.target.value.replace(/[^0-9 ]/g, '');
@@ -706,7 +706,7 @@ export default function AppPage() {
                                   </div>
                                 </div>
                                 <p className="text-[#92baf6] text-[12px] text-center leading-[1.5]">
-                                  Please enter your mobile number so we can send you a verification code!
+                                  يرجى إدخال رقم جوالك لنتمكن من إرسال رمز التحقق!
                                 </p>
                               </>
                             );
@@ -715,7 +715,7 @@ export default function AppPage() {
                           {formStep === 'otp' && (
                             <>
                               <div className="flex flex-col gap-2 items-center w-full">
-                                <p className="text-white text-[13px]">Mobile Number</p>
+                                <p className="text-white text-[13px]">رقم الجوال</p>
                                 <div className="flex items-center gap-2 justify-center">
                                   <img src={imgPhoneIconBlue} alt="" className="w-5 h-5 flex-shrink-0" />
                                   <span className="text-white text-[24px] font-bold">+966 {phoneNum.startsWith('0') ? phoneNum.slice(1) : phoneNum}</span>
@@ -725,11 +725,11 @@ export default function AppPage() {
                                 </div>
                               </div>
                               <p className="text-[#92baf6] text-[12px] text-center leading-[1.5] w-full">
-                                Please enter verification code from inbox in your mobile number!
+                                يرجى إدخال رمز التحقق المرسل إلى رقم جوالك!
                               </p>
                               <OtpInput digits={otpDigits} onChange={setOtpDigits} />
                               <p className="text-[12px] text-center tracking-[0.4px]">
-                                <span className="text-[#92baf6]">Resend Code? </span>
+                                <span className="text-[#92baf6]">إعادة إرسال الرمز؟ </span>
                                 <span className="text-[#FFDD33]">{countdownStr}</span>
                               </p>
                             </>
@@ -743,7 +743,7 @@ export default function AppPage() {
                               onClick={handleCancel}
                               className="border border-[#77a6ed] rounded-[56px] px-[32px] lg:px-[48px] py-[16px] flex items-center justify-center"
                             >
-                              <span className="text-[#92baf6] text-[16px] font-semibold">Cancel</span>
+                              <span className="text-[#92baf6] text-[16px] font-semibold">إلغاء</span>
                             </button>
                             <button
                               onClick={(phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length) >= 9 ? handleContinueToOtp : undefined}
@@ -751,7 +751,7 @@ export default function AppPage() {
                                 (phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length) >= 9 ? 'bg-[#FFDD33] cursor-pointer' : 'bg-[#92baf6] cursor-not-allowed'
                               }`}
                             >
-                              <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
+                              <span className="text-[#171717] text-[16px] font-semibold">متابعة</span>
                               <ArrowRight />
                             </button>
                           </div>
@@ -759,7 +759,7 @@ export default function AppPage() {
 
                         {formStep === 'otp' && (
                           <a href="/results" className="bg-[#FFDD33] rounded-[56px] px-[64px] py-[16px] flex items-center gap-[10px]">
-                            <span className="text-[#171717] text-[16px] font-semibold">Tamawal</span>
+                            <span className="text-[#171717] text-[16px] font-semibold">تمويل</span>
                             <ArrowRight />
                           </a>
                         )}
@@ -777,7 +777,7 @@ export default function AppPage() {
 
       {/* ── Install app — mobile only ────────────────────────────────────── */}
       <section className="lg:hidden bg-[#f9f8fd] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
-        <p className="text-[16px] text-[#121a26] text-center">Install our app now!</p>
+        <p className="text-[16px] text-[#121a26] text-center">حمّل تطبيقنا الآن!</p>
         <div className="flex gap-[12px]">
           <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
             <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -790,7 +790,7 @@ export default function AppPage() {
 
       {/* ── Partners ─────────────────────────────────────────────────────── */}
       <section className="bg-[#f9f8fd] py-[60px] lg:py-[94px] flex flex-col items-center gap-8 overflow-hidden">
-        <h2 className="text-[#101828] text-[32px] font-bold tracking-[0.15px]">Our Partners</h2>
+        <h2 className="text-[#101828] text-[32px] font-bold tracking-[0.15px]">شركاؤنا</h2>
         <div className="w-full overflow-hidden">
           {/* Duplicate logos so the loop is seamless (translateX -50% = one full set) */}
           <div
@@ -822,14 +822,14 @@ export default function AppPage() {
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="bg-white py-10 md:py-[94px] px-6 md:px-[75px] flex items-center justify-center">
         <div className="w-full max-w-[1290px] flex flex-col items-center gap-8 md:gap-[40px]">
-          <h2 className="text-[#141414] text-[32px] font-bold">F.A.Q</h2>
+          <h2 className="text-[#141414] text-[32px] font-bold">الأسئلة الشائعة</h2>
 
           <div className="w-full md:w-[1070px]">
             {faqs.map((faq, i) => (
               <div key={i} className="border-b border-[#E0E0E0]">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
-                  className="w-full flex items-center gap-4 md:gap-[30px] py-5 md:py-8 text-left"
+                  className="w-full flex items-center gap-4 md:gap-[30px] py-5 md:py-8 text-right"
                 >
                   <span className="flex-1 text-[#130F26] text-lg md:text-[30px] font-bold leading-normal">{faq.q}</span>
                   <img
@@ -849,7 +849,7 @@ export default function AppPage() {
 
           <div className="pt-6">
             <button className="bg-[#FED644] border border-[#EAECF0] rounded-[50px] px-8 py-6 flex items-center gap-3">
-              <span className="text-[#141414] text-[16px]">View more</span>
+              <span className="text-[#141414] text-[16px]">عرض المزيد</span>
               <ArrowRight className="w-6 h-6" />
             </button>
           </div>
@@ -869,10 +869,10 @@ export default function AppPage() {
               <div className="flex flex-col gap-[16px]">
                 <div className="relative size-[100px]">
                   <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
-                  <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
+                  <img src={imgBadgeCenter} alt="مرخص من ساما" className="absolute inset-0 size-full" />
                 </div>
                 <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
-                  Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
+                  تمويل® تحت إشراف ورقابة البنك المركزي السعودي بموجب ترخيص رقم 98/N M/202504
                 </p>
               </div>
             </div>
@@ -882,35 +882,35 @@ export default function AppPage() {
               {/* Top row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">معلومات عنا</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Who we are</span>
-                    <span>Our products</span>
-                    <span>Our values</span>
+                    <span>من نحن</span>
+                    <span>منتجاتنا</span>
+                    <span>قيمنا</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">قانوني</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Terms and Conditions</span>
-                    <span>Data Protection<br />and Privacy</span>
-                    <span>Customer Protection<br />Principles</span>
+                    <span>الشروط والأحكام</span>
+                    <span>حماية البيانات<br />والخصوصية</span>
+                    <span>مبادئ حماية<br />العميل</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">اتخذ إجراءً</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Be a partner</span>
-                    <span>Be a customer</span>
+                    <span>كن شريكاً</span>
+                    <span>كن عميلاً</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">رعاية العملاء</p>
                   <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
-                    <span>Suggestion</span>
-                    <span>Complaint</span>
-                    <span>Report a Violation</span>
-                    <span>Report Financial Fraud</span>
+                    <span>اقتراح</span>
+                    <span>شكوى</span>
+                    <span>الإبلاغ عن مخالفة</span>
+                    <span>الإبلاغ عن احتيال مالي</span>
                   </div>
                 </div>
               </div>
@@ -921,7 +921,7 @@ export default function AppPage() {
               {/* Bottom row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">تواصل معنا</p>
                   <div className="flex flex-col gap-[8px]">
                     <div className="flex items-center gap-[8px]">
                       <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
@@ -938,30 +938,30 @@ export default function AppPage() {
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
-                  <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
+                  <p className="text-white text-[16px] font-bold leading-[1.72]">العنوان</p>
                   <div className="flex gap-[8px] items-start">
                     <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
-                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
+                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">شارع العليا (403)، الرياض، المملكة العربية السعودية</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working hours</p>
+                    <p className="text-white text-[16px] font-semibold">ساعات العمل</p>
                     <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
                   </div>
                   <div className="flex flex-col gap-[4px]">
-                    <p className="text-white text-[16px] font-semibold">Working days</p>
-                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                    <p className="text-white text-[16px] font-semibold">أيام العمل</p>
+                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">الأحد – الخميس</p>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[8px]">
-                  <p className="text-white text-[16px] font-semibold leading-[1.72]">Social media</p>
+                  <p className="text-white text-[16px] font-semibold leading-[1.72]">وسائل التواصل الاجتماعي</p>
                   <div className="flex gap-[8px] items-center">
                     <img src={imgLinkedIn} alt="LinkedIn" className="w-[45px] h-[45px]" />
                     <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                   </div>
                   <button className="flex items-center gap-[2px] py-[12px]">
-                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">الأسئلة الشائعة</span>
                     <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
                   </button>
                 </div>
@@ -974,7 +974,7 @@ export default function AppPage() {
             <div className="border-t border-white/10" />
             {/* Mobile: stacked centered */}
             <div className="flex flex-col gap-[12px] items-center lg:hidden">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">حمّل تطبيقنا!</p>
               <div className="flex gap-[12px]">
                 <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                   <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
@@ -983,13 +983,13 @@ export default function AppPage() {
                   <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                 </a>
               </div>
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
             </div>
             {/* Desktop: copyright left, download right */}
             <div className="hidden lg:flex items-center justify-between w-full">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© جميع الحقوق محفوظة لتمويل 2026</p>
               <div className="flex items-center gap-[16px]">
-                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">حمّل تطبيقنا!</p>
                 <div className="flex gap-[12px]">
                   <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
