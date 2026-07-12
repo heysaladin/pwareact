@@ -207,44 +207,46 @@ export default function ReviewPage() {
                 <div className="border-r border-[#eef1f6] flex flex-col justify-between px-[24px] py-[28px] w-[284px] flex-shrink-0">
                   <h2 className="text-[#121a26] text-[24px] font-bold leading-[1.25]">Real Estate Financing for Home Buyers</h2>
                   <img src={imgLogoBank} alt="Bank" className="h-[60px] w-[203px] object-contain" />
-                  <StarRating value={4.5} />
                 </div>
                 <div className="flex-1 flex flex-col justify-between px-[32px] py-[28px]">
                   <div className="flex gap-[5px] w-full">
                     <div className="flex-1 flex flex-col">
                       <div className="flex items-baseline gap-[4px] text-[#667085]">
-                        <span className="text-[16px] font-semibold">Loan amount</span>
-                        <span className="text-[12px]">up to</span>
+                        <span className="text-[16px] font-semibold">Installment</span>
+                        <span className="text-[12px]">from</span>
                       </div>
                       <div className="flex items-baseline gap-[4px]">
                         <SARIcon className="w-5 h-5" />
-                        <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">90,000,000.99</span>
+                        <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">4,999.49</span>
                       </div>
                     </div>
                     <div className="flex-1 flex flex-col items-end">
                       <div className="flex items-baseline gap-[4px] text-[#667085]">
-                        <span className="text-[16px] font-semibold">Loan period</span>
-                        <span className="text-[12px]">for</span>
+                        <span className="text-[16px] font-semibold">You saved</span>
                       </div>
-                      <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">48 month</span>
+                      <div className="flex items-center gap-[6px] justify-end">
+                        <div className="flex items-baseline gap-[2px]">
+                          <SARIcon className="w-5 h-5" />
+                          <span className="text-[#101828] text-[32px] font-bold leading-[1.5]">228.55</span>
+                        </div>
+                        <div className="bg-[#17b26a] flex items-center justify-center px-[4px] py-[2px] rounded-[6px]">
+                          <span className="text-white text-[16px] font-bold">-4%</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="flex gap-[5px] items-center w-full">
                     <div className="flex-1 flex flex-col">
-                      <span className="text-[#667085] text-[16px] font-semibold">APR</span>
-                      <span className="text-[#101828] text-[32px] font-bold">2.21%</span>
-                      <span className="text-[#667085] text-[12px]">Up to 5.13% *</span>
+                      <div className="flex items-baseline gap-[4px] text-[#667085]">
+                        <span className="text-[16px] font-semibold">APR</span>
+                        <span className="text-[12px]">from</span>
+                      </div>
+                      <span className="text-[#101828] text-[32px] font-bold">5.52%</span>
                     </div>
                     <div className="flex-1 flex flex-col items-end gap-[8px]">
                       <img src={imgPayoutTime} alt="" className="w-[40px] h-[40px]" />
                       <span className="text-[#667085] text-[12px] text-right w-[156px] leading-[1.4]">Finalization & Disbursement within 1 to 2 working days</span>
                     </div>
-                  </div>
-                  <div className="flex items-center w-full">
-                    <button className="flex items-center gap-[4px]">
-                      <img src={imgFavorite} alt="" className="w-[24px] h-[24px]" />
-                      <span className="text-[#98a2b3] text-[16px]">Add to favorite</span>
-                    </button>
                   </div>
                 </div>
               </div>
