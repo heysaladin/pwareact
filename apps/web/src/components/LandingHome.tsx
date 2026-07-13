@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SlidingMenu from './SlidingMenu';
 
 const imgVuesaxLinearMenu = "/icon-menu.svg";
@@ -19,6 +19,8 @@ const imgGooglePlay  = "/playstore.svg";
 const imgLogo        = "/logo-tamawal-web.svg";
 const imgHeroBadge   = "/badge.svg";
 const imgBadgeCenter = "/badge-center.svg";
+const imgHeroPhonesMask = "/hero-phones-mask.png";
+const imgHeroPhones     = "/hero-phones.png";
 const imgEmailIcon   = "/icon-email.svg";
 const imgPhoneIcon   = "/icon-phone.svg";
 const imgLocationIcon = "/pinlocation.svg";
@@ -489,7 +491,7 @@ export default function LandingHome() {
       </div>
 
       {/* Hero section with dark bg */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-[#1a2232]">
         {/* Background shape */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <img
@@ -501,18 +503,82 @@ export default function LandingHome() {
         </div>
         <div className="absolute inset-0 z-0 pointer-events-none bg-[#1a2232]" />
 
-        <div className="relative z-10 pt-20">
-          {/* Navbar placeholder (height reservation) */}
-
+        <div className="relative z-10 pt-20" dir="rtl">
           {/* Hero text */}
-          <div className="px-6 pt-4 pb-8 max-w-4xl mx-auto">
-            <div className="flex flex-col gap-3 items-end md:items-start max-w-sm md:max-w-lg">
-              <p className="text-white text-[32px] md:text-[40px] font-semibold leading-[1.25] w-full">
-                Get the Best Loan, Instantly.
+          <div className="px-6 pt-4 pb-0 flex flex-col gap-4 text-right">
+            <p className="text-white text-[48px] font-bold leading-[1.1]" dir="auto">
+              احصل على أفضل قرض، فوراً.
+            </p>
+            <p className="text-[#98a2b3] text-[16px] leading-[1.7]" dir="auto">
+              طريقة آلية بالكامل لمقارنة القروض والتقديم ومتابعتها عبر البنوك الموثوقة — كل ذلك في منصة واحدة، في الوقت الفعلي.
+            </p>
+          </div>
+
+          {/* Card section */}
+          <div className="relative mt-8" style={{ height: '467px' }}>
+            {/* Blue background card */}
+            <div
+              className="absolute rounded-[32px] bg-[#0063f5]"
+              style={{ top: '62px', left: '-21px', width: '598px', height: '363px' }}
+            />
+
+            {/* Phone mockup */}
+            <div
+              className="absolute"
+              style={{
+                left: '205px',
+                top: '0',
+                width: '426px',
+                height: '467.449px',
+                maskImage: `url("${imgHeroPhonesMask}")`,
+                maskSize: '426px 467.448px',
+                maskRepeat: 'no-repeat',
+                maskMode: 'alpha',
+                WebkitMaskImage: `url("${imgHeroPhonesMask}")`,
+                WebkitMaskSize: '426px 467.448px',
+                WebkitMaskRepeat: 'no-repeat',
+              } as React.CSSProperties}
+            >
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <img
+                  alt=""
+                  src={imgHeroPhones}
+                  style={{
+                    position: 'absolute',
+                    height: '147.78%',
+                    left: '-31.08%',
+                    top: '-31.65%',
+                    width: '162.16%',
+                    maxWidth: 'none',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* App download section */}
+            <div className="absolute flex flex-col gap-5" style={{ left: '24px', top: '241px' }}>
+              <p className="text-[#d1dae8] text-[16px] leading-[1.7]" dir="auto">
+                حمّل تطبيقنا الآن!
               </p>
-              <p className="text-[#98a2b3] text-[16px] leading-[1.7] w-full">
-                A fully automated way to compare, apply, and track loans across trusted banks — all in one platform, all in real time.
-              </p>
+              <div className="flex flex-col gap-3">
+                <div className="rounded-[6px] overflow-hidden border border-[#16448f]" style={{ width: '128px', height: '40px' }}>
+                  <img alt="App Store" src={imgAppStore} className="w-full h-full object-cover" />
+                </div>
+                <div className="rounded-[6px] overflow-hidden border border-[#16448f]" style={{ width: '128px', height: '40px' }}>
+                  <img alt="Google Play" src={imgPlayStore} className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </div>
+
+            {/* SAMA badge */}
+            <div className="absolute" style={{ left: '24px', top: '38px', width: '157.557px', height: '156.85px' }}>
+              <img alt="" src={imgHeroBadge} className="absolute inset-0 w-full h-full" />
+              <img
+                alt="Licensed by SAMA"
+                src={imgBadgeCenter}
+                className="absolute"
+                style={{ width: '64px', height: '64px', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+              />
             </div>
           </div>
         </div>

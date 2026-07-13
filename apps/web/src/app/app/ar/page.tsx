@@ -463,7 +463,8 @@ function OtpInput({ digits, onChange }: {
 export default function AppPageAr() {
   const [menuOpen, setMenuOpen]         = useState(false);
   const [openFaq, setOpenFaq]           = useState(-1);
-  const [loanType, setLoanType]         = useState<'personal' | 'car' | 'card' | 'mortgage' | null>(null);
+  const [loanType, setLoanType]         = useState<'personal' | 'realEstate' | 'car' | 'card'>('personal');
+  const [propertyType, setPropertyType] = useState<'الجميع' | 'وحدات جاهزة' | 'القرض العقاري' | 'أرض' | 'شراء على الخارطة' | 'بناء ذاتي'>('الجميع');
   const [activeLoan, setActiveLoan]     = useState<'YES' | 'NO' | null>(null);
   const [commitment, setCommitment]     = useState('');
   const [loanPurpose, setLoanPurpose]   = useState('');
@@ -473,6 +474,9 @@ export default function AppPageAr() {
   const [countdown, setCountdown]       = useState(24);
 
   const isComplete = activeLoan !== null && loanPurpose !== '';
+  const phoneDigits = phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length;
+  const phoneValid = phoneDigits >= 9;
+  const phoneError = phoneNum.length > 0 && !phoneValid;
 
   useEffect(() => {
     if (formStep !== 'otp' || countdown <= 0) return;
@@ -581,79 +585,124 @@ export default function AppPageAr() {
                 {/* Body */}
                 <div className={`px-10 py-10 flex flex-col items-center gap-[48px] transition-opacity ${formStep !== 'form' ? 'bg-white opacity-50 pointer-events-none select-none' : 'bg-white'}`}>
                   {/* Loan Type */}
-                  <div className="flex flex-col items-center gap-[16px] px-[48px] w-full">
+                  <div className="flex flex-col items-center gap-2 w-full">
                     <p className="text-[#475467] text-[13px]">اختر نوع القرض</p>
-                    <div className="flex gap-[12px] items-center justify-center w-full">
+                    <div className="flex gap-2 items-center justify-center w-full flex-wrap">
                       {([
-                        { key: 'personal', label: 'قرض شخصي',  icon: '/types/simple-category-icon-perspective---personal.svg' },
-                        { key: 'car',      label: 'قرض سيارة',  icon: '/types/simple-category-icon-perspective---car.svg' },
-                        { key: 'card',     label: 'تمويل بطاقة', icon: '/types/simple-category-icon-perspective---card.svg' },
-                        { key: 'mortgage', label: 'قرض عقاري',  icon: '/types/simple-category-icon-perspective---mortgage.svg' },
-                      ] as const).map(({ key, label, icon }) => {
+                        { key: 'personal',   label: 'تمويل شخصي' },
+                        { key: 'realEstate', label: 'تمويل عقاري' },
+                        { key: 'car',        label: 'قرض سيارة' },
+                        { key: 'card',       label: 'تمويل البطاقات' },
+                      ] as const).map(({ key, label }) => {
                         const selected = loanType === key;
                         return (
                           <button
                             key={key}
                             type="button"
-                            onClick={() => setLoanType(selected ? null : key)}
-                            className={`flex items-center rounded-[48px] shrink-0 transition-all duration-200 bg-[#eef1f6] ${
-                              selected ? 'py-2 px-4 gap-2 border border-[#0063F5]' : 'py-2 px-2'
+                            onClick={() => setLoanType(key)}
+                            className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${
+                              selected
+                                ? 'bg-[#0063F5] border-[#D7E7FE] text-white'
+                                : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'
                             }`}
                           >
-                            <img src={icon} alt={label} className="w-[48px] h-[48px] shrink-0" />
-                            {selected && (
-                              <span className="text-[12px] font-semibold text-[#0063F5] whitespace-nowrap">{label}</span>
-                            )}
+                            {label}
                           </button>
                         );
                       })}
                     </div>
                   </div>
-                  {/* Salary */}
-                  <SalarySlider />
-                  {/* Active loans */}
-                  <div className="flex flex-col items-center gap-2 w-full">
-                    <p className="text-[#475467] text-[13px]">هل لديك قروض نشطة؟</p>
-                    <div className="flex gap-3">
-                      <button
-                        type="button"
-                        onClick={() => handleLoanToggle('YES')}
-                        className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
-                          activeLoan === 'YES'
-                            ? 'bg-[#0063F5] border border-[#004FC6] text-white'
-                            : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
-                        }`}
-                      >نعم</button>
-                      <button
-                        type="button"
-                        onClick={() => handleLoanToggle('NO')}
-                        className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
-                          activeLoan === 'NO'
-                            ? 'bg-[#0063F5] border border-[#004FC6] text-white'
-                            : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
-                        }`}
-                      >لا</button>
-                    </div>
-                  </div>
 
-                  {/* Monthly commitments — only when YES */}
-                  {activeLoan === 'YES' && (
-                    <div className="flex flex-col items-center gap-2 w-full">
-                      <p className="text-[#475467] text-[13px]">الالتزامات الشهرية</p>
-                      <CommitmentRow
-                        value={commitment}
-                        onChange={setCommitment}
-                        onClear={() => setCommitment('')}
+                  {/* Coming Soon — Car or Card */}
+                  {(loanType === 'car' || loanType === 'card') ? (
+                    <div className="flex flex-col items-center gap-4 pb-10">
+                      <img
+                        src={loanType === 'car'
+                          ? '/types/simple-category-icon-perspective---car.svg'
+                          : '/types/simple-category-icon-perspective---card.svg'}
+                        alt=""
+                        className="w-[260px] h-[260px] object-contain"
                       />
+                      <p className="text-[#130f26] text-[30px] font-bold text-center">قريبًا</p>
+                      <p className="text-[#4b5565] text-[16px] text-center leading-[1.72] max-w-[400px]">
+                        هذا المنتج غير متوفر حاليًا. سنقوم بإشعارك بمجرد توفره على تموّل.
+                      </p>
                     </div>
-                  )}
+                  ) : (
+                    <>
+                      {/* Property Financing type — Real Estate only */}
+                      {loanType === 'realEstate' && (
+                        <div className="flex flex-col items-center gap-[10px] w-full overflow-hidden">
+                          <p className="text-[#475467] text-[13px]">نوع تمويل العقارات</p>
+                          <div className="flex gap-2 items-center justify-end w-full overflow-x-auto pb-1">
+                            {(['الجميع', 'وحدات جاهزة', 'القرض العقاري', 'أرض', 'شراء على الخارطة', 'بناء ذاتي'] as const).map((type) => {
+                              const sel = propertyType === type;
+                              return (
+                                <button
+                                  key={type}
+                                  type="button"
+                                  onClick={() => setPropertyType(type)}
+                                  className={`px-3 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors whitespace-nowrap shrink-0 ${
+                                    sel
+                                      ? 'bg-[#0063F5] border-[#D7E7FE] text-white'
+                                      : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'
+                                  }`}
+                                >
+                                  {type}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
 
-                  {/* Loan purpose */}
-                  <LoanPurposeSelect selected={loanPurpose} onSelect={setLoanPurpose} />
+                      {/* Salary */}
+                      <SalarySlider />
+                      {/* Active loans */}
+                      <div className="flex flex-col items-center gap-2 w-full">
+                        <p className="text-[#475467] text-[13px]">هل لديك قروض حالياً؟</p>
+                        <div className="flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() => handleLoanToggle('YES')}
+                            className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
+                              activeLoan === 'YES'
+                                ? 'bg-[#0063F5] border border-[#004FC6] text-white'
+                                : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
+                            }`}
+                          >نعم</button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoanToggle('NO')}
+                            className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors ${
+                              activeLoan === 'NO'
+                                ? 'bg-[#0063F5] border border-[#004FC6] text-white'
+                                : 'bg-[#F5F9FF] border border-[#D7E7FE] text-[#202A39]'
+                            }`}
+                          >لا</button>
+                        </div>
+                      </div>
+
+                      {/* Monthly commitments — only when YES */}
+                      {activeLoan === 'YES' && (
+                        <div className="flex flex-col items-center gap-2 w-full">
+                          <p className="text-[#475467] text-[13px]">الالتزامات الشهرية</p>
+                          <CommitmentRow
+                            value={commitment}
+                            onChange={setCommitment}
+                            onClear={() => setCommitment('')}
+                          />
+                        </div>
+                      )}
+
+                      {/* Loan purpose */}
+                      <LoanPurposeSelect selected={loanPurpose} onSelect={setLoanPurpose} />
+                    </>
+                  )}
                 </div>
                 {/* Footer */}
                 <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start relative">
-                  {formStep === 'form' && (
+                  {formStep === 'form' && loanType !== 'car' && loanType !== 'card' && (
                     <button
                       disabled={!isComplete}
                       onClick={isComplete ? handleContinueToPhone : undefined}
@@ -672,7 +721,7 @@ export default function AppPageAr() {
                       <div className="absolute -translate-x-1/2 left-1/2 top-0 bg-[#0063F5] rounded-[24px] overflow-clip pb-[48px] pt-[16px] px-[22px] w-full max-w-[517px] flex flex-col gap-[25px] items-center">
 
                         {/* Inner content */}
-                        <div className="flex flex-col gap-[18px] items-center p-6 w-full rounded-[12px]">
+                        <div className="flex flex-col gap-[18px] items-center w-full rounded-[12px]">
 
                           {formStep === 'phone' && (() => {
                             const hasLeadingZero = phoneNum.startsWith('0');
@@ -681,28 +730,35 @@ export default function AppPageAr() {
                               <>
                                 <div className="flex flex-col gap-2 items-center w-full">
                                   <p className="text-white text-[13px]">رقم الجوال</p>
-                                  <div className="bg-[#0041a3] border border-[#0041a3] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full gap-[2px]">
-                                    <span className="text-white text-[24px] font-bold mr-1 shrink-0">+966</span>
-                                    {hasLeadingZero && (
-                                      <span className="text-[#77a6ed] text-[24px] font-bold">0</span>
+                                  <div className={`flex flex-col gap-1 w-full rounded-[8px] pb-1 ${phoneError ? 'bg-[#FECDCA] border border-[#FECDCA]' : ''}`}>
+                                    <div className="bg-[#0041a3] border border-[#00317a] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full gap-[2px]">
+                                      <span className="text-white text-[24px] font-bold mr-1 shrink-0">+966</span>
+                                      {hasLeadingZero && (
+                                        <span className="text-[#77a6ed] text-[24px] font-bold">0</span>
+                                      )}
+                                      <input
+                                        autoFocus
+                                        type="tel"
+                                        inputMode="numeric"
+                                        placeholder={!phoneNum ? "أدخل رقم جوالك" : ""}
+                                        value={inputValue}
+                                        onChange={e => {
+                                          const raw = e.target.value.replace(/[^0-9 ]/g, '');
+                                          setPhoneNum(hasLeadingZero ? '0' + raw : raw);
+                                        }}
+                                        onKeyDown={e => {
+                                          if (e.key === 'Backspace' && hasLeadingZero && phoneNum === '0') {
+                                            setPhoneNum('');
+                                          }
+                                        }}
+                                        className="bg-transparent outline-none text-[24px] font-bold text-white placeholder:text-[#77a6ed] placeholder:font-normal flex-1 min-w-0"
+                                      />
+                                    </div>
+                                    {phoneError && (
+                                      <div className="px-3">
+                                        <p className="text-[#D92D20] text-[16px]">رقم الجوال غير صحيح</p>
+                                      </div>
                                     )}
-                                    <input
-                                      autoFocus
-                                      type="tel"
-                                      inputMode="numeric"
-                                      placeholder={!phoneNum ? "أدخل رقم جوالك" : ""}
-                                      value={inputValue}
-                                      onChange={e => {
-                                        const raw = e.target.value.replace(/[^0-9 ]/g, '');
-                                        setPhoneNum(hasLeadingZero ? '0' + raw : raw);
-                                      }}
-                                      onKeyDown={e => {
-                                        if (e.key === 'Backspace' && hasLeadingZero && phoneNum === '0') {
-                                          setPhoneNum('');
-                                        }
-                                      }}
-                                      className="bg-transparent outline-none text-[24px] font-bold text-white placeholder:text-[#77a6ed] placeholder:font-normal flex-1 min-w-0"
-                                    />
                                   </div>
                                 </div>
                                 <p className="text-[#92baf6] text-[12px] text-center leading-[1.5]">
@@ -794,11 +850,11 @@ export default function AppPageAr() {
         <div className="w-full overflow-hidden">
           {/* Duplicate logos so the loop is seamless (translateX -50% = one full set) */}
           <div
-            className="flex items-center gap-[64px] w-max"
+            className="flex items-center w-max"
             style={{ animation: 'marquee 30s linear infinite' }}
           >
             {[0, 1].map((set) => (
-              <div key={set} className="flex items-center gap-[64px]">
+              <div key={set} className="flex items-center gap-[64px] pr-[64px]">
                 <img src={imgBadaya}        alt="" className="h-[65px] w-auto object-contain flex-shrink-0" />
                 <img src={imgPartner2}      alt="" className="h-[94px] w-auto object-contain flex-shrink-0" />
                 <img src={imgAsoul}         alt="" className="h-[60px] w-auto object-contain flex-shrink-0" />
