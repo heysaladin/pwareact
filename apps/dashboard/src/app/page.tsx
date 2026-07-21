@@ -61,6 +61,20 @@ const projects = [
       </svg>
     ),
   },
+  {
+    id: 'cps',
+    name: 'Customer Profile System',
+    description: 'View and manage customer profiles, credit scores, and account status.',
+    href: '/cps',
+    tag: 'CPS',
+    accentColor: '#059669',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
 ];
 
 export default function LandingPage() {

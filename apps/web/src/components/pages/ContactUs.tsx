@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import WebNavbar from '../WebNavbar';
 import WebFooter from '../WebFooter';
 
@@ -32,7 +32,7 @@ const t = {
     placeholderMessage: 'أدخل نص رسالتك (حتى 1000 حرف)',
     clearBtn: 'مسح الكل',
     sendBtn: 'إرسال',
-    messageTypes: ['اقتراح', 'شكوى', 'استفسار', 'الإبلاغ عن مخالفة'],
+    messageTypes: ['استفسار', 'اقتراح', 'شكوى', 'بلاغ', 'الإبلاغ عن مخالفة', 'الإبلاغ عن احتيال مالي'],
     contactTitle: 'معلومات التواصل',
     emailLabel: 'البريد الإلكتروني',
     phoneLabel: 'الهاتف',
@@ -40,6 +40,23 @@ const t = {
     addressText: 'مركز الحويشل، العليا (403)، الرياض',
     hoursLabel: 'ساعات العمل',
     hoursText: '9:00 ص – 5:00 م، الأحد – الخميس',
+    labelViolationType: 'نوع المخالفة',
+    placeholderViolationType: 'اختر نوع المخالفة',
+    labelCommunicationChannel: 'قناة التواصل',
+    placeholderCommunicationChannel: 'اختر قناة التواصل',
+    violationTypes: [
+      'الفساد المالي والإداري',
+      'مخالفة الأنظمة والقوانين واللوائح',
+      'مخالفة سياسات وإجراءات الشركة',
+      'السلوك غير اللائق أو مخالفة القيم الإسلامية والأعراف والتقاليد',
+      'إساءة استخدام أصول الشركة',
+      'التعسف في استخدام السلطة من قبل موظفي الشركة',
+      'تمرير معاملات غير نظامية',
+      'تضارب المصالح الواضح',
+      'العلم بحالات إخفاء الأخطاء المنهجية',
+      'غسيل الأموال وتمويل الإرهاب',
+    ],
+    communicationChannels: ['الهاتف', 'تويتر', 'البريد الإلكتروني', 'تطبيق الجوال', 'الموقع الإلكتروني', 'أخرى'],
   },
   en: {
     breadcrumbHome: 'Homepage',
@@ -61,7 +78,7 @@ const t = {
     placeholderMessage: 'Enter your message (up to 1,000 characters)',
     clearBtn: 'Clear all',
     sendBtn: 'Send',
-    messageTypes: ['Suggestion', 'Complaint', 'Inquiry', 'Report a Violation'],
+    messageTypes: ['Inquiry', 'Suggestion', 'Complaint', 'Report', 'Report a Violation', 'Report Financial Fraud'],
     contactTitle: 'Contact Information',
     emailLabel: 'Email',
     phoneLabel: 'Phone',
@@ -69,8 +86,98 @@ const t = {
     addressText: 'Al Olaya (403) street, Al-Huwaisal Center, Riyadh',
     hoursLabel: 'Working Hours',
     hoursText: '9:00 AM – 5:00 PM, Sunday – Thursday',
+    labelViolationType: 'Violation Type',
+    placeholderViolationType: 'Select violation type',
+    labelCommunicationChannel: 'Communication Channel',
+    placeholderCommunicationChannel: 'Select communication channel',
+    violationTypes: [
+      'Financial and Administrative Corruption',
+      'Violation of Systems, Laws, and Regulations',
+      'Violation of Company Policies and Procedures',
+      'Inappropriate Behavior or Violation of Islamic Values, Customs, and Traditions',
+      'Misuse of Company Assets',
+      'Abuse of Power by Company Employees',
+      'Passing Irregular Transactions',
+      'Clear Conflict of Interests',
+      'Knowledge of Cases Concealing Systemic Errors',
+      'Money Laundering and Financing Terrorism',
+    ],
+    communicationChannels: ['Phone', 'Twitter', 'Email', 'Mobile App', 'Website', 'Other'],
   },
 };
+
+function Dropdown({
+  label,
+  placeholder,
+  value,
+  options,
+  onChange,
+  isRtl,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  options: string[];
+  onChange: (v: string) => void;
+  isRtl: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-[#344054] text-[14px] font-medium">
+        {label} <span className="text-red-500">*</span>
+      </label>
+      <div ref={ref} className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="w-full flex items-center justify-between border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] bg-white focus:outline-none focus:border-[#0063F5] cursor-pointer"
+        >
+          <span className={value ? 'text-[#101828]' : 'text-[#98a2b3]'}>{value || placeholder}</span>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#667085"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          >
+            <polyline points="6,9 12,15 18,9" />
+          </svg>
+        </button>
+        {open && (
+          <div
+            className={`absolute top-full mt-1 z-10 w-full bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] p-4 flex flex-col ${isRtl ? 'right-0' : 'left-0'}`}
+          >
+            {options.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => { onChange(opt); setOpen(false); }}
+                className={`flex items-center px-4 py-1.5 w-full text-[14px] text-[#667085] font-[590] hover:bg-[#F9FAFB] rounded ${isRtl ? 'text-right' : 'text-left'}`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function ContactUs({ lang }: { lang: Lang }) {
   const isRtl = lang === 'ar';
@@ -82,6 +189,8 @@ export default function ContactUs({ lang }: { lang: Lang }) {
     email: '',
     subject: '',
     message: '',
+    violationType: '',
+    communicationChannel: '',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -89,8 +198,11 @@ export default function ContactUs({ lang }: { lang: Lang }) {
   };
 
   const handleClear = () => {
-    setForm({ type: '', name: '', phone: '', email: '', subject: '', message: '' });
+    setForm({ type: '', name: '', phone: '', email: '', subject: '', message: '', violationType: '', communicationChannel: '' });
   };
+
+  const isReportViolation = form.type === c.messageTypes[4];
+  const isReportFraud = form.type === c.messageTypes[5];
 
   return (
     <div className="min-h-screen bg-white" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -133,17 +245,59 @@ export default function ContactUs({ lang }: { lang: Lang }) {
                 <label className="text-[#344054] text-[14px] font-medium">
                   {c.labelType} <span className="text-red-500">*</span>
                 </label>
-                <select
-                  value={form.type}
-                  onChange={(e) => handleChange('type', e.target.value)}
-                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] bg-white focus:outline-none focus:border-[#0063F5]"
-                >
-                  <option value="">{c.placeholderType}</option>
-                  {c.messageTypes.map((mt) => (
-                    <option key={mt} value={mt}>{mt}</option>
-                  ))}
-                </select>
+                <div className="flex flex-wrap gap-x-8 gap-y-3 py-2">
+                  {c.messageTypes.map((mt) => {
+                    const selected = form.type === mt;
+                    return (
+                      <label key={mt} className="flex items-center gap-2 cursor-pointer">
+                        <div
+                          className={`relative shrink-0 w-5 h-5 rounded-full border ${selected ? 'border-[#0063F5] bg-[#EFF6FF]' : 'border-[#D0D5DD] bg-white'}`}
+                          onClick={() => handleChange('type', mt)}
+                        >
+                          {selected && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-2.5 h-2.5 rounded-full bg-[#0063F5]" />
+                            </div>
+                          )}
+                          <input
+                            type="radio"
+                            name="messageType"
+                            value={mt}
+                            checked={selected}
+                            onChange={() => handleChange('type', mt)}
+                            className="sr-only"
+                          />
+                        </div>
+                        <span className="text-[16px] text-[#344054] font-medium whitespace-nowrap">{mt}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Violation Type — shown when "Report a Violation" is selected */}
+              {isReportViolation && (
+                <Dropdown
+                  label={c.labelViolationType}
+                  placeholder={c.placeholderViolationType}
+                  value={form.violationType}
+                  options={c.violationTypes}
+                  onChange={(v) => handleChange('violationType', v)}
+                  isRtl={isRtl}
+                />
+              )}
+
+              {/* Communication Channel — shown when "Report Financial Fraud" is selected */}
+              {isReportFraud && (
+                <Dropdown
+                  label={c.labelCommunicationChannel}
+                  placeholder={c.placeholderCommunicationChannel}
+                  value={form.communicationChannel}
+                  options={c.communicationChannels}
+                  onChange={(v) => handleChange('communicationChannel', v)}
+                  isRtl={isRtl}
+                />
+              )}
 
               {/* Name */}
               <div className="flex flex-col gap-1.5">
