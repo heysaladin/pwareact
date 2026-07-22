@@ -1,6 +1,6 @@
 {
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm turbo run build --filter=dashboard",
-  "outputDirectory": "apps/dashboard/.next",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=dashboard",
+  "outputDirectory": ".next",
   "framework": "nextjs"
 }
