@@ -89,6 +89,14 @@ function IconAlert() {
   );
 }
 
+function IconXClose() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 5L5 15M5 5l10 10" stroke="#414651" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
 function IconLock() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,12 +137,90 @@ function CtaBanner({ className = "" }: { className?: string }) {
   );
 }
 
+function PaymentTermsModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50">
+      <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-[6px]" onClick={onClose} />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col gap-[32px] items-center p-[24px] rounded-[8px] w-[calc(100%-48px)] max-w-[640px]">
+        <div className="flex gap-[10px] items-start justify-end sticky top-0 w-full">
+          <div className="flex-1 h-[39px]" />
+          <button onClick={onClose} className="border border-[#d5d7da] flex items-center justify-center overflow-hidden p-[8px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] cursor-pointer">
+            <IconXClose />
+          </button>
+        </div>
+        <div className="flex flex-col gap-[24px] items-center px-[24px] py-[24px] w-full">
+          <div className="h-[157px] w-[188px] overflow-hidden relative flex-shrink-0">
+            <div className="absolute left-0 top-0 overflow-hidden" style={{ width: '184.554px', height: '184.554px' }}>
+              <div className="absolute" style={{ left: '3.71px', top: '23.98px', width: '174.319px', height: '150.895px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(59.97deg) skewX(-0.06deg)', flexShrink: 0 }}>
+                  <div style={{ height: '150.796px', width: '87.287px', position: 'relative' }}>
+                    <img src="/illustration-payment-card-face.svg" alt="" className="absolute block inset-0 max-w-none size-full" />
+                  </div>
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '6.55px', top: '15.01px', width: '166.168px', height: '123.242px' }}>
+                <img src="/illustration-payment-union.svg" alt="" className="block max-w-none size-full" />
+              </div>
+              <div className="absolute" style={{ left: '6.55px', top: '27.71px', width: '83.049px', height: '105.763px' }}>
+                <img src="/illustration-payment-mask.svg" alt="" className="absolute block inset-0 max-w-none size-full" />
+              </div>
+              <div className="absolute" style={{ left: '2.52px', top: '7.56px', width: '177.668px', height: '153.794px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(59.97deg) skewX(-0.06deg)', flexShrink: 0 }}>
+                  <div style={{ height: '153.693px', width: '88.964px', position: 'relative' }}>
+                    <img src="/illustration-payment-card-face2.svg" alt="" className="absolute block inset-0 max-w-none size-full" />
+                  </div>
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '2.52px', top: '41.32px', width: '121.025px', height: '58.56px' }}>
+                <img src="/illustration-payment-vector.svg" alt="" className="block max-w-none size-full" />
+              </div>
+              <div className="absolute" style={{ left: '108.83px', top: '47.36px', width: '27.487px', height: '24.059px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(-20.75deg)', flexShrink: 0 }}>
+                  <img src="/illustration-payment-coin1.svg" alt="" style={{ width: '22.938px', height: '17.036px' }} />
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '64.58px', top: '1.59px', width: '28.344px', height: '26.093px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(29.35deg)', flexShrink: 0 }}>
+                  <img src="/illustration-payment-coin2.svg" alt="" style={{ width: '22.938px', height: '17.036px' }} />
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '28.22px', top: '55.93px', width: '27.889px', height: '24.903px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(24.04deg)', flexShrink: 0 }}>
+                  <img src="/illustration-payment-coin3.svg" alt="" style={{ width: '22.938px', height: '17.036px' }} />
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '0.14px', top: '29.69px', width: '28.094px', height: '25.389px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ transform: 'rotate(-26.1deg)', flexShrink: 0 }}>
+                  <img src="/illustration-payment-coin4.svg" alt="" style={{ width: '22.938px', height: '17.036px' }} />
+                </div>
+              </div>
+              <div className="absolute" style={{ left: '11.09px', top: '14.61px', width: '78.41px', height: '55.21px' }}>
+                <img src="/illustration-payment-wallet1.svg" alt="" className="block max-w-none size-full" />
+              </div>
+              <div className="absolute" style={{ left: '51.53px', top: '18.58px', width: '98.714px', height: '100.171px' }}>
+                <img src="/illustration-payment-wallet2.svg" alt="" className="absolute block inset-0 max-w-none size-full" />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-[16px] items-start text-center w-full">
+            <p className="text-[#121a26] text-[23.5px] font-semibold leading-[30px] w-full">Payment Terms & Conditions</p>
+            <p className="text-[#ca7404] text-[17.5px] font-bold leading-[26px] tracking-[0.1px] w-full">Non-refundable charge</p>
+            <p className="text-[#4b5565] text-[13.5px] leading-[18px] tracking-[0.4px] w-full">This payment is a non-refundable charge to get your financial and credit reports from trusted services providers for eligibility purposes. Nonetheless, this charge is detectable from brokerage fees charges upon completing loan transaction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ReviewPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="bg-[#f9f8fd] min-h-screen flex flex-col">
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
+      {showModal && <PaymentTermsModal onClose={() => setShowModal(false)} />}
 
       <Navbar onMenuOpen={() => setMenuOpen(true)} langHref="/review/ar" />
 
@@ -338,7 +424,7 @@ export default function ReviewPage() {
               <div className="flex flex-col gap-[24px] p-[24px]">
                 <p className="text-[#364152] text-[13px] text-center leading-[18px] tracking-[0.4px]">
                   By paying, you acknowledge the payment is non-refundable.{' '}
-                  <span className="text-[#0063f5]">Read More</span>
+                  <button onClick={() => setShowModal(true)} className="text-[#0063f5] cursor-pointer">Read More</button>
                 </p>
                 <button onClick={() => window.location.href = '/payment'} className="bg-[#ffdd33] border-2 border-[rgba(255,255,255,0.12)] rounded-[24px] py-[12px] px-[16px] flex items-center justify-center min-h-[46px] w-full cursor-pointer">
                   <span className="text-[#121a26] text-[13px] font-semibold tracking-[0.5px]">Pay now</span>

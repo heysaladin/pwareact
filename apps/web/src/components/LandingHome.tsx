@@ -47,6 +47,8 @@ const imgIcon4 = "http://localhost:3845/assets/cb3a7fab272340302ba86f6a820b28b78
 const imgLayer1 = "http://localhost:3845/assets/ad2931524412784cfe16d2c27d020156912b9fcb.svg";
 const imgMobileLogo12 = "http://localhost:3845/assets/ac93bd5987437eaa9ad533d103363db5b1d6eacc.png";
 const imgFrame5 = "http://localhost:3845/assets/4ed1ddc826f477bf8089254b418f8ea3f2d6fdb4.svg";
+const imgCarIllustration = "/illustration-car.svg";
+const imgCardIllustration = "/illustration-card.svg";
 
 const faqItems = [
   {
@@ -96,120 +98,278 @@ function Navbar({ onMenuOpen, white }: { onMenuOpen: () => void; white: boolean 
   );
 }
 
+type LoanTab = 'personal' | 'realestate' | 'car' | 'card';
+type PropertyTab = 'self-build' | 'off-plan' | 'land' | 'mortgage' | 'ready' | 'all';
+
+const loanTabs: { id: LoanTab; label: string }[] = [
+  { id: 'personal',   label: 'Personal Loan' },
+  { id: 'realestate', label: 'Real Estate'    },
+  { id: 'car',        label: 'Car Loan'       },
+  { id: 'card',       label: 'Card Finance'   },
+];
+
+const propertyTabs: { id: PropertyTab; label: string }[] = [
+  { id: 'self-build', label: 'Self-build'       },
+  { id: 'off-plan',   label: 'Off-plan purchase' },
+  { id: 'land',       label: 'Land'              },
+  { id: 'mortgage',   label: 'Mortgage'          },
+  { id: 'ready',      label: 'Ready units'       },
+  { id: 'all',        label: 'All'               },
+];
+
 function LoanCalculator() {
+  const [activeTab, setActiveTab] = useState<LoanTab>('personal');
   const [hasLoan, setHasLoan] = useState<'yes' | 'no' | null>(null);
+  const [propertyTab, setPropertyTab] = useState<PropertyTab>('self-build');
+
+  const tabBtn = (active: boolean) =>
+    `px-[20px] py-[12px] rounded-[32px] text-[14px] font-medium border transition-colors whitespace-nowrap cursor-pointer ${
+      active ? 'bg-[#0063f5] text-white border-[#d7e7fe]' : 'bg-[#f5f9ff] text-[#202a39] border-[#d7e7fe]'
+    }`;
+
+  const isForm = activeTab === 'personal' || activeTab === 'realestate';
 
   return (
-    <div className="bg-white rounded-[32px] shadow-[0px_4px_32px_rgba(0,0,0,0.08)] overflow-hidden w-full max-w-[354px] mx-auto">
+    <div className="bg-white rounded-[32px] drop-shadow-[0px_4px_12px_rgba(0,0,0,0.03)] overflow-hidden w-full max-w-[354px] mx-auto">
       {/* Card header */}
-      <div className="bg-[#f1f7ff] border-b border-[#eaecf0] flex items-center px-6 py-5 rounded-tl-[24px] rounded-tr-[24px]">
-        <p className="flex-1 text-[#021945] text-[20px] font-bold leading-[1.25] text-center">
+      <div className="bg-[#f1f7ff] border-b border-[#eaecf0] pt-[24px] pb-[20px] px-[24px]">
+        <p className="text-[#021945] text-[20px] font-bold text-center mb-[16px]">
           How much funding do you need?
         </p>
+        <div className="flex gap-[8px] overflow-x-auto pb-[2px]">
+          {loanTabs.map((tab) => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={tabBtn(activeTab === tab.id)}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Loan amount + slider */}
-      <div className="bg-white flex flex-col gap-8 items-center px-6 pt-8 pb-6">
-        <div className="flex flex-col gap-4 items-center w-full">
-          <div className="flex flex-col gap-1 items-center">
+      {isForm ? (
+        <div className="bg-white flex flex-col gap-[48px] px-[24px] py-[40px]">
+          {/* Real estate sub-tabs */}
+          {activeTab === 'realestate' && (
+            <div className="flex flex-col gap-[12px]">
+              <p className="text-[#475467] text-[13px] font-medium text-center">Property Financing type</p>
+              <div className="flex gap-[6px] flex-wrap justify-center">
+                {propertyTabs.map((tab) => (
+                  <button key={tab.id} onClick={() => setPropertyTab(tab.id)} className={tabBtn(propertyTab === tab.id)}>
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Loan amount + slider */}
+          <div className="flex flex-col gap-[16px] items-center w-full">
             <p className="text-[#475467] text-[13px] font-medium">Loan Amount</p>
             <div className="bg-white border border-[#eef1f6] rounded-lg flex gap-1 items-center px-4 py-3">
               <span className="text-[#101828] text-[24px] font-bold">﷼</span>
               <span className="text-[#101828] text-[24px] font-bold tracking-tight">7,500.00</span>
             </div>
-          </div>
-          <div className="flex gap-3 items-center w-full">
-            <span className="text-[#101828] text-[16px] font-semibold w-10 text-right shrink-0">1k</span>
-            <div className="flex-1 h-8 relative">
-              <img src={imgFrame6512} alt="" className="absolute inset-0 w-full h-full object-fill" />
-            </div>
-            <span className="text-[#101828] text-[16px] font-semibold w-10 shrink-0">500k</span>
-          </div>
-        </div>
-
-        {/* Active loans */}
-        <div className="flex flex-col gap-2 items-center w-full">
-          <p className="text-[#475467] text-[13px] font-medium">Do you have active loans?</p>
-          <div className="flex gap-3 py-1">
-            <button
-              onClick={() => setHasLoan('yes')}
-              className={`px-12 py-3 rounded-lg text-[18px] font-semibold transition-colors ${
-                hasLoan === 'yes'
-                  ? 'bg-[#0063f5] border border-[#0063f5] text-white'
-                  : 'bg-[#f5f9ff] border border-[#d7e7fe] text-[#202a39]'
-              }`}
-            >
-              YES
-            </button>
-            <button
-              onClick={() => setHasLoan('no')}
-              className={`px-12 py-3 rounded-lg text-[18px] font-semibold transition-colors ${
-                hasLoan === 'no'
-                  ? 'bg-[#0063f5] border border-[#0063f5] text-white'
-                  : 'bg-[#f5f9ff] border border-[#d7e7fe] text-[#202a39]'
-              }`}
-            >
-              NO
-            </button>
-          </div>
-        </div>
-
-        {/* Loan purpose */}
-        <div className="flex flex-col gap-2 items-center w-full">
-          <p className="text-[#475467] text-[13px] font-medium">Select Loan Purpose</p>
-          <div className="bg-white border border-[#eef1f6] rounded-lg flex gap-1 items-center pl-4 pr-3 py-3 w-full cursor-pointer">
-            <p className="flex-1 text-[#101828] text-[18px] font-bold">Select your loan purpose</p>
-            <div className="size-5 relative shrink-0">
-              <img src={imgIcon} alt="" className="absolute inset-0 w-full h-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Phone + OTP section */}
-      <div className="bg-[#0063f5] flex flex-col gap-6 items-center px-6 py-6 rounded-bl-[24px] rounded-br-[24px]">
-        <div className="flex flex-col gap-4 items-center w-full">
-          <div className="flex flex-col gap-2 items-center">
-            <p className="text-white text-[13px] font-medium">Mobile Number</p>
-            <div className="flex gap-2 items-center">
-              <div className="size-5 shrink-0">
-                <img src={imgIcon1} alt="" className="size-5" />
+            <div className="flex gap-3 items-center w-full">
+              <span className="text-[#101828] text-[16px] font-semibold w-10 text-right shrink-0">1k</span>
+              <div className="flex-1 h-8 relative">
+                <img src={imgFrame6512} alt="" className="absolute inset-0 w-full h-full object-fill" />
               </div>
-              <span className="text-white text-[20px] font-bold">+992 8564 898 4911</span>
-              <div className="bg-white rounded-full p-[2px] shrink-0">
-                <div className="size-3">
-                  <img src={imgIcon2} alt="" className="size-3" />
+              <span className="text-[#101828] text-[16px] font-semibold w-10 shrink-0">500k</span>
+            </div>
+          </div>
+
+          {/* Active loans YES/NO */}
+          <div className="flex flex-col gap-[8px] items-center w-full">
+            <p className="text-[#475467] text-[13px] font-medium">Do you have active loans?</p>
+            <div className="flex gap-[12px]">
+              <button
+                onClick={() => setHasLoan('yes')}
+                className={`px-[48px] py-[12px] rounded-[48px] text-[18px] font-semibold border transition-colors cursor-pointer ${
+                  hasLoan === 'yes' ? 'bg-[#0063f5] border-[#004fc6] text-white' : 'bg-[#f5f9ff] border-[#d7e7fe] text-[#202a39]'
+                }`}
+              >
+                YES
+              </button>
+              <button
+                onClick={() => setHasLoan('no')}
+                className={`px-[48px] py-[12px] rounded-[48px] text-[18px] font-semibold border transition-colors cursor-pointer ${
+                  hasLoan === 'no' ? 'bg-[#0063f5] border-[#004fc6] text-white' : 'bg-[#f5f9ff] border-[#d7e7fe] text-[#202a39]'
+                }`}
+              >
+                NO
+              </button>
+            </div>
+          </div>
+
+          {/* Loan purpose */}
+          <div className="flex flex-col gap-[8px] items-center w-full">
+            <p className="text-[#475467] text-[13px] font-medium">Select Loan Purpose</p>
+            <div className="bg-white border border-[#eef1f6] rounded-lg flex gap-1 items-center pl-4 pr-3 py-3 w-full cursor-pointer">
+              <p className="flex-1 text-[#101828] text-[18px] font-bold">Select your loan purpose</p>
+              <div className="size-5 relative shrink-0">
+                <img src={imgIcon} alt="" className="absolute inset-0 w-full h-full" />
+              </div>
+            </div>
+          </div>
+
+          {/* Continue */}
+          <button className="bg-[#ffdd33] rounded-[56px] flex gap-2 items-center justify-center px-[24px] py-[16px] w-full cursor-pointer hover:bg-[#ffe55a] transition-colors">
+            <span className="text-[#171717] text-[16px] font-semibold">Continue</span>
+            <div className="size-5 shrink-0">
+              <img src={imgIcon3} alt="" className="size-5" />
+            </div>
+          </button>
+        </div>
+      ) : (
+        /* Coming Soon */
+        <div className="bg-white flex flex-col gap-[24px] items-center px-[24px] py-[40px]">
+          <div className="w-[260px] h-[260px] flex items-center justify-center overflow-hidden shrink-0">
+            <img
+              src={activeTab === 'car' ? imgCarIllustration : imgCardIllustration}
+              alt={activeTab === 'car' ? 'Car Loan' : 'Card Finance'}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="flex flex-col gap-[8px] items-center text-center">
+            <p className="text-[#130f26] text-[30px] font-bold">Coming Soon</p>
+            <p className="text-[#4b5565] text-[16px] leading-[1.72] max-w-[280px]">
+              {activeTab === 'car'
+                ? 'Car loan service will be available soon. Stay tuned!'
+                : 'Card finance service will be available soon. Stay tuned!'}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const howItWorksSlides = [
+  {
+    img: '/works-summary/1.svg',
+    alt: '1',
+    title: 'Apply securely with Tamawal',
+    body: `It takes five minutes from start to finish. We'll just need some basic information about your data and apply for the loan type you want, only necessary information from your application will be used by our partners to generate personalized offers for you.\n\nWe do not share your contact details until you have chosen an offer.`,
+    list: [] as string[],
+  },
+  {
+    img: '/works-summary/3.svg',
+    alt: '3',
+    title: 'Compare tailored loan offers',
+    body: `You will see the details of all loan offers - personalized and unique to you. Compare and choose the loan that meets your needs! `,
+    list: ['Rates are Real;', 'No markups and no hidden fees;', 'Everything is 100% Transparent and Free'],
+  },
+  {
+    img: '/works-summary/2.svg',
+    alt: '2',
+    title: 'Get your money',
+    body: `After final checks and contract signing your offer and then receiving your loan amount.\n\nEnjoy your day!`,
+    list: [] as string[],
+  },
+];
+
+function HowItWorksSection() {
+  const [current, setCurrent] = useState(0);
+  const total = howItWorksSlides.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+  const slide = howItWorksSlides[current];
+
+  return (
+    <div className="bg-white">
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
+        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">How it works summary</h2>
+        <div className="relative">
+          <div className="w-full overflow-x-hidden rounded-xl pt-5 md:pt-10 pb-20">
+            <div className="w-full text-[#101828]">
+              <div className="grid grid-cols-2 place-content-center gap-4 md:gap-8">
+                <img
+                  alt={slide.alt}
+                  width={400}
+                  height={400}
+                  className="mx-auto me-0 w-full md:w-[400px] h-[400px] object-contain"
+                  src={slide.img}
+                />
+                <div className="my-auto mx-0 md:me-20 lg:mx-0">
+                  <h3 className="text-2xl font-semibold mb-5">{slide.title}</h3>
+                  <p className="text-sm font-medium max-w-sm whitespace-pre-line">{slide.body}</p>
+                  {slide.list.length > 0 && (
+                    <ul className="list-disc text-sm font-medium max-w-sm whitespace-pre-line ms-6 mt-2">
+                      {slide.list.map((item) => <li key={item}>{item}</li>)}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-          <p className="text-[#92baf6] text-[12px] text-center leading-[1.5]">
-            Please enter verification code from inbox in your mobile number!
-          </p>
-          {/* OTP inputs */}
-          <div className="flex gap-2 items-center justify-center">
-            {[1, 2, 3, 4].map((n) => (
+
+          {/* Dots */}
+          <div className="absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 gap-2">
+            {howItWorksSlides.map((_, i) => (
               <button
-                key={n}
-                className="bg-[#0041a3] border border-[#00317a] rounded-lg flex items-center justify-center p-3 w-[53px] h-[78px] cursor-pointer"
-              >
-                <span className="text-white text-[46px] font-normal text-center leading-none">{n}</span>
-              </button>
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`block h-1 cursor-pointer rounded-2xl transition-all bg-[#5CACF3] ${i === current ? 'w-8' : 'w-4 border rounded-full border-[#5CACF3] opacity-[24%]'}`}
+              />
             ))}
           </div>
-          <p className="text-[12px] text-center">
-            <span className="text-[#92baf6]">Resend Code? </span>
-            <span className="text-[#ffdd33]">00:24</span>
-          </p>
-        </div>
 
-        {/* CTA button */}
-        <button className="bg-[#ffdd33] rounded-[56px] flex gap-2 items-center justify-center px-16 py-4 cursor-pointer hover:bg-[#ffe55a] transition-colors">
-          <span className="text-[#171717] text-[16px] font-semibold">Tamawal</span>
-          <div className="size-5 shrink-0">
-            <img src={imgIcon3} alt="" className="size-5" />
+          {/* Prev */}
+          <button
+            onClick={prev}
+            className="hidden sm:flex absolute top-1/2 left-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+
+          {/* Next */}
+          <button
+            onClick={next}
+            className="hidden sm:flex absolute top-1/2 right-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const loanProducts = [
+  { img: '/products/personal.svg',  alt: 'personal',  title: 'Personal Loan',  subtitle: 'Up To 150,000 SAR', badgeBg: '' },
+  { img: '/products/card.svg',      alt: 'card',      title: 'Credit Card',    subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+  { img: '/products/car.svg',       alt: 'car',       title: 'Car Loan',       subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+  { img: '/products/mortgage.svg',  alt: 'mortgage',  title: 'Mortgage Loan',  subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+];
+
+function FeaturedLoansSection() {
+  return (
+    <div className="bg-white">
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
+        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">Featured loans products</h2>
+        <div className="relative">
+          <div className="w-full overflow-x-hidden flex rounded-xl pt-5 md:pt-10 pb-20 sm:pb-5 md:grid md:grid-cols-2 xl:grid-cols-4 md:place-content-center md:gap-8">
+            {loanProducts.map((p) => (
+              <div key={p.alt} className="w-full inline-block flex-none md:w-auto">
+                <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 md:max-w-[20rem] overflow-hidden mx-auto w-full shadow-none">
+                  <div className="bg-clip-border overflow-hidden bg-transparent text-gray-700 shadow-none m-0 rounded-none relative">
+                    <img src={p.img} alt={p.alt} className="w-full px-5" />
+                    <div className={`uppercase w-full text-center py-2 text-sm ${p.badgeBg} text-white font-medium tracking-widest rounded mt-1`}>
+                      Coming soon
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="lg:text-2xl font-semibold mb-3 text-[#292929]">{p.title}</h3>
+                    <p className="text-md text-gray-500 font-medium">{p.subtitle}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -591,6 +751,12 @@ export default function LandingHome() {
 
       {/* Partners */}
       <PartnersSection />
+
+      {/* How it works */}
+      <HowItWorksSection />
+
+      {/* Featured loans */}
+      <FeaturedLoansSection />
 
       {/* FAQ */}
       <FAQSection />

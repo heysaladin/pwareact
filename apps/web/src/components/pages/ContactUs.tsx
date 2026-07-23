@@ -6,90 +6,79 @@ import WebFooter from '../WebFooter';
 
 type Lang = 'ar' | 'en';
 
-const imgMailbox = '/assets/images/Assets/illustration-mail-box.svg';
-const imgEmailIcon = '/icon-email.svg';
-const imgPhoneIcon = '/icon-phone.svg';
-const imgLocationIcon = '/pinlocation.svg';
+const imgMailSmall = '/illustration-mail-small.svg';
+const imgMailbox   = '/illustration-mailbox.svg';
+const imgCalendar  = '/icon-calendar.svg';
+const imgTimeCicle = '/icon-time-circle.svg';
+
+const MAX_CHARS = 1000;
+
+const subjectLabels: Record<string, Record<string, string>> = {
+  en: {
+    Inquiry:              'Inquiry Topic',
+    Complaint:            'Complaint Topic',
+    Suggestion:           'Suggestion Topic',
+    Report:               'Report Topic',
+    'Report a Violation': 'Violation Topic',
+    'Report Financial Fraud': 'Fraud Topic',
+  },
+  ar: {
+    'استفسار':               'موضوع الاستفسار',
+    'شكوى':                  'موضوع الشكوى',
+    'اقتراح':                'موضوع الاقتراح',
+    'بلاغ':                  'موضوع البلاغ',
+    'الإبلاغ عن مخالفة':    'موضوع المخالفة',
+    'الإبلاغ عن احتيال مالي': 'موضوع الاحتيال',
+  },
+};
+
+const messageLabels: Record<string, Record<string, string>> = {
+  en: {
+    Inquiry:              'Inquiry Message',
+    Complaint:            'Complaint Message',
+    Suggestion:           'Suggestion Message',
+    Report:               'Report Message',
+    'Report a Violation': 'Violation Message',
+    'Report Financial Fraud': 'Fraud Message',
+  },
+  ar: {
+    'استفسار':               'نص الاستفسار',
+    'شكوى':                  'نص الشكوى',
+    'اقتراح':                'نص الاقتراح',
+    'بلاغ':                  'نص البلاغ',
+    'الإبلاغ عن مخالفة':    'نص المخالفة',
+    'الإبلاغ عن احتيال مالي': 'نص الاحتيال',
+  },
+};
 
 const t = {
-  ar: {
-    breadcrumbHome: 'الرئيسية',
-    breadcrumbCurrent: 'ارسل رسالة',
-    heroTitle: 'اتصل بنا لمساعدتك',
-    heroDesc: 'تواصل معنا بسرية تامة دون الكشف عن بياناتك الشخصية. نحن هنا لمساعدتك.',
-    hours: 'الأحد – الخميس، 9:00 ص – 5:00 م',
-    formTitle: 'أرسل لنا رسالة',
-    labelType: 'نوع الرسالة',
-    labelName: 'الاسم',
-    labelPhone: 'رقم الجوال',
-    labelEmail: 'البريد الإلكتروني',
-    labelSubject: 'موضوع الاقتراح',
-    labelMessage: 'نص الرسالة',
-    placeholderType: 'اختر نوع الرسالة',
-    placeholderName: 'أدخل اسمك',
-    placeholderEmail: 'أدخل بريدك الإلكتروني',
-    placeholderSubject: 'أدخل موضوع الرسالة',
-    placeholderMessage: 'أدخل نص رسالتك (حتى 1000 حرف)',
-    clearBtn: 'مسح الكل',
-    sendBtn: 'إرسال',
-    messageTypes: ['استفسار', 'اقتراح', 'شكوى', 'بلاغ', 'الإبلاغ عن مخالفة', 'الإبلاغ عن احتيال مالي'],
-    contactTitle: 'معلومات التواصل',
-    emailLabel: 'البريد الإلكتروني',
-    phoneLabel: 'الهاتف',
-    addressLabel: 'العنوان',
-    addressText: 'مركز الحويشل، العليا (403)، الرياض',
-    hoursLabel: 'ساعات العمل',
-    hoursText: '9:00 ص – 5:00 م، الأحد – الخميس',
-    labelViolationType: 'نوع المخالفة',
-    placeholderViolationType: 'اختر نوع المخالفة',
-    labelCommunicationChannel: 'قناة التواصل',
-    placeholderCommunicationChannel: 'اختر قناة التواصل',
-    violationTypes: [
-      'الفساد المالي والإداري',
-      'مخالفة الأنظمة والقوانين واللوائح',
-      'مخالفة سياسات وإجراءات الشركة',
-      'السلوك غير اللائق أو مخالفة القيم الإسلامية والأعراف والتقاليد',
-      'إساءة استخدام أصول الشركة',
-      'التعسف في استخدام السلطة من قبل موظفي الشركة',
-      'تمرير معاملات غير نظامية',
-      'تضارب المصالح الواضح',
-      'العلم بحالات إخفاء الأخطاء المنهجية',
-      'غسيل الأموال وتمويل الإرهاب',
-    ],
-    communicationChannels: ['الهاتف', 'تويتر', 'البريد الإلكتروني', 'تطبيق الجوال', 'الموقع الإلكتروني', 'أخرى'],
-  },
   en: {
     breadcrumbHome: 'Homepage',
     breadcrumbCurrent: 'Send a message',
-    heroTitle: 'Contact us to help you',
-    heroDesc: 'Reach us confidentially without revealing your personal data. We are here to help you.',
-    hours: 'Sunday–Thursday, 9:00 AM – 5:00 PM',
-    formTitle: 'Send us a message',
-    labelType: 'Message type',
+    sideTitle1: 'Contact us',
+    sideTitle2: 'to help you',
+    sideDesc: 'You can communicate with us in complete confidentiality until your report reaches us without revealing your personal data',
+    sideDay: 'From Sunday until Thursday',
+    sideHours: 'From 9:00 am to 5:00 pm',
+    subtitle: 'You can contact us through our customer care phone, contact form, or through our social media accounts.',
+    labelType: 'Type',
+    messageTypes: ['Inquiry', 'Complaint', 'Suggestion', 'Report', 'Report a Violation', 'Report Financial Fraud'],
+    violationIdx: 4,
+    fraudIdx: 5,
     labelName: 'Name',
-    labelPhone: 'Mobile Number',
-    labelEmail: 'Email',
-    labelSubject: 'Suggestion Topic',
-    labelMessage: 'Message',
-    placeholderType: 'Select message type',
-    placeholderName: 'Enter your name',
-    placeholderEmail: 'Enter your email',
-    placeholderSubject: 'Enter message topic',
-    placeholderMessage: 'Enter your message (up to 1,000 characters)',
-    clearBtn: 'Clear all',
-    sendBtn: 'Send',
-    messageTypes: ['Inquiry', 'Suggestion', 'Complaint', 'Report', 'Report a Violation', 'Report Financial Fraud'],
-    contactTitle: 'Contact Information',
-    emailLabel: 'Email',
-    phoneLabel: 'Phone',
-    addressLabel: 'Address',
-    addressText: 'Al Olaya (403) street, Al-Huwaisal Center, Riyadh',
-    hoursLabel: 'Working Hours',
-    hoursText: '9:00 AM – 5:00 PM, Sunday – Thursday',
+    placeholderName: 'Enter the name',
+    labelPhone: 'Mobile number',
+    placeholderPhone: '5xxxxxxxxx',
+    labelEmail: 'E-mail',
+    placeholderEmail: 'Enter the E-mail',
+    labelSubjectDefault: 'Subject',
+    placeholderSubject: 'Enter the topic',
+    labelMessageDefault: 'Message',
+    placeholderMessage: 'Enter the message',
     labelViolationType: 'Violation Type',
     placeholderViolationType: 'Select violation type',
-    labelCommunicationChannel: 'Communication Channel',
-    placeholderCommunicationChannel: 'Select communication channel',
+    labelChannel: 'Communication Channel',
+    placeholderChannel: 'Select communication channel',
     violationTypes: [
       'Financial and Administrative Corruption',
       'Violation of Systems, Laws, and Regulations',
@@ -102,72 +91,97 @@ const t = {
       'Knowledge of Cases Concealing Systemic Errors',
       'Money Laundering and Financing Terrorism',
     ],
-    communicationChannels: ['Phone', 'Twitter', 'Email', 'Mobile App', 'Website', 'Other'],
+    channels: ['Phone', 'Twitter', 'Email', 'Mobile App', 'Website', 'Other'],
+    clearBtn: 'Clear all',
+    sendBtn: 'Send',
+    charsRemaining: (n: number) => `${n.toLocaleString()} characters are remaining`,
+  },
+  ar: {
+    breadcrumbHome: 'الرئيسية',
+    breadcrumbCurrent: 'ارسل رسالة',
+    sideTitle1: 'تواصل معنا',
+    sideTitle2: 'لمساعدتك',
+    sideDesc: 'يمكنك التواصل معنا بسرية تامة حتى يصلنا بلاغك دون الكشف عن بياناتك الشخصية',
+    sideDay: 'من الأحد حتى الخميس',
+    sideHours: 'من 9:00 صباحاً حتى 5:00 مساءً',
+    subtitle: 'يمكنك الاتصال بنا من خلال هاتف خدمة العملاء أو نموذج الاتصال أو من خلال حساباتنا على وسائل التواصل الاجتماعي',
+    labelType: 'النوع',
+    messageTypes: ['استفسار', 'شكوى', 'اقتراح', 'بلاغ', 'الإبلاغ عن مخالفة', 'الإبلاغ عن احتيال مالي'],
+    violationIdx: 4,
+    fraudIdx: 5,
+    labelName: 'الاسم',
+    placeholderName: 'أدخل الاسم',
+    labelPhone: 'رقم الجوال',
+    placeholderPhone: '5xxxxxxxxx',
+    labelEmail: 'البريد الإلكتروني',
+    placeholderEmail: 'أدخل البريد الإلكتروني',
+    labelSubjectDefault: 'الموضوع',
+    placeholderSubject: 'أدخل الموضوع',
+    labelMessageDefault: 'الرسالة',
+    placeholderMessage: 'أدخل نص الرسالة',
+    labelViolationType: 'نوع المخالفة',
+    placeholderViolationType: 'اختر نوع المخالفة',
+    labelChannel: 'قناة التواصل',
+    placeholderChannel: 'اختر قناة التواصل',
+    violationTypes: [
+      'الفساد المالي والإداري',
+      'مخالفة الأنظمة والقوانين واللوائح',
+      'مخالفة سياسات وإجراءات الشركة',
+      'السلوك غير اللائق أو مخالفة القيم الإسلامية والأعراف والتقاليد',
+      'إساءة استخدام أصول الشركة',
+      'التعسف في استخدام السلطة من قبل موظفي الشركة',
+      'تمرير معاملات غير نظامية',
+      'تضارب المصالح الواضح',
+      'العلم بحالات إخفاء الأخطاء المنهجية',
+      'غسيل الأموال وتمويل الإرهاب',
+    ],
+    channels: ['الهاتف', 'تويتر', 'البريد الإلكتروني', 'تطبيق الجوال', 'الموقع الإلكتروني', 'أخرى'],
+    clearBtn: 'مسح الكل',
+    sendBtn: 'إرسال',
+    charsRemaining: (n: number) => `${n.toLocaleString('ar-SA')} حرف متبقي`,
   },
 };
 
 function Dropdown({
-  label,
-  placeholder,
-  value,
-  options,
-  onChange,
-  isRtl,
+  label, placeholder, value, options, onChange, isRtl,
 }: {
-  label: string;
-  placeholder: string;
-  value: string;
-  options: string[];
-  onChange: (v: string) => void;
-  isRtl: boolean;
+  label: string; placeholder: string; value: string;
+  options: string[]; onChange: (v: string) => void; isRtl: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const h = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, []);
 
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-[#344054] text-[14px] font-medium">
-        {label} <span className="text-red-500">*</span>
+        {label} <span className="text-[#d92d20]">*</span>
       </label>
       <div ref={ref} className="relative">
         <button
           type="button"
-          onClick={() => setOpen((o) => !o)}
+          onClick={() => setOpen(o => !o)}
           className="w-full flex items-center justify-between border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] bg-white focus:outline-none focus:border-[#0063F5] cursor-pointer"
         >
           <span className={value ? 'text-[#101828]' : 'text-[#98a2b3]'}>{value || placeholder}</span>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#667085"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
-          >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}>
             <polyline points="6,9 12,15 18,9" />
           </svg>
         </button>
         {open && (
-          <div
-            className={`absolute top-full mt-1 z-10 w-full bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] p-4 flex flex-col ${isRtl ? 'right-0' : 'left-0'}`}
-          >
-            {options.map((opt) => (
-              <button
-                key={opt}
-                type="button"
+          <div className={`absolute top-full mt-1 z-10 w-full bg-white border border-[#efefef] rounded-[6px] shadow-[0px_12px_20px_0px_rgba(0,0,0,0.08)] p-2 flex flex-col max-h-[240px] overflow-y-auto ${isRtl ? 'right-0' : 'left-0'}`}>
+            {options.map(opt => (
+              <button key={opt} type="button"
                 onClick={() => { onChange(opt); setOpen(false); }}
-                className={`flex items-center px-4 py-1.5 w-full text-[14px] text-[#667085] font-[590] hover:bg-[#F9FAFB] rounded ${isRtl ? 'text-right' : 'text-left'}`}
+                className={`px-4 py-2 w-full text-[14px] text-[#667085] hover:bg-[#F9FAFB] rounded ${isRtl ? 'text-right' : 'text-left'}`}
               >
                 {opt}
               </button>
@@ -183,253 +197,200 @@ export default function ContactUs({ lang }: { lang: Lang }) {
   const isRtl = lang === 'ar';
   const c = t[lang];
   const [form, setForm] = useState({
-    type: '',
-    name: '',
-    phone: '',
-    email: '',
-    subject: '',
-    message: '',
-    violationType: '',
-    communicationChannel: '',
+    type: '', name: '', phone: '', email: '',
+    subject: '', message: '', violationType: '', channel: '',
   });
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  const change = (field: string, value: string) =>
+    setForm(prev => ({ ...prev, [field]: value }));
 
-  const handleClear = () => {
-    setForm({ type: '', name: '', phone: '', email: '', subject: '', message: '', violationType: '', communicationChannel: '' });
-  };
+  const clear = () =>
+    setForm({ type: '', name: '', phone: '', email: '', subject: '', message: '', violationType: '', channel: '' });
 
-  const isReportViolation = form.type === c.messageTypes[4];
-  const isReportFraud = form.type === c.messageTypes[5];
+  const isViolation = form.type === c.messageTypes[c.violationIdx];
+  const isFraud     = form.type === c.messageTypes[c.fraudIdx];
+  const charsLeft   = MAX_CHARS - form.message.length;
+  const subjectLabel  = (form.type && subjectLabels[lang][form.type]) || c.labelSubjectDefault;
+  const messageLabel  = (form.type && messageLabels[lang][form.type]) || c.labelMessageDefault;
+
+  const inputCls = 'border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5] w-full';
 
   return (
     <div className="min-h-screen bg-white" dir={isRtl ? 'rtl' : 'ltr'}>
       <WebNavbar lang={lang} />
 
       {/* Breadcrumb */}
-      <div className="border-b border-[#EAECF0] px-6 py-3">
-        <div className="max-w-[1200px] mx-auto flex items-center gap-2 text-[13px]">
-          <a href="#" className="text-[#0063F5] hover:underline">{c.breadcrumbHome}</a>
+      <div className="max-w-[1440px] mx-auto px-[75px] py-6">
+        <div className="flex items-center gap-2 text-[14px]">
+          <a href={isRtl ? '/landing' : '/landing/en'} className="text-[#344054] hover:text-[#0063F5]">{c.breadcrumbHome}</a>
           <span className="text-[#98a2b3]">/</span>
-          <span className="text-[#344054]">{c.breadcrumbCurrent}</span>
+          <span className="text-[#344054] font-medium">{c.breadcrumbCurrent}</span>
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="flex-1">
-              <img src={imgMailbox} alt="" className="w-[180px] md:w-[220px] mb-6" />
-              <h1 className="text-[#101828] text-[30px] md:text-[40px] font-bold mb-4">{c.heroTitle}</h1>
-              <p className="text-[#475467] text-[15px] md:text-[16px] leading-[1.75] mb-3">{c.heroDesc}</p>
-              <p className="text-[#0063F5] text-[14px] font-medium">{c.hours}</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Main content */}
+      <div className="max-w-[1440px] mx-auto px-[75px] pb-20">
+        <div className="flex gap-[80px] items-start px-[32px]">
 
-      {/* Form + Contact Info */}
-      <section className="pb-20 px-6">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Sidebar — dark card */}
+          <div className="shrink-0 w-[330px] relative pt-[140px]">
+            <div className="relative bg-[#303030] rounded-[32px] flex flex-col gap-[16px] items-start pb-[64px] pt-[150px] px-[40px]">
+              {/* Illustration — overlaps top of card */}
+              <img src={imgMailSmall} alt="" className="absolute pointer-events-none"
+                style={{ width: 67, height: 54, left: 40, top: -77 }} />
+              <img src={imgMailbox} alt="" className="absolute pointer-events-none"
+                style={{ width: 213, height: 198, left: 77, top: -117 }} />
 
-          {/* Form */}
-          <div className="lg:col-span-2">
-            <h2 className="text-[#101828] text-[22px] font-bold mb-8">{c.formTitle}</h2>
-            <div className="flex flex-col gap-5">
+              {/* Title */}
+              <div className="flex flex-col w-full">
+                <p className="text-[#ffdd33] text-[40px] font-semibold leading-[1.25]">{c.sideTitle1}</p>
+                <p className="text-white text-[40px] font-semibold leading-[1.25]">{c.sideTitle2}</p>
+              </div>
 
-              {/* Type */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[#344054] text-[14px] font-medium">
-                  {c.labelType} <span className="text-red-500">*</span>
-                </label>
-                <div className="flex flex-wrap gap-x-8 gap-y-3 py-2">
-                  {c.messageTypes.map((mt) => {
-                    const selected = form.type === mt;
-                    return (
-                      <label key={mt} className="flex items-center gap-2 cursor-pointer">
-                        <div
-                          className={`relative shrink-0 w-5 h-5 rounded-full border ${selected ? 'border-[#0063F5] bg-[#EFF6FF]' : 'border-[#D0D5DD] bg-white'}`}
-                          onClick={() => handleChange('type', mt)}
-                        >
-                          {selected && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-2.5 h-2.5 rounded-full bg-[#0063F5]" />
-                            </div>
-                          )}
-                          <input
-                            type="radio"
-                            name="messageType"
-                            value={mt}
-                            checked={selected}
-                            onChange={() => handleChange('type', mt)}
-                            className="sr-only"
-                          />
-                        </div>
-                        <span className="text-[16px] text-[#344054] font-medium whitespace-nowrap">{mt}</span>
-                      </label>
-                    );
-                  })}
+              {/* Description */}
+              <div className="py-[10px]">
+                <p className="text-[#aaa] text-[16px] leading-[1.72] tracking-[0.15px]">{c.sideDesc}</p>
+              </div>
+
+              {/* Hours */}
+              <div className="flex flex-col gap-[16px] py-[10px] w-full">
+                <div className="flex gap-[10px] items-center">
+                  <img src={imgCalendar} alt="" className="w-5 h-5 shrink-0" />
+                  <p className="text-white text-[14px] leading-[1.72] tracking-[0.15px]">{c.sideDay}</p>
+                </div>
+                <div className="flex gap-[10px] items-center">
+                  <img src={imgTimeCicle} alt="" className="w-5 h-5 shrink-0" />
+                  <p className="text-white text-[14px] leading-[1.72] tracking-[0.15px]">{c.sideHours}</p>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Violation Type — shown when "Report a Violation" is selected */}
-              {isReportViolation && (
-                <Dropdown
-                  label={c.labelViolationType}
-                  placeholder={c.placeholderViolationType}
-                  value={form.violationType}
-                  options={c.violationTypes}
-                  onChange={(v) => handleChange('violationType', v)}
-                  isRtl={isRtl}
-                />
-              )}
+          {/* Form area */}
+          <div className="flex-1 min-w-0">
+            {/* Subtitle */}
+            <p className="text-[#344054] text-[16px] leading-[1.75] mb-6">{c.subtitle}</p>
 
-              {/* Communication Channel — shown when "Report Financial Fraud" is selected */}
-              {isReportFraud && (
-                <Dropdown
-                  label={c.labelCommunicationChannel}
-                  placeholder={c.placeholderCommunicationChannel}
-                  value={form.communicationChannel}
-                  options={c.communicationChannels}
-                  onChange={(v) => handleChange('communicationChannel', v)}
-                  isRtl={isRtl}
-                />
-              )}
+            <hr className="border-[#EAECF0] mb-6" />
 
-              {/* Name */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[#344054] text-[14px] font-medium">
-                  {c.labelName} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder={c.placeholderName}
-                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5]"
-                />
+            {/* Type */}
+            <div className="flex flex-col gap-3 mb-6">
+              <p className="text-[#344054] text-[14px] font-medium">
+                {c.labelType} <span className="text-[#d92d20]">*</span>
+              </p>
+              <div className="flex flex-wrap gap-x-8 gap-y-3">
+                {c.messageTypes.map(mt => {
+                  const sel = form.type === mt;
+                  return (
+                    <label key={mt} className="flex items-center gap-2 cursor-pointer">
+                      <div
+                        className={`relative shrink-0 w-5 h-5 rounded-full border-2 transition-colors ${sel ? 'border-[#0063F5] bg-[#0063F5]' : 'border-[#D5D7DA] bg-white'}`}
+                        onClick={() => change('type', mt)}
+                      >
+                        {sel && <div className="absolute inset-[3px] rounded-full bg-white" />}
+                        <input type="radio" name="messageType" value={mt} checked={sel}
+                          onChange={() => change('type', mt)} className="sr-only" />
+                      </div>
+                      <span className="text-[16px] text-[#344054] whitespace-nowrap">{mt}</span>
+                    </label>
+                  );
+                })}
               </div>
+            </div>
 
-              {/* Phone */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[#344054] text-[14px] font-medium">
-                  {c.labelPhone} <span className="text-red-500">*</span>
-                </label>
-                <div className="flex border border-[#D0D5DD] rounded-lg overflow-hidden focus-within:border-[#0063F5]">
-                  <div className="flex items-center px-4 bg-[#F9FAFB] border-e border-[#D0D5DD]">
-                    <span className="text-[14px] text-[#344054] font-medium">+966</span>
+            <hr className="border-[#EAECF0] mb-6" />
+
+            <div className="flex flex-col gap-5">
+
+              {/* Violation Type */}
+              {isViolation && (
+                <Dropdown label={c.labelViolationType} placeholder={c.placeholderViolationType}
+                  value={form.violationType} options={c.violationTypes}
+                  onChange={v => change('violationType', v)} isRtl={isRtl} />
+              )}
+
+              {/* Channel */}
+              {isFraud && (
+                <Dropdown label={c.labelChannel} placeholder={c.placeholderChannel}
+                  value={form.channel} options={c.channels}
+                  onChange={v => change('channel', v)} isRtl={isRtl} />
+              )}
+
+              {/* Name + Phone — 2 columns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#344054] text-[14px] font-medium">
+                    {c.labelName} <span className="text-[#d92d20]">*</span>
+                  </label>
+                  <input type="text" value={form.name} onChange={e => change('name', e.target.value)}
+                    placeholder={c.placeholderName} className={inputCls} />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#344054] text-[14px] font-medium">
+                    {c.labelPhone} <span className="text-[#d92d20]">*</span>
+                  </label>
+                  <div className="flex border border-[#D0D5DD] rounded-lg overflow-hidden focus-within:border-[#0063F5]">
+                    <div className="flex items-center px-3 bg-[#F9FAFB] border-e border-[#D0D5DD] shrink-0">
+                      <span className="text-[14px] text-[#344054] font-medium">+966</span>
+                    </div>
+                    <input type="tel" value={form.phone} onChange={e => change('phone', e.target.value)}
+                      placeholder={c.placeholderPhone}
+                      className="flex-1 px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none bg-white" />
                   </div>
-                  <input
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                    placeholder="5X XXX XXXX"
-                    className="flex-1 px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none bg-white"
-                  />
                 </div>
               </div>
 
               {/* Email */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[#344054] text-[14px] font-medium">
-                  {c.labelEmail} <span className="text-red-500">*</span>
+                  {c.labelEmail} <span className="text-[#d92d20]">*</span>
                 </label>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  placeholder={c.placeholderEmail}
-                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5]"
-                />
+                <input type="email" value={form.email} onChange={e => change('email', e.target.value)}
+                  placeholder={c.placeholderEmail} className={inputCls} />
               </div>
 
               {/* Subject */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[#344054] text-[14px] font-medium">
-                  {c.labelSubject} <span className="text-red-500">*</span>
+                  {subjectLabel} <span className="text-[#d92d20]">*</span>
                 </label>
-                <input
-                  type="text"
-                  value={form.subject}
-                  onChange={(e) => handleChange('subject', e.target.value)}
-                  placeholder={c.placeholderSubject}
-                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5]"
-                />
+                <input type="text" value={form.subject} onChange={e => change('subject', e.target.value)}
+                  placeholder={c.placeholderSubject} className={inputCls} />
               </div>
 
               {/* Message */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[#344054] text-[14px] font-medium">{c.labelMessage}</label>
-                <textarea
-                  value={form.message}
-                  onChange={(e) => handleChange('message', e.target.value)}
+                <label className="text-[#344054] text-[14px] font-medium">
+                  {messageLabel} <span className="text-[#d92d20]">*</span>
+                </label>
+                <textarea value={form.message}
+                  onChange={e => change('message', e.target.value.slice(0, MAX_CHARS))}
                   placeholder={c.placeholderMessage}
-                  maxLength={1000}
                   rows={5}
-                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5] resize-none"
-                />
-                <p className="text-[12px] text-[#98a2b3] text-end">{form.message.length}/1000</p>
+                  className="border border-[#D0D5DD] rounded-lg px-4 py-3 text-[14px] text-[#101828] placeholder:text-[#98a2b3] focus:outline-none focus:border-[#0063F5] resize-none w-full" />
+                <div className="flex items-center justify-between">
+                  <p className="text-[12px] text-[#98a2b3]">{c.charsRemaining(charsLeft)}</p>
+                  <button onClick={clear} type="button"
+                    className="text-[12px] text-[#344054] hover:text-[#0063F5] cursor-pointer flex items-center gap-1">
+                    <span>×</span> {c.clearBtn}
+                  </button>
+                </div>
               </div>
 
-              {/* Buttons */}
-              <div className="flex gap-3 justify-end">
-                <button
-                  onClick={handleClear}
-                  className="border border-[#D0D5DD] text-[#344054] text-[14px] font-semibold px-6 py-2.5 rounded-lg hover:bg-[#F9FAFB] transition-colors cursor-pointer"
-                >
-                  {c.clearBtn}
-                </button>
-                <button className="bg-[#0063F5] text-white text-[14px] font-semibold px-8 py-2.5 rounded-lg hover:bg-[#0052d0] transition-colors cursor-pointer">
+              {/* Send button */}
+              <div>
+                <button type="button"
+                  className="bg-[#0063F5] hover:bg-[#0052d0] text-white text-[16px] font-semibold px-[32px] py-[16px] rounded-[48px] flex items-center gap-[10px] transition-colors cursor-pointer">
                   {c.sendBtn}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="lg:col-span-1">
-            <h2 className="text-[#101828] text-[22px] font-bold mb-8">{c.contactTitle}</h2>
-            <div className="flex flex-col gap-6">
-              <div className="flex items-start gap-3">
-                <img src={imgEmailIcon} alt="" className="w-5 h-5 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-[#101828] text-[14px] font-semibold mb-1">{c.emailLabel}</p>
-                  <a href="mailto:info@tamawal.sa" className="text-[#0063F5] text-[14px] hover:underline">info@tamawal.sa</a>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <img src={imgPhoneIcon} alt="" className="w-5 h-5 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-[#101828] text-[14px] font-semibold mb-1">{c.phoneLabel}</p>
-                  <p className="text-[#475467] text-[14px]">011 512 3870</p>
-                  <p className="text-[#475467] text-[14px]">800 100 0276</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <img src={imgLocationIcon} alt="" className="w-4 h-4 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-[#101828] text-[14px] font-semibold mb-1">{c.addressLabel}</p>
-                  <p className="text-[#475467] text-[14px] leading-[1.6]">{c.addressText}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 mt-0.5 shrink-0 flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#667085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.166 10h11.667M10 15.833 15.833 10 10 4.167" stroke="currentColor" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </div>
-                <div>
-                  <p className="text-[#101828] text-[14px] font-semibold mb-1">{c.hoursLabel}</p>
-                  <p className="text-[#475467] text-[14px]">{c.hoursText}</p>
-                </div>
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <WebFooter lang={lang} />
     </div>

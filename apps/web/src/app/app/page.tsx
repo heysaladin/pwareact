@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Navbar from '@/components/Navbar';
-import SlidingMenu from '@/components/SlidingMenu';
+import WebNavbar from '@/components/WebNavbar';
 
 // ── Hero assets ──────────────────────────────────────────────────────────────
 const imgBg          = "http://localhost:3845/assets/99f675afb55c489754593b085eb84d227ae42bf5.svg";
@@ -61,6 +60,37 @@ function ArrowRight({ color = '#414651', className = 'w-5 h-5' }: { color?: stri
     </svg>
   );
 }
+
+const howItWorksSlides = [
+  {
+    img: '/works-summary/1.svg',
+    alt: '1',
+    title: 'Apply securely with Tamawal',
+    body: `It takes five minutes from start to finish. We'll just need some basic information about your data and apply for the loan type you want, only necessary information from your application will be used by our partners to generate personalized offers for you.\n\nWe do not share your contact details until you have chosen an offer.`,
+    list: [] as string[],
+  },
+  {
+    img: '/works-summary/3.svg',
+    alt: '3',
+    title: 'Compare tailored loan offers',
+    body: `You will see the details of all loan offers - personalized and unique to you. Compare and choose the loan that meets your needs! `,
+    list: ['Rates are Real;', 'No markups and no hidden fees;', 'Everything is 100% Transparent and Free'],
+  },
+  {
+    img: '/works-summary/2.svg',
+    alt: '2',
+    title: 'Get your money',
+    body: `After final checks and contract signing your offer and then receiving your loan amount.\n\nEnjoy your day!`,
+    list: [] as string[],
+  },
+];
+
+const loanProducts = [
+  { img: '/products/personal.svg',  alt: 'personal',  title: 'Personal Loan',  subtitle: 'Up To 150,000 SAR', badgeBg: '' },
+  { img: '/products/card.svg',      alt: 'card',      title: 'Credit Card',    subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+  { img: '/products/car.svg',       alt: 'car',       title: 'Car Loan',       subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+  { img: '/products/mortgage.svg',  alt: 'mortgage',  title: 'Mortgage Loan',  subtitle: 'Up To 150,000 SAR', badgeBg: 'bg-[rgba(152,162,179,0.32)]' },
+];
 
 const faqs = [
   {
@@ -127,6 +157,7 @@ function SalarySlider() {
   const [value, setValue]     = useState(7000);
   const [editing, setEditing] = useState(false);
   const [inputStr, setInputStr] = useState('');
+  const [salaryError, setSalaryError] = useState(false);
   const viewportRef = useRef<HTMLDivElement>(null);
   const canvasRef   = useRef<HTMLCanvasElement>(null);
   const txRef       = useRef(0);
@@ -159,6 +190,7 @@ function SalarySlider() {
       canvasRef.current.style.transform = `translateX(${txRef.current}px)`;
     }
     setValue(currentValue(txRef.current));
+    setSalaryError(false);
   }
 
   useEffect(() => {
@@ -214,6 +246,13 @@ function SalarySlider() {
   function commitInput() {
     const raw = parseFloat(inputStr.replace(/,/g, ''));
     if (!isNaN(raw)) {
+      const digits = Math.floor(Math.abs(raw)).toString().length;
+      if (digits < 4 || digits > 6) {
+        setSalaryError(true);
+        setEditing(false);
+        return;
+      }
+      setSalaryError(false);
       const clamped = Math.min(MAX, Math.max(MIN, raw));
       setTxFromValue(clamped);
       applyTx(txRef.current);
@@ -230,11 +269,14 @@ function SalarySlider() {
 
   return (
     <div className="flex flex-col items-center gap-2 w-full">
-      <p className="text-[#475467] text-[13px]">Your Monthly Salary</p>
+      <div className="flex gap-[4px] items-start">
+        <p className="text-[#475467] text-[13px]">Your Monthly Salary</p>
+        <p className="text-[#d91c1c] text-[13px]">*</p>
+      </div>
 
       {/* Editable display */}
       <div
-        className="border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text"
+        className={`border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text ${salaryError ? 'border-[#f03838]' : 'border-[#EEF1F6]'}`}
         onClick={!editing ? handleDisplayClick : undefined}
       >
         <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
@@ -253,6 +295,10 @@ function SalarySlider() {
           <span className="text-[#101828] text-[24px] font-bold">{formatted}</span>
         )}
       </div>
+
+      {salaryError && (
+        <p className="text-[12px] text-[#d91c1c] text-center">Please enter a numeric value with a minimum of 4 digits and a maximum of 6 digits.</p>
+      )}
 
       {/* Canvas ruler row */}
       <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
@@ -460,8 +506,85 @@ function OtpInput({ digits, onChange }: {
   );
 }
 
+function HowItWorksSection() {
+  const [current, setCurrent] = useState(0);
+  const total = howItWorksSlides.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+  const slide = howItWorksSlides[current];
+
+  return (
+    <div className="bg-white">
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
+        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">How it works summary</h2>
+        <div className="relative">
+          <div className="w-full overflow-x-hidden rounded-xl pt-5 md:pt-10 pb-20">
+            <div className="w-full text-[#101828]">
+              <div className="grid grid-cols-2 place-content-center gap-4 md:gap-8">
+                <img alt={slide.alt} width={400} height={400} className="mx-auto me-0 w-full md:w-[400px] h-[400px] object-contain" src={slide.img} />
+                <div className="my-auto mx-0 md:me-20 lg:mx-0">
+                  <h3 className="text-2xl font-semibold mb-5">{slide.title}</h3>
+                  <p className="text-sm font-medium max-w-sm whitespace-pre-line">{slide.body}</p>
+                  {slide.list.length > 0 && (
+                    <ul className="list-disc text-sm font-medium max-w-sm whitespace-pre-line ms-6 mt-2">
+                      {slide.list.map((item) => <li key={item}>{item}</li>)}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 gap-2">
+            {howItWorksSlides.map((_, i) => (
+              <button key={i} onClick={() => setCurrent(i)} className={`block h-1 cursor-pointer rounded-2xl transition-all bg-[#5CACF3] ${i === current ? 'w-8' : 'w-4 border rounded-full border-[#5CACF3] opacity-[24%]'}`} />
+            ))}
+          </div>
+          <button onClick={prev} className="hidden sm:flex absolute top-1/2 left-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+          </button>
+          <button onClick={next} className="hidden sm:flex absolute top-1/2 right-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturedLoansSection() {
+  return (
+    <div className="bg-white">
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
+        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">Featured loans products</h2>
+        <div className="relative">
+          <div className="w-full overflow-x-hidden flex rounded-xl pt-5 md:pt-10 pb-20 sm:pb-5 md:grid md:grid-cols-2 xl:grid-cols-4 md:place-content-center md:gap-8">
+            {loanProducts.map((p) => (
+              <div key={p.alt} className="w-full inline-block flex-none md:w-auto">
+                <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 md:max-w-[20rem] overflow-hidden mx-auto w-full shadow-none">
+                  <div className="bg-clip-border overflow-hidden bg-transparent text-gray-700 shadow-none m-0 rounded-none relative">
+                    <img src={p.img} alt={p.alt} className="w-full px-5" />
+                    <div className={`uppercase w-full text-center py-2 text-sm ${p.badgeBg} text-white font-medium tracking-widest rounded mt-1`}>Coming soon</div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="lg:text-2xl font-semibold mb-3 text-[#292929]">{p.title}</h3>
+                    <p className="text-md text-gray-500 font-medium">{p.subtitle}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="sm:hidden absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 gap-2">
+            {loanProducts.map((_, i) => (
+              <span key={i} className={`block h-1 cursor-pointer rounded-2xl transition-all bg-[#5CACF3] ${i === 0 ? 'w-8' : 'w-4 border rounded-full border-[#5CACF3] opacity-[24%]'}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AppPage() {
-  const [menuOpen, setMenuOpen]         = useState(false);
   const [openFaq, setOpenFaq]           = useState(-1);
   const [loanType, setLoanType]         = useState<'personal' | 'realEstate' | 'car' | 'card'>('personal');
   const [propertyType, setPropertyType] = useState<'All' | 'Ready units' | 'Mortgage' | 'Land' | 'Off-plan purchase' | 'Self-build'>('All');
@@ -477,6 +600,7 @@ export default function AppPage() {
   const phoneDigits = phoneNum.startsWith('0') ? phoneNum.length - 1 : phoneNum.length;
   const phoneValid = phoneDigits >= 9;
   const phoneError = phoneNum.length > 0 && !phoneValid;
+  const phoneIsValid = phoneNum.length > 0 && phoneValid;
 
   useEffect(() => {
     if (formStep !== 'otp' || countdown <= 0) return;
@@ -511,8 +635,7 @@ export default function AppPage() {
 
   return (
     <div className="bg-[#f9f8fd]">
-      {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
-      <Navbar onMenuOpen={() => setMenuOpen(true)} dark langHref="/app/ar" />
+      <WebNavbar lang="en" dark />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative bg-[#F9F8FD] overflow-hidden">
@@ -730,7 +853,7 @@ export default function AppPage() {
                               <>
                                 <div className="flex flex-col gap-2 items-center w-full">
                                   <p className="text-white text-[13px]">Mobile Number</p>
-                                  <div className={`flex flex-col gap-1 w-full rounded-[8px] pb-1 ${phoneError ? 'bg-[#FECDCA] border border-[#FECDCA]' : ''}`}>
+                                  <div className={`flex flex-col gap-1 w-full rounded-[8px] pb-1 ${phoneError ? 'bg-[#FECDCA] border border-[#FECDCA]' : phoneIsValid ? 'bg-[#DCFAE6] border border-[#DCFAE6]' : ''}`}>
                                     <div className="bg-[#0041a3] border border-[#00317a] rounded-[8px] pl-3 pr-4 py-3 flex items-center w-full gap-[2px]">
                                       <span className="text-white text-[24px] font-bold mr-1 shrink-0">+966</span>
                                       {hasLeadingZero && (
@@ -757,6 +880,11 @@ export default function AppPage() {
                                     {phoneError && (
                                       <div className="px-3">
                                         <p className="text-[#D92D20] text-[16px]">Invalid mobile number</p>
+                                      </div>
+                                    )}
+                                    {phoneIsValid && (
+                                      <div className="px-3">
+                                        <p className="text-[#079455] text-[16px]">Mobile number valid</p>
                                       </div>
                                     )}
                                   </div>
@@ -874,6 +1002,12 @@ export default function AppPage() {
           </div>
         </div>
       </section>
+
+      {/* ── How it works ─────────────────────────────────────────────────── */}
+      <HowItWorksSection />
+
+      {/* ── Featured loans ───────────────────────────────────────────────── */}
+      <FeaturedLoansSection />
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="bg-white py-10 md:py-[94px] px-6 md:px-[75px] flex items-center justify-center">

@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 67.5564 86.0334" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask group">
+<mask id="mask0_4429_93736" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="68" height="87">
+<rect id="Rectangle 2401" width="67.5564" height="86.0334" fill="var(--fill-0, #D0D8DC)"/>
+</mask>
+<g mask="url(#mask0_4429_93736)">
+<path id="Rectangle 2372" d="M59.8138 8.8443C64.4445 6.1775 70.1491 6.17013 74.7926 8.82496L132.786 41.9817C135.875 43.7478 135.894 48.1869 132.821 49.9738L74.8812 83.6616C70.194 86.3869 64.3959 86.3762 59.7128 83.6336L2.23144 49.9701C-0.82789 48.1784 -0.815353 43.7602 2.25408 41.9926L59.8138 8.8443Z" fill="var(--fill-0, #D0D5DD)"/>
+<path id="Rectangle 2373" d="M59.8137 2.2448C64.4444 -0.422001 70.149 -0.42937 74.7924 2.22546L132.785 35.3822C135.875 37.1483 135.894 41.5874 132.821 43.3743L74.8811 77.0621C70.1939 79.7874 64.3958 79.7767 59.7127 77.0341L2.23134 43.3706C-0.827997 41.5789 -0.815461 37.1608 2.25397 35.3931L59.8137 2.2448Z" fill="var(--fill-0, #D0D5DD)"/>
+<rect id="Rectangle 2374" x="0.00112774" y="39.0335" width="135.113" height="6.92886" fill="var(--fill-0, #D0D5DD)"/>
+</g>
+</g>
+</svg>

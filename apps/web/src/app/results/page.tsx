@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SlidingMenu from '../../components/SlidingMenu';
 import Navbar from '../../components/Navbar';
+import PayoutTimeModal from '../../components/PayoutTimeModal';
 
 // ── Asset constants ───────────────────────────────────────────────────────────
 const imgLogo        = "/logo-tamawal-web.svg";
@@ -111,6 +112,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   const PREF_MIN = 2000;
   const PREF_MAX = 150000;
   const [openSections, setOpenSections] = useState({ greatFor: true, beware: true, docs: true, conditions: true });
+  const [showPayoutModal, setShowPayoutModal] = useState(false);
 
   const periods = [12, 18, 24, 30, 36, 42, 54, 60];
   const disabledPeriods = [42, 54, 60];
@@ -157,7 +159,9 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 
   const payoutCardJSX = (
     <div className="bg-white border border-[#eef1f6] rounded-[8px] p-[16px] flex items-center gap-[20px]">
-      <img src="/icon-payout-time.svg" alt="" className="w-[56px] h-[56px] shrink-0" />
+      <button onClick={() => setShowPayoutModal(true)} className="shrink-0">
+        <img src="/icon-payout-time.svg" alt="" className="w-[56px] h-[56px] shrink-0" />
+      </button>
       <p className="text-[15.5px] font-semibold text-[#202a39]">Finalization &amp; Disbursement immediately</p>
     </div>
   );
@@ -247,6 +251,8 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   );
 
   return (
+    <>
+      {showPayoutModal && <PayoutTimeModal onClose={() => setShowPayoutModal(false)} />}
     <div
       className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-[6px] overflow-y-auto"
       onClick={onClose}
@@ -379,11 +385,12 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
         </div>
       </div>
     </div>
+    </>
   );
 }
 
 // ── Loan Card ─────────────────────────────────────────────────────────────────
-function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: () => void }) {
+function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[number]; onDetails: () => void; onPayoutClick: () => void }) {
   return (
     <div className="border border-[#dadee3] rounded-[16px] bg-white overflow-hidden mb-4">
 
@@ -433,9 +440,9 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
         </div>
         {/* Bottom row: time icon + favorite + button */}
         <div className="flex gap-[48px] items-center w-full">
-          <div className="shrink-0">
+          <button className="shrink-0" onClick={onPayoutClick}>
             <img src="/icon-payout-time.svg" alt="" className="w-[40px] h-[40px]" />
-          </div>
+          </button>
           <div className="flex flex-1 gap-[16px] items-center min-w-0">
             <button className="shrink-0">
               <img src="/icon-favorite.svg" alt="Favorite" className="w-6 h-6" />
@@ -513,15 +520,18 @@ function LoanCard({ loan, onDetails }: { loan: typeof loans[number]; onDetails: 
           </div>
           <div className="flex gap-[5px] items-center w-full">
             <div className="flex flex-col flex-1">
-              <span className="text-[16px] font-semibold text-[#667085]">APR</span>
+              <div className="flex gap-[4px] items-baseline text-[#667085]">
+                <span className="text-[16px] font-semibold">APR</span>
+                <span className="text-[12px]">from</span>
+              </div>
               <span className="text-[32px] font-bold text-[#101828]">{loan.rate}%</span>
-              <span className="text-[12px] text-[#667085]">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
             </div>
-            <div className="flex flex-col items-end flex-1">
-              <p className="text-[12px] text-[#667085] text-right w-[156px] leading-[normal]">Finalization &amp; Disbursement within 1 to 2 working days</p>
+            <div className="flex flex-col gap-[8px] items-end flex-1">
+              <img src="/icon-payout-time.svg" alt="" className="w-[40px] h-[40px]" />
+              <p className="text-[12px] text-[#667085] text-right leading-[normal]">Finalization &amp; Disbursement immediately</p>
             </div>
           </div>
-          <div className="flex gap-[48px] items-center w-full">
+          <div className="flex items-center justify-between w-full">
             <button className="flex items-center gap-[4px] text-[#98a2b3]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#98A2B3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               <span className="text-[16px]">Add to favorite</span>
@@ -655,9 +665,11 @@ export default function ResultsPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedLoanIdx, setSelectedLoanIdx] = useState<number | null>(null);
+  const [showPayoutModal, setShowPayoutModal] = useState(false);
 
   return (
     <div className="bg-white">
+      {showPayoutModal && <PayoutTimeModal onClose={() => setShowPayoutModal(false)} />}
       {selectedLoanIdx !== null && (
         <ProductDetailsModal loan={loans[selectedLoanIdx]} onClose={() => setSelectedLoanIdx(null)} />
       )}
@@ -676,9 +688,9 @@ export default function ResultsPage() {
               <span className="text-[16px] font-semibold">Back</span>
             </button>
             <div className="flex flex-col gap-[8px]">
-              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
+              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">Preliminary search</p>
               <p className="text-[16px] text-[#525252] leading-[1.5]">
-                This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
+                You may be eligible for 1 of One Product for Personal Loan
               </p>
             </div>
           </div>
@@ -691,9 +703,9 @@ export default function ResultsPage() {
             </button>
             <div className="flex items-center gap-[64px]">
               <div className="flex flex-col gap-[2px] flex-1">
-                <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">Search results</p>
+                <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">Preliminary search</p>
                 <p className="text-[16px] text-[#525252] leading-[1.72]">
-                  This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
+                  You may be eligible for 1 of One Product for Personal Loan
                 </p>
               </div>
               <div className="relative flex-shrink-0">
@@ -729,8 +741,16 @@ export default function ResultsPage() {
           {/* Loan cards */}
           <div className="pb-6">
             {loans.map((loan, i) => (
-              <LoanCard key={i} loan={loan} onDetails={() => setSelectedLoanIdx(i)} />
+              <LoanCard key={i} loan={loan} onDetails={() => setSelectedLoanIdx(i)} onPayoutClick={() => setShowPayoutModal(true)} />
             ))}
+          </div>
+
+          {/* More products */}
+          <div className="flex justify-center pb-10">
+            <button className="bg-[#fdb022] text-[#101828] text-[16px] font-semibold px-[32px] py-[20px] rounded-[48px] flex items-center gap-[8px]">
+              More products
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 15.833 15.833 10 10 4.167" stroke="#101828" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
           </div>
 
         </div>
