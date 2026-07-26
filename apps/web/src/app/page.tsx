@@ -30,6 +30,23 @@ const projects = [
       </svg>
     ),
   },
+  {
+    id: 'ceer',
+    name: 'Ceer',
+    description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
+    href: '/ceer',
+    tag: 'EV',
+    accentColor: '#0D0D0D',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12.5h1.5M19.5 12.5H21M5 9.5l1.5 3h11l1.5-3H5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6.5 12.5v1.5a1 1 0 001 1h9a1 1 0 001-1v-1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="8.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="15.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8 9.5l1-3h6l1 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
 ];
 
 export default function HubPage() {

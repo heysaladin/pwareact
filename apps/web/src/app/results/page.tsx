@@ -8,8 +8,6 @@ import PayoutTimeModal from '../../components/PayoutTimeModal';
 
 // ── Asset constants ───────────────────────────────────────────────────────────
 const imgLogo        = "/logo-tamawal-web.svg";
-const imgLogoBlue    = "/logo-tamawal-web-blue.svg";
-const imgNavArrow    = "http://localhost:3845/assets/4c4ae62485902829fc9e816c9e3b6272289709e3.svg";
 const imgMenuIcon    = "/icon-menu.svg";
 const imgBackArrow   = "/arrow-narrow-left.svg";
 const imgSortIcon    = "/icon-sort.png";
@@ -55,7 +53,7 @@ function StarRating({ rating, size = 16, numSize = '20.747px' }: { rating: numbe
                   <defs>
                     <linearGradient id={`half-${star}`} x1="0" x2="1" y1="0" y2="0">
                       <stop offset="50%" stopColor="#FDD849" />
-                      <stop offset="50%" stopColor="#E4E7EC" />
+                      <stop offset="50%" stopColor="#ffffff33" />
                     </linearGradient>
                   </defs>
                   <path d="M8 1.33L9.83 5.05L14 5.68L11 8.6L11.66 12.76L8 10.83L4.34 12.76L5 8.6L2 5.68L6.17 5.05L8 1.33Z"
@@ -63,13 +61,15 @@ function StarRating({ rating, size = 16, numSize = '20.747px' }: { rating: numbe
                 </>
               ) : (
                 <path d="M8 1.33L9.83 5.05L14 5.68L11 8.6L11.66 12.76L8 10.83L4.34 12.76L5 8.6L2 5.68L6.17 5.05L8 1.33Z"
-                  fill={filled ? "#FDD849" : "#E4E7EC"} />
+                  fill={filled ? "#FDD849" : "#ffffff20"} />
               )}
             </svg>
           );
         })}
       </div>
-      <span className="font-bold text-[#344054]" style={{ fontSize: numSize }}>{rating.toFixed(1)}</span>
+      {numSize !== '0px' && (
+        <span className="font-bold text-white/70" style={{ fontSize: numSize }}>{rating.toFixed(1)}</span>
+      )}
     </div>
   );
 }
@@ -82,17 +82,17 @@ function AccordionSection({ title, isOpen, onToggle, children }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-[#eef1f6] rounded-[8px] overflow-hidden">
+    <div className="border border-white/[0.08] rounded-[8px] overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between px-[16px] py-[14px]"
       >
-        <span className="text-[15.5px] font-semibold text-[#202a39]">{title}</span>
+        <span className="text-[15.5px] font-semibold text-white">{title}</span>
         <svg
           width="20" height="20" viewBox="0 0 20 20" fill="none"
           className={`transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`}
         >
-          <path d="M5 7.5L10 12.5L15 7.5" stroke="#667085" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
       {isOpen && (
@@ -100,6 +100,85 @@ function AccordionSection({ title, isOpen, onToggle, children }: {
           {children}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Tamawal Popup ─────────────────────────────────────────────────────────────
+function TamawalPopup({ loan, onClose }: { loan: typeof loans[number]; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+  const deepLink = 'twl.app/web?ref=6114378a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t';
+
+  function handleCopy() {
+    navigator.clipboard.writeText(`https://${deepLink}`).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-[8px] flex items-center justify-center px-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#111] border border-white/[0.08] rounded-2xl w-full max-w-[960px] flex items-stretch overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Left col */}
+        <div className="flex-1 flex flex-col gap-6 px-[56px] py-[72px]">
+          <img alt="" className="w-[188px] h-[188px]" src="/payment_success.svg" />
+          <div className="flex flex-col gap-[16px]">
+            <h2 className="text-[36px] font-bold text-white leading-[1.25]">Scan QR Code to continue</h2>
+            <p className="text-[16px] text-white/50 leading-[1.6] max-w-[440px]">
+              To continue and access the full range of Tamawal services, please scan the QR code to proceed in the Tamawal mobile application.
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="mt-auto w-fit border border-white/10 text-white/40 text-sm font-medium px-5 py-2.5 rounded-full hover:border-white/20 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+
+        {/* Right col */}
+        <div className="flex-shrink-0 flex flex-col gap-[10px] w-[440px] py-6 px-6 border-l border-white/[0.06]">
+          <img alt="QR Code" className="w-full" src="/qr-code.svg" />
+
+          {/* Copy link */}
+          <div className="border border-white/[0.08] rounded-[8px] px-[16px] py-[13px] flex items-center gap-[8px]">
+            <button onClick={handleCopy} className="shrink-0 cursor-pointer" title="Copy link">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.66667 13.3333C5.74619 13.3333 5 12.5871 5 11.6667V5C5 4.07952 5.74619 3.33333 6.66667 3.33333H13.3333C14.2538 3.33333 15 4.07952 15 5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect x="6.66667" y="6.66667" width="10" height="10" rx="1.66667" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5"/>
+              </svg>
+            </button>
+            <div className="relative flex-1 min-w-0 overflow-hidden">
+              <span className="text-[14px] text-white/30 whitespace-nowrap">{deepLink}</span>
+              <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#111] to-transparent pointer-events-none"/>
+            </div>
+            <button onClick={handleCopy} className="shrink-0 text-xs font-semibold text-[#E87722] hover:opacity-80 transition-opacity">
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+
+          {/* Continue button */}
+          <div className="flex justify-center pt-[1px]">
+            <a
+              href="https://tamawal.sa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-[#E87722] rounded-[56px] px-[24px] py-[16px] flex items-center gap-[8px]"
+            >
+              <span className="text-[16px] font-semibold text-[#E87722]">Continue in mobile app</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="#E87722" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -120,8 +199,8 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 
   const InfoIcon = () => (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <circle cx="7" cy="7" r="6.5" stroke="#9aa4b2"/>
-      <path d="M7 6.5v3.5M7 4.5v.5" stroke="#9aa4b2" strokeWidth="1.2" strokeLinecap="round"/>
+      <circle cx="7" cy="7" r="6.5" stroke="rgba(255,255,255,0.3)"/>
+      <path d="M7 6.5v3.5M7 4.5v.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round"/>
     </svg>
   );
 
@@ -134,20 +213,20 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   ];
 
   const statsTableJSX = (
-    <div className="rounded-[8px] overflow-hidden border border-[#eef1f6]">
+    <div className="rounded-[8px] overflow-hidden border border-white/[0.08]">
       {statsRows.map(({ label, value, badge, info }, i) => (
         <div
           key={label}
-          className={`flex items-center justify-between px-[12px] h-[36px] ${i % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white'}`}
+          className={`flex items-center justify-between px-[12px] h-[36px] ${i % 2 === 1 ? 'bg-white/[0.03]' : 'bg-transparent'}`}
         >
           <div className="flex items-center gap-[4px]">
-            <span className="text-[13.5px] text-[#667085]">{label}</span>
+            <span className="text-[13.5px] text-white/50">{label}</span>
             {info && <InfoIcon />}
           </div>
           <div className="flex items-center gap-[6px]">
-            <span className="text-[13.5px] font-bold text-[#0041a3]">{value}</span>
+            <span className="text-[13.5px] font-bold text-[#E87722]">{value}</span>
             {badge && (
-              <span className="bg-[#079455] text-white text-[11px] font-semibold rounded-[4px] px-[5px] py-[1px]">
+              <span className="bg-[#22C55E] text-white text-[11px] font-semibold rounded-[4px] px-[5px] py-[1px]">
                 {badge}
               </span>
             )}
@@ -158,16 +237,16 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
   );
 
   const payoutCardJSX = (
-    <div className="bg-white border border-[#eef1f6] rounded-[8px] p-[16px] flex items-center gap-[20px]">
+    <div className="bg-[#0C0C0C] border border-white/[0.08] rounded-[8px] p-[16px] flex items-center gap-[20px]">
       <button onClick={() => setShowPayoutModal(true)} className="shrink-0">
         <img src="/icon-payout-time.svg" alt="" className="w-[56px] h-[56px] shrink-0" />
       </button>
-      <p className="text-[15.5px] font-semibold text-[#202a39]">Finalization &amp; Disbursement immediately</p>
+      <p className="text-[15.5px] font-semibold text-white">Finalization &amp; Disbursement within 1 to 2 working days</p>
     </div>
   );
 
   const descriptionJSX = (
-    <p className="text-[15.5px] text-[#4b5565] leading-[1.6]">
+    <p className="text-[15.5px] text-white/50 leading-[1.6]">
       Profit rates starting from 2.25%, Payment holiday for first installment (up to 120 days), High financing amounts of up to SAR 4 Million for KSA Nationals, Quick and easy approval process
     </p>
   );
@@ -189,7 +268,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
       <AccordionSection title="Great for" isOpen={openSections.greatFor} onToggle={() => toggle('greatFor')}>
         <div className="flex flex-col gap-[10px]">
           {[
-            'Low profit fees starting from 2.25% for KSA nationals',
+            'Low profit fees starting from 2.25% for KSA Nationals',
             'Deferred payment of the first installment for up to 120 days',
             'Flexible repayment periods up to 25 years',
             'Fast and simple application process',
@@ -199,11 +278,11 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
             <div key={item} className="flex gap-[12px] items-start">
               <div className="mt-[2px] shrink-0">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="8" fill="#D1FADF"/>
-                  <path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="8" cy="8" r="8" fill="#22C55E20"/>
+                  <path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <p className="text-[13.5px] text-[#475467] leading-[1.6]">{item}</p>
+              <p className="text-[13.5px] text-white/50 leading-[1.6]">{item}</p>
             </div>
           ))}
         </div>
@@ -212,12 +291,12 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
         <div className="flex gap-[12px] items-start">
           <div className="mt-[2px] shrink-0">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="8" fill="#FEE4E2"/>
+              <circle cx="8" cy="8" r="8" fill="#F0443820"/>
               <path d="M8 5v3" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round"/>
               <circle cx="8" cy="11" r="0.75" fill="#F04438"/>
             </svg>
           </div>
-          <p className="text-[13.5px] text-[#475467] leading-[1.6]">Applicable only for KSA Nationals</p>
+          <p className="text-[13.5px] text-white/50 leading-[1.6]">Applicable only for KSA Nationals</p>
         </div>
       </AccordionSection>
       <AccordionSection title="Required documents" isOpen={openSections.docs} onToggle={() => toggle('docs')}>
@@ -225,10 +304,10 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
           {['Passport (pdf or jpg)', 'Salary Evidence Document (pdf or jpg)'].map((doc) => (
             <div key={doc} className="flex gap-[12px] items-center">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M9.33 1.33H4a1.33 1.33 0 0 0-1.33 1.34v10.66A1.33 1.33 0 0 0 4 14.67h8a1.33 1.33 0 0 0 1.33-1.34V5.33L9.33 1.33Z" stroke="#667085" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9.33 1.33v4h4" stroke="#667085" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9.33 1.33H4a1.33 1.33 0 0 0-1.33 1.34v10.66A1.33 1.33 0 0 0 4 14.67h8a1.33 1.33 0 0 0 1.33-1.34V5.33L9.33 1.33Z" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9.33 1.33v4h4" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <p className="text-[13.5px] text-[#475467]">{doc}</p>
+              <p className="text-[13.5px] text-white/50">{doc}</p>
             </div>
           ))}
         </div>
@@ -237,12 +316,12 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
         <div className="flex flex-col gap-[10px]">
           {['The borrower is of legal age', 'The borrower has his permanent residence in Saudi Arabia'].map((cond) => (
             <div key={cond} className="flex gap-[12px] items-start">
-              <div className="mt-[2px] shrink-0 w-4 h-4 rounded-[3px] border border-[#fdb022] bg-[#fffaeb] flex items-center justify-center">
+              <div className="mt-[2px] shrink-0 w-4 h-4 rounded-[3px] border border-[#E87722]/40 bg-[#E87722]/10 flex items-center justify-center">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                  <path d="M2 5l2 2 4-4" stroke="#fdb022" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 5l2 2 4-4" stroke="#E87722" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <p className="text-[13.5px] text-[#475467] leading-[1.6]">{cond}</p>
+              <p className="text-[13.5px] text-white/50 leading-[1.6]">{cond}</p>
             </div>
           ))}
         </div>
@@ -254,29 +333,29 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
     <>
       {showPayoutModal && <PayoutTimeModal onClose={() => setShowPayoutModal(false)} />}
     <div
-      className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-[6px] overflow-y-auto"
+      className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-[6px] overflow-y-auto"
       onClick={onClose}
     >
       <div className="min-h-full flex items-start justify-center py-6 px-4">
         <div
-          className="bg-white rounded-[8px] w-full max-w-[960px] flex flex-col gap-[32px] p-[24px]"
+          className="bg-[#111] border border-white/[0.08] rounded-2xl w-full max-w-[960px] flex flex-col gap-[32px] p-[24px]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="flex items-start justify-between gap-[10px]">
             <div className="flex flex-col gap-[4px]">
-              <p className="text-[22px] lg:text-[26px] font-semibold text-[#15212f]">Product Details</p>
-              <p className="text-[14px] lg:text-[16px] text-[#6d7989]">{loan.bank} • {loan.type}</p>
+              <p className="text-[22px] lg:text-[26px] font-semibold text-white">Product Details</p>
+              <p className="text-[14px] lg:text-[16px] text-white/40">{loan.bank} • {loan.type}</p>
             </div>
-            <button onClick={onClose} className="border border-[#d5d7da] rounded-[8px] p-[8px] shrink-0">
+            <button onClick={onClose} className="border border-white/10 rounded-[8px] p-[8px] shrink-0">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M15 5L5 15M5 5l10 10" stroke="#667085" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M15 5L5 15M5 5l10 10" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </button>
           </div>
 
           {/* Product title */}
-          <h2 className="text-[28px] lg:text-[40px] font-bold text-[#0063f5] leading-[1.2]">
+          <h2 className="text-[28px] lg:text-[40px] font-bold text-[#E87722] leading-[1.2]">
             Real Estate Financing for Home Buyers
           </h2>
 
@@ -286,13 +365,13 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
             {/* ── Left column ── */}
             <div className="flex-1 flex flex-col gap-[24px]">
               {/* Tab switcher */}
-              <div className="bg-[#f8fafc] rounded-[11px] p-[3px] flex">
+              <div className="bg-[#0C0C0C] rounded-[11px] p-[3px] flex">
                 {(['max', 'calculate'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`flex-1 text-[13.5px] font-semibold py-[10px] rounded-[8px] transition-colors
-                      ${activeTab === tab ? 'bg-white border border-[#eef1f6] text-[#0063f5]' : 'text-[#697586]'}`}
+                      ${activeTab === tab ? 'bg-[#1a1a1a] border border-white/10 text-[#E87722]' : 'text-white/40'}`}
                   >
                     {tab === 'max' ? 'Max loan' : 'Calculate'}
                   </button>
@@ -301,7 +380,7 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 
               {/* Loan period */}
               <div className="flex flex-col gap-[12px]">
-                <p className="text-[15.5px] font-semibold text-[#202a39]">Select Loan Period (Months)</p>
+                <p className="text-[15.5px] font-semibold text-white">Select Loan Period (Months)</p>
                 <div className="flex flex-wrap gap-[8px]">
                   {periods.map((p) => {
                     const disabled = disabledPeriods.includes(p);
@@ -313,10 +392,10 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
                         onClick={() => setSelectedPeriod(p)}
                         className={`w-[48px] h-[48px] rounded-[12px] text-[13.5px] font-semibold tracking-[0.5px] transition-colors
                           ${disabled
-                            ? 'bg-[#f8fafc] text-[#9aa4b2] cursor-not-allowed'
+                            ? 'bg-white/[0.03] text-white/20 cursor-not-allowed'
                             : active
-                              ? 'bg-[#0063f5] text-white'
-                              : 'bg-[#eef1f6] text-[#4b5565] hover:bg-[#e0e8f9]'
+                              ? 'bg-[#E87722] text-white'
+                              : 'bg-white/[0.06] text-white/60 hover:bg-white/10'
                           }`}
                       >
                         {p}
@@ -329,21 +408,21 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
               {/* Loan amount — Max loan tab */}
               {activeTab === 'max' && (
                 <div className="flex flex-col gap-[4px]">
-                  <p className="text-[15.5px] font-semibold text-[#202a39]">Loan amount (Received)</p>
-                  <span className="text-[12.5px] text-[#697586]">up to</span>
-                  <p className="text-[33.5px] font-bold text-[#0041a3] leading-[1.1]">SAR 99,999,999.99</p>
-                  <span className="text-[12.5px] text-[#697586]">for {selectedPeriod} months</span>
+                  <p className="text-[15.5px] font-semibold text-white">Loan amount (Received)</p>
+                  <span className="text-[12.5px] text-white/40">up to</span>
+                  <p className="text-[33.5px] font-bold text-[#E87722] leading-[1.1]">SAR 99,999,999.99</p>
+                  <span className="text-[12.5px] text-white/40">for {selectedPeriod} months</span>
                 </div>
               )}
 
               {/* Preferred amount slider — Calculate tab */}
               {activeTab === 'calculate' && (
                 <div className="flex flex-col gap-[16px]">
-                  <p className="text-[15.5px] font-semibold text-[#202a39]">Your Preferred Amount</p>
+                  <p className="text-[15.5px] font-semibold text-white">Your Preferred Amount</p>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MIN.toLocaleString()}</span>
-                    <span className="text-[22px] font-bold text-[#0041a3]">SAR {preferredAmount.toLocaleString()}</span>
-                    <span className="text-[12.5px] text-[#697586]">SAR {PREF_MAX.toLocaleString()}</span>
+                    <span className="text-[12.5px] text-white/40">SAR {PREF_MIN.toLocaleString()}</span>
+                    <span className="text-[22px] font-bold text-[#E87722]">SAR {preferredAmount.toLocaleString()}</span>
+                    <span className="text-[12.5px] text-white/40">SAR {PREF_MAX.toLocaleString()}</span>
                   </div>
                   <input
                     type="range"
@@ -353,12 +432,12 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
                     value={preferredAmount}
                     onChange={(e) => setPreferredAmount(Number(e.target.value))}
                     className="w-full h-[8px] rounded-full cursor-pointer"
-                    style={{ accentColor: '#0063f5' }}
+                    style={{ accentColor: '#E87722' }}
                   />
                 </div>
               )}
 
-              {/* Stats + payout — mobile only (between loan amount and accordions) */}
+              {/* Stats + payout — mobile only */}
               <div className="lg:hidden flex flex-col gap-[16px]">
                 {statsTableJSX}
                 {payoutCardJSX}
@@ -390,35 +469,40 @@ function ProductDetailsModal({ loan, onClose }: { loan: typeof loans[number]; on
 }
 
 // ── Loan Card ─────────────────────────────────────────────────────────────────
-function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[number]; onDetails: () => void; onPayoutClick: () => void }) {
+function LoanCard({ loan, onDetails, onPayoutClick, onTamawal }: {
+  loan: typeof loans[number];
+  onDetails: () => void;
+  onPayoutClick: () => void;
+  onTamawal: () => void;
+}) {
   return (
-    <div className="border border-[#dadee3] rounded-[16px] bg-white overflow-hidden mb-4">
+    <div className="border border-white/[0.08] rounded-[16px] bg-[#111] overflow-hidden mb-4">
 
       {/* ── Mobile layout ── */}
       <div className="lg:hidden p-5 flex flex-col gap-4">
         {/* Title + arrow */}
         <div className="flex items-start gap-[16px] w-full">
-          <p className="text-[20px] font-bold text-[#121a26] leading-[1.25] flex-1">{loan.type}</p>
+          <p className="text-[20px] font-bold text-white leading-[1.25] flex-1">{loan.type}</p>
           <button onClick={onDetails} className="shrink-0 mt-[1px]">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="#414651" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M4.16602 10.0001H15.8327M9.99935 15.8334L15.8327 10.0001L9.99935 4.16675" stroke="rgba(255,255,255,0.4)" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </div>
         {/* Logo + Rating */}
         <div className="flex items-center justify-between w-full">
-          <div className="h-[40px] w-[135px]">
+          <div className="h-[40px] w-[135px] bg-white/5 rounded-lg flex items-center px-2">
             <img src={loan.logo} alt={loan.bank} className="h-full object-contain object-left" />
           </div>
           <StarRating rating={loan.rating} size={19} numSize="20.747px" />
         </div>
         {/* Loan amount */}
         <div className="flex flex-col items-start w-full">
-          <div className="flex gap-[4px] items-baseline text-[#667085]">
+          <div className="flex gap-[4px] items-baseline text-white/40">
             <span className="text-[12px] font-semibold">Loan amount</span>
             <span className="text-[10px]">up to</span>
           </div>
-          <div className="flex gap-[2px] items-baseline text-[#101828]">
+          <div className="flex gap-[2px] items-baseline text-white">
             <span className="text-[32px] font-bold">SAR</span>
             <span className="text-[24px] font-bold">{loan.amount.toLocaleString()}</span>
           </div>
@@ -426,28 +510,28 @@ function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[numbe
         {/* APR + Loan period */}
         <div className="flex gap-[5px] items-start w-full">
           <div className="flex-1 flex flex-col">
-            <span className="text-[12px] font-semibold text-[#667085]">APR</span>
-            <span className="text-[24px] font-bold text-[#101828]">{loan.rate}%</span>
-            <span className="text-[12px] text-[#667085]">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
+            <span className="text-[12px] font-semibold text-white/40">APR</span>
+            <span className="text-[24px] font-bold text-white">{loan.rate}%</span>
+            <span className="text-[12px] text-white/30">Up to {(loan.rate + 2.9).toFixed(2)}% *</span>
           </div>
           <div className="flex flex-col items-end w-[129px]">
-            <div className="flex gap-[4px] items-baseline text-[#667085]">
+            <div className="flex gap-[4px] items-baseline text-white/40">
               <span className="text-[12px] font-semibold">Loan period</span>
               <span className="text-[10px]">for</span>
             </div>
-            <span className="text-[24px] font-bold text-[#101828] text-right">{loan.months} month</span>
+            <span className="text-[24px] font-bold text-white text-right">{loan.months} month</span>
           </div>
         </div>
-        {/* Bottom row: time icon + favorite + button */}
+        {/* Bottom row */}
         <div className="flex gap-[48px] items-center w-full">
           <button className="shrink-0" onClick={onPayoutClick}>
             <img src="/icon-payout-time.svg" alt="" className="w-[40px] h-[40px]" />
           </button>
           <div className="flex flex-1 gap-[16px] items-center min-w-0">
             <button className="shrink-0">
-              <img src="/icon-favorite.svg" alt="Favorite" className="w-6 h-6" />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-            <button onClick={() => window.location.href = '/review'} className="flex-1 bg-[#0063f5] rounded-[24px] py-[10px] flex items-center justify-center">
+            <button onClick={onTamawal} className="flex-1 bg-[#E87722] rounded-[24px] py-[10px] flex items-center justify-center">
               <span className="text-white text-[13px] font-bold">Tamawal</span>
             </button>
           </div>
@@ -457,43 +541,43 @@ function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[numbe
       {/* ── Desktop layout ── */}
       <div className="hidden lg:flex overflow-hidden">
         {/* Left col */}
-        <div className="border-r border-[#dadee3] flex flex-col justify-between px-[24px] py-[28px] w-[284px] flex-shrink-0">
-          <p className="text-[24px] font-bold text-[#121a26] leading-[1.25]">{loan.type}</p>
-          <div className="h-[60px] w-[203px] flex items-center">
-            <img src={loan.logo} alt={loan.bank} className="max-h-[60px] max-w-[203px] object-contain" />
+        <div className="border-r border-white/[0.06] flex flex-col justify-between px-[24px] py-[28px] w-[284px] flex-shrink-0">
+          <p className="text-[24px] font-bold text-white leading-[1.25]">{loan.type}</p>
+          <div className="h-[60px] w-[203px] flex items-center bg-white/5 rounded-lg px-3">
+            <img src={loan.logo} alt={loan.bank} className="max-h-[40px] max-w-[160px] object-contain" />
           </div>
           <StarRating rating={loan.rating} size={19} numSize="20.747px" />
         </div>
 
         {/* Middle col */}
-        <div className="border-r border-[#dadee3] flex flex-col justify-between px-[32px] py-[28px] w-[375px] flex-shrink-0">
+        <div className="border-r border-white/[0.06] flex flex-col justify-between px-[32px] py-[28px] w-[375px] flex-shrink-0">
           <div className="flex flex-col gap-[10px]">
-            <p className="text-[13px] font-bold text-[#1d2939]">Great for</p>
+            <p className="text-[13px] font-bold text-white/70">Great for</p>
             <div className="flex flex-col gap-[8px]">
               <div className="flex gap-[12px] items-start">
                 <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#D1FADF"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#22C55E20"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Low profit fees starting from 2.25% for KSA Nationals</p>
+                <p className="text-[13px] text-white/40 leading-[1.6] flex-1">Low profit fees starting from 2.25% for KSA Nationals</p>
               </div>
               <div className="flex gap-[12px] items-start">
                 <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#D1FADF"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#22C55E20"/><path d="M4.87 8.48L6.72 10.33L11.66 5.39" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Deferred payment of the first installment for up to 120 days</p>
+                <p className="text-[13px] text-white/40 leading-[1.6] flex-1">Deferred payment of the first installment for up to 120 days</p>
               </div>
             </div>
-            <p className="text-[13px] font-bold text-[#1d2939]">Be aware</p>
+            <p className="text-[13px] font-bold text-white/70">Be aware</p>
             <div className="flex gap-[12px] items-start">
               <div className="mt-[2.5px] flex-shrink-0 w-4 h-4">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FEE4E2"/><path d="M8 5v3" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round"/><circle cx="8" cy="11" r="0.75" fill="#F04438"/></svg>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#F0443820"/><path d="M8 5v3" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round"/><circle cx="8" cy="11" r="0.75" fill="#F04438"/></svg>
               </div>
-              <p className="text-[13px] text-[#475467] leading-[1.6] flex-1">Applicable only for KSA Nationals</p>
+              <p className="text-[13px] text-white/40 leading-[1.6] flex-1">Applicable only for KSA Nationals</p>
             </div>
           </div>
-          <button onClick={onDetails} className="border border-[rgba(0,99,245,0.32)] rounded-[24px] h-[44px] px-[24px] py-[10px] flex items-center justify-center gap-[8px] w-full bg-white mt-[24px]">
-            <span className="text-[13px] font-bold text-[#0063f5]">Details</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <button onClick={onDetails} className="border border-[#E87722]/30 rounded-[24px] h-[44px] px-[24px] py-[10px] flex items-center justify-center gap-[8px] w-full bg-transparent mt-[24px]">
+            <span className="text-[13px] font-bold text-[#E87722]">Details</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="#E87722" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
         </div>
 
@@ -501,43 +585,43 @@ function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[numbe
         <div className="flex flex-col justify-between px-[32px] py-[28px] flex-1">
           <div className="flex gap-[5px] items-start w-full">
             <div className="flex flex-col flex-1">
-              <div className="flex gap-[4px] items-baseline text-[#667085]">
+              <div className="flex gap-[4px] items-baseline text-white/40">
                 <span className="text-[16px] font-semibold">Loan amount</span>
                 <span className="text-[12px]">up to</span>
               </div>
-              <div className="flex gap-[2px] items-baseline text-[#101828] text-[32px]">
+              <div className="flex gap-[2px] items-baseline text-white text-[32px]">
                 <span className="font-bold">SAR</span>
                 <span className="font-bold">{loan.amount.toLocaleString()}</span>
               </div>
             </div>
             <div className="flex flex-col flex-1 items-end">
-              <div className="flex gap-[4px] items-baseline text-[#667085]">
+              <div className="flex gap-[4px] items-baseline text-white/40">
                 <span className="text-[16px] font-semibold">Loan period</span>
                 <span className="text-[12px]">for</span>
               </div>
-              <span className="text-[32px] font-bold text-[#101828]">{loan.months} month</span>
+              <span className="text-[32px] font-bold text-white">{loan.months} month</span>
             </div>
           </div>
           <div className="flex gap-[5px] items-center w-full">
             <div className="flex flex-col flex-1">
-              <div className="flex gap-[4px] items-baseline text-[#667085]">
+              <div className="flex gap-[4px] items-baseline text-white/40">
                 <span className="text-[16px] font-semibold">APR</span>
                 <span className="text-[12px]">from</span>
               </div>
-              <span className="text-[32px] font-bold text-[#101828]">{loan.rate}%</span>
+              <span className="text-[32px] font-bold text-white">{loan.rate}%</span>
             </div>
             <div className="flex flex-col gap-[8px] items-end flex-1">
               <img src="/icon-payout-time.svg" alt="" className="w-[40px] h-[40px]" />
-              <p className="text-[12px] text-[#667085] text-right leading-[normal]">Finalization &amp; Disbursement immediately</p>
+              <p className="text-[12px] text-white/30 text-right leading-[normal]">Finalization &amp; Disbursement within 1 to 2 working days</p>
             </div>
           </div>
-          <div className="flex items-center justify-between w-full">
-            <button className="flex items-center gap-[4px] text-[#98a2b3]">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#98A2B3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <div className="flex items-center justify-between w-full gap-4">
+            <button className="flex items-center gap-[4px] text-white/30 shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               <span className="text-[16px]">Add to favorite</span>
             </button>
-            <button onClick={() => window.location.href = '/review'} className="bg-[#0063f5] rounded-[24px] px-[12px] py-[10px] flex items-center justify-center flex-1">
-              <span className="text-white text-[13px] font-bold text-center w-[357px]">Tamawal</span>
+            <button onClick={onTamawal} className="bg-[#E87722] rounded-[24px] px-[24px] py-[10px] flex items-center justify-center flex-1">
+              <span className="text-white text-[13px] font-bold">Tamawal</span>
             </button>
           </div>
         </div>
@@ -552,7 +636,7 @@ function LoanCard({ loan, onDetails, onPayoutClick }: { loan: typeof loans[numbe
 type SortDir = 'min' | 'max' | null;
 interface SortState { apr: SortDir; monthly: SortDir; saved: SortDir; rating: SortDir; }
 
-const blueFilter = 'brightness(0) saturate(100%) invert(21%) sepia(99%) saturate(2000%) hue-rotate(210deg) brightness(102%) contrast(103%)';
+const blueFilter = 'brightness(0) saturate(100%) invert(55%) sepia(60%) saturate(600%) hue-rotate(10deg) brightness(110%)';
 
 function SortIconBtn({ icon, selected, onClick }: {
   icon: string; selected: boolean; onClick: () => void;
@@ -562,14 +646,14 @@ function SortIconBtn({ icon, selected, onClick }: {
       type="button"
       onClick={onClick}
       className={`flex items-center justify-center p-[8px] rounded-[8px] border transition-colors ${
-        selected ? 'border-[#bbd5fb]' : 'border-[#eef1f6]'
+        selected ? 'border-[#E87722]/40 bg-[#E87722]/10' : 'border-white/[0.08]'
       }`}
     >
       <img
         src={icon}
         alt=""
         className="w-[24px] h-[24px] transition-all"
-        style={selected ? { filter: blueFilter } : undefined}
+        style={selected ? { filter: blueFilter } : { filter: 'invert(1) opacity(0.4)' }}
       />
     </button>
   );
@@ -612,30 +696,29 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
   const hasSelection = Object.values(sel).some(v => v !== null);
 
   return (
-    <div className="absolute right-0 top-[calc(100%+8px)] z-50 bg-white rounded-[24px] shadow-[0px_12px_24px_-4px_rgba(10,13,18,0.12),0px_4px_8px_-2px_rgba(10,13,18,0.06)] w-[375px] overflow-hidden">
+    <div className="absolute right-0 top-[calc(100%+8px)] z-50 bg-[#111] border border-white/[0.08] rounded-[24px] shadow-[0px_12px_24px_-4px_rgba(0,0,0,0.5)] w-[375px] overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-[24px] pt-[24px] pb-[24px]">
-        <p className="text-[#121a26] text-[23.5px] font-semibold">Sort</p>
-        <button onClick={onClose} className="border border-[#eef1f6] rounded-[24px] p-[6px]">
-          <img src="/sort/close-x.svg" alt="Close" className="w-[18px] h-[18px]" />
+        <p className="text-white text-[23.5px] font-semibold">Sort</p>
+        <button onClick={onClose} className="border border-white/10 rounded-[24px] p-[6px]">
+          <img src="/sort/close-x.svg" alt="Close" className="w-[18px] h-[18px] invert opacity-50" />
         </button>
       </div>
 
       {/* Rows */}
       <div className="px-[24px] flex flex-col">
-        {/* Column headers */}
         <div className="flex items-center justify-end gap-[16px]">
           <div className="w-[40px] flex items-center justify-center">
-            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">Min.</span>
+            <span className="text-[12.5px] font-medium text-white/30 tracking-[0.5px]">Min.</span>
           </div>
           <div className="w-[40px] flex items-center justify-center">
-            <span className="text-[12.5px] font-medium text-[#697586] tracking-[0.5px]">Max.</span>
+            <span className="text-[12.5px] font-medium text-white/30 tracking-[0.5px]">Max.</span>
           </div>
         </div>
 
         {sortRows.map(({ key, label, minIcon, maxIcon }) => (
           <div key={key} className="flex items-center gap-[16px] py-[8px]">
-            <p className="flex-1 text-[15.5px] font-medium text-[#4b5565] leading-[22px]">{label}</p>
+            <p className="flex-1 text-[15.5px] font-medium text-white/60 leading-[22px]">{label}</p>
             <SortIconBtn icon={minIcon} selected={sel[key] === 'min'} onClick={() => toggle(key, 'min')} />
             <SortIconBtn icon={maxIcon} selected={sel[key] === 'max'} onClick={() => toggle(key, 'max')} />
           </div>
@@ -648,7 +731,7 @@ function SortPanel({ onClose, onApply }: { onClose: () => void; onApply: (s: Sor
           disabled={!hasSelection}
           onClick={() => { onApply(sel); onClose(); }}
           className={`w-full rounded-[48px] py-[16px] text-[17.5px] font-bold tracking-[0.1px] transition-colors ${
-            hasSelection ? 'bg-[#0063f5] text-white cursor-pointer' : 'bg-[#e2e9f3] text-[#9aa4b2] cursor-not-allowed'
+            hasSelection ? 'bg-[#E87722] text-white cursor-pointer' : 'bg-white/[0.06] text-white/20 cursor-not-allowed'
           }`}
         >
           Apply
@@ -666,12 +749,16 @@ export default function ResultsPage() {
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedLoanIdx, setSelectedLoanIdx] = useState<number | null>(null);
   const [showPayoutModal, setShowPayoutModal] = useState(false);
+  const [tamawalLoan, setTamawalLoan] = useState<typeof loans[number] | null>(null);
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#0C0C0C] min-h-screen">
       {showPayoutModal && <PayoutTimeModal onClose={() => setShowPayoutModal(false)} />}
       {selectedLoanIdx !== null && (
         <ProductDetailsModal loan={loans[selectedLoanIdx]} onClose={() => setSelectedLoanIdx(null)} />
+      )}
+      {tamawalLoan !== null && (
+        <TamawalPopup loan={tamawalLoan} onClose={() => setTamawalLoan(null)} />
       )}
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
 
@@ -683,39 +770,39 @@ export default function ResultsPage() {
 
           {/* Header section — mobile */}
           <div className="lg:hidden flex flex-col gap-[24px] py-[24px]">
-            <button onClick={() => router.back()} className="flex items-center gap-[8px] text-[#717680] w-fit">
-              <img src={imgBackArrow} alt="" className="size-5" />
+            <button onClick={() => router.back()} className="flex items-center gap-[8px] text-white/40 w-fit">
+              <img src={imgBackArrow} alt="" className="size-5 invert opacity-40" />
               <span className="text-[16px] font-semibold">Back</span>
             </button>
             <div className="flex flex-col gap-[8px]">
-              <p className="text-[32px] font-semibold text-[#101828] leading-[1.35] tracking-[0.15px]">Preliminary search</p>
-              <p className="text-[16px] text-[#525252] leading-[1.5]">
-                You may be eligible for 1 of One Product for Personal Loan
+              <p className="text-[32px] font-semibold text-white leading-[1.35] tracking-[0.15px]">Search results</p>
+              <p className="text-[16px] text-white/40 leading-[1.5]">
+                This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
               </p>
             </div>
           </div>
 
           {/* Header section — desktop */}
           <div className="hidden lg:flex flex-col gap-6 pt-10 pb-6">
-            <button onClick={() => router.back()} className="flex items-center gap-2 text-[#717680] w-fit">
-              <img src={imgBackArrow} alt="" className="size-5" />
+            <button onClick={() => router.back()} className="flex items-center gap-2 text-white/40 w-fit">
+              <img src={imgBackArrow} alt="" className="size-5 invert opacity-40" />
               <span className="text-[16px] font-semibold">Back</span>
             </button>
             <div className="flex items-center gap-[64px]">
               <div className="flex flex-col gap-[2px] flex-1">
-                <p className="text-[32px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">Preliminary search</p>
-                <p className="text-[16px] text-[#525252] leading-[1.72]">
-                  You may be eligible for 1 of One Product for Personal Loan
+                <p className="text-[32px] font-bold text-white leading-[1.35] tracking-[0.15px]">Search results</p>
+                <p className="text-[16px] text-white/40 leading-[1.72]">
+                  This will result in a less accurate product, but not necessarily eligible for you. You need to be logged in for get much more accurate results!
                 </p>
               </div>
               <div className="relative flex-shrink-0">
                 {sortOpen && <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />}
                 <button
                   onClick={() => setSortOpen(!sortOpen)}
-                  className="relative z-50 border border-[#0063f5] rounded-[56px] px-[24px] py-[16px] flex items-center gap-[10px] bg-white"
+                  className="relative z-50 border border-[#E87722]/40 rounded-[56px] px-[24px] py-[16px] flex items-center gap-[10px] bg-transparent"
                 >
-                  <img src={imgSortIcon} alt="" className="size-5" />
-                  <span className="text-[16px] font-bold text-[#0063f5]">Sort</span>
+                  <img src={imgSortIcon} alt="" className="size-5 invert opacity-70" />
+                  <span className="text-[16px] font-bold text-[#E87722]">Sort</span>
                 </button>
                 {sortOpen && <SortPanel onClose={() => setSortOpen(false)} onApply={() => setSortOpen(false)} />}
               </div>
@@ -724,15 +811,15 @@ export default function ResultsPage() {
 
           {/* Offers count + Sort row — mobile only */}
           <div className="lg:hidden flex items-center gap-[8px] pb-4">
-            <p className="flex-1 text-[18px] text-[#525252]">{loans.length} offers for you</p>
+            <p className="flex-1 text-[18px] text-white/40">{loans.length} offers for you</p>
             <div className="relative shrink-0">
               {sortOpen && <div className="fixed inset-0 z-40" onClick={() => setSortOpen(false)} />}
               <button
                 onClick={() => setSortOpen(!sortOpen)}
-                className="relative z-50 bg-white border border-[#0063f5] rounded-[56px] px-[20px] py-[12px] flex items-center gap-[10px]"
+                className="relative z-50 bg-transparent border border-[#E87722]/40 rounded-[56px] px-[20px] py-[12px] flex items-center gap-[10px]"
               >
-                <img src={imgSortIcon} alt="" className="size-5" />
-                <span className="text-[16px] text-[#0063f5]">Sort</span>
+                <img src={imgSortIcon} alt="" className="size-5 invert opacity-70" />
+                <span className="text-[16px] text-[#E87722]">Sort</span>
               </button>
               {sortOpen && <SortPanel onClose={() => setSortOpen(false)} onApply={() => setSortOpen(false)} />}
             </div>
@@ -741,28 +828,34 @@ export default function ResultsPage() {
           {/* Loan cards */}
           <div className="pb-6">
             {loans.map((loan, i) => (
-              <LoanCard key={i} loan={loan} onDetails={() => setSelectedLoanIdx(i)} onPayoutClick={() => setShowPayoutModal(true)} />
+              <LoanCard
+                key={i}
+                loan={loan}
+                onDetails={() => setSelectedLoanIdx(i)}
+                onPayoutClick={() => setShowPayoutModal(true)}
+                onTamawal={() => setTamawalLoan(loan)}
+              />
             ))}
           </div>
 
           {/* More products */}
           <div className="flex justify-center pb-10">
-            <button className="bg-[#fdb022] text-[#101828] text-[16px] font-semibold px-[32px] py-[20px] rounded-[48px] flex items-center gap-[8px]">
+            <button className="bg-[#E87722] text-white text-[16px] font-semibold px-[32px] py-[20px] rounded-[48px] flex items-center gap-[8px]">
               More products
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 15.833 15.833 10 10 4.167" stroke="#101828" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 15.833 15.833 10 10 4.167" stroke="white" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
           </div>
 
         </div>
 
         {/* Install app — mobile only */}
-        <div className="lg:hidden bg-[#f9f8fd] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
-          <p className="text-[16px] text-[#121a26] text-center">Install our app now!</p>
+        <div className="lg:hidden bg-[#111] border-t border-white/[0.06] flex flex-col gap-[16px] items-center px-[24px] py-[40px]">
+          <p className="text-[16px] text-white/60 text-center">Install our app now!</p>
           <div className="flex gap-[12px]">
-            <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+            <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] overflow-hidden">
               <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
             </a>
-            <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] overflow-hidden">
+            <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] overflow-hidden">
               <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
             </a>
           </div>
@@ -771,12 +864,12 @@ export default function ResultsPage() {
         {/* CTA Section — desktop only */}
         <div className="hidden lg:block max-w-[1440px] mx-auto relative" style={{ paddingTop: '150px', paddingBottom: '128px' }}>
           <img src={imgPhoneImg} alt="Tamawal App" className="absolute z-10 object-contain pointer-events-none" style={{ height: '620px', width: 'auto', top: '53px', left: '129px' }} />
-          <div className="mx-[75px] bg-[#000921] rounded-[32px] overflow-hidden" style={{ height: '465px' }}>
+          <div className="mx-[75px] bg-[#111] border border-white/[0.06] rounded-[32px] overflow-hidden" style={{ height: '465px' }}>
             <div className="h-full flex items-center" style={{ paddingLeft: '757px', paddingRight: '67px' }}>
               <div className="flex flex-col justify-between" style={{ width: '466px', height: '265px' }}>
                 <div className="flex flex-col gap-[16px]">
                   <h2 className="text-[32px] font-bold text-white leading-[1.35]">Tamawal App Download</h2>
-                  <p className="text-[16px] text-[#98A2B3] leading-[1.72]">Saudi's best comparisons for on the go — now even easier to compare, switch and save. So you can load the Tamawal app directly onto your mobile phone.</p>
+                  <p className="text-[16px] text-white/40 leading-[1.72]">Saudi's best comparisons for on the go — now even easier to compare, switch and save. So you can load the Tamawal app directly onto your mobile phone.</p>
                 </div>
                 <div className="flex items-center gap-[16px]">
                   <span className="text-[16px] font-bold text-white">4.75</span>
@@ -798,7 +891,7 @@ export default function ResultsPage() {
       </div>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer className="bg-[#202a39]">
+      <footer className="bg-[#0a0a0a] border-t border-white/[0.06]">
         <div className="max-w-[1440px] mx-auto px-[24px] lg:px-[75px] pt-[60px] lg:pt-[90px] flex flex-col gap-[48px]">
           <div className="flex flex-col lg:flex-row lg:items-start w-full gap-[40px] lg:gap-[64px]">
 
@@ -812,7 +905,7 @@ export default function ResultsPage() {
                   <img src={imgHeroBadge} alt="" className="absolute inset-0 size-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
                   <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 size-full" />
                 </div>
-                <p className="text-[rgba(255,255,255,0.86)] text-[18px] font-semibold leading-[1.5] max-w-[254px]">
+                <p className="text-white/60 text-[18px] font-semibold leading-[1.5] max-w-[254px]">
                   Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504
                 </p>
               </div>
@@ -824,7 +917,7 @@ export default function ResultsPage() {
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">About us</p>
-                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                  <div className="flex flex-col gap-[8px] text-white/40 text-[16px]">
                     <span>Who we are</span>
                     <span>Our products</span>
                     <span>Our values</span>
@@ -832,7 +925,7 @@ export default function ResultsPage() {
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Legal</p>
-                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                  <div className="flex flex-col gap-[8px] text-white/40 text-[16px]">
                     <span>Terms and Conditions</span>
                     <span>Data Protection<br />and Privacy</span>
                     <span>Customer Protection<br />Principles</span>
@@ -840,14 +933,14 @@ export default function ResultsPage() {
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Take actions</p>
-                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                  <div className="flex flex-col gap-[8px] text-white/40 text-[16px]">
                     <span>Be a partner</span>
                     <span>Be a customer</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Customer Care</p>
-                  <div className="flex flex-col gap-[8px] text-[rgba(255,255,255,0.64)] text-[16px]">
+                  <div className="flex flex-col gap-[8px] text-white/40 text-[16px]">
                     <span>Suggestion</span>
                     <span>Complaint</span>
                     <span>Report a Violation</span>
@@ -857,7 +950,7 @@ export default function ResultsPage() {
               </div>
 
               {/* Divider */}
-              <div className="border-t border-white/10" />
+              <div className="border-t border-white/[0.06]" />
 
               {/* Bottom row */}
               <div className="flex flex-col gap-[30px] lg:flex-row lg:gap-[30px]">
@@ -865,34 +958,34 @@ export default function ResultsPage() {
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Contact us</p>
                   <div className="flex flex-col gap-[8px]">
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">info@tamawal.sa</span>
+                      <img src={imgEmailIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0 invert opacity-40" />
+                      <span className="text-white/40 text-[16px]">info@tamawal.sa</span>
                     </div>
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">011 512 3870</span>
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0 invert opacity-40" />
+                      <span className="text-white/40 text-[16px]">011 512 3870</span>
                     </div>
                     <div className="flex items-center gap-[8px]">
-                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0" />
-                      <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[16px]">800 100 0276</span>
+                      <img src={imgPhoneIcon} alt="" className="w-[16px] h-[16px] flex-shrink-0 invert opacity-40" />
+                      <span className="text-white/40 text-[16px]">800 100 0276</span>
                     </div>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <p className="text-white text-[16px] font-bold leading-[1.72]">Address</p>
                   <div className="flex gap-[8px] items-start">
-                    <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0" />
-                    <span className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
+                    <img src={imgLocationIcon} alt="" className="w-[13px] mt-[2px] flex-shrink-0 invert opacity-40" />
+                    <span className="text-white/40 text-[14px] leading-[1.45]">Al Olaya (403) street, Riyadh, Saudi Arabia</span>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[12px]">
                   <div className="flex flex-col gap-[4px]">
                     <p className="text-white text-[16px] font-semibold">Working hours</p>
-                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">09:00 – 17:00</p>
+                    <p className="text-white/40 text-[14px]">09:00 – 17:00</p>
                   </div>
                   <div className="flex flex-col gap-[4px]">
                     <p className="text-white text-[16px] font-semibold">Working days</p>
-                    <p className="text-[rgba(255,255,255,0.86)] lg:text-[rgba(255,255,255,0.64)] text-[14px]">Sunday - Thursday</p>
+                    <p className="text-white/40 text-[14px]">Sunday - Thursday</p>
                   </div>
                 </div>
                 <div className="lg:w-[190px] flex flex-col gap-[8px]">
@@ -902,8 +995,8 @@ export default function ResultsPage() {
                     <img src={imgTwitterX} alt="X" className="w-[45px] h-[45px]" />
                   </div>
                   <button className="flex items-center gap-[2px] py-[12px]">
-                    <span className="text-[rgba(255,255,255,0.86)] text-[16px] font-semibold leading-[1.72]">FAQs</span>
-                    <img src={imgArrowNext} alt="" className="w-[24px] h-[24px]" />
+                    <span className="text-white/40 text-[16px] font-semibold leading-[1.72]">FAQs</span>
+                    <img src={imgArrowNext} alt="" className="w-[24px] h-[24px] invert opacity-40" />
                   </button>
                 </div>
               </div>
@@ -912,30 +1005,28 @@ export default function ResultsPage() {
 
           {/* Bottom bar */}
           <div className="flex flex-col gap-[24px] pb-[24px]">
-            <div className="border-t border-white/10" />
-            {/* Mobile: stacked centered */}
+            <div className="border-t border-white/[0.06]" />
             <div className="flex flex-col gap-[12px] items-center lg:hidden">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">Download our App!</p>
+              <p className="text-white/40 text-[16px] text-center leading-[1.7]">Download our App!</p>
               <div className="flex gap-[12px]">
-                <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                   <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
                 </a>
-                <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                   <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                 </a>
               </div>
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-white/40 text-[16px] text-center leading-[1.7]">© All right reserved to Tamawal 2026</p>
             </div>
-            {/* Desktop: copyright left, download right */}
             <div className="hidden lg:flex items-center justify-between w-full">
-              <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
+              <p className="text-white/40 text-[16px] leading-[1.7]">© All right reserved to Tamawal 2026</p>
               <div className="flex items-center gap-[16px]">
-                <p className="text-[rgba(255,255,255,0.64)] text-[16px] leading-[1.7]">Download our App!</p>
+                <p className="text-white/40 text-[16px] leading-[1.7]">Download our App!</p>
                 <div className="flex gap-[12px]">
-                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <a href="http://apps.apple.com/sa/app/tamawal-%D8%AA%D9%85%D9%88%D9%84/id6450682646" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                     <img src={imgAppStore} alt="App Store" className="w-full h-full object-contain" />
                   </a>
-                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-[#16448f] rounded-[6px] h-[40px] w-[128px] overflow-hidden">
+                  <a href="https://play.google.com/store/apps/details?id=sa.tamawal.capp&hl=id" target="_blank" rel="noopener noreferrer" className="border border-white/10 rounded-[6px] h-[40px] w-[128px] overflow-hidden">
                     <img src={imgGooglePlay} alt="Google Play" className="w-full h-full object-contain" />
                   </a>
                 </div>
