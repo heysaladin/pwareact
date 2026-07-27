@@ -858,16 +858,10 @@ const defaultForm: AddSlaForm = {
   pauseConditions: '',
 };
 
-function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [form, setForm] = useState<AddSlaForm>(defaultForm);
-  function set<K extends keyof AddSlaForm>(key: K, value: AddSlaForm[K]) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
-  if (!open) return null;
-
-  const SelectField = ({ value, onChange, placeholder, children, className }: {
-    value: string; onChange: (v: string) => void; placeholder?: string; children: React.ReactNode; className?: string;
-  }) => (
+function SlaSelectField({ value, onChange, placeholder, children, className }: {
+  value: string; onChange: (v: string) => void; placeholder?: string; children: React.ReactNode; className?: string;
+}) {
+  return (
     <div className={cn('relative', className)}>
       <select value={value} onChange={(e) => onChange(e.target.value)}
         className="w-full appearance-none h-[44px] px-[14px] pr-10 text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
@@ -877,21 +871,33 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
       <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#667085]" />
     </div>
   );
+}
 
-  const NumberField = ({ value, onChange, className }: { value: string; onChange: (v: string) => void; className?: string }) => (
+function SlaNumberField({ value, onChange, className }: { value: string; onChange: (v: string) => void; className?: string }) {
+  return (
     <input type="number" min={0} value={value} onChange={(e) => onChange(e.target.value)}
       className={cn('w-full h-[44px] px-[14px] text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-2 focus:ring-[#0063F5]', className)} />
   );
+}
 
-  const Label = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
+function SlaLabel({ children, required }: { children: React.ReactNode; required?: boolean }) {
+  return (
     <label className="block text-[14px] font-medium text-[#344054] leading-[20px] mb-[6px]">
       {children}{required && <span className="text-[#D92D20] ml-0.5">*</span>}
     </label>
   );
+}
 
-  const Hint = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[13px] text-[#667085] leading-[20px] mt-[6px]">{children}</p>
-  );
+function SlaHint({ children }: { children: React.ReactNode }) {
+  return <p className="text-[13px] text-[#667085] leading-[20px] mt-[6px]">{children}</p>;
+}
+
+function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [form, setForm] = useState<AddSlaForm>(defaultForm);
+  function set<K extends keyof AddSlaForm>(key: K, value: AddSlaForm[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex">
@@ -908,31 +914,31 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-6 pb-6 flex flex-col gap-5">
           <div>
-            <Label required>Team in Charge</Label>
-            <SelectField value={form.team} onChange={(v) => set('team', v)} placeholder="Select responsible team">
+            <SlaLabel required>Team in Charge</SlaLabel>
+            <SlaSelectField value={form.team} onChange={(v) => set('team', v)} placeholder="Select responsible team">
               <option value="customer-care">Customer Care</option>
               <option value="aml-team">AML Team</option>
               <option value="operations">Operations Team</option>
-            </SelectField>
-            <Hint>The selected team owns the Step SLA while the order is in this step.</Hint>
+            </SlaSelectField>
+            <SlaHint>The selected team owns the Step SLA while the order is in this step.</SlaHint>
           </div>
 
           <div>
-            <Label required>Step</Label>
-            <SelectField value={form.step} onChange={(v) => set('step', v)} placeholder="Select steps">
+            <SlaLabel required>Step</SlaLabel>
+            <SlaSelectField value={form.step} onChange={(v) => set('step', v)} placeholder="Select steps">
               <option value="cs-confirmation">Customer Service Confirmation</option>
               <option value="aml-review">AML Review</option>
               <option value="brokerage-review">Brokerage Review</option>
               <option value="final-approval">Final Approval</option>
               <option value="disbursement">Disbursement</option>
-            </SelectField>
-            <Hint>Steps are fixed at the category level and remain available regardless of the selected product scope.</Hint>
+            </SlaSelectField>
+            <SlaHint>Steps are fixed at the category level and remain available regardless of the selected product scope.</SlaHint>
           </div>
 
           <div>
-            <Label required>SLA Time</Label>
+            <SlaLabel required>SLA Time</SlaLabel>
             <div className="flex gap-[8px]">
-              <NumberField value={form.slaTime} onChange={(v) => set('slaTime', v)} className="flex-1" />
+              <SlaNumberField value={form.slaTime} onChange={(v) => set('slaTime', v)} className="flex-1" />
               <div className="relative">
                 <select value={form.slaUnit} onChange={(e) => set('slaUnit', e.target.value)}
                   className="appearance-none h-[44px] pl-[14px] pr-10 text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
@@ -941,16 +947,16 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
                 <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#667085]" />
               </div>
             </div>
-            <Hint>Time until the first valid operational action.</Hint>
+            <SlaHint>Time until the first valid operational action.</SlaHint>
           </div>
 
           <div>
-            <Label required>Business Calendar</Label>
-            <SelectField value={form.businessCalendar} onChange={(v) => set('businessCalendar', v)}>
+            <SlaLabel required>Business Calendar</SlaLabel>
+            <SlaSelectField value={form.businessCalendar} onChange={(v) => set('businessCalendar', v)}>
               <option value="Default KSA Business Calendar">Default KSA Business Calendar</option>
               <option value="UAE Business Calendar">UAE Business Calendar</option>
-            </SelectField>
-            <Hint>The Step SLA starts when ownership is assigned to the selected team and stops when the order completes or leaves the selected step. Returning to the step creates a new linked SLA cycle.</Hint>
+            </SlaSelectField>
+            <SlaHint>The Step SLA starts when ownership is assigned to the selected team and stops when the order completes or leaves the selected step. Returning to the step creates a new linked SLA cycle.</SlaHint>
           </div>
 
           {/* SLA Thresholds */}
@@ -959,13 +965,13 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
             <div className="flex gap-[12px]">
               <div className="flex-1 border border-[#FEC84B] rounded-[8px] p-[14px]">
                 <p className="text-[14px] font-semibold text-[#DC6803] mb-3">Warning Threshold</p>
-                <Label required>Consumed SLA %</Label>
-                <NumberField value={form.warnPct} onChange={(v) => set('warnPct', v)} />
+                <SlaLabel required>Consumed SLA %</SlaLabel>
+                <SlaNumberField value={form.warnPct} onChange={(v) => set('warnPct', v)} />
               </div>
               <div className="flex-1 border border-[#FECDCA] rounded-[8px] p-[14px]">
                 <p className="text-[14px] font-semibold text-[#D92D20] mb-3">Breach Threshold</p>
-                <Label required>Consumed SLA %</Label>
-                <NumberField value={form.breachPct} onChange={(v) => set('breachPct', v)} />
+                <SlaLabel required>Consumed SLA %</SlaLabel>
+                <SlaNumberField value={form.breachPct} onChange={(v) => set('breachPct', v)} />
               </div>
             </div>
             <div className="flex items-start gap-[6px] mt-[10px]">
@@ -984,12 +990,12 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
               <div className="border border-[#FEC84B] rounded-[8px] p-[14px] flex flex-col gap-4">
                 <p className="text-[14px] font-semibold text-[#DC6803]">Warning Threshold</p>
                 <div>
-                  <Label required>Escalate To</Label>
-                  <SelectField value={form.warnEscalateTo} onChange={(v) => set('warnEscalateTo', v)}>
+                  <SlaLabel required>Escalate To</SlaLabel>
+                  <SlaSelectField value={form.warnEscalateTo} onChange={(v) => set('warnEscalateTo', v)}>
                     <option value="Assigned User">Assigned User</option>
                     <option value="Team Lead">Team Lead</option>
                     <option value="Manager">Manager</option>
-                  </SelectField>
+                  </SlaSelectField>
                 </div>
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -1008,12 +1014,12 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
               <div className="border border-[#FECDCA] rounded-[8px] p-[14px] flex flex-col gap-4">
                 <p className="text-[14px] font-semibold text-[#D92D20]">Breach Threshold</p>
                 <div>
-                  <Label required>Escalate To</Label>
-                  <SelectField value={form.breachEscalateTo} onChange={(v) => set('breachEscalateTo', v)} placeholder="Escalate To">
+                  <SlaLabel required>Escalate To</SlaLabel>
+                  <SlaSelectField value={form.breachEscalateTo} onChange={(v) => set('breachEscalateTo', v)} placeholder="Escalate To">
                     <option value="Team Lead">Team Lead</option>
                     <option value="Manager">Manager</option>
                     <option value="Director">Director</option>
-                  </SelectField>
+                  </SlaSelectField>
                 </div>
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -1029,16 +1035,16 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
                 {form.breachReassign && (
                   <div className="flex gap-[8px]">
                     <div className="flex-1">
-                      <Label required>Escalate To</Label>
-                      <SelectField value={form.breachReassignEscalateTo} onChange={(v) => set('breachReassignEscalateTo', v)} placeholder="Escalate To">
+                      <SlaLabel required>Escalate To</SlaLabel>
+                      <SlaSelectField value={form.breachReassignEscalateTo} onChange={(v) => set('breachReassignEscalateTo', v)} placeholder="Escalate To">
                         <option value="Team Lead">Team Lead</option>
                         <option value="Manager">Manager</option>
-                      </SelectField>
+                      </SlaSelectField>
                     </div>
                     <div>
-                      <Label required>Reassign After</Label>
+                      <SlaLabel required>Reassign After</SlaLabel>
                       <div className="flex gap-[8px]">
-                        <NumberField value={form.breachReassignAfter} onChange={(v) => set('breachReassignAfter', v)} className="w-[72px]" />
+                        <SlaNumberField value={form.breachReassignAfter} onChange={(v) => set('breachReassignAfter', v)} className="w-[72px]" />
                         <div className="relative">
                           <select value={form.breachReassignUnit} onChange={(e) => set('breachReassignUnit', e.target.value)}
                             className="appearance-none h-[44px] pl-[10px] pr-8 text-[14px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
@@ -1063,15 +1069,15 @@ function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => voi
           {/* Pause Conditions */}
           <div>
             <p className="text-[11px] font-semibold text-[#667085] tracking-[0.08em] uppercase mb-3">Pause Conditions</p>
-            <Label required>Pause Conditions</Label>
-            <SelectField value={form.pauseConditions} onChange={(v) => set('pauseConditions', v)} placeholder="PAUSE CONDITIONS">
+            <SlaLabel required>Pause Conditions</SlaLabel>
+            <SlaSelectField value={form.pauseConditions} onChange={(v) => set('pauseConditions', v)} placeholder="PAUSE CONDITIONS">
               <option value="waiting-customer">Waiting Customer</option>
               <option value="waiting-documents">Waiting Documents</option>
               <option value="waiting-confirmation">Waiting Confirmation</option>
               <option value="waiting-3rd-party">Waiting 3rd Party</option>
               <option value="on-hold">On Hold</option>
-            </SelectField>
-            <Hint>Only the selected conditions pause this Step SLA. The timer resumes automatically when the blocking condition is resolved.</Hint>
+            </SlaSelectField>
+            <SlaHint>Only the selected conditions pause this Step SLA. The timer resumes automatically when the blocking condition is resolved.</SlaHint>
           </div>
         </div>
 
