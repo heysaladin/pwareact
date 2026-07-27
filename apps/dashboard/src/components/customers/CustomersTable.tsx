@@ -2,6 +2,7 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Mail } from 'lucide-react';
 import { useLang } from '@/lib/language-context';
+import { CreditScoreGauge, scoreToRisk } from './CreditScoreGauge';
 
 type CustomerStatus = 'Active' | 'Inactive' | 'Suspended';
 
@@ -39,11 +40,6 @@ const CUSTOMERS: Customer[] = [
   { id: 'CPS-012', name: 'Hessa Al-Bishi',        nameAr: 'هسة البيشي',        phone: '+966562346789', email: 'hessa.b@email.com',      status: 'Suspended', joinedDate: 'October 3, 2018',    joinedTime: '11:00 AM', creditScore: 488, creditRisk: 'HIGH RISK',   orderCount: 0,  nationalId: '1043456789', nationality: 'Saudi Arabia', nationalityAr: 'المملكة العربية السعودية', simah: false, masdr: false },
 ];
 
-function getRiskBorderColor(risk: Customer['creditRisk']) {
-  if (risk === 'LOW RISK') return 'border-[#0063f5] text-[#004fc6]';
-  if (risk === 'HIGH RISK') return 'border-[#f04438] text-[#b42318]';
-  return 'border-[#9aa4b2] text-[#9aa4b2]';
-}
 
 function getStatusStyle(s: CustomerStatus) {
   if (s === 'Active') return 'bg-[#ecfdf3] border-[#abefc6] text-[#067647]';
@@ -127,28 +123,11 @@ export default function CustomersTable({ onSelectCustomer }: { onSelectCustomer?
 
             {/* Credit Score */}
             <TableCell>
-              <div className="flex items-center gap-3">
-                <div className="relative w-[56px] h-[56px] shrink-0">
-                  <svg viewBox="0 0 56 56" className="w-full h-full -rotate-90">
-                    <circle cx="28" cy="28" r="22" fill="none" stroke="#e9eaeb" strokeWidth="4" />
-                    <circle
-                      cx="28" cy="28" r="22"
-                      fill="none"
-                      stroke={customer.creditRisk === 'LOW RISK' ? '#0063f5' : customer.creditRisk === 'HIGH RISK' ? '#f04438' : '#9aa4b2'}
-                      strokeWidth="4"
-                      strokeDasharray={`${2 * Math.PI * 22}`}
-                      strokeDashoffset={`${2 * Math.PI * 22 * (1 - (customer.creditScore - 300) / 550)}`}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-[12px] font-medium text-[#181d27] dark:text-slate-100">
-                    {customer.creditScore}
-                  </span>
-                </div>
-                <span className={`text-[11px] font-semibold border rounded-full px-2 py-0.5 whitespace-nowrap ${getRiskBorderColor(customer.creditRisk)}`}>
-                  {customer.creditRisk}
-                </span>
-              </div>
+              <CreditScoreGauge
+                score={customer.creditScore}
+                risk={scoreToRisk(customer.creditScore)}
+                isAr={isAr}
+              />
             </TableCell>
 
             {/* Order Count */}

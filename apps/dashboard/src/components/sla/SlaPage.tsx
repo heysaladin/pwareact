@@ -5,92 +5,57 @@ import { cn } from '@/lib/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type PauseKey = 'waitingCustomer' | 'waitingDocuments' | 'waitingConfirmation' | 'waiting3rdParty' | 'onHold';
+type OuterTab = 'SLA Rules' | 'Business Hours' | 'Role Assignment' | 'Priority Engine';
+type InnerTab = 'Priority Scoring Model' | 'Overall Priority Scoring Model';
+type SlaProductTab = 'Personal Loan' | 'Mortgage Loan' | 'Car Loan' | 'Card Loan';
 
-const PAUSE_LABELS: Record<PauseKey, string> = {
-  waitingCustomer: 'Waiting Customer',
-  waitingDocuments: 'Waiting Documents',
-  waitingConfirmation: 'Waiting Confirmation',
-  waiting3rdParty: 'Waiting 3rd Party',
-  onHold: 'On Hold',
-};
-
-type SlaRule = {
-  id: number;
-  workflowStep: string;
-  description: string;
-  team: string;
-  durationHrs: number;
-  pause: Record<PauseKey, boolean>;
-  warnPct: number;
-  warnEscalateTo: string;
-  warnReassign: boolean;
-  breachPct: number;
-  breachEscalateTo: string;
-  breachReassign: boolean;
-};
-
-type Product = {
+type ScoringRow = {
   id: number;
   name: string;
-  category: string;
-  provider: string;
-  e2eDays: number;
-  productSteps: number;
-  rules: SlaRule[];
+  weight: number;
+  percentage: string;
+  active: boolean;
+};
+
+type CalendarItem = {
+  id: number;
+  name: string;
+  startEnd: string;
+  timezone: string;
+  enabled: boolean;
+  expanded: boolean;
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const defaultRules: SlaRule[] = [
-  {
-    id: 1, workflowStep: 'Customer Service Confirmation', description: 'Verify customer details and contact info',
-    team: 'Customer Care', durationHrs: 2,
-    pause: { waitingCustomer: true, waitingDocuments: true, waitingConfirmation: false, waiting3rdParty: false, onHold: true },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'Manager', breachReassign: true,
-  },
-  {
-    id: 2, workflowStep: 'AML Review', description: 'Anti-money laundering screening',
-    team: 'AML Team', durationHrs: 4,
-    pause: { waitingCustomer: true, waitingDocuments: true, waitingConfirmation: false, waiting3rdParty: false, onHold: true },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'AML Manager', breachReassign: true,
-  },
-  {
-    id: 3, workflowStep: 'Brokerage Review', description: 'Review and validate broker information',
-    team: 'Brokerage Team', durationHrs: 4,
-    pause: { waitingCustomer: true, waitingDocuments: true, waitingConfirmation: true, waiting3rdParty: false, onHold: true },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'Brokerage Manager', breachReassign: true,
-  },
-  {
-    id: 4, workflowStep: 'Provider Review', description: 'Provider final review and decision',
-    team: 'Provider Team', durationHrs: 4,
-    pause: { waitingCustomer: true, waitingDocuments: true, waitingConfirmation: false, waiting3rdParty: true, onHold: false },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'Provider Manager', breachReassign: true,
-  },
-  {
-    id: 5, workflowStep: 'Final Approval', description: 'Credit approval and offer generation',
-    team: 'Credit Team', durationHrs: 2,
-    pause: { waitingCustomer: false, waitingDocuments: false, waitingConfirmation: false, waiting3rdParty: false, onHold: true },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'Credit Manager', breachReassign: false,
-  },
-  {
-    id: 6, workflowStep: 'Disbursement', description: 'Disburse the loan to customer',
-    team: 'Operations Team', durationHrs: 3,
-    pause: { waitingCustomer: false, waitingDocuments: false, waitingConfirmation: false, waiting3rdParty: false, onHold: false },
-    warnPct: 50, warnEscalateTo: 'Assigned User', warnReassign: false,
-    breachPct: 100, breachEscalateTo: 'Operations Manager', breachReassign: false,
-  },
+const initialRows: ScoringRow[] = [
+  { id: 1, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 2, name: 'Age', weight: 50, percentage: '25.00%', active: false },
+  { id: 3, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 4, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 5, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 6, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 7, name: 'Age', weight: 24, percentage: '25.00%', active: true },
+  { id: 8, name: 'Age', weight: 24, percentage: '25.00%', active: true },
 ];
 
-const initialProducts: Product[] = [
-  { id: 1, name: 'Home Renovation Loan', category: 'Mortgage Loan', provider: 'Al Rajhi Bank', e2eDays: 3, productSteps: 7, rules: defaultRules },
-  { id: 2, name: 'Buy Home Loan', category: 'Mortgage Loan', provider: 'Al Rajhi Bank', e2eDays: 3, productSteps: 7, rules: defaultRules },
-  { id: 3, name: 'Build Home Loan', category: 'Mortgage Loan', provider: 'Al Rajhi Bank', e2eDays: 3, productSteps: 7, rules: defaultRules },
+const initialCalendars: CalendarItem[] = [
+  { id: 1, name: 'Tamawal Internal Calendar', startEnd: '08:00 - 18:00', timezone: 'Asia/Riyadh', enabled: true, expanded: false },
+  { id: 2, name: 'New calendar', startEnd: '08:00 - 18:00', timezone: 'Asia/Riyadh', enabled: true, expanded: false },
+  { id: 3, name: 'Calendar X', startEnd: '08:00 - 18:00', timezone: 'Asia/Riyadh', enabled: true, expanded: true },
+];
+
+const WORK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const ACTIVE_DAYS = ['Sunday', 'Monday', 'Wednesday', 'Thursday'];
+
+const SLA_RULES_ROWS = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+const PAUSE_CONDITIONS = [
+  { label: 'Waiting Customer', checked: true },
+  { label: 'Waiting Documents', checked: true },
+  { label: 'Waiting Confirmation', checked: false },
+  { label: 'Waiting 3rd Party', checked: false },
+  { label: 'On Hold', checked: true },
 ];
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -116,49 +81,31 @@ function BellIcon() {
 
 function ChevronDownIcon({ className }: { className?: string }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <polyline points="6 9 12 15 18 9" />
     </svg>
   );
 }
 
-function ChevronRightIcon({ className }: { className?: string }) {
+function ChevronRightIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="9 18 15 12 9 6" />
     </svg>
   );
 }
 
-function ChevronLeftIcon({ className }: { className?: string }) {
+function ChevronUpIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <polyline points="15 18 9 12 15 6" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="18 15 12 9 6 15" />
     </svg>
   );
 }
 
-function UserIcon() {
+function EditIcon({ size = 20 }: { size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#697586" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#414651" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-function EditIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
     </svg>
@@ -175,299 +122,180 @@ function TrashIcon() {
   );
 }
 
-function SearchIcon() {
+function TrashSmIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa4b2" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#026AA2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-px">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B42318" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14H6L5 6" />
+      <path d="M10 11v6M14 11v6M9 6V4h6v2" />
     </svg>
   );
 }
 
 function PlusIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="12" y1="5" x2="12" y2="19" />
       <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   );
 }
 
-function HouseIcon() {
+function ArrowLeftIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-      <polyline points="9 22 9 12 15 12 15 22" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
     </svg>
   );
 }
 
-// ─── Mini Components ──────────────────────────────────────────────────────────
-
-function Checkbox({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+function ArrowRightIcon() {
   return (
-    <span
-      onClick={onChange}
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
+function DotsVerticalIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="5" r="1" fill="currentColor" />
+      <circle cx="12" cy="12" r="1" fill="currentColor" />
+      <circle cx="12" cy="19" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+    </svg>
+  );
+}
+
+function XIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
+function PersonIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
+// ─── Priority Level Icons ─────────────────────────────────────────────────────
+
+function LowIcon() {
+  return (
+    <svg width="75" height="75" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M33.7729 34.161C36.0846 32.8281 38.9319 32.823 41.2498 34.1478L69.5265 50.309C71.0695 51.1909 71.0793 53.4103 69.5441 54.3041L41.266 70.7662C38.926 72.1284 36.0321 72.1244 33.6944 70.7558L5.66847 54.3477C4.14031 53.453 4.14672 51.2441 5.68004 50.3599L33.7729 34.161Z" fill="#12B76A"/>
+      <mask id="path-2-outside-1_4005_126068" maskUnits="userSpaceOnUse" x="2.87207" y="22.9855" width="70" height="45" fill="black">
+        <rect fill="white" x="2.87207" y="22.9855" width="70" height="45"/>
+        <path d="M33.7812 24.9872C36.0945 23.6551 38.944 23.6513 41.2636 24.9774L70.2363 41.5419C70.9524 41.9513 71.338 42.6484 71.3925 43.3671H71.4004V46.828H71.3994C71.4039 47.6054 71.0226 48.385 70.2539 48.8319L41.3086 65.661C38.9669 67.0225 36.07 67.0175 33.7304 65.6474L5.01363 48.83C4.1318 48.3135 3.76187 47.3602 3.90035 46.4765V43.9032C3.76189 43.0152 4.13679 42.0595 5.02535 41.5477L33.7812 24.9872Z"/>
+      </mask>
+      <path d="M33.7812 24.9872C36.0945 23.6551 38.944 23.6513 41.2636 24.9774L70.2363 41.5419C70.9524 41.9513 71.338 42.6484 71.3925 43.3671H71.4004V46.828H71.3994C71.4039 47.6054 71.0226 48.385 70.2539 48.8319L41.3086 65.661C38.9669 67.0225 36.07 67.0175 33.7304 65.6474L5.01363 48.83C4.1318 48.3135 3.76187 47.3602 3.90035 46.4765V43.9032C3.76189 43.0152 4.13679 42.0595 5.02535 41.5477L33.7812 24.9872Z" fill="white"/>
+      <path d="M33.7812 24.9872L33.4933 24.4872L33.4933 24.4873L33.7812 24.9872ZM41.2636 24.9774L41.55 24.4766L41.55 24.4766L41.2636 24.9774ZM70.2363 41.5419L70.5227 41.0411L70.5226 41.041L70.2363 41.5419ZM71.3925 43.3671L70.8173 43.4108C70.8401 43.7116 71.0909 43.944 71.3925 43.944V43.3671ZM71.4004 43.3671H71.9773C71.9773 43.0485 71.719 42.7902 71.4004 42.7902V43.3671ZM71.4004 46.828V47.4049C71.719 47.4049 71.9773 47.1466 71.9773 46.828H71.4004ZM71.3994 46.828V46.2511C71.2458 46.2511 71.0985 46.3123 70.9902 46.4213C70.8819 46.5302 70.8216 46.6778 70.8225 46.8314L71.3994 46.828ZM70.2539 48.8319L70.5438 49.3307V49.3307L70.2539 48.8319ZM41.3086 65.661L41.0186 65.1623L41.0186 65.1623L41.3086 65.661ZM33.7304 65.6474L33.4389 66.1452V66.1452L33.7304 65.6474ZM5.01363 48.83L4.72208 49.3278L4.72208 49.3278L5.01363 48.83ZM3.90035 46.4765L4.47032 46.5658C4.47495 46.5362 4.47727 46.5064 4.47727 46.4765H3.90035ZM3.90035 43.9032H4.47727C4.47727 43.8735 4.47497 43.8437 4.47038 43.8143L3.90035 43.9032ZM5.02535 41.5477L5.31326 42.0477H5.31327L5.02535 41.5477ZM33.7812 24.9872L34.0691 25.4872C36.2046 24.2575 38.8354 24.2538 40.9773 25.4783L41.2636 24.9774L41.55 24.4766C39.0525 23.0488 35.9845 23.0528 33.4933 24.4872L33.7812 24.9872ZM41.2636 24.9774L40.9773 25.4783L69.9499 42.0427L70.2363 41.5419L70.5226 41.041L41.55 24.4766L41.2636 24.9774ZM70.2363 41.5419L69.9499 42.0427C70.4887 42.3508 70.7762 42.8698 70.8173 43.4108L71.3925 43.3671L71.9678 43.3234C71.8997 42.427 71.416 41.5519 70.5227 41.0411L70.2363 41.5419ZM71.3925 43.3671V43.944H71.4004V43.3671V42.7902H71.3925V43.3671ZM71.4004 43.3671H70.8234V46.828H71.4004H71.9773V43.3671H71.4004ZM71.4004 46.828V46.2511H71.3994V46.828V47.4049H71.4004V46.828ZM71.3994 46.828L70.8225 46.8314C70.8259 47.4178 70.5407 47.9978 69.9639 48.3332L70.2539 48.8319L70.5438 49.3307C71.5045 48.7722 71.982 47.793 71.9763 46.8246L71.3994 46.828ZM70.2539 48.8319L69.9639 48.3332L41.0186 65.1623L41.3086 65.661L41.5985 66.1598L70.5438 49.3307L70.2539 48.8319ZM41.3086 65.661L41.0186 65.1623C38.8569 66.4191 36.1822 66.4146 34.022 65.1495L33.7304 65.6474L33.4389 66.1452C35.9578 67.6203 39.0769 67.6259 41.5985 66.1598L41.3086 65.661ZM33.7304 65.6474L34.022 65.1495L5.30518 48.3321L5.01363 48.83L4.72208 49.3278L33.4389 66.1452L33.7304 65.6474ZM5.01363 48.83L5.30518 48.3321C4.64477 47.9454 4.36547 47.2349 4.47032 46.5658L3.90035 46.4765L3.33038 46.3871C3.15828 47.4854 3.61883 48.6817 4.72208 49.3278L5.01363 48.83ZM3.90035 46.4765H4.47727V43.9032H3.90035H3.32343V46.4765H3.90035ZM3.90035 43.9032L4.47038 43.8143C4.36554 43.1419 4.64854 42.4305 5.31326 42.0477L5.02535 41.5477L4.73743 41.0478C3.62503 41.6884 3.15823 42.8885 3.33031 43.9921L3.90035 43.9032ZM5.02535 41.5477L5.31327 42.0477L34.0691 25.4871L33.7812 24.9872L33.4933 24.4873L4.73743 41.0478L5.02535 41.5477Z" fill="#1D2939" mask="url(#path-2-outside-1_4005_126068)"/>
+      <mask id="mask0_4005_126068" style={{maskType:'alpha'}} maskUnits="userSpaceOnUse" x="3" y="23" width="35" height="44">
+        <rect x="3.86963" y="23.8672" width="33.75" height="42.9808" fill="#D0D8DC"/>
+      </mask>
+      <g mask="url(#mask0_4005_126068)">
+        <path d="M33.751 28.2861C36.0644 26.9538 38.9144 26.9501 41.2342 28.2764L70.2064 44.841C71.7497 45.7233 71.7596 47.941 70.2243 48.8336L41.2784 65.6635C38.9368 67.025 36.0402 67.0197 33.7006 65.6495L4.98389 48.8318C3.4555 47.9367 3.46176 45.7295 4.9952 44.8464L33.751 28.2861Z" fill="#D0D5DD"/>
+        <path d="M33.751 24.9873C36.0644 23.655 38.9143 23.6513 41.2341 24.9776L70.2064 41.5422C71.7496 42.4245 71.7595 44.6422 70.2242 45.5349L41.2784 62.3647C38.9367 63.7262 36.0401 63.7209 33.7005 62.3507L4.98385 45.533C3.45546 44.6379 3.46172 42.4307 4.99515 41.5476L33.751 24.9873Z" fill="#D0D5DD"/>
+        <rect x="3.87061" y="43.3672" width="67.5" height="3.46154" fill="#D0D5DD"/>
+      </g>
+      <path d="M70.2776 41.3663C71.917 42.3033 71.9271 44.6615 70.2961 45.6111L41.3351 62.4706C38.9503 63.8588 36.001 63.8555 33.6184 62.4607L4.91547 45.6563C3.2918 44.7057 3.29887 42.3578 4.92802 41.4184L33.6978 24.8292C36.0539 23.4706 38.9561 23.4655 41.3185 24.8155L70.2776 41.3663Z" fill="white" stroke="#1D2939" strokeWidth="0.288462"/>
+      <path d="M27.6431 22.7634C27.8168 22.734 27.9946 22.7852 28.1255 22.903L30.5933 25.1247C30.6813 25.2039 30.7393 25.3081 30.7662 25.4206C30.8378 25.5573 30.8744 25.7155 30.8619 25.8845L29.7984 40.1901C29.7108 41.3681 28.8383 42.3387 27.6763 42.5514L20.5503 43.8561C20.5 43.8654 20.45 43.8683 20.4009 43.8688C20.2293 43.9 20.0525 43.852 19.9205 43.738L17.1812 41.3727C17.0402 41.2508 16.9666 41.0681 16.9839 40.8825L18.356 26.2878C18.466 25.1175 19.3494 24.1665 20.5084 23.9704L27.6431 22.7634Z" fill="#D0D5DD"/>
+      <path d="M27.6431 22.7634L27.6191 22.6211L27.6191 22.6212L27.6431 22.7634ZM28.1255 22.903L28.222 22.7958L28.222 22.7958L28.1255 22.903ZM30.5933 25.1247L30.4968 25.2319L30.4968 25.2319L30.5933 25.1247ZM30.7662 25.4206L30.6259 25.4541C30.6286 25.4657 30.6329 25.4769 30.6384 25.4875L30.7662 25.4206ZM30.8619 25.8845L31.0057 25.8951L31.0057 25.8951L30.8619 25.8845ZM29.7984 40.1901L29.9422 40.2008V40.2008L29.7984 40.1901ZM27.6763 42.5514L27.7023 42.6933L27.7023 42.6933L27.6763 42.5514ZM20.5503 43.8561L20.5244 43.7143H20.5244L20.5503 43.8561ZM20.4009 43.8688L20.3994 43.7246C20.3913 43.7247 20.3831 43.7255 20.3751 43.7269L20.4009 43.8688ZM19.9205 43.738L20.0147 43.6288L20.0147 43.6288L19.9205 43.738ZM17.1812 41.3727L17.0869 41.4819L17.0869 41.4819L17.1812 41.3727ZM16.9839 40.8825L16.8403 40.869L16.8403 40.8691L16.9839 40.8825ZM18.356 26.2878L18.2124 26.2743L18.2124 26.2743L18.356 26.2878ZM20.5084 23.9704L20.4843 23.8282L20.4843 23.8282L20.5084 23.9704ZM27.6431 22.7634L27.6672 22.9056C27.7977 22.8835 27.9311 22.922 28.0291 23.0102L28.1255 22.903L28.222 22.7958C28.0582 22.6483 27.8359 22.5845 27.6191 22.6211L27.6431 22.7634ZM28.1255 22.903L28.029 23.0102L30.4968 25.2319L30.5933 25.1247L30.6898 25.0175L28.222 22.7958L28.1255 22.903ZM30.5933 25.1247L30.4968 25.2319C30.5612 25.2898 30.6052 25.3674 30.6259 25.4541L30.7662 25.4206L30.9065 25.3871C30.8734 25.2487 30.8014 25.1179 30.6898 25.0175L30.5933 25.1247ZM30.7662 25.4206L30.6384 25.4875C30.698 25.6014 30.7285 25.7328 30.718 25.8738L30.8619 25.8845L31.0057 25.8951C31.0203 25.6982 30.9775 25.5133 30.8939 25.3537L30.7662 25.4206ZM30.8619 25.8845L30.718 25.8738L29.6546 40.1794L29.7984 40.1901L29.9422 40.2008L31.0057 25.8951L30.8619 25.8845ZM29.7984 40.1901L29.6546 40.1794C29.5718 41.292 28.7478 42.2086 27.6503 42.4096L27.6763 42.5514L27.7023 42.6933C28.9288 42.4688 29.8497 41.4443 29.9422 40.2008L29.7984 40.1901ZM27.6763 42.5514L27.6503 42.4096L20.5244 43.7143L20.5503 43.8561L20.5763 43.998L27.7023 42.6933L27.6763 42.5514ZM20.5503 43.8561L20.5244 43.7143C20.4851 43.7215 20.444 43.7241 20.3994 43.7246L20.4009 43.8688L20.4024 44.0131C20.456 44.0125 20.5149 44.0092 20.5763 43.998L20.5503 43.8561ZM20.4009 43.8688L20.3751 43.7269C20.2463 43.7504 20.1137 43.7143 20.0147 43.6288L19.9205 43.738L19.8262 43.8471C19.9913 43.9898 20.2123 44.0497 20.4267 44.0107L20.4009 43.8688ZM19.9205 43.738L20.0147 43.6288L17.2755 41.2636L17.1812 41.3727L17.0869 41.4819L19.8262 43.8471L19.9205 43.738ZM17.1812 41.3727L17.2755 41.2636C17.1697 41.1722 17.1146 41.0351 17.1275 40.8959L16.9839 40.8825L16.8403 40.8691C16.8187 41.1011 16.9106 41.3295 17.0869 41.4819L17.1812 41.3727ZM16.9839 40.8825L17.1275 40.896L18.4996 26.3013L18.356 26.2878L18.2124 26.2743L16.8403 40.869L16.9839 40.8825ZM18.356 26.2878L18.4996 26.3013C18.6035 25.196 19.4378 24.2978 20.5324 24.1126L20.5084 23.9704L20.4843 23.8282C19.261 24.0352 18.3285 25.039 18.2124 26.2743L18.356 26.2878ZM20.5084 23.9704L20.5324 24.1126L27.6672 22.9056L27.6431 22.7634L27.6191 22.6212L20.4843 23.8282L20.5084 23.9704Z" fill="black"/>
+      <path d="M45.8018 5.84668L45.7998 5.85449C46.7405 6.51067 47.0653 7.74418 47.1006 8.44824C47.2855 10.0756 47.218 13.5007 45.9697 16.6758L54.3115 15.3652L57.1963 17.6738L57.1777 17.7529C57.7314 18.0336 58.206 18.6091 58.2061 19.6982C58.2061 21.6595 57.149 22.535 56.6201 22.7275C57.1971 22.7758 58.293 23.3624 58.0625 25.3232C57.8317 27.2848 56.5234 27.8718 55.8984 27.9199C56.2831 28.0642 56.9944 28.7567 56.7637 30.3721C56.5327 31.987 55.2256 32.679 54.6006 32.8232C55.3306 33.4164 55.8437 35.6116 53.4287 37.4365C53.1626 37.6376 52.8459 37.7605 52.5186 37.8242L37.4375 40.7559C34.7629 41.2908 32.3895 41.223 30.8242 40.7754C30.7887 40.7652 30.7545 40.7517 30.7207 40.7393L30.6582 40.75L30.5527 40.667C30.392 40.5835 30.2555 40.4721 30.1416 40.3408L27.1963 38.0098L31.0908 23.0098L37.8691 16.2314L42.7734 3.39453L45.8018 5.84668Z" fill="#D0D5DD"/>
+      <path d="M45.8018 5.84668L45.9417 5.88166C45.9553 5.82725 45.9361 5.76988 45.8925 5.73459L45.8018 5.84668ZM45.7998 5.85449L45.6599 5.81951C45.6454 5.87757 45.6682 5.93855 45.7173 5.97279L45.7998 5.85449ZM47.1006 8.44824L46.9562 8.45548L46.9573 8.46453L47.1006 8.44824ZM45.9697 16.6758L45.8355 16.623C45.8166 16.6711 45.8249 16.7257 45.8572 16.766C45.8896 16.8064 45.941 16.8263 45.9921 16.8183L45.9697 16.6758ZM54.3115 15.3652L54.4016 15.2526C54.37 15.2273 54.3292 15.2165 54.2891 15.2228L54.3115 15.3652ZM57.1963 17.6738L57.3367 17.7068C57.3494 17.6526 57.3298 17.596 57.2864 17.5612L57.1963 17.6738ZM57.1777 17.7529L57.0373 17.72C57.0221 17.7848 57.0532 17.8515 57.1125 17.8816L57.1777 17.7529ZM58.2061 19.6982H58.3503V19.6982L58.2061 19.6982ZM56.6201 22.7275L56.5708 22.592C56.5071 22.6152 56.4682 22.6795 56.4772 22.7466C56.4861 22.8138 56.5406 22.8656 56.6081 22.8713L56.6201 22.7275ZM58.0625 25.3232L58.2057 25.3401V25.3401L58.0625 25.3232ZM55.8984 27.9199L55.8874 27.7761C55.8199 27.7813 55.7651 27.8327 55.7556 27.8997C55.7461 27.9666 55.7845 28.0312 55.8478 28.055L55.8984 27.9199ZM56.7637 30.3721L56.9065 30.3925L56.9065 30.3925L56.7637 30.3721ZM54.6006 32.8232L54.5681 32.6827C54.5145 32.6951 54.4725 32.737 54.4601 32.7907C54.4476 32.8444 54.4669 32.9004 54.5096 32.9352L54.6006 32.8232ZM53.4287 37.4365L53.5157 37.5516L53.5157 37.5516L53.4287 37.4365ZM52.5186 37.8242L52.5461 37.9658L52.5461 37.9658L52.5186 37.8242ZM37.4375 40.7559L37.41 40.6143L37.4092 40.6144L37.4375 40.7559ZM30.8242 40.7754L30.7846 40.9141H30.7846L30.8242 40.7754ZM30.7207 40.7393L30.7704 40.6038C30.7467 40.5952 30.7211 40.5928 30.6963 40.5971L30.7207 40.7393ZM30.6582 40.75L30.569 40.8633C30.6011 40.8886 30.6424 40.8991 30.6826 40.8921L30.6582 40.75ZM30.5527 40.667L30.6419 40.5537C30.6348 40.5481 30.6272 40.5432 30.6192 40.539L30.5527 40.667ZM30.1416 40.3408L30.2505 40.2463C30.2447 40.2395 30.2382 40.2333 30.2311 40.2277L30.1416 40.3408ZM27.1963 38.0098L27.0567 37.9735C27.0423 38.0288 27.062 38.0874 27.1068 38.1229L27.1963 38.0098ZM31.0908 23.0098L30.9888 22.9078C30.9707 22.926 30.9577 22.9486 30.9512 22.9735L31.0908 23.0098ZM37.8691 16.2314L37.9711 16.3334C37.9855 16.3191 37.9966 16.3019 38.0039 16.2829L37.8691 16.2314ZM42.7734 3.39453L42.8642 3.28244C42.8283 3.25336 42.7806 3.24325 42.736 3.25525C42.6914 3.26724 42.6552 3.29989 42.6387 3.34306L42.7734 3.39453ZM45.8018 5.84668L45.6618 5.8117L45.6599 5.81951L45.7998 5.85449L45.9397 5.88947L45.9417 5.88166L45.8018 5.84668ZM45.7998 5.85449L45.7173 5.97279C46.6051 6.59205 46.9223 7.77131 46.9565 8.45546L47.1006 8.44824L47.2446 8.44102C47.2084 7.71704 46.876 6.42929 45.8823 5.7362L45.7998 5.85449ZM47.1006 8.44824L46.9573 8.46453C47.1402 10.0744 47.0733 13.4748 45.8355 16.623L45.9697 16.6758L46.104 16.7286C47.3628 13.5267 47.4308 10.0769 47.2439 8.43196L47.1006 8.44824ZM45.9697 16.6758L45.9921 16.8183L54.3339 15.5077L54.3115 15.3652L54.2891 15.2228L45.9473 16.5333L45.9697 16.6758ZM54.3115 15.3652L54.2214 15.4778L57.1062 17.7864L57.1963 17.6738L57.2864 17.5612L54.4016 15.2526L54.3115 15.3652ZM57.1963 17.6738L57.0559 17.6409L57.0373 17.72L57.1777 17.7529L57.3182 17.7859L57.3367 17.7068L57.1963 17.6738ZM57.1777 17.7529L57.1125 17.8816C57.3681 18.0111 57.6034 18.2074 57.7756 18.4962C57.9479 18.7853 58.0618 19.175 58.0618 19.6983L58.2061 19.6982L58.3503 19.6982C58.3502 19.1323 58.2268 18.6897 58.0234 18.3485C57.8199 18.0072 57.541 17.7754 57.2429 17.6243L57.1777 17.7529ZM58.2061 19.6982H58.0618C58.0618 21.6026 57.0393 22.4215 56.5708 22.592L56.6201 22.7275L56.6694 22.8631C57.2588 22.6486 58.3503 21.7163 58.3503 19.6982H58.2061ZM56.6201 22.7275L56.6081 22.8713C56.8606 22.8924 57.241 23.034 57.5314 23.3981C57.8193 23.7591 58.0311 24.3548 57.9193 25.3064L58.0625 25.3232L58.2057 25.3401C58.3244 24.3308 58.1035 23.6528 57.7569 23.2182C57.4127 22.7867 56.9566 22.611 56.6321 22.5838L56.6201 22.7275ZM58.0625 25.3232L57.9193 25.3064C57.6972 27.1938 56.4495 27.7329 55.8874 27.7761L55.8984 27.9199L55.9095 28.0637C56.5974 28.0108 57.9663 27.3758 58.2057 25.3401L58.0625 25.3232ZM55.8984 27.9199L55.8478 28.055C56.1535 28.1696 56.8446 28.7854 56.6209 30.3517L56.7637 30.3721L56.9065 30.3925C57.1442 28.728 56.4126 27.9587 55.9491 27.7849L55.8984 27.9199ZM56.7637 30.3721L56.6209 30.3517C56.4012 31.8879 55.1573 32.5467 54.5681 32.6827L54.6006 32.8232L54.633 32.9638C55.2938 32.8112 56.6642 32.0862 56.9065 30.3925L56.7637 30.3721ZM54.6006 32.8232L54.5096 32.9352C55.1485 33.4543 55.7023 35.5377 53.3418 37.3214L53.4287 37.4365L53.5157 37.5516C55.9852 35.6855 55.5127 33.3785 54.6915 32.7113L54.6006 32.8232ZM53.4287 37.4365L53.3418 37.3214C53.097 37.5064 52.8019 37.6221 52.491 37.6826L52.5186 37.8242L52.5461 37.9658C52.8899 37.8989 53.2283 37.7687 53.5157 37.5516L53.4287 37.4365ZM52.5186 37.8242L52.491 37.6826L37.41 40.6143L37.4375 40.7559L37.465 40.8974L52.5461 37.9658L52.5186 37.8242ZM37.4375 40.7559L37.4092 40.6144C34.7499 41.1463 32.4008 41.0762 30.8639 40.6367L30.8242 40.7754L30.7846 40.9141C32.3782 41.3698 34.776 41.4352 37.4658 40.8973L37.4375 40.7559ZM30.8242 40.7754L30.8639 40.6367C30.835 40.6285 30.809 40.618 30.7704 40.6038L30.7207 40.7393L30.671 40.8747C30.7001 40.8853 30.7423 40.902 30.7846 40.9141L30.8242 40.7754ZM30.7207 40.7393L30.6963 40.5971L30.6338 40.6079L30.6582 40.75L30.6826 40.8921L30.7451 40.8814L30.7207 40.7393ZM30.6582 40.75L30.7474 40.6367L30.6419 40.5537L30.5527 40.667L30.4635 40.7803L30.569 40.8633L30.6582 40.75ZM30.5527 40.667L30.6192 40.539C30.4757 40.4644 30.3533 40.3648 30.2505 40.2463L30.1416 40.3408L30.0327 40.4353C30.1576 40.5793 30.3082 40.7025 30.4862 40.795L30.5527 40.667ZM30.1416 40.3408L30.2311 40.2277L27.2858 37.8967L27.1963 38.0098L27.1068 38.1229L30.0521 40.4539L30.1416 40.3408ZM27.1963 38.0098L27.3359 38.046L31.2304 23.046L31.0908 23.0098L30.9512 22.9735L27.0567 37.9735L27.1963 38.0098ZM31.0908 23.0098L31.1928 23.1118L37.9711 16.3334L37.8691 16.2314L37.7672 16.1295L30.9888 22.9078L31.0908 23.0098ZM37.8691 16.2314L38.0039 16.2829L42.9082 3.44601L42.7734 3.39453L42.6387 3.34306L37.7344 16.18L37.8691 16.2314ZM42.7734 3.39453L42.6827 3.50662L45.711 5.95877L45.8018 5.84668L45.8925 5.73459L42.8642 3.28244L42.7734 3.39453Z" fill="black"/>
+      <path d="M25.1763 40.0278L17.2437 41.4701L20.2725 43.922C22.484 43.5374 26.9071 42.7393 27.484 42.6239C28.061 42.5086 28.7821 42.047 29.0706 41.6143L26.4744 39.3066C26.0129 39.8836 25.4167 39.9797 25.1763 40.0278Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M29.6483 40.8897L26.9079 38.582L26.7637 38.8705L29.5041 41.1782L29.6483 40.8897Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M29.2153 23.8726L26.8847 36.4318C26.7225 37.3062 27.0836 38.2144 27.9387 38.4589C29.504 38.9066 31.8771 38.9748 34.5518 38.4398L49.6329 35.5074C49.9604 35.4437 50.2776 35.3215 50.5438 35.1204C52.9588 33.2955 52.4453 31.1003 51.7153 30.5072C52.3403 30.3629 53.648 29.6706 53.8788 28.0552C54.1095 26.4398 53.398 25.7475 53.0134 25.6033C53.6384 25.5552 54.9461 24.9687 55.1768 23.0072C55.4076 21.0456 54.3115 20.4591 53.7345 20.411C54.2634 20.2187 55.3211 19.3437 55.3211 17.3822C55.3211 15.4206 53.7826 15.1225 53.0134 15.2187L41.6191 17.0937C44.273 13.4014 44.4557 8.24753 44.2153 6.13216C44.1672 5.17063 43.5807 3.21872 41.6191 3.10334C39.6576 2.98795 39.0711 4.20911 39.023 4.83411C39.023 11.1803 37.4364 12.911 36.4268 14.6418C35.4172 16.3726 31.523 20.6995 30.3691 21.7091C29.4461 22.5168 29.2153 23.488 29.2153 23.8726Z" fill="white" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M27.0802 22.5222L19.9784 24.0062C19.1219 24.1852 18.4782 24.8954 18.3839 25.7653L16.7919 40.4606C16.7296 41.0361 17.2388 41.5093 17.8082 41.4051L24.9347 40.1002C26.0967 39.8875 26.9685 38.9171 27.0561 37.7391L28.1202 23.4335C28.1629 22.8595 27.6436 22.4045 27.0802 22.5222Z" fill="white" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M51.2822 34.5443L54.1668 36.7078L54.4553 36.4193L51.5707 34.2559L51.2822 34.5443Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M51.7158 30.5072L54.6004 32.8149L55.3216 32.5264L52.437 30.2188L51.7158 30.5072Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M54.888 20.9881C54.5419 20.642 54.0707 20.4593 53.8784 20.4112L54.4553 19.9785L57.1957 22.2862L56.6188 22.7189L54.888 20.9881Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M56.1853 27.9106L53.0122 25.6029L53.8776 25.3145L56.9064 27.4779L56.1853 27.9106Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+      <path d="M30.6578 40.7477L27.6289 38.2958C29.2443 39.1035 32.3404 38.8247 33.6866 38.5843C39.0231 37.5747 49.7539 35.5266 49.9847 35.4112L50.8501 34.9785L53.7347 37.142C53.302 37.4304 52.8693 37.7189 52.2924 37.8631L35.4174 41.0362C32.7635 41.267 31.1385 40.9401 30.6578 40.7477Z" fill="#151515" stroke="#151515" strokeWidth="0.288462"/>
+    </svg>
+  );
+}
+
+function MediumIcon() {
+  return (
+    <svg width="75" height="75" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_medium)">
+        <path d="M33.6537 34.1591C35.9655 32.8261 38.8127 32.8211 41.1306 34.1458L69.4074 50.3071C70.9504 51.189 70.9602 53.4084 69.425 54.3021L41.1468 70.7642C38.8069 72.1264 35.913 72.1225 33.5753 70.7538L5.54933 54.3458C4.02116 53.4511 4.02757 51.2421 5.56089 50.358L33.6537 34.1591Z" fill="#FFDD33"/>
+        <mask id="path-2-outside-1_4005_126102" maskUnits="userSpaceOnUse" x="2.75146" y="22.9818" width="70" height="45" fill="black">
+          <rect fill="white" x="2.75146" y="22.9818" width="70" height="45"/>
+          <path d="M33.6606 24.9836C35.974 23.6514 38.8234 23.6476 41.1431 24.9738L70.1157 41.5383C70.8325 41.9481 71.218 42.646 71.272 43.3654H71.2788V46.8293C71.2823 47.6056 70.901 48.3829 70.1333 48.8293L41.188 65.6594C38.8463 67.0208 35.9494 67.0158 33.6099 65.6457L4.89306 48.8283C4.01324 48.313 3.64295 47.3626 3.7788 46.4806V43.8928C3.64328 43.0066 4.01846 42.0536 4.90478 41.5431L33.6606 24.9836Z"/>
+        </mask>
+        <path d="M33.6606 24.9836C35.974 23.6514 38.8234 23.6476 41.1431 24.9738L70.1157 41.5383C70.8325 41.9481 71.218 42.646 71.272 43.3654H71.2788V46.8293C71.2823 47.6056 70.901 48.3829 70.1333 48.8293L41.188 65.6594C38.8463 67.0208 35.9494 67.0158 33.6099 65.6457L4.89306 48.8283C4.01324 48.313 3.64295 47.3626 3.7788 46.4806V43.8928C3.64328 43.0066 4.01846 42.0536 4.90478 41.5431L33.6606 24.9836Z" fill="white"/>
+        <path d="M70.1589 41.3663C71.7983 42.3033 71.8085 44.6615 70.1774 45.6111L41.2165 62.4706C38.8316 63.8588 35.8823 63.8555 33.4998 62.4607L4.79682 45.6563C3.17315 44.7057 3.18022 42.3578 4.80937 41.4184L33.5791 24.8292C35.9352 23.4706 38.8374 23.4655 41.1999 24.8155L70.1589 41.3663Z" fill="white" stroke="#1D2939" strokeWidth="0.288462"/>
+        <path d="M27.4039 58.6271H38.077L46.5866 54.3002L52.5001 50.6944L22.5001 31.5117L15.4328 35.5502L4.93273 41.5038C3.38444 42.3817 3.37078 44.6078 4.90819 45.5046L27.4039 58.6271Z" fill="#D0D5DD"/>
+        <path d="M63.1771 32.7304C64.8165 33.6674 64.8266 36.0255 63.1956 36.9752L41.2525 49.7497C38.8676 51.1379 35.9178 51.1339 33.5353 49.739L11.7943 37.0107C10.1706 36.0601 10.1777 33.7122 11.8068 32.7728L33.6098 20.2007C35.9659 18.8422 38.8681 18.837 41.2305 20.1871L63.1771 32.7304Z" fill="#1D2939" stroke="#1D2939" strokeWidth="0.288462"/>
+        <ellipse cx="0.9302" cy="1.09162" rx="0.9302" ry="1.09162" transform="matrix(-0.866025 -0.5 -0.5 0.866025 61.7305 42.1035)" fill="#FFDD33" stroke="#1D2939" strokeWidth="0.288462"/>
+        <ellipse cx="0.9302" cy="1.09162" rx="0.9302" ry="1.09162" transform="matrix(-0.866025 -0.5 -0.5 0.866025 57.5117 44.6348)" fill="#D0D5DD" stroke="#1D2939" strokeWidth="0.288462"/>
+        <path d="M63.1771 22.3476C64.8165 23.2845 64.8266 25.6427 63.1956 26.5924L41.2525 39.3669C38.8676 40.7551 35.9178 40.751 33.5353 39.3562L11.7943 26.6279C10.1706 25.6773 10.1777 23.3294 11.8068 22.39L33.6098 9.81792C35.9659 8.45939 38.8681 8.45415 41.2305 9.80427L63.1771 22.3476Z" fill="white" stroke="#1D2939" strokeWidth="0.288462"/>
+        <ellipse cx="0.9302" cy="1.09162" rx="0.9302" ry="1.09162" transform="matrix(-0.866025 -0.5 -0.5 0.866025 61.7305 31.7168)" fill="#FFDD33" stroke="#1D2939" strokeWidth="0.288462"/>
+        <ellipse cx="0.9302" cy="1.09162" rx="0.9302" ry="1.09162" transform="matrix(-0.866025 -0.5 -0.5 0.866025 57.5117 34.252)" fill="#D0D5DD" stroke="#1D2939" strokeWidth="0.288462"/>
+        <path d="M28.4603 26.081L32.514 28.7367L31.6756 29.1802L29.0465 27.4578L29.723 29.3286L29.6251 29.3804L26.5433 28.789L29.1666 30.5076L28.3221 30.9543L24.2684 28.2987L25.1374 27.8389L28.2842 28.444L27.5913 26.5407L28.4603 26.081ZM33.3922 27.3669L35.1975 26.4119L35.9619 26.9127L33.3122 28.3145L29.2584 25.6588L31.8776 24.2732L32.642 24.7739L30.8674 25.7128L31.7302 26.2781L33.3519 25.4202L34.1047 25.9134L32.483 26.7713L33.3922 27.3669ZM34.2047 23.0421C34.7921 22.7313 35.4767 22.6 36.2582 22.6483C37.0439 22.6944 37.7224 22.9046 38.2938 23.2789C38.8652 23.6532 39.148 24.0728 39.1422 24.5376C39.1404 25.0002 38.8459 25.3869 38.2584 25.6977L36.5572 26.5977L32.5034 23.9421L34.2047 23.0421ZM37.494 25.197C37.8652 25.0006 38.0513 24.765 38.0522 24.4902C38.0492 24.2129 37.8605 23.9516 37.486 23.7062C37.1115 23.4609 36.6922 23.3239 36.228 23.2951C35.76 23.2639 35.3403 23.3464 34.9691 23.5428L34.1124 23.9961L36.6372 25.6502L37.494 25.197ZM36.866 21.6341L37.7105 21.1874L41.7642 23.8431L40.9197 24.2898L36.866 21.6341ZM44.2354 22.6317C43.7581 22.8842 43.239 23.008 42.6782 23.0029C42.1175 22.9978 41.6228 22.8549 41.1943 22.5742L38.4667 20.7873L39.3051 20.3438L41.9689 22.0889C42.1813 22.228 42.4125 22.3046 42.6625 22.3186C42.9166 22.3305 43.1803 22.2641 43.4536 22.1195C43.7269 21.9749 43.8651 21.8287 43.868 21.6809C43.875 21.5309 43.7723 21.3863 43.56 21.2472L40.8961 19.5021L41.7406 19.0553L44.4682 20.8422C44.8967 21.1229 45.0854 21.4277 45.0342 21.7565C44.9831 22.0853 44.7168 22.377 44.2354 22.6317ZM46.6933 16.4352L50.747 19.0909L49.9086 19.5344L47.2795 17.812L47.956 19.6828L47.8581 19.7346L44.7763 19.1431L47.3996 20.8617L46.5551 21.3085L42.5014 18.6528L43.3704 18.1931L46.5172 18.7981L45.8243 16.8949L46.6933 16.4352Z" fill="black"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_medium">
+          <rect width="75" height="75" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function HighIcon() {
+  return (
+    <img src="/illustrations/icon-risk-3.png" width={75} height={75} alt="High risk" />
+  );
+}
+
+function CriticalIcon() {
+  return (
+    <img src="/illustrations/icon-risk-4.png" width={75} height={75} alt="Critical risk" />
+  );
+}
+
+// ─── Toggle Switch ────────────────────────────────────────────────────────────
+
+function ToggleSwitch({ pressed, onToggle }: { pressed: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
       className={cn(
-        'h-4 w-4 rounded border flex items-center justify-center shrink-0 transition-colors cursor-pointer overflow-hidden',
-        checked ? 'bg-[#0063F5] border-[#0063F5]' : 'border-[#D5D7DA]'
+        'flex h-[20px] w-[36px] shrink-0 items-center rounded-[12px] p-[2px] transition-colors',
+        pressed ? 'bg-[#0063f5] justify-end' : 'bg-[#f5f5f5] justify-start'
       )}
     >
-      {checked && (
-        <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-          <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )}
-    </span>
-  );
-}
-
-function WarnBadge({ pct }: { pct: number }) {
-  return (
-    <span className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-[#FEDF89] bg-[#FFFAEB] text-[#B54708] text-[14px] font-medium whitespace-nowrap">
-      {pct}%
-    </span>
-  );
-}
-
-function BreachBadge({ pct }: { pct: number }) {
-  return (
-    <span className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-[#FECDCA] bg-[#FEF3F2] text-[#B42318] text-[14px] font-medium whitespace-nowrap">
-      {pct}%
-    </span>
-  );
-}
-
-function DurationBadge({ hrs }: { hrs: number }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#E9EAEB] bg-[#FAFAFA] text-[#414651] text-[14px] font-medium whitespace-nowrap">
-      <ClockIcon />
-      {hrs} hrs
-    </span>
-  );
-}
-
-function AvatarPlaceholder() {
-  return (
-    <div className="w-6 h-6 rounded-full bg-[#F5F5F5] flex items-center justify-center shrink-0 border border-black/5">
-      <UserIcon />
-    </div>
-  );
-}
-
-function ProductAvatar() {
-  return (
-    <div className="w-12 h-12 rounded-xl bg-[#F2F4F7] flex items-center justify-center shrink-0">
-      <HouseIcon />
-    </div>
-  );
-}
-
-function StatBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-[#E9EAEB] bg-[#FAFAFA] text-[#414651] text-[12px] font-medium whitespace-nowrap">
-      {children}
-    </span>
-  );
-}
-
-// ─── Table Header ─────────────────────────────────────────────────────────────
-
-function SlaTableHeader() {
-  const cols = [
-    { label: '#', width: 'w-8' },
-    { label: 'WORKFLOW STEP', width: 'w-[150px]' },
-    { label: 'TEAM / OWNER', width: 'w-[150px]' },
-    { label: 'SLA DURATION', width: 'w-[110px]' },
-    { label: 'PAUSE CONDITIONS', width: 'w-[200px]' },
-    { label: 'WARNING → ESCALATE', width: 'w-[120px]' },
-    { label: 'WARN REASSIGN', width: 'w-[110px]' },
-    { label: 'BREACH → ESCALATE', width: 'w-[120px]' },
-    { label: 'BREACH REASSIGN', width: 'w-[110px]' },
-    { label: 'ACTIONS', width: 'w-[90px]' },
-  ];
-  return (
-    <div className="flex items-center gap-6 px-6 py-0 h-16 border-b border-[#F2F4F7]">
-      {cols.map((c) => (
-        <div key={c.label} className={cn('shrink-0', c.width)}>
-          <p className="text-[14px] font-medium text-[#697586] whitespace-nowrap">{c.label}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── SLA Table Row ────────────────────────────────────────────────────────────
-
-function SlaTableRow({
-  rule,
-  onUpdate,
-  onDelete,
-}: {
-  rule: SlaRule;
-  onUpdate: (r: SlaRule) => void;
-  onDelete: () => void;
-}) {
-  function togglePause(key: PauseKey) {
-    onUpdate({ ...rule, pause: { ...rule.pause, [key]: !rule.pause[key] } });
-  }
-
-  return (
-    <div className="flex items-start gap-6 px-6 py-2 border border-[#E9EAEB] rounded-[6px] bg-white mx-3 mb-1.5 relative shadow-[0_-1px_0_0_#F2F4F7_inset]">
-      {/* # */}
-      <div className="w-8 shrink-0 py-3">
-        <p className="text-[14px] font-medium text-[#697586]">{rule.id}</p>
-      </div>
-
-      {/* Workflow Step */}
-      <div className="w-[150px] shrink-0 py-3 flex flex-col gap-1.5">
-        <p className="text-[16px] font-medium text-[#121a26] leading-snug">{rule.workflowStep}</p>
-        <p className="text-[12px] text-[#697586] leading-snug">{rule.description}</p>
-      </div>
-
-      {/* Team / Owner */}
-      <div className="w-[150px] shrink-0 py-3">
-        <div className="flex items-center gap-1.5">
-          <AvatarPlaceholder />
-          <p className="text-[14px] font-medium text-[#535862]">{rule.team}</p>
-        </div>
-      </div>
-
-      {/* SLA Duration */}
-      <div className="w-[110px] shrink-0 py-3">
-        <DurationBadge hrs={rule.durationHrs} />
-      </div>
-
-      {/* Pause Conditions */}
-      <div className="w-[200px] shrink-0 py-3 flex flex-col gap-2">
-        {(Object.keys(PAUSE_LABELS) as PauseKey[]).map((key) => (
-          <label key={key} className="flex items-center gap-2 cursor-pointer">
-            <Checkbox checked={rule.pause[key]} onChange={() => togglePause(key)} />
-            <span className="text-[16px] font-medium text-[#414651] leading-none select-none">{PAUSE_LABELS[key]}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Warning → Escalate */}
-      <div className="w-[120px] shrink-0 py-3 flex flex-col gap-4">
-        <WarnBadge pct={rule.warnPct} />
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[12px] text-[#9aa4b2] leading-tight">Escalate to:</p>
-          <p className="text-[12px] font-medium text-[#202a39] leading-tight">{rule.warnEscalateTo}</p>
-        </div>
-      </div>
-
-      {/* Warn Reassign */}
-      <div className="w-[110px] shrink-0 py-3">
-        <p className="text-[18px] font-semibold text-[#697586]">{rule.warnReassign ? 'Yes' : 'No'}</p>
-      </div>
-
-      {/* Breach → Escalate */}
-      <div className="w-[120px] shrink-0 py-3 flex flex-col gap-4">
-        <BreachBadge pct={rule.breachPct} />
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[12px] text-[#9aa4b2] leading-tight">Escalate to:</p>
-          <p className="text-[12px] font-medium text-[#202a39] leading-tight">{rule.breachEscalateTo}</p>
-        </div>
-      </div>
-
-      {/* Breach Reassign */}
-      <div className="w-[110px] shrink-0 py-3">
-        <p className="text-[18px] font-semibold text-[#697586]">{rule.breachReassign ? 'Yes' : 'No'}</p>
-      </div>
-
-      {/* Actions */}
-      <div className="w-[90px] shrink-0 py-3 flex flex-col gap-2">
-        <button className="w-11 h-11 flex items-center justify-center rounded-lg border border-[#E9EAEB] bg-white text-[#697586] hover:bg-[#F9FAFB] transition-colors shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <EditIcon />
-        </button>
-        <button
-          onClick={onDelete}
-          className="w-11 h-11 flex items-center justify-center rounded-lg border border-[#FECDCA] bg-white hover:bg-[#FEF3F2] transition-colors shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
-        >
-          <TrashIcon />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Product Item ─────────────────────────────────────────────────────────────
-
-function ProductItem({
-  product,
-  expanded,
-  onToggle,
-  onUpdateRule,
-  onDeleteRule,
-}: {
-  product: Product;
-  expanded: boolean;
-  onToggle: () => void;
-  onUpdateRule: (r: SlaRule) => void;
-  onDeleteRule: (id: number) => void;
-}) {
-  return (
-    <div className={cn('border border-[#E3E8EF] rounded-lg bg-white overflow-hidden', expanded && 'shadow-sm')}>
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between px-6 py-3 hover:bg-[#FAFAFA] transition-colors text-left gap-4"
-      >
-        <div className="flex items-center gap-6">
-          <ProductAvatar />
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-semibold text-[#121a26] leading-tight">{product.name}</p>
-            <p className="text-[12px] text-[#697586]">{product.category} • {product.provider}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          <StatBadge>{product.e2eDays} Working Days (E2E)</StatBadge>
-          <StatBadge>{product.productSteps} Product Steps</StatBadge>
-          <StatBadge>{product.rules.length} SLA Rules</StatBadge>
-          <ChevronDownIcon className={cn('text-[#697586] transition-transform', expanded && 'rotate-180')} />
-        </div>
-      </button>
-
-      {expanded && (
-        <>
-          <div className="px-6 py-3 border-t border-[#F2F4F7] bg-[#FAFAFA] flex items-center justify-between">
-            <div>
-              <p className="text-[11px] text-[#697586] uppercase tracking-wider">End-to-end SLA</p>
-              <p className="text-[18px] font-semibold text-[#121a26]">{product.e2eDays} Working Days</p>
-            </div>
-            <button className="h-9 px-4 flex items-center gap-1.5 text-[14px] font-medium text-white bg-[#0063F5] rounded-lg hover:bg-[#0052cc] transition-colors shadow-[0_1px_2px_rgba(0,99,245,0.2)]">
-              <PlusIcon />
-              Add SLA Rule
-            </button>
-          </div>
-
-          <div className="pb-3">
-            <SlaTableHeader />
-            <div className="pt-1.5">
-              {product.rules.map((rule) => (
-                <SlaTableRow
-                  key={rule.id}
-                  rule={rule}
-                  onUpdate={onUpdateRule}
-                  onDelete={() => onDeleteRule(rule.id)}
-                />
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="size-[16px] rounded-full bg-white shadow-[0_1px_2px_rgba(16,24,40,0.1)]" />
+    </button>
   );
 }
 
@@ -482,7 +310,6 @@ function TopBar() {
           <ChevronRightIcon />
         </button>
       </div>
-
       <div className="flex items-center gap-5">
         <button className="text-[13px] font-medium text-[#344054] hover:text-[#101828] transition-colors">عربي</button>
         <button className="text-[#697586] hover:text-[#344054] transition-colors">
@@ -496,513 +323,1191 @@ function TopBar() {
             <p className="text-[12px] font-semibold text-[#101828] leading-tight">Abdullah Ayyad</p>
             <p className="text-[11px] text-[#697586] leading-tight">abusayyad@tamawal.sa</p>
           </div>
-          <ChevronDownIcon className="text-[#9aa4b2] w-3.5 h-3.5" />
+          <ChevronDownIcon className="text-[#9aa4b2]" />
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Pagination ───────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-function PageBtn({ n, page, onPage }: { n: number; page: number; onPage: (p: number) => void }) {
+const OUTER_TABS: OuterTab[] = ['SLA Rules', 'Business Hours', 'Role Assignment', 'Priority Engine'];
+const INNER_TABS: InnerTab[] = ['Priority Scoring Model', 'Overall Priority Scoring Model'];
+const FACTOR_TABS = ['Personal Loan', 'Real Estate Loan', 'Car Loan', 'Card Loan'];
+const TOTAL_PAGES = 10;
+const SLA_PRODUCT_TABS: SlaProductTab[] = ['Personal Loan', 'Mortgage Loan', 'Car Loan', 'Card Loan'];
+
+const PRIORITY_LEVELS = [
+  { label: 'LOW', range: '6 ~ 5', color: '#12b76a', icon: <LowIcon /> },
+  { label: 'MEDIUM', range: '4.99 ~ 4.96', color: '#667085', icon: <MediumIcon /> },
+  { label: 'HIGH', range: '4.95 ~ 1', color: '#d92d20', icon: <HighIcon /> },
+  { label: 'Critical', range: '4.95 ~ 1', color: '#d92d20', icon: <CriticalIcon /> },
+];
+
+// ─── Business Hours Tab ───────────────────────────────────────────────────────
+
+type CalModal =
+  | { type: 'deactivate'; calId: number }
+  | { type: 'update-linked'; calId: number }
+  | { type: 'delete-cal'; calId: number };
+
+function BusinessHoursTab() {
+  const [calendars, setCalendars] = useState<CalendarItem[]>(initialCalendars);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [calModal, setCalModal] = useState<CalModal | null>(null);
+
+  function toggleExpanded(id: number) {
+    setCalendars((prev) => prev.map((c) => (c.id === id ? { ...c, expanded: !c.expanded } : c)));
+    setOpenMenuId(null);
+  }
+
+  function toggleEnabled(id: number) {
+    const cal = calendars.find((c) => c.id === id);
+    if (cal?.enabled) {
+      setCalModal({ type: 'deactivate', calId: id });
+    } else {
+      setCalendars((prev) => prev.map((c) => (c.id === id ? { ...c, enabled: true } : c)));
+    }
+  }
+
+  function toggleMenu(id: number) {
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  }
+
   return (
-    <button
-      onClick={() => onPage(n)}
-      className={cn(
-        'w-7 h-7 flex items-center justify-center rounded-lg text-[12px] font-medium transition-colors',
-        page === n ? 'bg-[#0063F5] text-white' : 'border border-[#D5D7DA] bg-white text-[#344054] hover:bg-[#F9FAFB]'
-      )}
-    >
-      {n}
-    </button>
-  );
-}
-
-function Pagination({
-  page, perPage, total, onPage, onPerPage,
-}: {
-  page: number; perPage: number; total: number;
-  onPage: (p: number) => void; onPerPage: (n: number) => void;
-}) {
-  const lastPage = Math.ceil(total / perPage);
-
-  return (
-    <div className="mt-4 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <span className="text-[12px] text-[#697586]">Show</span>
-        <div className="relative">
-          <select
-            value={perPage}
-            onChange={(e) => onPerPage(Number(e.target.value))}
-            className="appearance-none h-7 pl-2 pr-6 text-[12px] font-medium text-[#344054] bg-white border border-[#D5D7DA] rounded-lg focus:outline-none cursor-pointer"
-          >
-            {[10, 25, 50].map((n) => <option key={n} value={n}>{n}</option>)}
-          </select>
-          <ChevronDownIcon className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[#697586] w-[10px] h-[10px]" />
+    <div className="flex flex-col gap-[16px]">
+      {/* Header */}
+      <div className="flex items-center justify-between px-[24px] py-[16px]">
+        <span className="font-semibold text-[#0063f5] text-[25px] leading-[32px]">Business Hours</span>
+        <div className="flex items-center gap-[12px]">
+          <button className="flex items-center gap-[4px] px-[14px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors outline outline-[4px] outline-[#77a6ed] outline-offset-2">
+            <FilterIcon />
+            <span className="mx-[2px]">Filter</span>
+            <XIcon size={14} />
+          </button>
+          <button className="flex items-center gap-[4px] px-[14px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors">
+            <PlusIcon />
+            <span className="ml-[2px]">Add calendar</span>
+          </button>
         </div>
       </div>
 
-      <div className="flex items-center gap-1">
+      {/* Filter bar */}
+      <div className="px-[24px] pb-[4px]">
+        <div className="bg-white border border-[#eaecf0] rounded-[8px] shadow-[0px_4px_6px_-2px_rgba(10,13,18,0.03),0px_12px_16px_-4px_rgba(10,13,18,0.08)] p-[24px]">
+          <div className="flex items-center gap-[16px]">
+            <div className="flex items-center justify-between bg-white border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] px-[12px] py-[8px] cursor-pointer w-[200px]">
+              <span className="text-[16px] text-[#717680]">Choose calendars</span>
+              <ChevronDownIcon className="text-[#717680]" />
+            </div>
+            <div className="ml-auto flex items-center gap-[12px]">
+              <button className="px-[14px] py-[10px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fff5f5] transition-colors min-w-[120px]">
+                Reset
+              </button>
+              <button className="px-[14px] py-[10px] rounded-[8px] bg-[#0063f5] text-white text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(255,255,255,0.12),inset_0px_-2px_0px_0px_rgba(255,255,255,0.08)] hover:bg-[#0053cc] transition-colors min-w-[120px]">
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Calendar rows */}
+      <div className="px-[24px] flex flex-col gap-[12px] pb-[16px]">
+        {calendars.map((cal) => (
+          <div
+            key={cal.id}
+            className={cn(
+              'border rounded-[6px] bg-white overflow-hidden',
+              cal.expanded ? 'border-[#0063f5]' : 'border-[#e9eaeb]'
+            )}
+          >
+            {/* Row header */}
+            <div className="flex items-center justify-between px-[16px] py-[14px]">
+              <div className="flex items-center gap-[8px]">
+                <button
+                  onClick={() => toggleExpanded(cal.id)}
+                  className="text-[#717680] hover:text-[#344054] transition-colors"
+                >
+                  {cal.expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </button>
+                <ToggleSwitch pressed={cal.enabled} onToggle={() => toggleEnabled(cal.id)} />
+                <span className="text-[18px] font-semibold text-[#121a26] ml-[4px]">{cal.name}</span>
+              </div>
+              <div className="flex items-center gap-[8px]">
+                <span
+                  className={cn(
+                    'px-[8px] py-[2px] rounded-full text-[12px] font-medium border',
+                    cal.expanded
+                      ? 'border-[#0063f5] text-[#0063f5] bg-[#eaf2ff]'
+                      : 'border-[#e9eaeb] text-[#414651] bg-[#f9fafb]'
+                  )}
+                >
+                  Start/End time: {cal.startEnd}
+                </span>
+                <span
+                  className={cn(
+                    'px-[8px] py-[2px] rounded-full text-[12px] font-medium border',
+                    cal.expanded
+                      ? 'border-[#0063f5] text-[#0063f5] bg-[#eaf2ff]'
+                      : 'border-[#e9eaeb] text-[#414651] bg-[#f9fafb]'
+                  )}
+                >
+                  {cal.timezone}
+                </span>
+                <div className="relative">
+                  <button
+                    onClick={() => toggleMenu(cal.id)}
+                    className="p-[8px] rounded-[8px] text-[#717680] hover:bg-[#f5f5f5] transition-colors"
+                  >
+                    <DotsVerticalIcon />
+                  </button>
+                  {openMenuId === cal.id && (
+                    <div className="absolute right-0 top-[calc(100%+4px)] z-50 bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_8px_24px_0px_rgba(10,13,18,0.12)] w-[160px] py-[4px]">
+                      <button className="w-full flex items-center gap-[8px] px-[16px] py-[10px] text-[14px] text-[#414651] hover:bg-[#f9fafb] transition-colors">
+                        <EditIcon size={16} />
+                        <span>Edit</span>
+                      </button>
+                      <button onClick={() => { setOpenMenuId(null); setCalModal({ type: 'delete-cal', calId: cal.id }); }} className="w-full flex items-center gap-[8px] px-[16px] py-[10px] text-[14px] text-[#b42318] hover:bg-[#fff5f5] transition-colors">
+                        <TrashSmIcon />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Expanded content */}
+            {cal.expanded && (
+              <div className="border-t border-[#e9eaeb]">
+                <div className="px-[16px] py-[16px] flex flex-col gap-[16px]">
+                  <div>
+                    <p className="text-[12px] text-[#717680] leading-[18px]">Calendar name</p>
+                    <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">Tamawal Internal Calendar</p>
+                  </div>
+
+                  <div>
+                    <p className="text-[12px] text-[#717680] leading-[18px] mb-[8px]">Work Days</p>
+                    <div className="flex items-center gap-[8px] flex-wrap">
+                      {WORK_DAYS.map((day) => {
+                        const active = ACTIVE_DAYS.includes(day);
+                        return (
+                          <button
+                            key={day}
+                            className={cn(
+                              'flex items-center gap-[4px] px-[12px] py-[5px] rounded-full border text-[14px] font-medium transition-colors',
+                              active
+                                ? 'border-[#0063f5] text-[#0063f5] bg-white'
+                                : 'border-[#d5d7da] text-[#414651] bg-white'
+                            )}
+                          >
+                            {active && (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            )}
+                            {day}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex">
+                    <div className="flex-1">
+                      <p className="text-[12px] text-[#717680] leading-[18px]">Start Time</p>
+                      <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">08:00</p>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[12px] text-[#717680] leading-[18px]">End Time</p>
+                      <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">18:00</p>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[12px] text-[#717680] leading-[18px]">Timezone</p>
+                      <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">Asia/Riyadh</p>
+                    </div>
+                  </div>
+
+                  <div className="flex">
+                    <div className="flex-1">
+                      <p className="text-[12px] text-[#717680] leading-[18px]">Break Start</p>
+                      <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">12:00</p>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[12px] text-[#717680] leading-[18px]">Break End</p>
+                      <p className="text-[16px] font-semibold text-[#101828] leading-[24px]">13:00</p>
+                    </div>
+                    <div className="flex-1" />
+                  </div>
+                </div>
+
+                {[
+                  { title: 'Pause SLA on Weekends', subtitle: 'SLA timers pause on non-working days.', status: 'Inactive' as const },
+                  { title: 'Pause SLA on Holidays', subtitle: 'SLA timers count only during configured business hours.', status: 'Active' as const },
+                  { title: 'Ramadan Working Hours Override', subtitle: 'Use separate working hours during the effective Ramadan period.', status: 'Active' as const },
+                ].map((feature) => (
+                  <div key={feature.title} className="flex items-center justify-between px-[16px] py-[14px] border-t border-[#f2f4f7]">
+                    <div>
+                      <p className="text-[14px] font-semibold text-[#101828]">{feature.title}</p>
+                      <p className="text-[13px] text-[#717680]">{feature.subtitle}</p>
+                    </div>
+                    {feature.status === 'Active' ? (
+                      <span className="px-[10px] py-[4px] rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-[12px] font-medium">
+                        Active
+                      </span>
+                    ) : (
+                      <span className="text-[12px] text-[#717680] font-medium">Inactive</span>
+                    )}
+                  </div>
+                ))}
+
+                {/* Save footer */}
+                <div className="flex justify-end gap-[12px] px-[16px] py-[12px] border-t border-[#f2f4f7]">
+                  <button onClick={() => toggleExpanded(cal.id)} className="px-[16px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#344054] text-[14px] font-medium hover:bg-[#fafafa] transition-colors">Cancel</button>
+                  <button onClick={() => setCalModal({ type: 'update-linked', calId: cal.id })} className="px-[16px] py-[10px] rounded-[8px] bg-[#0063f5] text-white text-[14px] font-medium hover:bg-[#0053cc] transition-colors">Save</button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <ConfirmModal
+        open={calModal?.type === 'deactivate'}
+        onClose={() => setCalModal(null)}
+        onConfirm={() => calModal?.type === 'deactivate' && setCalendars((prev) => prev.map((c) => c.id === calModal.calId ? { ...c, enabled: false } : c))}
+        variant="gray-warning"
+        title="Deactivate Calendar?"
+        description="This calendar will no longer be available for new SLA rules. Active orders and historical SLA records will continue using their saved calendar snapshot until completion. Are you sure you want to continue?"
+      />
+      <ConfirmModal
+        open={calModal?.type === 'update-linked'}
+        onClose={() => setCalModal(null)}
+        onConfirm={() => {}}
+        variant="gray-warning"
+        title="Update Linked Calendar?"
+        description="This calendar is linked to active SLA rules. Changes will apply only to new SLA calculations created after saving. Running orders will continue using their existing calendar snapshot. Are you sure you want to continue?"
+      />
+      <ConfirmModal
+        open={calModal?.type === 'delete-cal'}
+        onClose={() => setCalModal(null)}
+        onConfirm={() => calModal?.type === 'delete-cal' && setCalendars((prev) => prev.filter((c) => c.id !== calModal.calId))}
+        variant="danger"
+        title="Are you sure you want to delete this Calendar?"
+        description="This action is irreversible. Are you sure you want to Delete?"
+      />
+    </div>
+  );
+}
+
+// ─── Empty State ─────────────────────────────────────────────────────────────
+
+function NoSlaRules({ onAdd }: { onAdd: () => void }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-[48px] gap-[16px]">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <ellipse cx="40" cy="68" rx="28" ry="6" fill="#F2F4F7" />
+        <rect x="14" y="20" width="52" height="42" rx="4" fill="#E9EAEB" />
+        <rect x="14" y="20" width="52" height="10" rx="4" fill="#D5D7DA" />
+        <rect x="20" y="34" width="40" height="4" rx="2" fill="#A4A7AE" />
+        <rect x="20" y="42" width="32" height="4" rx="2" fill="#A4A7AE" />
+        <rect x="20" y="50" width="24" height="4" rx="2" fill="#A4A7AE" />
+        <circle cx="56" cy="54" r="14" fill="#F2F4F7" stroke="#E9EAEB" strokeWidth="1.5" />
+        <line x1="52" y1="54" x2="60" y2="54" stroke="#A4A7AE" strokeWidth="2" strokeLinecap="round" />
+        <line x1="56" y1="50" x2="56" y2="58" stroke="#A4A7AE" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="56" cy="54" r="9" fill="none" stroke="#D5D7DA" strokeWidth="1.5" />
+        <path d="M63 61L67 65" stroke="#A4A7AE" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+      <p className="text-[15px] font-semibold text-[#344054]">No SLA Rules</p>
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-[6px] px-[16px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors"
+      >
+        <PlusIcon />
+        <span>Add SLA Rule</span>
+      </button>
+    </div>
+  );
+}
+
+// ─── Confirm Modal ────────────────────────────────────────────────────────────
+
+type ConfirmVariant = 'warning' | 'gray-warning' | 'danger';
+
+function YellowWarningIllus() {
+  return (
+    <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+      <ellipse cx="48" cy="83" rx="30" ry="7" fill="#FEF9C3" />
+      <path d="M48 16L82 74H14L48 16Z" fill="#FCD34D" />
+      <path d="M82 74L78 80H18L14 74H82Z" fill="#CA8A04" />
+      <rect x="44.5" y="36" width="7" height="20" rx="3.5" fill="#78350F" />
+      <circle cx="48" cy="63" r="4" fill="#78350F" />
+    </svg>
+  );
+}
+
+function GrayWarningIllus() {
+  return (
+    <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+      <ellipse cx="48" cy="83" rx="30" ry="7" fill="#F2F4F7" />
+      <path d="M48 16L82 74H14L48 16Z" fill="#9CA3AF" />
+      <path d="M82 74L78 80H18L14 74H82Z" fill="#6B7280" />
+      <rect x="44.5" y="36" width="7" height="20" rx="3.5" fill="#1F2937" />
+      <circle cx="48" cy="63" r="4" fill="#1F2937" />
+    </svg>
+  );
+}
+
+function DangerShieldIllus() {
+  return (
+    <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+      <ellipse cx="48" cy="83" rx="30" ry="7" fill="#FEE2E2" />
+      <path d="M48 10L74 22V46C74 62 62 74 48 80C34 74 22 62 22 46V22L48 10Z" fill="#EF4444" />
+      <path d="M74 22L79 27V48C79 64 67 76 53 82L48 80C62 74 74 62 74 46V22Z" fill="#B91C1C" />
+      <rect x="44.5" y="30" width="7" height="22" rx="3.5" fill="white" />
+      <circle cx="48" cy="59" r="4.5" fill="white" />
+    </svg>
+  );
+}
+
+function ConfirmModal({ open, onClose, onConfirm, variant, title, description }: {
+  open: boolean; onClose: () => void; onConfirm: () => void;
+  variant: ConfirmVariant; title: string; description: string;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[300] flex items-center justify-center">
+      <div className="absolute inset-0 bg-[#101828]/50" onClick={onClose} />
+      <div className="relative bg-white rounded-[12px] shadow-[0px_20px_60px_0px_rgba(10,13,18,0.18)] w-[380px] flex flex-col items-center">
+        <div className="px-[32px] pt-[32px] pb-[24px] flex flex-col items-center gap-[16px] text-center">
+          <div className="w-[96px] h-[96px]">
+            {variant === 'warning' && <YellowWarningIllus />}
+            {variant === 'gray-warning' && <GrayWarningIllus />}
+            {variant === 'danger' && <DangerShieldIllus />}
+          </div>
+          <p className="text-[18px] font-bold text-[#101828] leading-[28px]">{title}</p>
+          <p className="text-[14px] text-[#667085] leading-[20px]">{description}</p>
+        </div>
+        <div className="w-full border-t border-[#f2f4f7] px-[24px] py-[16px] flex gap-[12px]">
+          <button onClick={onClose} className="flex-1 px-[16px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#344054] text-[14px] font-semibold hover:bg-[#fafafa] transition-colors">Cancel</button>
+          <button onClick={() => { onConfirm(); onClose(); }} className="flex-1 px-[16px] py-[10px] rounded-[8px] bg-[#0063f5] text-white text-[14px] font-semibold hover:bg-[#0053cc] transition-colors">Yes</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── SLA Rules Table ──────────────────────────────────────────────────────────
+
+function SlaRulesTable({ rows, onAddRule, onEditRow, onDeleteRow }: { rows: typeof SLA_RULES_ROWS; onAddRule: () => void; onEditRow: () => void; onDeleteRow: () => void }) {
+  const [openActionMenu, setOpenActionMenu] = useState<number | null>(null);
+
+  return (
+    <div>
+      <div className="px-[16px] py-[10px] flex justify-end border-b border-[#e9eaeb]">
         <button
-          onClick={() => onPage(Math.max(1, page - 1))}
-          disabled={page === 1}
-          className="w-7 h-7 flex items-center justify-center rounded-lg border border-[#D5D7DA] bg-white text-[#697586] disabled:opacity-40 hover:bg-[#F9FAFB] transition-colors"
+          onClick={onAddRule}
+          className="flex items-center gap-[6px] px-[12px] py-[8px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[13px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors"
         >
-          <ChevronLeftIcon />
-        </button>
-        <PageBtn n={1} page={page} onPage={onPage} />
-        {page > 3 && <span className="text-[12px] text-[#697586] px-1">...</span>}
-        {page > 2 && page < lastPage - 1 && <PageBtn n={page} page={page} onPage={onPage} />}
-        {page < lastPage - 2 && <span className="text-[12px] text-[#697586] px-1">...</span>}
-        {lastPage > 1 && <PageBtn n={lastPage - 1} page={page} onPage={onPage} />}
-        {lastPage > 2 && <PageBtn n={lastPage} page={page} onPage={onPage} />}
-        <button
-          onClick={() => onPage(Math.min(lastPage, page + 1))}
-          disabled={page === lastPage}
-          className="w-7 h-7 flex items-center justify-center rounded-lg border border-[#D5D7DA] bg-white text-[#697586] disabled:opacity-40 hover:bg-[#F9FAFB] transition-colors"
-        >
-          <ChevronRightIcon />
+          <PlusIcon />
+          <span>Add SLA Rule</span>
         </button>
       </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[1200px]">
+          <thead>
+            <tr className="border-b border-[#f2f4f7] bg-white">
+              <th className="text-left px-[16px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[48px]">#</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[140px]">WORKFLOW STEP</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[150px]">TEAM IN CHARGE</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[160px]">ADDED/ UPDATED</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[110px]">SLA DURATION</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[190px]">PAUSE CONDITIONS</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] leading-[16px] w-[100px]">WARNING →<br />ESCALATE</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] leading-[16px] w-[100px]">WARN<br />REASSIGN</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] leading-[16px] w-[100px]">BREACH →<br />ESCALATE</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] leading-[16px] w-[100px]">BREACH<br />REASSIGN</th>
+              <th className="text-left px-[8px] py-[12px] text-[11px] font-semibold text-[#717680] tracking-[0.05em] w-[70px]">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <tr key={row.id} className="border-b border-[#f2f4f7] last:border-0">
+                <td className="px-[16px] py-[16px] align-top text-[14px] text-[#414651]">{row.id}</td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <span className="text-[15px] font-semibold text-[#101828]">AML</span>
+                </td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex items-center gap-[6px] text-[13px] text-[#414651]">
+                    <PersonIcon />
+                    <span>Customer Care</span>
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex flex-col gap-[6px]">
+                    <div>
+                      <p className="text-[11px] text-[#717680]">Added by</p>
+                      <div className="flex items-center gap-[4px]">
+                        <div className="w-[18px] h-[18px] rounded-full bg-[#f2a83e] flex items-center justify-center shrink-0">
+                          <span className="text-[8px] font-bold text-white">OR</span>
+                        </div>
+                        <span className="text-[12px] text-[#414651]">Omar radwan</span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-[#717680]">Updated by</p>
+                      <div className="flex items-center gap-[4px]">
+                        <div className="w-[18px] h-[18px] rounded-full bg-[#0063f5] flex items-center justify-center shrink-0">
+                          <span className="text-[8px] font-bold text-white">SA</span>
+                        </div>
+                        <span className="text-[12px] text-[#414651]">Sara Alaa</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex items-center gap-[4px] text-[13px] text-[#414651]">
+                    <ClockIcon />
+                    <span>2 hrs</span>
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex flex-col gap-[4px]">
+                    {PAUSE_CONDITIONS.map((cond) => (
+                      <div key={cond.label} className="flex items-center gap-[6px]">
+                        <div className={cn(
+                          'w-[14px] h-[14px] rounded-[3px] border flex items-center justify-center shrink-0',
+                          cond.checked ? 'bg-[#0063f5] border-[#0063f5]' : 'bg-white border-[#d5d7da]'
+                        )}>
+                          {cond.checked && (
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          )}
+                        </div>
+                        <span className="text-[12px] text-[#414651]">{cond.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex flex-col gap-[4px]">
+                    <span className="px-[8px] py-[2px] rounded-full bg-[#fef9c3] border border-[#fde047] text-[#854d0e] text-[12px] font-semibold w-fit">50%</span>
+                    <p className="text-[11px] text-[#717680]">Escalate to:</p>
+                    <p className="text-[12px] text-[#414651]">Assigned User</p>
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top text-[13px] text-[#414651]">No</td>
+                <td className="px-[8px] py-[16px] align-top">
+                  <div className="flex flex-col gap-[4px]">
+                    <span className="px-[8px] py-[2px] rounded-full bg-[#fef2f2] border border-[#fca5a5] text-[#b91c1c] text-[12px] font-semibold w-fit">100%</span>
+                    <p className="text-[11px] text-[#717680]">Escalate to:</p>
+                    <p className="text-[12px] text-[#414651]">Manager</p>
+                  </div>
+                </td>
+                <td className="px-[8px] py-[16px] align-top text-[13px] text-[#414651]">Yes</td>
+                <td className="px-[8px] py-[16px] align-top relative">
+                  <button
+                    onClick={() => setOpenActionMenu(openActionMenu === i ? null : i)}
+                    className="p-[6px] rounded-[6px] text-[#717680] hover:bg-[#f5f5f5] transition-colors"
+                  >
+                    <DotsVerticalIcon />
+                  </button>
+                  {openActionMenu === i && (
+                    <div className="absolute right-0 top-[calc(100%-8px)] z-50 bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_8px_24px_0px_rgba(10,13,18,0.12)] w-[140px] py-[4px]">
+                      <button onClick={() => { setOpenActionMenu(null); onEditRow(); }} className="w-full flex items-center gap-[8px] px-[14px] py-[10px] text-[14px] text-[#414651] hover:bg-[#f9fafb] transition-colors">
+                        <EditIcon size={16} />
+                        <span>Edit</span>
+                      </button>
+                      <button onClick={() => { setOpenActionMenu(null); onDeleteRow(); }} className="w-full flex items-center gap-[8px] px-[14px] py-[10px] text-[14px] text-[#b42318] hover:bg-[#fff5f5] transition-colors">
+                        <TrashSmIcon />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ─── Add SLA Rule Drawer ──────────────────────────────────────────────────────
+
+type AddSlaForm = {
+  team: string; step: string; slaTime: string; slaUnit: string;
+  businessCalendar: string; warnPct: string; breachPct: string;
+  warnEscalateTo: string; warnReassign: boolean;
+  breachEscalateTo: string; breachReassign: boolean;
+  breachReassignEscalateTo: string; breachReassignAfter: string; breachReassignUnit: string;
+  pauseConditions: string;
+};
+
+const defaultForm: AddSlaForm = {
+  team: '', step: '', slaTime: '0', slaUnit: 'Hours',
+  businessCalendar: 'Default KSA Business Calendar',
+  warnPct: '0', breachPct: '0',
+  warnEscalateTo: 'Assigned User', warnReassign: false,
+  breachEscalateTo: '', breachReassign: true,
+  breachReassignEscalateTo: '', breachReassignAfter: '0', breachReassignUnit: 'Hours',
+  pauseConditions: '',
+};
+
+function AddSlaRuleDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [form, setForm] = useState<AddSlaForm>(defaultForm);
+  function set<K extends keyof AddSlaForm>(key: K, value: AddSlaForm[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+  if (!open) return null;
+
+  const SelectField = ({ value, onChange, placeholder, children, className }: {
+    value: string; onChange: (v: string) => void; placeholder?: string; children: React.ReactNode; className?: string;
+  }) => (
+    <div className={cn('relative', className)}>
+      <select value={value} onChange={(e) => onChange(e.target.value)}
+        className="w-full appearance-none h-[44px] px-[14px] pr-10 text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
+        {placeholder && <option value="">{placeholder}</option>}
+        {children}
+      </select>
+      <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#667085]" />
+    </div>
+  );
+
+  const NumberField = ({ value, onChange, className }: { value: string; onChange: (v: string) => void; className?: string }) => (
+    <input type="number" min={0} value={value} onChange={(e) => onChange(e.target.value)}
+      className={cn('w-full h-[44px] px-[14px] text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-2 focus:ring-[#0063F5]', className)} />
+  );
+
+  const Label = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
+    <label className="block text-[14px] font-medium text-[#344054] leading-[20px] mb-[6px]">
+      {children}{required && <span className="text-[#D92D20] ml-0.5">*</span>}
+    </label>
+  );
+
+  const Hint = ({ children }: { children: React.ReactNode }) => (
+    <p className="text-[13px] text-[#667085] leading-[20px] mt-[6px]">{children}</p>
+  );
+
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      <div className="flex-1 backdrop-blur-[6px] bg-black/50" onClick={onClose} />
+      <div className="w-[420px] bg-white flex flex-col h-full shadow-xl">
+        {/* Header */}
+        <div className="flex items-start justify-between px-6 pt-6 pb-4 shrink-0">
+          <h2 className="text-[24px] font-semibold text-[#101828]">Add SLA Rule</h2>
+          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-lg border border-[#E9EAEB] text-[#667085] hover:bg-[#F9FAFB] transition-colors">
+            <XIcon size={18} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-6 pb-6 flex flex-col gap-5">
+          <div>
+            <Label required>Team in Charge</Label>
+            <SelectField value={form.team} onChange={(v) => set('team', v)} placeholder="Select responsible team">
+              <option value="customer-care">Customer Care</option>
+              <option value="aml-team">AML Team</option>
+              <option value="operations">Operations Team</option>
+            </SelectField>
+            <Hint>The selected team owns the Step SLA while the order is in this step.</Hint>
+          </div>
+
+          <div>
+            <Label required>Step</Label>
+            <SelectField value={form.step} onChange={(v) => set('step', v)} placeholder="Select steps">
+              <option value="cs-confirmation">Customer Service Confirmation</option>
+              <option value="aml-review">AML Review</option>
+              <option value="brokerage-review">Brokerage Review</option>
+              <option value="final-approval">Final Approval</option>
+              <option value="disbursement">Disbursement</option>
+            </SelectField>
+            <Hint>Steps are fixed at the category level and remain available regardless of the selected product scope.</Hint>
+          </div>
+
+          <div>
+            <Label required>SLA Time</Label>
+            <div className="flex gap-[8px]">
+              <NumberField value={form.slaTime} onChange={(v) => set('slaTime', v)} className="flex-1" />
+              <div className="relative">
+                <select value={form.slaUnit} onChange={(e) => set('slaUnit', e.target.value)}
+                  className="appearance-none h-[44px] pl-[14px] pr-10 text-[16px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
+                  <option>Hours</option><option>Days</option><option>Minutes</option>
+                </select>
+                <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#667085]" />
+              </div>
+            </div>
+            <Hint>Time until the first valid operational action.</Hint>
+          </div>
+
+          <div>
+            <Label required>Business Calendar</Label>
+            <SelectField value={form.businessCalendar} onChange={(v) => set('businessCalendar', v)}>
+              <option value="Default KSA Business Calendar">Default KSA Business Calendar</option>
+              <option value="UAE Business Calendar">UAE Business Calendar</option>
+            </SelectField>
+            <Hint>The Step SLA starts when ownership is assigned to the selected team and stops when the order completes or leaves the selected step. Returning to the step creates a new linked SLA cycle.</Hint>
+          </div>
+
+          {/* SLA Thresholds */}
+          <div>
+            <p className="text-[11px] font-semibold text-[#667085] tracking-[0.08em] uppercase mb-3">SLA Thresholds</p>
+            <div className="flex gap-[12px]">
+              <div className="flex-1 border border-[#FEC84B] rounded-[8px] p-[14px]">
+                <p className="text-[14px] font-semibold text-[#DC6803] mb-3">Warning Threshold</p>
+                <Label required>Consumed SLA %</Label>
+                <NumberField value={form.warnPct} onChange={(v) => set('warnPct', v)} />
+              </div>
+              <div className="flex-1 border border-[#FECDCA] rounded-[8px] p-[14px]">
+                <p className="text-[14px] font-semibold text-[#D92D20] mb-3">Breach Threshold</p>
+                <Label required>Consumed SLA %</Label>
+                <NumberField value={form.breachPct} onChange={(v) => set('breachPct', v)} />
+              </div>
+            </div>
+            <div className="flex items-start gap-[6px] mt-[10px]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#667085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-px">
+                <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              <p className="text-[12px] text-[#667085]">On Track: below 50% · Warning: 50% to below 100% · Breached: 100% or more</p>
+            </div>
+          </div>
+
+          {/* Escalation Rules */}
+          <div>
+            <p className="text-[11px] font-semibold text-[#667085] tracking-[0.08em] uppercase mb-3">Escalation Rules</p>
+            <div className="flex flex-col gap-[12px]">
+              {/* Warning */}
+              <div className="border border-[#FEC84B] rounded-[8px] p-[14px] flex flex-col gap-4">
+                <p className="text-[14px] font-semibold text-[#DC6803]">Warning Threshold</p>
+                <div>
+                  <Label required>Escalate To</Label>
+                  <SelectField value={form.warnEscalateTo} onChange={(v) => set('warnEscalateTo', v)}>
+                    <option value="Assigned User">Assigned User</option>
+                    <option value="Team Lead">Team Lead</option>
+                    <option value="Manager">Manager</option>
+                  </SelectField>
+                </div>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[14px] font-medium text-[#344054]">Auto Reassign on Warning</p>
+                    <p className="text-[13px] text-[#667085] mt-0.5">Move the order to another eligible user when the warning event is triggered.</p>
+                  </div>
+                  <button type="button" onClick={() => set('warnReassign', !form.warnReassign)}
+                    className={cn('flex h-[24px] w-[44px] shrink-0 items-center rounded-[12px] p-[2px] transition-colors mt-0.5',
+                      form.warnReassign ? 'bg-[#0063f5] justify-end' : 'bg-[#D5D7DA] justify-start')}>
+                    <div className="size-[20px] rounded-full bg-white shadow-sm" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Breach */}
+              <div className="border border-[#FECDCA] rounded-[8px] p-[14px] flex flex-col gap-4">
+                <p className="text-[14px] font-semibold text-[#D92D20]">Breach Threshold</p>
+                <div>
+                  <Label required>Escalate To</Label>
+                  <SelectField value={form.breachEscalateTo} onChange={(v) => set('breachEscalateTo', v)} placeholder="Escalate To">
+                    <option value="Team Lead">Team Lead</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Director">Director</option>
+                  </SelectField>
+                </div>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[14px] font-medium text-[#344054]">Auto Reassign on Breach</p>
+                    <p className="text-[13px] text-[#667085] mt-0.5">Reassign the order after the breach threshold is reached.</p>
+                  </div>
+                  <button type="button" onClick={() => set('breachReassign', !form.breachReassign)}
+                    className={cn('flex h-[24px] w-[44px] shrink-0 items-center rounded-[12px] p-[2px] transition-colors mt-0.5',
+                      form.breachReassign ? 'bg-[#0063f5] justify-end' : 'bg-[#D5D7DA] justify-start')}>
+                    <div className="size-[20px] rounded-full bg-white shadow-sm" />
+                  </button>
+                </div>
+                {form.breachReassign && (
+                  <div className="flex gap-[8px]">
+                    <div className="flex-1">
+                      <Label required>Escalate To</Label>
+                      <SelectField value={form.breachReassignEscalateTo} onChange={(v) => set('breachReassignEscalateTo', v)} placeholder="Escalate To">
+                        <option value="Team Lead">Team Lead</option>
+                        <option value="Manager">Manager</option>
+                      </SelectField>
+                    </div>
+                    <div>
+                      <Label required>Reassign After</Label>
+                      <div className="flex gap-[8px]">
+                        <NumberField value={form.breachReassignAfter} onChange={(v) => set('breachReassignAfter', v)} className="w-[72px]" />
+                        <div className="relative">
+                          <select value={form.breachReassignUnit} onChange={(e) => set('breachReassignUnit', e.target.value)}
+                            className="appearance-none h-[44px] pl-[10px] pr-8 text-[14px] text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#0063F5] cursor-pointer">
+                            <option>Hours</option><option>Days</option>
+                          </select>
+                          <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#667085]" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-start gap-[6px]">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#667085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-px">
+                    <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                  <p className="text-[12px] text-[#667085]">At breach, OMS creates an escalation record and flags the order as Breached. Reassignment does not restart the SLA timer. The Priority Engine recalculates the order priority automatically.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pause Conditions */}
+          <div>
+            <p className="text-[11px] font-semibold text-[#667085] tracking-[0.08em] uppercase mb-3">Pause Conditions</p>
+            <Label required>Pause Conditions</Label>
+            <SelectField value={form.pauseConditions} onChange={(v) => set('pauseConditions', v)} placeholder="PAUSE CONDITIONS">
+              <option value="waiting-customer">Waiting Customer</option>
+              <option value="waiting-documents">Waiting Documents</option>
+              <option value="waiting-confirmation">Waiting Confirmation</option>
+              <option value="waiting-3rd-party">Waiting 3rd Party</option>
+              <option value="on-hold">On Hold</option>
+            </SelectField>
+            <Hint>Only the selected conditions pause this Step SLA. The timer resumes automatically when the blocking condition is resolved.</Hint>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E9EAEB] shrink-0">
+          <button onClick={onClose} className="h-[44px] px-[18px] text-[16px] font-medium text-[#344054] bg-white border border-[#D5D7DA] rounded-[8px] hover:bg-[#F9FAFB] transition-colors">
+            Cancel
+          </button>
+          <button className="h-[44px] px-[18px] text-[16px] font-medium text-white bg-[#0063F5] rounded-[8px] hover:bg-[#004fc6] transition-colors">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── SLA Rules Tab ────────────────────────────────────────────────────────────
+
+type SpecificGroup = { id: number; expanded: boolean; rules: typeof SLA_RULES_ROWS };
+
+type RulesModal =
+  | { type: 'edit-rule' }
+  | { type: 'delete-rule' }
+  | { type: 'delete-group'; groupId: number };
+
+function SlaRulesTab({ onAddRule }: { onAddRule: () => void }) {
+  const [productTab, setProductTab] = useState<SlaProductTab>('Personal Loan');
+  const [generalExpanded, setGeneralExpanded] = useState(true);
+  const [generalRules, setGeneralRules] = useState(SLA_RULES_ROWS);
+  const [specificGroups, setSpecificGroups] = useState<SpecificGroup[]>([]);
+  const [openGroupMenu, setOpenGroupMenu] = useState<number | null>(null);
+  const [modal, setModal] = useState<RulesModal | null>(null);
+
+  function addSpecificGroup() {
+    setSpecificGroups((prev) => [...prev, { id: Date.now(), expanded: true, rules: [] }]);
+  }
+
+  function removeSpecificGroup(id: number) {
+    setSpecificGroups((prev) => prev.filter((g) => g.id !== id));
+    setOpenGroupMenu(null);
+  }
+
+  function toggleGroupExpanded(id: number) {
+    setSpecificGroups((prev) => prev.map((g) => g.id === id ? { ...g, expanded: !g.expanded } : g));
+    setOpenGroupMenu(null);
+  }
+
+  const CONNECTED_PRODUCTS = ['New Personal Finance', 'Short-Term Personal Finance', 'Personal Finance Refinance', 'Watani Finance'];
+
+  return (
+    <div className="flex flex-col">
+      {/* Product tabs */}
+      <div className="px-[24px] py-[14px] border-b border-[#f2f4f7]">
+        <div className="flex items-center gap-[4px]">
+          {SLA_PRODUCT_TABS.map((tab) => (
+            <button key={tab} onClick={() => setProductTab(tab)}
+              className={cn('px-[16px] py-[10px] rounded-[8px] text-[15px] font-medium whitespace-nowrap transition-colors',
+                productTab === tab ? 'bg-[#eaf2ff] text-[#0053cc]' : 'text-[#717680] hover:bg-[#f5f5f5]')}>
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Section header */}
+      <div className="flex items-center justify-between px-[24px] py-[16px]">
+        <span className="font-semibold text-[#0063f5] text-[25px] leading-[32px]">SLA Rules</span>
+        <button onClick={addSpecificGroup}
+          className="flex items-center gap-[6px] px-[14px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[14px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors">
+          <PlusIcon />
+          <span>Add Specific Product Rules</span>
+        </button>
+      </div>
+
+      <div className="px-[24px] pb-[24px] flex flex-col gap-[12px]">
+        {/* General SLA Rules accordion */}
+        <div className={cn('rounded-[8px] overflow-hidden border', generalExpanded ? 'border-[#0063f5]' : 'border-[#e9eaeb]')}>
+          <div className="flex items-center justify-between px-[16px] py-[12px] bg-white border-b border-[#e9eaeb]">
+            <div className="flex items-center gap-[8px]">
+              <button onClick={() => setGeneralExpanded((v) => !v)} className="text-[#717680]">
+                {generalExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              </button>
+              <span className="text-[15px] font-semibold text-[#101828]">General SLA Rules</span>
+            </div>
+            <div className="flex items-center gap-[6px]">
+              {[`3 Working Days (E2E)`, `6 Product Steps`, `${generalRules.length} SLA Rules`].map((badge) => (
+                <span key={badge} className={cn('px-[8px] py-[2px] rounded-full text-[12px] font-medium border',
+                  generalExpanded ? 'border-[#0063f5] text-[#0063f5] bg-[#eaf2ff]' : 'border-[#e9eaeb] text-[#414651] bg-[#f9fafb]')}>
+                  {badge}
+                </span>
+              ))}
+            </div>
+          </div>
+          {generalExpanded && (
+            generalRules.length === 0
+              ? <NoSlaRules onAdd={onAddRule} />
+              : <SlaRulesTable rows={generalRules} onAddRule={onAddRule} onEditRow={() => setModal({ type: 'edit-rule' })} onDeleteRow={() => setModal({ type: 'delete-rule' })} />
+          )}
+        </div>
+
+        {/* Specific SLA Rules groups */}
+        {specificGroups.map((group, idx) => (
+          <div key={group.id} className={cn('rounded-[8px] overflow-hidden border', group.expanded ? 'border-[#0063f5]' : 'border-[#e9eaeb]')}>
+            {/* Group header */}
+            <div className="flex items-center justify-between px-[16px] py-[12px] bg-white border-b border-[#e9eaeb]">
+              <div className="flex items-center gap-[8px]">
+                <button onClick={() => toggleGroupExpanded(group.id)} className="text-[#717680]">
+                  {group.expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </button>
+                <span className="text-[15px] font-semibold text-[#101828]">Specific SLA Rules {`{#${idx + 1}}`}</span>
+              </div>
+              <div className="flex items-center gap-[6px]">
+                {[`3 Working Days (E2E)`, `6 Product Steps`, `${group.rules.length} SLA Rules`].map((badge) => (
+                  <span key={badge} className={cn('px-[8px] py-[2px] rounded-full text-[12px] font-medium border',
+                    group.expanded ? 'border-[#0063f5] text-[#0063f5] bg-[#eaf2ff]' : 'border-[#e9eaeb] text-[#414651] bg-[#f9fafb]')}>
+                    {badge}
+                  </span>
+                ))}
+                <div className="relative">
+                  <button onClick={() => setOpenGroupMenu(openGroupMenu === group.id ? null : group.id)}
+                    className="p-[6px] rounded-[6px] text-[#717680] hover:bg-[#f5f5f5] transition-colors">
+                    <DotsVerticalIcon />
+                  </button>
+                  {openGroupMenu === group.id && (
+                    <div className="absolute right-0 top-[calc(100%+4px)] z-50 bg-white border border-[#e9eaeb] rounded-[8px] shadow-[0px_8px_24px_0px_rgba(10,13,18,0.12)] w-[140px] py-[4px]">
+                      <button onClick={() => { setOpenGroupMenu(null); setModal({ type: 'delete-group', groupId: group.id }); }}
+                        className="w-full flex items-center gap-[8px] px-[14px] py-[10px] text-[14px] text-[#b42318] hover:bg-[#fff5f5] transition-colors">
+                        <TrashSmIcon /><span>Delete</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Connected products */}
+            {group.expanded && (
+              <div>
+                <div className="px-[16px] py-[12px] border-b border-[#e9eaeb] flex items-center justify-between flex-wrap gap-[8px]">
+                  <div className="flex items-center gap-[8px] flex-wrap">
+                    <span className="text-[13px] text-[#717680]">Connected Products ({CONNECTED_PRODUCTS.length})</span>
+                    {CONNECTED_PRODUCTS.map((p) => (
+                      <span key={p} className="px-[10px] py-[4px] rounded-full border border-[#e9eaeb] bg-[#f9fafb] text-[12px] text-[#414651] font-medium">{p}</span>
+                    ))}
+                  </div>
+                  {group.rules.length > 0 && (
+                    <button className="flex items-center gap-[6px] px-[12px] py-[8px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] text-[13px] font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors">
+                      <EditIcon size={14} /><span>Update Connected Products</span>
+                    </button>
+                  )}
+                </div>
+                {group.rules.length === 0
+                  ? <NoSlaRules onAdd={onAddRule} />
+                  : <SlaRulesTable rows={group.rules} onAddRule={onAddRule} onEditRow={() => setModal({ type: 'edit-rule' })} onDeleteRow={() => setModal({ type: 'delete-rule' })} />
+                }
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <ConfirmModal
+        open={modal?.type === 'edit-rule'}
+        onClose={() => setModal(null)}
+        onConfirm={() => {}}
+        variant="warning"
+        title="Are you sure you want to edit this rule?"
+        description="This action will affect the ingoing orders. Are you sure you want to delete the selected SLA rule?"
+      />
+      <ConfirmModal
+        open={modal?.type === 'delete-rule'}
+        onClose={() => setModal(null)}
+        onConfirm={() => {}}
+        variant="danger"
+        title="Are you sure you want to delete this Rule?"
+        description="This action is irreversible. Are you sure you want to delete the selected SLA rule?"
+      />
+      <ConfirmModal
+        open={modal?.type === 'delete-group'}
+        onClose={() => setModal(null)}
+        onConfirm={() => modal?.type === 'delete-group' && removeSpecificGroup(modal.groupId)}
+        variant="danger"
+        title="Are you sure you want to delete the product-specific rules?"
+        description="This action is irreversible. Once deleted, products will automatically follow the general service standards rules."
+      />
     </div>
   );
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-const TABS = ['SLA Rules', 'Business Hours', 'Role Assignment', 'Priority Engine'] as const;
-type Tab = typeof TABS[number];
-
-type Factor = { name: string; weight: number };
-
 export default function SlaPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('SLA Rules');
-  const [provider, setProvider] = useState('Al Rajhi Bank');
-  const [loanType, setLoanType] = useState('Mortgage Loan');
-  const [search, setSearch] = useState('');
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  const [expandedId, setExpandedId] = useState<number | null>(3);
+  const [outerTab, setOuterTab] = useState<OuterTab>('Priority Engine');
+  const [innerTab, setInnerTab] = useState<InnerTab>('Overall Priority Scoring Model');
+  const [factorTab, setFactorTab] = useState(0);
+  const [rows, setRows] = useState<ScoringRow[]>(initialRows);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
-  const [factors, setFactors] = useState<Factor[]>([
-    { name: 'SLA Risk', weight: 50 },
-    { name: 'Order Age', weight: 30 },
-    { name: 'Loan Amount', weight: 20 },
-  ]);
-  const [savedFactors, setSavedFactors] = useState<Factor[]>([
-    { name: 'SLA Risk', weight: 50 },
-    { name: 'Order Age', weight: 30 },
-    { name: 'Loan Amount', weight: 20 },
-  ]);
-  const [previewValues, setPreviewValues] = useState([45, 18, 14]);
-  const [showExplainer, setShowExplainer] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const totalWeight = factors.reduce((s, f) => s + f.weight, 0);
-  const clampedPreviews = previewValues.map((v, i) => Math.min(v, factors[i].weight));
-  const computedScore = Math.min(100, clampedPreviews.reduce((s, v) => s + v, 0));
-  const isDirty = factors.some((f, i) => f.weight !== savedFactors[i].weight);
-
-  function updateWeight(index: number, value: number) {
-    setFactors((prev) => prev.map((f, i) => (i === index ? { ...f, weight: value } : f)));
+  function toggleRow(id: number) {
+    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, active: !r.active } : r)));
   }
-
-  function handleSave() {
-    setSavedFactors(factors);
-  }
-
-  function handleCancel() {
-    setFactors(savedFactors);
-  }
-
-  function updatePreview(index: number, value: number) {
-    setPreviewValues((prev) => prev.map((v, i) => (i === index ? value : v)));
-  }
-
-  function getPriorityLevel(score: number): { label: string; bg: string; text: string } {
-    if (score >= 85) return { label: 'Critical Priority', bg: '#fee4e2', text: '#912018' };
-    if (score >= 65) return { label: 'High Priority', bg: '#fff0e8', text: '#b54708' };
-    if (score >= 40) return { label: 'Medium Priority', bg: '#fff4d6', text: '#8a4b00' };
-    return { label: 'Low Priority', bg: '#eaf8f0', text: '#16834a' };
-  }
-
-  const level = getPriorityLevel(computedScore);
-
-  const TOTAL_RECORDS = 50;
-
-  function toggleProduct(id: number) {
-    setExpandedId((prev) => (prev === id ? null : id));
-  }
-
-  function updateRule(productId: number, rule: SlaRule) {
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === productId ? { ...p, rules: p.rules.map((r) => (r.id === rule.id ? rule : r)) } : p
-      )
-    );
-  }
-
-  function deleteRule(productId: number, ruleId: number) {
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === productId ? { ...p, rules: p.rules.filter((r) => r.id !== ruleId) } : p
-      )
-    );
-  }
-
-  const visibleProducts = products.filter((p) =>
-    !search || p.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div className="h-screen flex flex-col bg-[#F8FAFB] overflow-hidden">
       <TopBar />
 
-      <div className="flex-1 flex flex-col min-h-0">
-        {/* Tabs */}
-        <div className="bg-white border-b border-[#E9EAEB] px-6 shrink-0">
-          <div className="flex items-center">
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  'px-4 py-3.5 text-[14px] font-medium border-b-2 -mb-px transition-colors whitespace-nowrap',
-                  activeTab === tab
-                    ? 'text-[#0063F5] border-[#0063F5]'
-                    : 'text-[#697586] border-transparent hover:text-[#344054]'
-                )}
-              >
-                {tab}
-              </button>
-            ))}
+      <div className="flex-1 flex flex-col min-h-0 p-4 pt-3 gap-[16px]">
+
+        {/* Page header */}
+        <div className="flex items-baseline gap-[8px] shrink-0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0 self-center">
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="#0063f5" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="#0063f5" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <div className="flex flex-col gap-[2px]">
+            <p className="text-[#0063f5] font-medium text-[25px] leading-[32px]">SLA Configuration</p>
+            <p className="text-[#535862] font-medium text-[14px] leading-[20px] tracking-[0.014px]">Manage end-to-end SLA and step SLA rules per product, using category workflow steps and escalation settings.</p>
           </div>
         </div>
 
-        {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="px-6 py-5">
+        <div className="flex flex-col isolate items-start relative rounded-tl-[6px] rounded-tr-[6px] flex-1 min-h-0">
 
-            {/* SLA Rules header */}
-            {activeTab === 'SLA Rules' && (
-              <>
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <div>
-                    <h1 className="text-[18px] font-semibold text-[#121a26] leading-tight">SLA Configuration</h1>
-                    <p className="text-[14px] text-[#697586] mt-1">
-                      Manage end-to-end and step SLA rules per product, using category workflow steps and escalation settings.
-                    </p>
-                  </div>
+          {/* Document tab bar */}
+          <div className="flex items-end h-[57px] mb-[-1px] z-[2] w-full overflow-clip rounded-tl-[6px] rounded-tr-[6px]">
+            {OUTER_TABS.map((tab) => {
+              const isActive = outerTab === tab;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setOuterTab(tab)}
+                  className={cn(
+                    'flex items-center justify-center gap-[8px] h-full px-[24px] py-[4px] rounded-tl-[6px] rounded-tr-[6px] whitespace-nowrap transition-colors',
+                    isActive
+                      ? 'bg-white border-t border-l border-r border-[#e9eaeb]'
+                      : 'bg-[#f0f2f5] hover:bg-[#e9eaeb]'
+                  )}
+                >
+                  <span className="text-[#252b37] font-medium text-[14px] leading-[20px]">{tab}</span>
+                </button>
+              );
+            })}
+          </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="relative">
-                      <select
-                        value={provider}
-                        onChange={(e) => setProvider(e.target.value)}
-                        className="appearance-none h-9 pl-3 pr-7 text-[14px] font-medium text-[#344054] bg-white border border-[#D5D7DA] rounded-lg shadow-[0_1px_2px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-1 focus:ring-[#0063F5] cursor-pointer"
+          {/* Main content area */}
+          <div className="flex flex-col z-[1] w-full flex-1 min-h-0 overflow-y-auto bg-white border border-[#e9eaeb] rounded-b-[6px] rounded-tr-[6px]">
+
+            {outerTab === 'SLA Rules' && <SlaRulesTab onAddRule={() => setDrawerOpen(true)} />}
+
+            {outerTab === 'Business Hours' && <BusinessHoursTab />}
+
+            {outerTab === 'Role Assignment' && <div className="flex-1" />}
+
+            {outerTab === 'Priority Engine' && (
+              <div className="flex flex-col gap-[16px] p-4">
+
+                {/* Priority Levels Card */}
+                <div className="bg-white border border-[#e2e3e4] rounded-[6px] shrink-0">
+                  <div className="flex items-center px-[24px] py-[16px] gap-[4px]">
+                    {INNER_TABS.map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setInnerTab(tab)}
+                        className={cn(
+                          'h-[44px] rounded-[6px] px-[12px] py-[8px] text-[16px] font-medium whitespace-nowrap transition-colors',
+                          innerTab === tab
+                            ? 'bg-[#eaf2ff] text-[#0053cc]'
+                            : 'text-[#717680] hover:bg-[#f5f5f5]'
+                        )}
                       >
-                        <option>Al Rajhi Bank</option>
-                        <option>Riyad Bank</option>
-                        <option>NCB</option>
-                      </select>
-                      <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#697586] w-3.5 h-3.5" />
-                    </div>
-
-                    <div className="relative">
-                      <select
-                        value={loanType}
-                        onChange={(e) => setLoanType(e.target.value)}
-                        className="appearance-none h-9 pl-3 pr-7 text-[14px] font-medium text-[#344054] bg-white border border-[#D5D7DA] rounded-lg shadow-[0_1px_2px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-1 focus:ring-[#0063F5] cursor-pointer"
-                      >
-                        <option>Mortgage Loan</option>
-                        <option>Personal Finance</option>
-                        <option>Auto Loan</option>
-                      </select>
-                      <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#697586] w-3.5 h-3.5" />
-                    </div>
-
-                    <div className="relative">
-                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <SearchIcon />
-                      </span>
-                      <input
-                        type="text"
-                        placeholder="Search product..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="h-9 pl-8 pr-3 text-[14px] text-[#344054] placeholder:text-[#9aa4b2] bg-white border border-[#D5D7DA] rounded-lg shadow-[0_1px_2px_rgba(16,24,40,0.05)] focus:outline-none focus:ring-1 focus:ring-[#0063F5] w-[180px]"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 bg-[#EFF8FF] border border-[#B2DDFF] rounded-xl px-4 py-2.5 mb-4">
-                  <InfoIcon />
-                  <p className="text-[13px] text-[#026AA2] leading-relaxed">
-                    SLA timers follow the configured business calendar and pause only for the selected pause conditions inside each Step SLA rule.
-                  </p>
-                </div>
-              </>
-            )}
-
-            {/* Priority Engine header */}
-            {activeTab === 'Priority Engine' && (
-              <div className="flex items-center gap-2 mb-6">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10 17V3M5 8l5-5 5 5" stroke="#0063F5" strokeWidth="1.67" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <div>
-                  <h1 className="text-[20px] font-semibold text-[#0063F5] leading-tight">Priority Engine</h1>
-                  <p className="text-[13px] text-[#535862] mt-0.5">A priority score is calculated based on weighted business factors.</p>
-                </div>
-              </div>
-            )}
-
-            {/* Products */}
-            {activeTab === 'SLA Rules' && (
-              <div className="flex flex-col gap-2">
-                {visibleProducts.length === 0 ? (
-                  <div className="bg-white rounded-xl border border-[#E9EAEB] px-6 py-12 text-center">
-                    <p className="text-[14px] text-[#697586]">No products match your search.</p>
-                  </div>
-                ) : (
-                  visibleProducts.map((product) => (
-                    <ProductItem
-                      key={product.id}
-                      product={product}
-                      expanded={expandedId === product.id}
-                      onToggle={() => toggleProduct(product.id)}
-                      onUpdateRule={(r) => updateRule(product.id, r)}
-                      onDeleteRule={(id) => deleteRule(product.id, id)}
-                    />
-                  ))
-                )}
-              </div>
-            )}
-
-            {/* Priority Engine content */}
-            {activeTab === 'Priority Engine' && (
-              <div className="grid grid-cols-[2fr_1fr_1fr] gap-3">
-                {/* Factors panel */}
-                <div className="bg-white border border-[#e3e8ef] rounded-lg flex flex-col min-w-0">
-                  {/* Header */}
-                  <div className="flex items-center justify-between px-6 py-5 border-b border-[#e3e8ef]">
-                    <span className="text-[18px] font-semibold text-[#202a39]">Factors</span>
-                    {/* Circular progress */}
-                    <div className="relative w-14 h-14">
-                      <svg width="56" height="56" viewBox="0 0 56 56">
-                        <circle cx="28" cy="28" r="24" fill="none" stroke="#eef1f6" strokeWidth="4" />
-                        <circle
-                          cx="28" cy="28" r="24" fill="none"
-                          stroke={totalWeight > 100 ? '#d92d20' : totalWeight === 100 ? '#16a34a' : '#0063F5'}
-                          strokeWidth="4"
-                          strokeDasharray={`${2 * Math.PI * 24}`}
-                          strokeDashoffset={`${2 * Math.PI * 24 * (1 - Math.min(totalWeight, 100) / 100)}`}
-                          strokeLinecap="round"
-                          transform="rotate(-90 28 28)"
-                        />
-                      </svg>
-                      <span className="absolute inset-0 flex items-center justify-center text-[12px] font-medium text-[#181d27]">
-                        {totalWeight}%
-                      </span>
-                    </div>
+                        {tab}
+                      </button>
+                    ))}
                   </div>
 
-                  {/* Table header */}
-                  <div className="grid grid-cols-[120px_1fr_96px] items-center px-6 h-11 border-b border-[#e3e8ef]">
-                    <span className="text-[13px] font-medium text-[#697586]">Factor</span>
-                    <span />
-                    <span className="text-[13px] font-medium text-[#697586] text-right">Weight</span>
+                  <div className="flex items-center justify-between px-[24px] py-[16px] border-t border-[#f2f4f7]">
+                    <span className="font-semibold text-[#1d2939] text-[18px] leading-[28px]">Priority Levels</span>
+                    <button className="flex items-center gap-[4px] min-w-[120px] px-[12px] py-[8px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors">
+                      <EditIcon size={20} />
+                      <span className="text-[14px] font-medium leading-[20px]">Update</span>
+                    </button>
                   </div>
 
-                  {/* Factor rows */}
-                  {factors.map((factor, i) => (
-                    <div key={factor.name} className="grid grid-cols-[120px_1fr_96px] items-center px-6 py-6 gap-4 bg-[#fcfcfd] border-b border-[#f0f2f5] last:border-b-0">
-                      <span className="text-[14px] font-medium text-[#121a26]">{factor.name}</span>
-                      <div className="flex flex-col gap-1.5">
-                        <span className="text-[11px] text-[#667085]">Weight Slider</span>
-                        <input
-                          type="range"
-                          min={0}
-                          max={100}
-                          value={factor.weight}
-                          onChange={(e) => updateWeight(i, Number(e.target.value))}
-                          className="w-full h-1 rounded-full appearance-none cursor-pointer"
-                          style={{
-                            background: `linear-gradient(to right, #0063f5 ${factor.weight}%, #eef1f6 ${factor.weight}%)`,
-                          }}
-                        />
+                  <div className="flex gap-[16px] pb-[16px] px-[16px]">
+                    {PRIORITY_LEVELS.map(({ label, range, color, icon }) => (
+                      <div key={label} className="border border-[#e2e3e4] flex-[1_0_0] flex items-center gap-[24px] p-[16px] rounded-[6px]">
+                        <div className="w-[75px] h-[75px] shrink-0">{icon}</div>
+                        <div className="flex flex-col gap-[6px]">
+                          <span className="text-[18px] font-semibold leading-[28px]" style={{ color }}>{label}</span>
+                          <span className="text-[14px] leading-[20px] text-[#697586]">{range}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 justify-end">
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={factor.weight}
-                          onChange={(e) => updateWeight(i, Number(e.target.value))}
-                          className="w-14 h-9 px-2 text-center text-[15px] font-medium text-[#181d27] bg-white border border-[#d5d7da] rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-[#0063F5]"
-                        />
-                        <span className="text-[14px] text-[#697586]">%</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Score Factors Container */}
+                <div className="bg-white border border-[#e2e3e4] rounded-[6px] overflow-clip shrink-0">
+                  <div className="px-[24px] py-[16px] border-b border-[#e9eaeb]">
+                    <span className="font-semibold text-[#0063f5] text-[23.5px] leading-[30px]">
+                      Overall Priority Scoring Model
+                    </span>
+                  </div>
+
+                  <div className="px-[24px] py-[16px] border-b border-[#e9eaeb]">
+                    <div className="flex bg-[#fafafa] border border-[#e9eaeb] h-[55px] p-[6px] rounded-[12px] gap-[4px]">
+                      {FACTOR_TABS.map((tab, i) => (
+                        <button
+                          key={tab}
+                          onClick={() => setFactorTab(i)}
+                          className={cn(
+                            'flex-[1_0_0] h-[44px] rounded-[8px] text-[16px] font-medium transition-colors',
+                            factorTab === i
+                              ? 'bg-white shadow-[0px_1px_3px_0px_rgba(10,13,18,0.1),0px_1px_2px_-1px_rgba(10,13,18,0.1)] text-[#414651]'
+                              : 'text-[#717680] hover:bg-white/50'
+                          )}
+                        >
+                          {tab}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-[24px] px-[24px] h-[48px] border-b border-[#f5f5f5]">
+                    <div className="w-[58px] shrink-0" />
+                    <div className="flex-[1_0_0]">
+                      <span className="text-[14px] font-medium text-[#717680] leading-[20px]">Scoring Model</span>
+                    </div>
+                    <div className="flex-[1_0_0]">
+                      <span className="text-[14px] font-medium text-[#717680] leading-[20px]">Weight</span>
+                    </div>
+                    <div className="w-[200px] shrink-0">
+                      <span className="text-[14px] font-medium text-[#717680] leading-[20px]">Percentage</span>
+                    </div>
+                    <div className="w-[230px] shrink-0 flex justify-center">
+                      <span className="text-[14px] font-medium text-[#717680] leading-[20px]">Action</span>
+                    </div>
+                  </div>
+
+                  {rows.map((row) => (
+                    <div
+                      key={row.id}
+                      className="flex items-center gap-[24px] h-[52px] px-[24px] relative shadow-[inset_0px_-1px_0px_0px_#f2f4f7]"
+                    >
+                      <div className="absolute inset-0 bg-white" aria-hidden="true" />
+                      <div className="w-[34px] shrink-0 z-10 flex items-center border-r border-[#f2f4f7] pr-[12px] py-[16px]">
+                        <ToggleSwitch pressed={row.active} onToggle={() => toggleRow(row.id)} />
+                      </div>
+                      <div className="flex-[1_0_0] z-10">
+                        <span className={cn('text-[18px] font-semibold', row.active ? 'text-[#181d27]' : 'text-[#a4a7ae]')}>
+                          {row.name}
+                        </span>
+                      </div>
+                      <div className="flex-[1_0_0] z-10">
+                        <span className={cn('text-[18px] font-semibold', row.active ? 'text-[#181d27]' : 'text-[#a4a7ae]')}>
+                          {row.weight}
+                        </span>
+                      </div>
+                      <div className="w-[200px] shrink-0 z-10">
+                        <span className={cn('text-[18px] font-semibold', row.active ? 'text-[#181d27]' : 'text-[#a4a7ae]')}>
+                          {row.percentage}
+                        </span>
+                      </div>
+                      <div className="w-[230px] shrink-0 z-10 flex items-center gap-[16px] px-[12px] py-[4px]">
+                        <button className="text-[#b42318] hover:opacity-70 transition-opacity">
+                          <TrashIcon />
+                        </button>
+                        <button className="text-[#414651] hover:text-[#0063f5] transition-colors">
+                          <EditIcon />
+                        </button>
                       </div>
                     </div>
                   ))}
 
-                  {/* Footer */}
-                  {isDirty && (
-                    <div className="flex items-center justify-between px-6 py-4 mt-auto border-t border-[#e3e8ef]">
-                      <button
-                        onClick={handleCancel}
-                        className="h-9 px-4 text-[14px] font-medium text-[#414651] bg-white border border-[#d5d7da] rounded-lg hover:bg-[#f9fafb] transition-colors shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleSave}
-                        disabled={totalWeight !== 100}
-                        className="h-9 px-4 text-[14px] font-medium text-white bg-[#0063F5] border-2 border-white/20 rounded-lg hover:bg-[#004fc6] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#0063F5]"
-                      >
-                        Save factor
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Live Preview panel */}
-                <div className="bg-white border border-[#e3e8ef] rounded-lg flex flex-col min-w-0">
-                  <div className="px-6 pt-6 pb-4 border-b border-[#e3e8ef]">
-                    <span className="text-[18px] font-semibold text-[#697586]">Live Preview</span>
-                  </div>
-                  <div className="flex flex-col items-center px-6 pt-6 pb-4 gap-3">
-                    <span className="text-[64px] font-black text-[#202a39] leading-none">{computedScore}</span>
-                    <span
-                      className="text-[14px] font-medium px-5 py-1.5 rounded-full"
-                      style={{ background: level.bg, color: level.text }}
-                    >
-                      {level.label}
-                    </span>
-                    <p className="text-[11px] text-[#667085] text-center leading-relaxed">
-                      Priority is recalculated automatically and then used by the Queue Engine.
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-3 px-6 pb-4">
-                    {factors.map((factor, i) => {
-                      const subLabels: (string | null)[] = [null, 'Older First', 'Bigger Amount'];
-                      const clamped = Math.min(previewValues[i], factor.weight);
-                      return (
-                        <div key={factor.name} className="flex flex-col gap-1">
-                          <span className="text-[11px] text-[#667085]">{factor.name}</span>
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="range"
-                              min={0}
-                              max={factor.weight}
-                              value={clamped}
-                              onChange={(e) => updatePreview(i, Number(e.target.value))}
-                              className="flex-1 h-1 rounded-full appearance-none cursor-pointer"
-                              style={{
-                                background: `linear-gradient(to right, #202a39 ${(clamped / factor.weight) * 100}%, #eef1f6 ${(clamped / factor.weight) * 100}%)`,
-                              }}
-                            />
-                            <span className="text-[14px] font-bold text-[#1d2939] w-6 text-right">{clamped}</span>
-                            <span className="text-[11px] text-[#667085]">/ {factor.weight}</span>
-                          </div>
-                          {showExplainer && i === 0 && (
-                            <div className="flex items-end justify-between w-full" style={{ paddingRight: 60 }}>
-                              {[
-                                { label: 'On Track', color: '#0063f5' },
-                                { label: 'Warning', color: '#ea8808' },
-                                { label: 'Breach', color: '#d91c1c' },
-                              ].map(({ label, color }) => (
-                                <div key={label} className="flex flex-col items-center gap-0.5 flex-1">
-                                  <div className="w-full h-0.5 rounded-full" style={{ background: color }} />
-                                  <span className="text-[10px] font-semibold" style={{ color }}>{label}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          {showExplainer && subLabels[i] && (
-                            <span className="text-[11px] text-[#667085] w-full text-right" style={{ paddingRight: 60 }}>{subLabels[i]}</span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex items-center justify-between px-6 py-3 mt-auto border-t border-[#e3e8ef]">
-                    <span className="text-[13px] font-medium text-[#697586]">Show explainer</span>
-                    <button
-                      onClick={() => setShowExplainer((v) => !v)}
-                      className={cn(
-                        'relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors',
-                        showExplainer ? 'bg-[#0063F5]' : 'bg-[#D5D7DA]'
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transform transition-transform',
-                          showExplainer ? 'translate-x-4' : 'translate-x-0'
-                        )}
-                      />
+                  <div className="px-[24px] py-[12px]">
+                    <button className="flex items-center gap-[6px] w-full px-[16px] py-[10px] rounded-[8px] border border-[#d5d7da] bg-white text-[#414651] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)] hover:bg-[#fafafa] transition-colors">
+                      <PlusIcon />
+                      <span className="text-[16px] font-medium">Add new Model</span>
                     </button>
                   </div>
-                </div>
 
-                {/* Priority Levels panel */}
-                <div className="bg-[#fcfcfd] border border-[#e3e8ef] rounded-lg flex flex-col min-w-0">
-                  <div className="px-6 pt-6 pb-3 border-b border-[#e3e8ef]">
-                    <span className="text-[18px] font-semibold text-[#697586]">Priority Levels</span>
-                  </div>
-                  <div className="flex flex-col gap-2 px-6 py-4">
-                    {[
-                      { label: 'Critical', range: '85–100', bg: '#fee4e2', text: '#912018' },
-                      { label: 'High', range: '65–84', bg: '#fff0e8', text: '#b54708' },
-                      { label: 'Medium', range: '40–64', bg: '#fff4d6', text: '#8a4b00' },
-                      { label: 'Low', range: '0–39', bg: '#eaf8f0', text: '#16834a' },
-                    ].map(({ label, range, bg, text }) => (
-                      <div
-                        key={label}
-                        className="flex items-center justify-between px-5 py-4 rounded-lg"
-                        style={{ background: bg }}
-                      >
-                        <span className="text-[15px]" style={{ color: text }}>{label}</span>
-                        <span className="text-[15px] font-bold" style={{ color: text }}>{range}</span>
+                  <div className="flex items-center justify-between pb-[16px] pt-[12px] px-[24px] border-t border-[#e9eaeb]">
+                    <div className="flex items-center gap-[8px]">
+                      <span className="text-[#344054] text-[14px] font-medium">Show</span>
+                      <div className="relative">
+                        <select className="appearance-none bg-white border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] px-[12px] py-[8px] pr-8 text-[#717680] text-[14px] w-[74px] focus:outline-none cursor-pointer">
+                          <option>3</option>
+                          <option>10</option>
+                          <option>25</option>
+                        </select>
+                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#717680]" />
                       </div>
-                    ))}
-                  </div>
-                  <div className="px-6 pb-6 mt-auto">
-                    <div className="flex gap-2 bg-white border border-[#e9eaeb] rounded-lg p-2">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 mt-0.5">
-                        <circle cx="7" cy="7" r="6" stroke="#697586" strokeWidth="1.2"/>
-                        <path d="M7 6.5v4M7 4.5h.01" stroke="#697586" strokeWidth="1.2" strokeLinecap="round"/>
-                      </svg>
-                      <p className="text-[11px] font-medium text-[#414651] leading-relaxed">
-                        Each order receives a priority score between 0 and 100. A priority score is calculated based on weighted business factors.
-                      </p>
+                    </div>
+
+                    <div className="flex border border-[#d5d7da] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] overflow-clip">
+                      <button
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        className="bg-white border-r border-[#d5d7da] px-[16px] py-[8px] min-h-[40px] flex items-center text-[#414651] hover:bg-[#fafafa] transition-colors"
+                      >
+                        <ArrowLeftIcon />
+                      </button>
+                      {[1, 2, 3, '...', 8, 9, 10].map((n, i) =>
+                        n === '...' ? (
+                          <span key={`ellipsis-${i}`} className="min-h-[40px] min-w-[40px] p-[8px] border-r border-[#d5d7da] text-[14px] text-[#414651] flex items-center justify-center bg-white">
+                            …
+                          </span>
+                        ) : (
+                          <button
+                            key={n}
+                            onClick={() => setPage(n as number)}
+                            className={cn(
+                              'min-h-[40px] min-w-[40px] p-[8px] border-r border-[#d5d7da] text-[14px] font-medium transition-colors',
+                              page === n ? 'bg-[#fafafa] text-[#252b37]' : 'bg-white text-[#414651] hover:bg-[#fafafa]'
+                            )}
+                          >
+                            {n}
+                          </button>
+                        )
+                      )}
+                      <button
+                        onClick={() => setPage((p) => Math.min(TOTAL_PAGES, p + 1))}
+                        className="bg-white px-[16px] py-[8px] min-h-[40px] flex items-center text-[#414651] hover:bg-[#fafafa] transition-colors"
+                      >
+                        <ArrowRightIcon />
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Other tabs placeholder */}
-            {activeTab !== 'SLA Rules' && activeTab !== 'Priority Engine' && (
-              <div className="bg-white rounded-xl border border-[#E9EAEB] px-6 py-16 text-center">
-                <p className="text-[15px] font-medium text-[#121a26]">{activeTab}</p>
-                <p className="text-[13px] text-[#697586] mt-1">This section is under construction.</p>
               </div>
-            )}
-
-            {activeTab === 'SLA Rules' && (
-              <Pagination
-                page={page}
-                perPage={perPage}
-                total={TOTAL_RECORDS}
-                onPage={setPage}
-                onPerPage={setPerPage}
-              />
             )}
           </div>
         </div>
       </div>
+      <AddSlaRuleDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </div>
   );
 }

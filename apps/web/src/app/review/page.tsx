@@ -53,9 +53,14 @@ function StarRating({ value = 4.5 }: { value?: number }) {
 function IconSimah() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3.5 10.5A6.5 6.5 0 1 1 16.5 10.5" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M10 10.5L13.5 7" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round"/>
-      <circle cx="10" cy="10.5" r="1.2" fill="#0063F5"/>
+      <g clipPath="url(#clip0_2463_28795)">
+        <path d="M4.16602 9.99996C4.16602 6.7783 6.77769 4.16663 9.99935 4.16663M13.7493 6.24996L9.99927 9.99996M18.3327 9.99996C18.3327 14.6023 14.6017 18.3333 9.99935 18.3333C5.39698 18.3333 1.66602 14.6023 1.66602 9.99996C1.66602 5.39759 5.39698 1.66663 9.99935 1.66663C14.6017 1.66663 18.3327 5.39759 18.3327 9.99996ZM10.8327 9.99996C10.8327 10.4602 10.4596 10.8333 9.99935 10.8333C9.53911 10.8333 9.16602 10.4602 9.16602 9.99996C9.16602 9.53972 9.53911 9.16663 9.99935 9.16663C10.4596 9.16663 10.8327 9.53972 10.8327 9.99996Z" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_2463_28795">
+          <rect width="20" height="20" fill="white"/>
+        </clipPath>
+      </defs>
     </svg>
   );
 }
@@ -63,8 +68,7 @@ function IconSimah() {
 function IconShield() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 2L16.5 4.5V10C16.5 13.5 13.5 16.5 10 18C6.5 16.5 3.5 13.5 3.5 10V4.5L10 2Z" stroke="#0063F5" strokeWidth="1.5" strokeLinejoin="round"/>
-      <path d="M7.5 10.5L9 12L12.5 8" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16.6673 8.33329V5.66663C16.6673 4.26649 16.6673 3.56643 16.3948 3.03165C16.1552 2.56124 15.7727 2.17879 15.3023 1.93911C14.7675 1.66663 14.0674 1.66663 12.6673 1.66663H7.33398C5.93385 1.66663 5.23379 1.66663 4.69901 1.93911C4.2286 2.17879 3.84615 2.56124 3.60647 3.03165C3.33398 3.56643 3.33398 4.26649 3.33398 5.66663V14.3333C3.33398 15.7334 3.33398 16.4335 3.60647 16.9683C3.84615 17.4387 4.2286 17.8211 4.69901 18.0608C5.23379 18.3333 5.93385 18.3333 7.33398 18.3333H10.4173M15.0007 17.5C15.0007 17.5 17.5007 16.3084 17.5007 14.521V12.4357L15.6777 11.7843C15.2397 11.6274 14.7607 11.6274 14.3227 11.7843L12.5007 12.4357V14.521C12.5007 16.3084 15.0007 17.5 15.0007 17.5Z" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -72,9 +76,14 @@ function IconShield() {
 function IconTarget() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="10" cy="10" r="7.5" stroke="#0063F5" strokeWidth="1.5"/>
-      <circle cx="10" cy="10" r="4" stroke="#0063F5" strokeWidth="1.5"/>
-      <circle cx="10" cy="10" r="1.2" fill="#0063F5"/>
+      <g clipPath="url(#clip0_2463_28801)">
+        <path d="M13.3326 6.66663V4.16663L15.8326 1.66663L16.666 3.33329L18.3326 4.16663L15.8326 6.66663H13.3326ZM13.3326 6.66663L9.99932 9.99991M18.3327 9.99996C18.3327 14.6023 14.6017 18.3333 9.99935 18.3333C5.39698 18.3333 1.66602 14.6023 1.66602 9.99996C1.66602 5.39759 5.39698 1.66663 9.99935 1.66663M14.166 9.99996C14.166 12.3011 12.3005 14.1666 9.99935 14.1666C7.69816 14.1666 5.83268 12.3011 5.83268 9.99996C5.83268 7.69877 7.69816 5.83329 9.99935 5.83329" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_2463_28801">
+          <rect width="20" height="20" fill="white"/>
+        </clipPath>
+      </defs>
     </svg>
   );
 }
