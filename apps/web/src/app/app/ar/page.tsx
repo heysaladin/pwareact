@@ -512,7 +512,7 @@ export default function AppPageAr() {
   return (
     <div className="bg-[#f9f8fd]" dir="rtl">
       {menuOpen && <SlidingMenu onClose={() => setMenuOpen(false)} />}
-      <Navbar onMenuOpen={() => setMenuOpen(true)} dark langHref="/app" langLabel="EN" />
+      <Navbar onMenuOpen={() => setMenuOpen(true)} dark langHref="/app" langLabel="EN" lang="ar" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative bg-[#F9F8FD] overflow-hidden">

@@ -14,10 +14,11 @@ const serviceItems = [
 ];
 
 const navLinksEn = [
-  { label: 'Home',       href: '/app',                      dropdown: false },
-  { label: 'Services',   href: '#',                         dropdown: true  },
-  { label: 'About us',   href: '/landing/en/about-us',      dropdown: false },
-  { label: 'Contact us', href: '/landing/en/contact-us',    dropdown: false },
+  { label: 'Home',               href: '/app',                      dropdown: false },
+  { label: 'Services',           href: '#',                         dropdown: true  },
+  { label: 'About us',           href: '/landing/en/about-us',      dropdown: false },
+  { label: 'Contact us',         href: '/landing/en/contact-us',    dropdown: false },
+  { label: 'Terms & Conditions', href: '/landing/en/terms',         dropdown: false },
 ];
 
 const navLinksAr = [
@@ -25,6 +26,7 @@ const navLinksAr = [
   { label: 'خدمات',           href: '#',                     dropdown: true  },
   { label: 'معلومات عنا',     href: '/landing/about-us',     dropdown: false },
   { label: 'اتصل بنا',        href: '/landing/contact-us',   dropdown: false },
+  { label: 'الأحكام والشروط', href: '/landing/terms',        dropdown: false },
 ];
 
 function ServicesDropdown({ lang, dark }: { lang: Lang; dark: boolean }) {
@@ -114,7 +116,10 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
             <a href={isRtl ? '/landing/business' : '/landing/en/business'} className={linkClass}>
               {businessLabel}
             </a>
-            <div className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center cursor-pointer shrink-0 ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+            <div
+              onClick={() => { window.location.href = lang === 'ar' ? '/app' : '/app/ar'; }}
+              className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center cursor-pointer shrink-0 ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
+            >
               <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
             </div>
           </div>
@@ -126,7 +131,10 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
             <img src={imgMenuDark} alt="Menu" className="size-6" style={dark ? { filter: 'brightness(0) invert(1)' } : undefined} />
           </button>
           <img src={dark ? imgLogoWhite : imgLogoBlue} alt="Tamawal" className="h-7 w-auto" />
-          <div className={`border rounded-full w-9 h-9 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
+          <div
+            onClick={() => { window.location.href = lang === 'ar' ? '/app' : '/app/ar'; }}
+            className={`border rounded-full w-9 h-9 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
+          >
             <span className={`text-[12px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
           </div>
         </div>
