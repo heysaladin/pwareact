@@ -47,6 +47,20 @@ const projects = [
       </svg>
     ),
   },
+  {
+    id: 'ceer-tamawal',
+    name: 'CEER x Tamawal',
+    description: 'Co-branded experience between CEER and Tamawal.',
+    href: '/ceer-tamawal',
+    tag: 'CO-BRAND',
+    accentColor: '#0063F5',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="15" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
 ];
 
 export default function HubPage() {

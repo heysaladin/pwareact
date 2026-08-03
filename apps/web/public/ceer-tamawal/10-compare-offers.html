@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamawal — Compare &amp; Choose Your Best Offer</title>
+<link rel="stylesheet" href="shared.css">
+<script src="theme.js"></script>
+<style>
+  body { background: var(--bg-page); }
+  .kv { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; }
+  .kv .k { color: var(--muted); }
+  .kv .v { font-weight: 600; }
+  .amount-band {
+    background: var(--bg-light); border-radius: 10px; padding: 12px 16px;
+    margin-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+  }
+  .amount-band b { font-size: 15px; }
+  .total-band {
+    background: var(--blue); color: #fff; border-radius: 10px; padding: 12px 16px;
+    margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+  }
+  .total-band b { font-size: 15px; }
+  .side-note {
+    display: flex; gap: 12px; align-items: flex-start;
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px; font-size: 12.5px; line-height: 1.5;
+    margin-top: 12px; background: var(--surface);
+  }
+  .side-note b { display: block; font-size: 13px; }
+  .side-note span { color: var(--muted); }
+  .nafath-mark {
+    display: inline-block; background: color-mix(in srgb, var(--green) 12%, var(--surface)); color: #2a7d4f;
+    border-radius: 6px; padding: 2px 8px; font-weight: 800; font-size: 11px;
+  }
+
+  .compare-head { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
+  .compare-head .count { font-weight: 700; font-size: 14px; }
+  .clear-link { font-size: 13px; font-weight: 600; }
+
+  /* Comparison table */
+  .cmp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 13.5px;
+  }
+  .cmp-table th, .cmp-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+  }
+  .cmp-table th:first-child, .cmp-table td:first-child {
+    text-align: left; color: var(--muted); font-weight: 500;
+    border-left: none; width: 200px; background: var(--bg-light);
+  }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table td { font-weight: 700; }
+  .cmp-table col.sel-col {}
+  .cmp-table .sel { background: var(--bg-light); box-shadow: inset 0 0 0 2px var(--blue); }
+  th.bank-h { padding: 18px 14px 14px; vertical-align: top; }
+  .bank-h .bank-name { font-weight: 800; font-size: 15px; }
+  .bank-h .bank-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+  .bank-h.snb .bank-name { color: #1a6b3c; font-size: 18px; }
+  .bank-h.alinma .bank-name { color: #4a2c1a; }
+  .bank-h.riyad .bank-name { color: #17807c; }
+  .bank-h.aloula .bank-name { color: #1b2a4a; }
+  .sel-btn {
+    margin-top: 10px;
+    display: inline-block;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 4px 16px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  .sel-btn.on { background: var(--blue); color: #fff; }
+  .section-row td {
+    background: color-mix(in srgb, var(--muted) 15%, var(--surface)) !important;
+    color: var(--navy) !important;
+    font-weight: 800 !important;
+    text-align: left !important;
+    box-shadow: none !important;
+    font-size: 13px;
+  }
+  .stars { color: var(--amber); letter-spacing: 1px; }
+  .best { color: var(--green-dark); }
+</style>
+</head>
+<body>
+
+<header class="tw-header">
+  <div class="logo">
+    <img class="logo-img logo-img-light" alt="Tamawal" src="/logo-tamawal-web-blue.svg">
+    <img class="logo-img logo-img-dark" alt="Tamawal" src="/logo-tamawal-web.svg">
+    <span class="logo-divider"></span>
+    <svg class="ceer-logo-header" width="100" height="14" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_3493_306)"><path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"></path><path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"></path><path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"></path><path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"></path><path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"></path><path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"></path><path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"></path><path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"></path><path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"></path></g><defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"></rect></clipPath></defs></svg>
+  </div>
+</header>
+
+<div class="page-wrap">
+  <aside class="sidebar">
+    <h3 style="font-size:16px; color:var(--navy); margin-bottom:14px">Your selected vehicle</h3>
+    <div class="car-card">
+      <span class="car-img"></span>
+      <div class="car-title">EXOBOT SUV</div>
+      <div class="car-sub">Premium AWD – 2026</div>
+      <div class="spec-list">
+        <div class="kv"><span class="k">🎨 Exterior</span><span class="v">Quantum Grey</span></div>
+        <div class="kv"><span class="k">💺 Interior</span><span class="v">Onyx Black</span></div>
+        <div class="kv"><span class="k">✳️ Wheels</span><span class="v">21&quot; Alloy Sport</span></div>
+        <div class="kv"><span class="k">🔋 Battery</span><span class="v">108 kWh</span></div>
+        <div class="kv"><span class="k">📏 Range</span><span class="v">610 km</span></div>
+      </div>
+      <div class="price-block">
+        <div class="kv"><span class="k">Vehicle price (incl. VAT)</span><span class="v">SAR 228,750</span></div>
+        <div class="kv"><span class="k">Down payment (20%)</span><span class="v">SAR 45,750</span></div>
+      </div>
+      <div class="amount-band">
+        <span>Amount to finance</span>
+        <b>SAR 183,000</b>
+      </div>
+      <div class="kv" style="margin-top:8px"><span class="k">Tenure</span><span class="v">60 Months</span></div>
+      <div class="total-band">
+        <span>Total payable (SNB)</span>
+        <b>SAR 218,880</b>
+      </div>
+    </div>
+
+    <div class="side-note">
+      <div class="shield" style="width:34px;height:34px;font-size:15px">🛡️</div>
+      <div>
+        <b>Your data is secure</b>
+        <span>We use bank-level encryption to protect your information.</span>
+      </div>
+    </div>
+    <div class="side-note">
+      <span class="nafath-mark">نفاذ Nafath</span>
+      <div><span>Verification powered by Nafath — government-trusted identity services.</span></div>
+    </div>
+  </aside>
+
+  <main class="main-col">
+    <a class="back" href="09-eligibility-offers.html">‹ Back to Offers</a>
+    <h1 class="page-title" style="margin-top:12px">Compare &amp; Choose Your Best Offer</h1>
+    <p class="page-sub">Compare financing offers from our trusted partners and choose the one that fits you best.</p>
+
+    <div class="compare-head">
+      <span class="count">Compare up to 4 offers</span>
+      <a class="clear-link" href="#">Clear Selection</a>
+    </div>
+
+    <table class="cmp-table">
+      <tr>
+        <th></th>
+        <th class="bank-h snb sel">
+          <div class="bank-name">SNB الأهلي</div>
+          <div class="bank-sub">Saudi National Bank</div>
+          <button class="sel-btn on">✓ Selected</button>
+        </th>
+        <th class="bank-h alinma">
+          <div class="bank-name">مصرف الإنماء</div>
+          <div class="bank-sub">alinma bank</div>
+          <button class="sel-btn">Select</button>
+        </th>
+        <th class="bank-h riyad">
+          <div class="bank-name">بنك الرياض</div>
+          <div class="bank-sub">Riyad Bank</div>
+          <button class="sel-btn">Select</button>
+        </th>
+        <th class="bank-h aloula">
+          <div class="bank-name">تمويل الأولى</div>
+          <div class="bank-sub">Tamweel Aloula</div>
+          <button class="sel-btn">Select</button>
+        </th>
+      </tr>
+      <tr class="section-row"><td colspan="5">Key Details</td></tr>
+      <tr>
+        <td>Annual Profit Rate (APR)</td>
+        <td class="sel" style="color:var(--blue)">4.69%</td>
+        <td class="best">4.29%</td>
+        <td>4.99%</td>
+        <td>5.19%</td>
+      </tr>
+      <tr>
+        <td>Monthly Payment</td>
+        <td class="sel">SAR 3,648</td>
+        <td>SAR 3,564</td>
+        <td>SAR 3,721</td>
+        <td>SAR 3,775</td>
+      </tr>
+      <tr>
+        <td>Total Payable</td>
+        <td class="sel">SAR 218,880</td>
+        <td>SAR 213,840</td>
+        <td>SAR 223,260</td>
+        <td>SAR 226,500</td>
+      </tr>
+      <tr>
+        <td>Down Payment</td>
+        <td class="sel">SAR 45,750</td>
+        <td>SAR 45,750</td>
+        <td>SAR 45,750</td>
+        <td>SAR 45,750</td>
+      </tr>
+      <tr>
+        <td>Tenure</td>
+        <td class="sel">60 Months</td>
+        <td>60 Months</td>
+        <td>60 Months</td>
+        <td>60 Months</td>
+      </tr>
+      <tr>
+        <td>Processing Fee</td>
+        <td class="sel best">SAR 0</td>
+        <td>SAR 500</td>
+        <td class="best">SAR 0</td>
+        <td>SAR 750</td>
+      </tr>
+      <tr>
+        <td>Early Settlement Benefit</td>
+        <td class="sel best">✓ Yes</td>
+        <td class="best">✓ Yes</td>
+        <td style="color:var(--muted)">✕ No</td>
+        <td class="best">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>Free Comprehensive Insurance</td>
+        <td class="sel best">✓ Yes</td>
+        <td style="color:var(--muted)">✕ No</td>
+        <td class="best">✓ Yes</td>
+        <td style="color:var(--muted)">✕ No</td>
+      </tr>
+      <tr>
+        <td>Digital Services</td>
+        <td class="sel">Advanced</td>
+        <td>Standard</td>
+        <td>Standard</td>
+        <td>Standard</td>
+      </tr>
+      <tr>
+        <td>Customer Rating</td>
+        <td class="sel"><span class="stars">★★★★★</span> 4.8</td>
+        <td><span class="stars">★★★★☆</span> 4.5</td>
+        <td><span class="stars">★★★★☆</span> 4.3</td>
+        <td><span class="stars">★★★★☆</span> 4.1</td>
+      </tr>
+    </table>
+  </main>
+</div>
+
+<footer class="tw-footer">
+  <a class="btn btn-outline" href="09-eligibility-offers.html">← Back to Offers</a>
+  <div style="display:flex; gap:14px">
+    <a class="btn btn-outline" href="#">Save Comparison</a>
+    <a class="btn btn-primary" style="background:#f08a1d" href="11-offer-details.html">Create Order &nbsp;→</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.sel-btn').forEach((btn, i) => btn.addEventListener('click', () => {
+    document.querySelectorAll('.sel-btn').forEach(b => { b.classList.remove('on'); b.textContent = 'Select'; });
+    btn.classList.add('on');
+    btn.textContent = '✓ Selected';
+    // move highlight
+    const col = i + 2; // nth-child column
+    document.querySelectorAll('.cmp-table .sel').forEach(c => c.classList.remove('sel'));
+    document.querySelectorAll('.cmp-table tr:not(.section-row)').forEach(tr => {
+      const cell = tr.children[col - 1];
+      if (cell) cell.classList.add('sel');
+    });
+  }));
+</script>
+
+</body>
+</html>

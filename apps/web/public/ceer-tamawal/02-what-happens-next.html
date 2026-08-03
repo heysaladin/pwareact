@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamawal — What happens next?</title>
+<link rel="stylesheet" href="shared.css">
+<script src="theme.js"></script>
+<style>
+  body { background: var(--surface); }
+
+  .top {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px 32px 8px;
+  }
+  .top .logo { flex-shrink: 0; }
+  .top-titles { flex: 1; text-align: center; padding-right: 88px; }
+  .top-titles h1 { font-size: 26px; font-weight: 800; color: var(--navy); }
+  .top-titles p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  .diagram-wrap { max-width: 1280px; margin: 18px auto 0; padding: 0 32px; }
+
+  /* Step labels row */
+  .flow-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 18px;
+  }
+  .flow-step {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; color: var(--blue);
+  }
+  .flow-step .num {
+    width: 22px; height: 22px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .flow-step::after {
+    content: "";
+    flex: 1;
+    border-top: 2px dotted #c9d6ea;
+    margin-left: 6px;
+  }
+  .flow-step:last-child::after { display: none; }
+
+  /* Diagram grid */
+  .diagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 40px;
+    row-gap: 56px;
+  }
+  .node {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 22px 18px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(20,35,60,0.05);
+  }
+  .node .n-icon {
+    width: 44px; height: 44px;
+    margin: 0 auto 12px;
+    font-size: 19px;
+  }
+  .node .n-title { font-weight: 700; font-size: 14px; color: var(--navy); line-height: 1.4; }
+  .node .n-sub { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
+  .node.decision { border: 1.5px solid var(--blue); background: var(--bg-light); }
+  .node.green {
+    border: 1.5px solid var(--green);
+    background: color-mix(in srgb, var(--green) 12%, var(--surface));
+  }
+  .node.green .n-icon { background: #dff5e7; color: var(--green-dark); }
+  .node.green .n-title { color: var(--green-dark); }
+
+  /* Right arrows (Yes) */
+  .arrow-right::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    width: 40px;
+    height: 2px;
+    background: var(--blue);
+  }
+  .arrow-right::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-4px);
+    border: 5px solid transparent;
+    border-left-color: var(--blue);
+  }
+  .yes-label {
+    position: absolute;
+    top: calc(50% - 22px);
+    right: -34px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green-dark);
+    background: color-mix(in srgb, var(--green) 14%, var(--surface));
+    border-radius: 999px;
+    padding: 2px 9px;
+    z-index: 1;
+  }
+
+  /* Down arrows (No) */
+  .arrow-down .down-line {
+    position: absolute;
+    left: 50%;
+    bottom: -56px;
+    height: 56px;
+    width: 2px;
+    background: var(--red);
+  }
+  .arrow-down .down-line::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    border: 5px solid transparent;
+    border-top-color: var(--red);
+  }
+  .no-label {
+    position: absolute;
+    left: calc(50% + 10px);
+    bottom: -34px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    background: color-mix(in srgb, var(--red) 12%, var(--surface));
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
+
+  .cell-empty {}
+
+  /* Quick summary */
+  .qs {
+    max-width: 1280px;
+    margin: 40px auto 0;
+    padding: 22px 26px;
+  }
+  .qs h2 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 18px; }
+  .qs-cols {
+    display: grid;
+    grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .qs-col { display: flex; gap: 12px; font-size: 13px; }
+  .qs-col .qs-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    font-size: 16px;
+  }
+  .qs-col b { display: block; color: var(--navy); margin-bottom: 4px; font-size: 13px; }
+  .qs-col span { color: var(--muted); line-height: 1.55; font-size: 12px; }
+  .qs-arrow { color: #b7c4d4; font-size: 18px; align-self: center; text-align: center; }
+  .qs-wrap { padding: 0 32px; }
+
+  /* Continue row */
+  .continue-row {
+    max-width: 1280px;
+    margin: 26px auto 0;
+    padding: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tw-footer { margin-top: 28px; }
+  .help { text-align: right; font-size: 13px; }
+  .help b { display: block; color: var(--navy); }
+  .help a { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo">
+    <img class="logo-img logo-img-light" alt="Tamawal" src="/logo-tamawal-web-blue.svg">
+    <img class="logo-img logo-img-dark" alt="Tamawal" src="/logo-tamawal-web.svg">
+    <span class="logo-divider"></span>
+    <svg class="ceer-logo-header" width="100" height="14" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_3493_306)"><path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"></path><path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"></path><path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"></path><path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"></path><path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"></path><path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"></path><path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"></path><path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"></path><path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"></path></g><defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"></rect></clipPath></defs></svg>
+  </div>
+  <div class="top-titles">
+    <h1>What happens next?</h1>
+    <p>Here’s how we get you started after you choose a preliminary offer.</p>
+  </div>
+</div>
+
+<div class="diagram-wrap">
+  <div class="flow-steps">
+    <div class="flow-step"><span class="num">1</span> Start</div>
+    <div class="flow-step"><span class="num">2</span> Check CEER Login</div>
+    <div class="flow-step"><span class="num">3</span> Check Tamawal Customer</div>
+    <div class="flow-step"><span class="num">4</span> Next Step</div>
+  </div>
+
+  <div class="diagram">
+    <!-- Row 1 -->
+    <div class="node arrow-right">
+      <div class="icon-circle n-icon">🔍</div>
+      <div class="n-title">You selected a preliminary offer</div>
+      <div class="n-sub">Click Tamawal to continue</div>
+    </div>
+
+    <div class="node decision arrow-right arrow-down">
+      <span class="yes-label">Yes</span>
+      <div class="icon-circle n-icon">👤</div>
+      <div class="n-title">Are you logged in with CEER?</div>
+      <span class="no-label">No</span>
+      <span class="down-line"></span>
+    </div>
+
+    <div class="node decision arrow-right arrow-down">
+      <span class="yes-label">Yes</span>
+      <div class="icon-circle n-icon">🧾</div>
+      <div class="n-title">Are you already a Tamawal customer?</div>
+      <span class="no-label">No</span>
+      <span class="down-line"></span>
+    </div>
+
+    <div class="node green">
+      <div class="icon-circle n-icon">🔑</div>
+      <div class="n-title">Enter your PIN</div>
+      <div class="n-sub">Welcome back! Enter your Tamawal PIN</div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="cell-empty"></div>
+
+    <div class="node">
+      <div class="icon-circle n-icon">🔐</div>
+      <div class="n-title">Login or Sign up to CEER</div>
+      <div class="n-sub">You’ll need to login or create an account to continue</div>
+    </div>
+
+    <div class="node">
+      <div class="icon-circle n-icon">➕</div>
+      <div class="n-title">Create your Tamawal account</div>
+      <div class="n-sub">Let’s get you set up. It only takes a few minutes</div>
+    </div>
+
+    <div class="cell-empty"></div>
+  </div>
+</div>
+
+<div class="qs-wrap">
+  <div class="card qs">
+    <h2>Quick summary</h2>
+    <div class="qs-cols">
+      <div class="qs-col">
+        <div class="icon-circle qs-icon">1️⃣</div>
+        <div>
+          <b>1. You selected an offer</b>
+          <span>You choose the offer that fits you best</span>
+        </div>
+      </div>
+      <div class="qs-arrow">→</div>
+      <div class="qs-col">
+        <div class="icon-circle qs-icon">2️⃣</div>
+        <div>
+          <b>2. We check your CEER login</b>
+          <span>Not logged in → Go to CEER login / sign up. Logged in → Move to next step</span>
+        </div>
+      </div>
+      <div class="qs-arrow">→</div>
+      <div class="qs-col">
+        <div class="icon-circle qs-icon">3️⃣</div>
+        <div>
+          <b>3. We check your Tamawal status</b>
+          <span>Existing customer → Enter your PIN. New customer → Create your account</span>
+        </div>
+      </div>
+      <div class="qs-arrow">→</div>
+      <div class="qs-col">
+        <div class="icon-circle qs-icon">🔒</div>
+        <div>
+          <b>4. You’re all set!</b>
+          <span>Enter your PIN and continue your financing journey with Tamawal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="continue-row">
+  <a class="back" href="01-preliminary-offers.html">‹ Back to offers</a>
+  <a class="btn btn-primary" href="03-verify-id.html">Continue →</a>
+</div>
+
+<footer class="tw-footer">
+  <div class="footer-note">
+    <div class="shield">🛡️</div>
+    <div>
+      Your data is safe with us<br>
+      Tamawal is licensed and regulated by the Saudi Central Bank
+    </div>
+  </div>
+  <div class="help">
+    <b>Need help?</b>
+    <a href="#">Contact us 24/7</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamawal — Your eligibility offers</title>
+<link rel="stylesheet" href="shared.css">
+<script src="theme.js"></script>
+<style>
+  /* Compact top stepper */
+  .stepper.compact { padding: 12px 32px; }
+  .stepper.compact .step-dot { width: 20px; height: 20px; font-size: 10px; }
+  .stepper.compact .step-label b { font-size: 11.5px; font-weight: 600; }
+
+  .headline-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+
+  .amount-band {
+    background: var(--bg-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  .amount-band b { font-size: 15px; }
+  .indicative-band {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+  }
+  .indicative-band b { font-size: 16px; }
+  .sidebar-note { color: var(--muted); font-size: 11.5px; margin-top: 12px; line-height: 1.5; }
+  .kv { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; }
+  .kv .k { color: var(--muted); }
+  .kv .v { font-weight: 600; }
+
+  /* Offer cards */
+  .offer {
+    display: flex; align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-top: 16px;
+    padding: 18px 18px;
+    gap: 2px;
+    cursor: pointer;
+    position: relative;
+    background: var(--surface);
+  }
+  .offer.selected { border: 2px solid var(--blue); background: var(--bg-light); }
+  .rec-badge {
+    position: absolute; top: -10px; left: 54px;
+    background: var(--blue); color: #fff;
+    font-size: 10px; font-weight: 800; letter-spacing: 1px;
+    padding: 4px 12px; border-radius: 999px;
+  }
+  .radio {
+    width: 22px; height: 22px; flex-shrink: 0;
+    border: 2px solid #c3ccd6; border-radius: 50%;
+    margin-right: 14px;
+  }
+  .offer.selected .radio { border-color: var(--blue); position: relative; }
+  .offer.selected .radio::after {
+    content: ""; position: absolute; inset: 3px;
+    background: var(--blue); border-radius: 50%;
+  }
+  .bank { width: 130px; flex-shrink: 0; text-align: center; }
+  .bank .bank-name { font-weight: 800; font-size: 15px; }
+  .bank .bank-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .bank.snb .bank-name { color: #1a6b3c; font-size: 20px; }
+  .bank.alinma .bank-name { color: #4a2c1a; }
+  .bank.riyad .bank-name { color: #17807c; }
+  .bank.aloula .bank-name { color: #1b2a4a; }
+  .offer-col { flex: 1; padding: 2px 14px; border-left: 1px solid var(--border); min-width: 96px; }
+  .offer-col .label { color: var(--muted); font-size: 11.5px; }
+  .offer-col .value { font-weight: 700; font-size: 15.5px; margin-top: 4px; }
+  .offer-col .value.blue { color: var(--blue); }
+  .offer-feats {
+    flex: 1.25; padding-left: 14px;
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+    font-size: 12.5px;
+  }
+  .offer-right {
+    width: 120px; flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 14px;
+  }
+  .compare-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .compare-check input { accent-color: var(--blue); width: 15px; height: 15px; }
+  .view-details { font-size: 13px; font-weight: 700; }
+
+  .info-strip {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 18px;
+    font-size: 13.5px;
+  }
+</style>
+</head>
+<body>
+
+<header class="tw-header">
+  <div class="logo">
+    <img class="logo-img logo-img-light" alt="Tamawal" src="/logo-tamawal-web-blue.svg">
+    <img class="logo-img logo-img-dark" alt="Tamawal" src="/logo-tamawal-web.svg">
+    <span class="logo-divider"></span>
+    <svg class="ceer-logo-header" width="100" height="14" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_3493_306)"><path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"></path><path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"></path><path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"></path><path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"></path><path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"></path><path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"></path><path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"></path><path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"></path><path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"></path></g><defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"></rect></clipPath></defs></svg>
+  </div>
+</header>
+
+<div class="stepper compact">
+  <div class="step done"><div class="step-dot">✓</div><div class="step-label"><b>Select vehicle</b></div></div>
+  <div class="step done"><div class="step-dot">✓</div><div class="step-label"><b>Verify identity (Nafath)</b></div></div>
+  <div class="step done"><div class="step-dot">✓</div><div class="step-label"><b>Mobile ownership</b></div></div>
+  <div class="step done"><div class="step-dot">✓</div><div class="step-label"><b>Consents &amp; disclosures</b></div></div>
+  <div class="step done"><div class="step-dot">✓</div><div class="step-label"><b>Data collection</b></div></div>
+  <div class="step active"><div class="step-dot">6</div><div class="step-label"><b>Eligibility offers</b></div></div>
+</div>
+
+<div class="page-wrap">
+  <aside class="sidebar">
+    <h3 style="font-size:16px; color:var(--navy); margin-bottom:14px">Your selected vehicle</h3>
+    <div class="car-card">
+      <span class="car-img"></span>
+      <div class="car-title">EXOBOT SUV</div>
+      <div class="car-sub">Premium AWD – 2026</div>
+      <div class="spec-list">
+        <div class="kv"><span class="k">🎨 Exterior</span><span class="v">Quantum Grey</span></div>
+        <div class="kv"><span class="k">💺 Interior</span><span class="v">Onyx Black</span></div>
+        <div class="kv"><span class="k">✳️ Wheels</span><span class="v">21&quot; Alloy Sport</span></div>
+        <div class="kv"><span class="k">🔋 Battery</span><span class="v">108 kWh</span></div>
+        <div class="kv"><span class="k">📏 Range</span><span class="v">610 km</span></div>
+      </div>
+      <div class="price-block">
+        <div class="kv"><span class="k">Vehicle price (incl. VAT)</span><span class="v">SAR 228,750</span></div>
+        <div class="kv"><span class="k">Down payment (20%)</span><span class="v">SAR 45,750</span></div>
+      </div>
+      <div class="amount-band">
+        <span>Amount to finance</span>
+        <b>SAR 183,000</b>
+      </div>
+      <div class="indicative-band">
+        <span>Indicative monthly payment</span>
+        <span>From <b>SAR 3,600</b></span>
+      </div>
+      <p class="sidebar-note">ℹ️ Figures are indicative and may change based on final verification.</p>
+    </div>
+  </aside>
+
+  <main class="main-col">
+    <div class="headline-row">
+      <div>
+        <h1 class="page-title">Your eligibility offers</h1>
+        <p class="page-sub">Here are the financing offers generated for you based on your reports and each provider's product strategy in our decision engine.</p>
+      </div>
+      <a class="btn btn-outline" style="flex-shrink:0" href="10-compare-offers.html">⇄ Compare selected products (<span class="cmp-count">2</span>)</a>
+    </div>
+
+    <div class="info-strip">
+      <span style="color:var(--blue); font-weight:700">ℹ️</span>
+      These offers are indicative and remain subject to final approval by the provider.
+    </div>
+
+    <!-- SNB -->
+    <div class="offer selected">
+      <span class="rec-badge">RECOMMENDED</span>
+      <div class="radio"></div>
+      <div class="bank snb">
+        <div class="bank-name">SNB الأهلي</div>
+        <div class="bank-sub">Saudi National Bank</div>
+      </div>
+      <div class="offer-col"><div class="label">APR</div><div class="value blue">4.69%</div></div>
+      <div class="offer-col"><div class="label">Monthly payment</div><div class="value">SAR 3,648</div></div>
+      <div class="offer-col"><div class="label">Tenure</div><div class="value">60 months</div></div>
+      <div class="offer-col"><div class="label">Amount financed</div><div class="value">SAR 183,000</div></div>
+      <div class="offer-col"><div class="label">Total payable</div><div class="value">SAR 218,880</div></div>
+      <div class="offer-feats">
+        <div class="feat"><span class="check green">✓</span> No processing fee</div>
+        <div class="feat"><span class="check green">✓</span> Early settlement flexibility</div>
+        <div class="feat"><span class="check green">✓</span> Free comprehensive insurance</div>
+        <div class="feat"><span class="check green">✓</span> Advanced digital services</div>
+      </div>
+      <div class="offer-right">
+        <label class="compare-check" onclick="event.stopPropagation()"><input type="checkbox" checked> Compare</label>
+        <a class="view-details" href="11-offer-details.html">View details</a>
+      </div>
+    </div>
+
+    <!-- alinma -->
+    <div class="offer">
+      <div class="radio"></div>
+      <div class="bank alinma">
+        <div class="bank-name">مصرف الإنماء</div>
+        <div class="bank-sub">alinma bank</div>
+      </div>
+      <div class="offer-col"><div class="label">APR</div><div class="value blue">5.19%</div></div>
+      <div class="offer-col"><div class="label">Monthly payment</div><div class="value">SAR 3,755</div></div>
+      <div class="offer-col"><div class="label">Tenure</div><div class="value">60 months</div></div>
+      <div class="offer-col"><div class="label">Amount financed</div><div class="value">SAR 183,000</div></div>
+      <div class="offer-col"><div class="label">Total payable</div><div class="value">SAR 225,300</div></div>
+      <div class="offer-feats">
+        <div class="feat"><span class="check green">✓</span> Flexible payment options</div>
+        <div class="feat"><span class="check green">✓</span> No processing fees</div>
+        <div class="feat"><span class="check green">✓</span> Early settlement available</div>
+      </div>
+      <div class="offer-right">
+        <label class="compare-check" onclick="event.stopPropagation()"><input type="checkbox"> Compare</label>
+        <a class="view-details" href="11-offer-details.html">View details</a>
+      </div>
+    </div>
+
+    <!-- Riyad Bank -->
+    <div class="offer">
+      <div class="radio"></div>
+      <div class="bank riyad">
+        <div class="bank-name">بنك الرياض</div>
+        <div class="bank-sub">Riyad Bank</div>
+      </div>
+      <div class="offer-col"><div class="label">APR</div><div class="value blue">5.49%</div></div>
+      <div class="offer-col"><div class="label">Monthly payment</div><div class="value">SAR 3,697</div></div>
+      <div class="offer-col"><div class="label">Tenure</div><div class="value">60 months</div></div>
+      <div class="offer-col"><div class="label">Amount financed</div><div class="value">SAR 183,000</div></div>
+      <div class="offer-col"><div class="label">Total payable</div><div class="value">SAR 221,820</div></div>
+      <div class="offer-feats">
+        <div class="feat"><span class="check green">✓</span> Fast approval</div>
+        <div class="feat"><span class="check green">✓</span> Free comprehensive insurance</div>
+      </div>
+      <div class="offer-right">
+        <label class="compare-check" onclick="event.stopPropagation()"><input type="checkbox" checked> Compare</label>
+        <a class="view-details" href="11-offer-details.html">View details</a>
+      </div>
+    </div>
+
+    <!-- Tamweel Aloula -->
+    <div class="offer">
+      <div class="radio"></div>
+      <div class="bank aloula">
+        <div class="bank-name">تمويل الأولى</div>
+        <div class="bank-sub">Tamweel Aloula</div>
+      </div>
+      <div class="offer-col"><div class="label">APR</div><div class="value blue">5.29%</div></div>
+      <div class="offer-col"><div class="label">Monthly payment</div><div class="value">SAR 3,820</div></div>
+      <div class="offer-col"><div class="label">Tenure</div><div class="value">60 months</div></div>
+      <div class="offer-col"><div class="label">Amount financed</div><div class="value">SAR 183,000</div></div>
+      <div class="offer-col"><div class="label">Total payable</div><div class="value">SAR 229,200</div></div>
+      <div class="offer-feats">
+        <div class="feat"><span class="check green">✓</span> No processing fee</div>
+        <div class="feat"><span class="check green">✓</span> Early settlement available</div>
+      </div>
+      <div class="offer-right">
+        <label class="compare-check" onclick="event.stopPropagation()"><input type="checkbox"> Compare</label>
+        <a class="view-details" href="11-offer-details.html">View details</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="tw-footer">
+  <span></span>
+  <div style="display:flex; gap:14px">
+    <a class="btn btn-outline" href="10-compare-offers.html">⇄ Compare selected products (<span class="cmp-count">2</span>)</a>
+    <a class="btn btn-primary" href="11-offer-details.html">Create order &nbsp;→</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.offer').forEach(o => o.addEventListener('click', () => {
+    document.querySelectorAll('.offer').forEach(x => x.classList.remove('selected'));
+    o.classList.add('selected');
+  }));
+  const boxes = document.querySelectorAll('.compare-check input');
+  function updateCount() {
+    const n = [...boxes].filter(b => b.checked).length;
+    document.querySelectorAll('.cmp-count').forEach(el => el.textContent = n);
+  }
+  boxes.forEach(b => b.addEventListener('change', updateCount));
+</script>
+
+</body>
+</html>

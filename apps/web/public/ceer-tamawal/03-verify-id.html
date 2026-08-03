@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamawal — Enter your verified ID</title>
+<link rel="stylesheet" href="shared.css">
+<script src="theme.js"></script>
+<style>
+  body { background: var(--surface); }
+
+  .tw-header { justify-content: flex-end; }
+  .tw-header .logo { flex-direction: row-reverse; }
+
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 73px);
+  }
+
+  /* Left vehicle summary */
+  .veh-panel {
+    width: 320px;
+    flex-shrink: 0;
+    background: var(--bg-page);
+    border-right: 1px solid var(--border);
+    padding: 24px 20px;
+  }
+  .veh-panel .car-card { background: var(--surface); }
+  .veh-panel .car-img { background: url("/ceer-car-00.png") center / contain no-repeat, linear-gradient(160deg, #3a4048, #14171c); }
+  .veh-panel .spec { font-size: 12px; }
+  .veh-panel .spec-label { width: auto; padding-top: 0; }
+  .veh-panel .spec-body { padding-top: 4px; }
+  .veh-panel .spec-body .spec-label { display: block; font-size: 11px; }
+  .veh-panel .spec-body .spec-value { display: block; padding-top: 2px; font-size: 12px; line-height: 1.45; }
+  .color-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #14171c;
+    margin-left: auto;
+    align-self: center;
+  }
+  .veh-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+    padding-top: 16px;
+  }
+  .veh-price .p-label { font-weight: 700; font-size: 14px; color: var(--navy); }
+  .veh-price .p-value { font-weight: 800; font-size: 16px; color: var(--blue); }
+
+  /* Right form area */
+  .form-col {
+    flex: 1;
+    padding: 40px 64px;
+    max-width: 860px;
+  }
+  .form-col h1 { font-size: 30px; font-weight: 800; color: var(--navy); margin-top: 28px; }
+  .id-field { margin-top: 34px; max-width: 560px; }
+  .id-input {
+    border: 2px solid var(--blue);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 0 0 4px rgba(26,115,245,0.12);
+  }
+  .id-input .icon { color: var(--blue); font-size: 18px; }
+  .id-input input::placeholder { color: #9aa8b8; font-weight: 500; }
+
+  .actions {
+    max-width: 560px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+    margin-top: 60px;
+  }
+</style>
+</head>
+<body>
+
+<header class="tw-header">
+  <div class="logo">
+    <img class="logo-img logo-img-light" alt="Tamawal" src="/logo-tamawal-web-blue.svg">
+    <img class="logo-img logo-img-dark" alt="Tamawal" src="/logo-tamawal-web.svg">
+    <span class="logo-divider"></span>
+    <svg class="ceer-logo-header" width="100" height="14" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_3493_306)"><path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"></path><path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"></path><path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"></path><path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"></path><path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"></path><path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"></path><path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"></path><path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"></path><path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"></path></g><defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"></rect></clipPath></defs></svg>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="veh-panel">
+    <div class="car-card">
+      <div class="car-img"></div>
+      <div class="car-title">EXOBOT SEDAN FIRST EDITION</div>
+      <div class="car-sub">2027</div>
+      <div class="spec-list">
+        <div class="spec">
+          <div class="spec-icon">🎨</div>
+          <div class="spec-body">
+            <span class="spec-label">Exterior Color</span>
+            <span class="spec-value">Obsidian Black</span>
+          </div>
+          <span class="color-dot"></span>
+        </div>
+        <div class="spec">
+          <div class="spec-icon">✳️</div>
+          <div class="spec-body">
+            <span class="spec-label">Wheels &amp; Tires</span>
+            <span class="spec-value">20” Alloy Wheels</span>
+          </div>
+        </div>
+        <div class="spec">
+          <div class="spec-icon">💺</div>
+          <div class="spec-body">
+            <span class="spec-label">Interior Material</span>
+            <span class="spec-value">Premium Nappa Leather</span>
+          </div>
+        </div>
+        <div class="spec">
+          <div class="spec-icon">⭐</div>
+          <div class="spec-body">
+            <span class="spec-label">Options</span>
+            <span class="spec-value">Panoramic Roof<br>Advanced Driver Assistance Pack</span>
+          </div>
+        </div>
+      </div>
+      <div class="veh-price">
+        <span class="p-label">Price</span>
+        <span class="p-value">SAR 399,000</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="form-col">
+    <a class="back" href="02-what-happens-next.html">← Back</a>
+    <h1>Enter your verified ID</h1>
+
+    <div class="field id-field">
+      <label class="field-label" for="nid">National ID / Iqama number</label>
+      <div class="input id-input">
+        <span class="icon">🪪</span>
+        <input id="nid" type="text" inputmode="numeric" placeholder="1 234 567 890" autofocus>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-ghost" href="#">Cancel</a>
+      <a class="btn btn-primary" href="04-nafath-approve.html">Continue</a>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
