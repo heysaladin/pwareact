@@ -1,4 +1,5 @@
 import '../globals.css';
+import { GlobalSettingsProvider } from '@/contexts/GlobalSettingsContext';
 
 export const metadata = {
   title: 'Tamawal',
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <GlobalSettingsProvider>{children}</GlobalSettingsProvider>
+      </body>
     </html>
   )
 }

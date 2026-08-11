@@ -71,10 +71,20 @@ export default function HubPage() {
       <header className="sticky top-0 z-10 border-b border-[#eef1f6] dark:border-white/[0.06] bg-white/90 dark:bg-[#080d14]/90 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <TamawalLogo />
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
             <span className="text-xs font-medium text-[#667085] dark:text-white/40 px-2 py-0.5 rounded-full border border-[#eef1f6] dark:border-white/[0.08]">
               Design
             </span>
+            <Link
+              href="/global-settings"
+              className="flex items-center gap-1.5 text-xs font-medium text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              Settings
+            </Link>
           </nav>
         </div>
       </header>
