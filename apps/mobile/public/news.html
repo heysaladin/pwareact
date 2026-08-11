@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>موجز الأخبار - تموّل</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #dde3ec;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, 'SF Arabic', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .phone {
+      width: 375px;
+      min-height: 100vh;
+      background: #f8fafc;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px 0;
+      flex-shrink: 0;
+    }
+
+    .status-time {
+      font-size: 15px;
+      font-weight: 600;
+      color: #121a26;
+      letter-spacing: -0.3px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    /* Feed container */
+    .feed-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px 130px;
+    }
+
+    .feed-title {
+      font-size: 17.5px;
+      font-weight: 700;
+      color: #121a26;
+      text-align: center;
+      padding: 14px 0 16px;
+    }
+
+    .cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+
+    .card-media {
+      width: 100%;
+      position: relative;
+      background: #d7e7fe;
+    }
+
+    .card-media img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.55);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-caption {
+      border-bottom: 1px solid #d7e7fe;
+      border-left: 1px solid #d7e7fe;
+      border-right: 1px solid #d7e7fe;
+      border-radius: 0 0 16px 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .rt-badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: #0063f5;
+      background: #eef5ff;
+      padding: 2px 10px;
+      border-radius: 999px;
+      direction: ltr;
+      align-self: flex-start;
+    }
+
+    .card-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #202a39;
+      text-align: right;
+      line-height: 1.65;
+      width: 100%;
+    }
+
+    .card-date {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 5px;
+      align-self: flex-start;
+    }
+
+    .card-date-text {
+      font-size: 12.5px;
+      color: #697586;
+      line-height: 20px;
+    }
+
+    .cal-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 375px;
+      z-index: 100;
+    }
+
+    .bottom-nav-bar {
+      background: white;
+      border-top: 1px solid #eef1f6;
+      border-left: 1px solid #eef1f6;
+      border-right: 1px solid #eef1f6;
+      border-radius: 32px 32px 0 0;
+      padding: 0 24px 6px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      min-width: 40px;
+      position: relative;
+      padding-top: 16px;
+    }
+
+    .nav-dot {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 3px;
+      background: #ffdd33;
+      border-radius: 999px;
+      opacity: 0;
+    }
+
+    .nav-item.active .nav-dot { opacity: 1; }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-label {
+      font-size: 12px;
+      color: #697586;
+      white-space: nowrap;
+    }
+
+    .nav-item.active .nav-label { color: #0063f5; }
+    .nav-item.active .nav-icon { stroke: #0063f5; }
+
+    .nav-search-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0;
+    }
+
+    .search-btn {
+      background: #0063f5;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -24px;
+      box-shadow: 0 4px 16px rgba(0,99,245,0.35);
+      cursor: pointer;
+    }
+
+    .home-bar {
+      background: white;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .home-bar-line {
+      width: 134px;
+      height: 5px;
+      background: #121a26;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <!-- Signal bars -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <rect x="0" y="6" width="3" height="6" rx="0.8" fill="#121a26"/>
+          <rect x="4.7" y="4" width="3" height="8" rx="0.8" fill="#121a26"/>
+          <rect x="9.4" y="1.5" width="3" height="10.5" rx="0.8" fill="#121a26"/>
+          <rect x="14.1" y="0" width="3" height="12" rx="0.8" fill="#121a26" opacity="0.35"/>
+        </svg>
+        <!-- WiFi -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M8 9.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" fill="#121a26"/>
+          <path d="M4.7 7C5.9 5.8 7 5.3 8 5.3c1 0 2.1.5 3.3 1.7l1.1-1.2C11 4.3 9.5 3.5 8 3.5c-1.5 0-3 .8-4.4 2.3L4.7 7z" fill="#121a26"/>
+          <path d="M2 4.5C3.8 2.7 5.8 1.8 8 1.8s4.2.9 6 2.7l1.1-1.2C13.2 1.2 10.8 0 8 0S2.8 1.2.9 3.3L2 4.5z" fill="#121a26"/>
+        </svg>
+        <!-- Battery -->
+        <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+          <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#121a26" stroke-opacity="0.35"/>
+          <rect x="1.5" y="1.5" width="19" height="10" rx="2.5" fill="#121a26"/>
+          <path d="M24 4.5v4a2 2 0 000-4z" fill="#121a26" fill-opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div class="feed-container">
+      <h1 class="feed-title">موجز الأخبار</h1>
+
+      <div class="cards-list">
+
+        <!-- 1 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2086456755760804243" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HPRrn1HWQAAMuZc.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <span class="rt-badge">RT @Tamawal_sa</span>
+            <p class="card-title">كل ما تحتاجه لرحلة التمويل في مكان واحد. قارن، اختر، وابدأ طلبك بكل سهولة.</p>
+            <div class="card-date">
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+              <span class="card-date-text">09 Aug 2026 • 02:17 PM</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2 -->
+        <a class="card" href="https://twitter.com/SAMA_GOV/status/2077681773601853881" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HNVnKRLXUAAENDX.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <span class="rt-badge">RT @SAMA_GOV</span>
+            <p class="card-title" style="text-align:left;direction:ltr">#SAMA's website offers updated pages listing all licensed or permitted financial institutions in #SaudiArabia.</p>
+            <div class="card-date">
+              <span class="card-date-text">16 Jul 2026 • 09:08 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 3 -->
+        <a class="card" href="https://twitter.com/SAMA_GOV/status/2077681768023331253" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HNVnIAkXQAA_nOn.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <span class="rt-badge">RT @SAMA_GOV</span>
+            <p class="card-title">يوفر الموقع الإلكتروني لـ #البنك_المركزي_السعودي "ساما" صفحات محدثة وشاملة لكافة المؤسسات المالية المرخصة أو المصرح لها.</p>
+            <div class="card-date">
+              <span class="card-date-text">16 Jul 2026 • 09:08 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 4 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2076302759859495206" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HNCCFZAWUAA-0yG.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">بيتك يبدأ من تموّل. التمويل العقاري من بداية متاح الآن. قدّم واعرف أهليتك اليوم.</p>
+            <div class="card-date">
+              <span class="card-date-text">12 Jul 2026 • 01:48 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 5 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2074891258712162386" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HMomyJiW8AAD9rL.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">تحتاج تمويل؟ لا تبدأ بسؤال: مين يعطيني أسرع موافقة؟ ابدأ بسؤال أذكى: وش المنتج الأنسب لاحتياجك؟</p>
+            <div class="card-date">
+              <span class="card-date-text">08 Jul 2026 • 04:20 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 6 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2074513180315779455" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HMomVQrXIAAzlqV.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">بعد ما تقدم على التمويل، الأهم تعرف: وش صار على طلبي؟ في تموّل تقدر تتابع حالة طلبك وتشوف التحديثات من داخل التطبيق.</p>
+            <div class="card-date">
+              <span class="card-date-text">07 Jul 2026 • 03:17 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 7 – video -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2066604769536323771" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/amplify_video_thumb/2066604628469305344/img/7pmK-qs6Z8MFz5fI.jpg" alt="" loading="lazy">
+            <div class="play-btn">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="white"><path d="M1 1.5l16 8.5-16 8.5V1.5z"/></svg>
+            </div>
+          </div>
+          <div class="card-caption">
+            <p class="card-title">يا أخضر معاك الله 💚 🇸🇦 #السعودية_الأوروغواي</p>
+            <div class="card-date">
+              <span class="card-date-text">15 Jun 2026 • 07:32 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 8 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2061107684603310239" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HJmPmmaXwAIjBSv.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">تمويل شخصي خلال دقائق. أكثر من جهة تمويلية، وأفضل عرض في مكان واحد. #تمول</p>
+            <div class="card-date">
+              <span class="card-date-text">31 May 2026 • 03:29 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 9 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2060836568659632536" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HJmPuo_XAAQgS_0.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">تمويلك بين يديك. #تمول 💙 #نجاح_موسم_حج_1447هـ</p>
+            <div class="card-date">
+              <span class="card-date-text">30 May 2026 • 09:31 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 10 – video -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2059329350382534693" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/amplify_video_thumb/2059329059021094912/img/676mgclij1RJacT1.jpg" alt="" loading="lazy">
+            <div class="play-btn">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="white"><path d="M1 1.5l16 8.5-16 8.5V1.5z"/></svg>
+            </div>
+          </div>
+          <div class="card-caption">
+            <p class="card-title">#كل_عام_وأنتم_بخير 🌙 عيد الأضحى مبارك أعاده الله علينا وعليكم بالخير واليمن والبركات. #عيد_الاضحي_المبارك</p>
+            <div class="card-date">
+              <span class="card-date-text">26 May 2026 • 05:42 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 11 – image only tweet -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2056001212856545452" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HIhiMh1XwAAPPBa.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">@Tamawal_sa</p>
+            <div class="card-date">
+              <span class="card-date-text">17 May 2026 • 01:17 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 12 -->
+        <a class="card" href="https://twitter.com/aljabrfinancing/status/2046491514449055845" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HGaZJSaaEAA2qNR.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <span class="rt-badge">RT @aljabrfinancing</span>
+            <p class="card-title">شراكتنا الرقمية مع منصة تموّل تفتح لك آفاقاً جديدة لتجربة تمويل ميسرة وسريعة. نبتكر لأجلك.. لتمويل أسهل. #الجبر_للتمويل</p>
+            <div class="card-date">
+              <span class="card-date-text">21 Apr 2026 • 07:29 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 13 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2034779347811258718" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HDz9BypWsAAtCvJ.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">#تمول تهنئكم بحلول #عيد_الفطر المبارك، أعادهُ الله علينا وعليكم أعوامًا عديدة وأزمنة مديدة بالخير والمسرات. #كل_عام_وأنتم_بخير</p>
+            <div class="card-date">
+              <span class="card-date-text">19 Mar 2026 • 11:49 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 14 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2027840043893555368" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HCRVxBQXsAE8GCX.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">#اللهم_احفظ_السعودية #رمضان_كريم و #شهر_رمضان_المبارك١٤٤٧هـ</p>
+            <div class="card-date">
+              <span class="card-date-text">28 Feb 2026 • 08:15 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 15 – video -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2025674095078125785" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/amplify_video_thumb/2025673960717701120/img/pvgHEVYUWEDAtuMD.jpg" alt="" loading="lazy">
+            <div class="play-btn">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="white"><path d="M1 1.5l16 8.5-16 8.5V1.5z"/></svg>
+            </div>
+          </div>
+          <div class="card-caption">
+            <p class="card-title">#يوم_بدينا_1727 مملكة عز وفخر برجالها. واليوم نرفع راية #تمول في ظل ملوكنا. #يوم_التأسيس_السعودي</p>
+            <div class="card-date">
+              <span class="card-date-text">22 Feb 2026 • 08:48 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 16 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2025509464632078447" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HBwOHrkXQAIr_6q.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">#يوم_بدينا_1727 مملكة عز وفخر برجالها. واليوم نرفع راية #تمول في ظل ملوكنا. #يوم_التأسيس_السعودي</p>
+            <div class="card-date">
+              <span class="card-date-text">22 Feb 2026 • 09:54 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 17 -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2025282171552825781" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HBs_V8nXEAAUhHI.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <p class="card-title">يوم بدينا… لم يكن البدء خطوة، كان قدرًا يُكتب. كانت الأرض صامتة، لكن في صدرها وعد. 🇸🇦 #من_الشدة_للرخاء #السعودية_العظمى</p>
+            <div class="card-date">
+              <span class="card-date-text">21 Feb 2026 • 06:51 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 18 -->
+        <a class="card" href="https://twitter.com/GoSuhail/status/2017951514212413832" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/media/HAEzz10XAAAB7rm.jpg" alt="" loading="lazy">
+          </div>
+          <div class="card-caption">
+            <span class="rt-badge">RT @GoSuhail</span>
+            <p class="card-title">تم توقيع اتفاقية مع شركة تموّل لتسهيل حلول التمويل العقاري داخل سوق #سهيل، ضمن توجه يهدف إلى تسريع الإجراءات وتحسين تجربة المستفيد.</p>
+            <div class="card-date">
+              <span class="card-date-text">01 Feb 2026 • 01:21 PM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 19 – video -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2017565255249838348" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/amplify_video_thumb/2017565167723085824/img/vnamu_civMD4VP7H.jpg" alt="" loading="lazy">
+            <div class="play-btn">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="white"><path d="M1 1.5l16 8.5-16 8.5V1.5z"/></svg>
+            </div>
+          </div>
+          <div class="card-caption">
+            <p class="card-title">يسرّنا أن نعلن عن انضمام شركة النايفات للتمويل @nayifatCo مع تموّل. قدّم طلبك الآن بكل سهولة.</p>
+            <div class="card-date">
+              <span class="card-date-text">31 Jan 2026 • 11:46 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 20 – video -->
+        <a class="card" href="https://twitter.com/Tamawal_sa/status/2017565156314620052" target="_blank">
+          <div class="card-media">
+            <img src="https://pbs.twimg.com/amplify_video_thumb/2017565003151241217/img/aSe5yU3RseHbeFlR.jpg" alt="" loading="lazy">
+            <div class="play-btn">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="white"><path d="M1 1.5l16 8.5-16 8.5V1.5z"/></svg>
+            </div>
+          </div>
+          <div class="card-caption">
+            <p class="card-title">يسرّنا أن نعلن عن انضمام شركة اليسر للتمويل @alyusrcompany مع تموّل. قدّم طلبك الآن بكل سهولة.</p>
+            <div class="card-date">
+              <span class="card-date-text">31 Jan 2026 • 11:46 AM</span>
+              <svg class="cal-icon" viewBox="0 0 14 14" fill="none" stroke="#697586" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="1.5"/><line x1="1" y1="5.5" x2="13" y2="5.5"/><line x1="4" y1="1" x2="4" y2="3"/><line x1="10" y1="1" x2="10" y2="3"/></svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Bottom Nav Bar -->
+    <div class="bottom-nav">
+      <div class="bottom-nav-bar">
+
+        <!-- التمويل -->
+        <div class="nav-item">
+          <div class="nav-dot"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="#697586" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+            <path d="M2 10h20"/>
+          </svg>
+          <span class="nav-label">التمويل</span>
+        </div>
+
+        <!-- الطلبات -->
+        <div class="nav-item">
+          <div class="nav-dot"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="#697586" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="2" width="14" height="18" rx="2"/>
+            <path d="M7 7h6M7 11h6M7 15h4"/>
+            <path d="M17 6h2a2 2 0 012 2v11a2 2 0 01-2 2H7"/>
+          </svg>
+          <span class="nav-label">الطلبات</span>
+        </div>
+
+        <!-- بحث (center) -->
+        <div class="nav-search-wrap">
+          <div class="search-btn">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="7.5"/>
+              <line x1="17.5" y1="17.5" x2="23" y2="23"/>
+            </svg>
+          </div>
+          <span class="nav-label">بحث</span>
+        </div>
+
+        <!-- الاخبار (active) -->
+        <div class="nav-item active">
+          <div class="nav-dot"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="#0063f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span class="nav-label">الاخبار</span>
+        </div>
+
+        <!-- الرئيسية -->
+        <div class="nav-item">
+          <div class="nav-dot"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="#697586" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+            <path d="M9 21V12h6v9"/>
+          </svg>
+          <span class="nav-label">الرئيسية</span>
+        </div>
+
+      </div>
+      <div class="home-bar">
+        <div class="home-bar-line"></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
