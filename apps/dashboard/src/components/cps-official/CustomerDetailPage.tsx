@@ -8,12 +8,11 @@ import {
   BarChart2, ArrowLeft, Pencil, MessageSquare, ArrowRight,
   Briefcase, Receipt, Gift, Shield, FileSearch, ClipboardMinus,
   Phone, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2,
-  File, Building2, Building, Banknote, UserCircle, Check, X,
-  ChevronDown, ChevronUp, ArrowUpCircle,
+  File, Building2, Building, Banknote, UserCircle,
 } from 'lucide-react';
 import {
   PROFILES, ACTIVITY_LOG, JOURNEY_STEPS,
-  type Profile, type JourneyStep, type CheckpointStatus, type JourneyStepStatus,
+  type Profile,
 } from './cps-data';
 
 // ─── Tab config ──────────────────────────────────────────────────────────────
@@ -24,7 +23,7 @@ type MainTab   = { key: string; labelEn: string; labelAr: string; Icon: React.El
 const CUSTOMER_TABS: MainTab[] = [
   { key: 'overview',       labelEn: 'Overview',            labelAr: 'ملخص',                 Icon: BarChart2,      sub: [
     { key: 'summary',       labelEn: 'Summary',            labelAr: 'ملخص',           Icon: BarChart2      },
-    { key: 'journey',       labelEn: 'User Journey',       labelAr: 'رحلة المستخدم',  Icon: ArrowUpCircle  },
+    { key: 'journey',       labelEn: 'User Journey',       labelAr: 'رحلة المستخدم',  Icon: ArrowRight     },
     { key: 'comments',      labelEn: 'Internal Comments',  labelAr: 'تعليقات داخلية', Icon: MessageSquare  },
   ]},
   { key: 'verification',   labelEn: 'Verification & Risk', labelAr: 'التحقق والمخاطر',       Icon: FileSearch,     sub: [
@@ -60,249 +59,447 @@ const CUSTOMER_TABS: MainTab[] = [
   ]},
 ];
 
-// ─── Journey helpers ──────────────────────────────────────────────────────────
 
-function CpStatusDot({ status }: { status: CheckpointStatus }) {
-  if (status === 'Passed')
-    return <span className="w-5 h-5 rounded-full bg-[#dcfae6] border border-[#17b26a] flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-[#17b26a]" /></span>;
-  if (status === 'Paused')
-    return <span className="w-5 h-5 rounded-full bg-[#fffaeb] border border-[#fec84b] flex items-center justify-center shrink-0"><span className="w-2 h-2 rounded-full bg-[#f79009]" /></span>;
-  if (status === 'Failed')
-    return <span className="w-5 h-5 rounded-full bg-[#fef3f2] border border-[#fecdca] flex items-center justify-center shrink-0"><X className="w-3 h-3 text-[#f04438]" /></span>;
-  return <span className="w-5 h-5 rounded-full bg-white border border-[#d0d5dd] flex items-center justify-center shrink-0" />;
-}
+const STEP_OVERLINES = [
+  'Preserved history',
+  'Repeatable login',
+  'Versioned',
+  'Repeatable engine',
+  'Repeatable order',
+];
 
-function StepCircle({ status }: { status: JourneyStepStatus }) {
-  const base = 'w-9 h-9 rounded-full border-2 flex items-center justify-center shrink-0';
-  if (status === 'Passed')
-    return <span className={cn(base, 'bg-[#dcfae6] border-[#17b26a]')}><Check className="w-4 h-4 text-[#17b26a]" /></span>;
-  if (status === 'Paused')
-    return <span className={cn(base, 'bg-[#fffaeb] border-[#f79009]')}><span className="w-3 h-3 rounded-full bg-[#f79009]" /></span>;
-  if (status === 'Failed')
-    return <span className={cn(base, 'bg-[#fef3f2] border-[#f04438]')}><X className="w-4 h-4 text-[#f04438]" /></span>;
-  return <span className={cn(base, 'bg-white border-[#d0d5dd]')}><span className="w-3 h-3 rounded-full bg-[#d0d5dd]" /></span>;
-}
-
-function Connector({ done }: { done: boolean }) {
-  return <div className={cn('h-0.5 flex-1 mx-1', done ? 'bg-[#17b26a]' : 'bg-[#e3e8f1]')} />;
-}
-
-function StatusLegend({ isAr }: { isAr: boolean }) {
-  const items: { label: string; labelAr: string; color: string }[] = [
-    { label: 'Passed',      labelAr: 'ناجح',         color: '#17b26a' },
-    { label: 'Paused',      labelAr: 'موقوف مؤقتاً', color: '#f79009' },
-    { label: 'Failed',      labelAr: 'فاشل',         color: '#f04438' },
-    { label: 'Not started', labelAr: 'لم يبدأ',      color: '#d0d5dd' },
-  ];
-  return (
-    <div className="flex items-center gap-4">
-      {items.map(it => (
-        <span key={it.label} className="flex items-center gap-1.5 text-xs text-[#697586]">
-          <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: it.color }} />
-          {isAr ? it.labelAr : it.label}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function CheckpointTag({ tag }: { tag: 'Mandatory' | 'System' }) {
-  if (tag === 'Mandatory')
-    return <span className="px-2 py-0.5 rounded-full bg-[#eef3ff] border border-[#c7d7fd] text-[#3538cd] text-[10px] font-medium whitespace-nowrap">Mandatory</span>;
-  return <span className="px-2 py-0.5 rounded-full bg-[#f8f9fb] border border-[#d0d5dd] text-[#697586] text-[10px] font-medium whitespace-nowrap">System</span>;
-}
+const SUB_JOURNEYS = [
+  { labelEn: 'Guest registration', count: '5/5 passed' },
+  { labelEn: 'Product search',     count: '4/4 passed' },
+  { labelEn: 'Search payment',     count: '4/4 passed' },
+  { labelEn: 'Customer conversion', count: '10/10 passed' },
+];
 
 function JourneyContent({ isAr }: { isAr: boolean }) {
-  const [selectedStep, setSelectedStep] = useState(4);
-  const [expandedCp,   setExpandedCp]   = useState(3);
+  const [selectedStep,       setSelectedStep]       = useState(0);
+  const [selectedSubJourney, setSelectedSubJourney] = useState(0);
+  const [expandedCp,         setExpandedCp]         = useState<number | null>(null);
 
-  const step = JOURNEY_STEPS[selectedStep];
-  const passedCount = step.checkpoints.filter(c => c.status === 'Passed').length;
-  const pausedCount = step.checkpoints.filter(c => c.status === 'Paused').length;
-  const notStarted  = step.checkpoints.filter(c => c.status === 'Not started').length;
+  const step     = JOURNEY_STEPS[selectedStep];
+  const passed   = step.checkpoints.filter(c => c.status === 'Passed').length;
+  const open     = step.checkpoints.filter(c => c.status === 'Paused' || c.status === 'Failed').length;
+  const total    = step.checkpoints.length;
+  const progress = total > 0 ? Math.round((passed / total) * 100) : 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
 
-      {/* Journey steps card */}
-      <div className="bg-white border border-[#e3e8f1] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#eef1f6]">
-          <h2 className="text-base font-semibold text-[#15212f]">
-            {isAr ? 'رحلة تمويل العميل' : 'Customer financing journey'}
-          </h2>
-          <StatusLegend isAr={isAr} />
+      {/* ── Banner ──────────────────────────────────────────────── */}
+      <div className="bg-white border border-[#e3e8f1] rounded-[11px] p-[17px] flex flex-col gap-[16px] items-start">
+        {/* Header row */}
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-[12px] flex-1 min-w-0">
+            <div className="overflow-clip size-[24px] shrink-0">
+              <img alt="" className="block size-full" src="/journey-icons/arrow-circle-up-right.svg" />
+            </div>
+            <p className="text-[18px] font-semibold text-[#15212f] leading-[28px] tracking-[0.027px]">
+              {isAr ? 'رحلة العميل' : 'Customer journey'}
+            </p>
+          </div>
+          <div className="flex items-center gap-[8px] shrink-0">
+            <div className="bg-white border border-[#d5d7da] flex gap-[8px] items-center px-[12px] py-[8px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-[250px]">
+              <p className="flex-1 min-w-0 text-[16px] text-[#717680] tracking-[0.08px] truncate">Journey instance</p>
+              <div className="overflow-clip size-[20px] shrink-0">
+                <img alt="" className="block size-full" src="/journey-icons/chevron-down.svg" />
+              </div>
+            </div>
+            <button className="border border-[#aacbfc] bg-white flex gap-[4px] items-center justify-center px-[14px] py-[10px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] min-w-[120px]">
+              <p className="text-[14px] font-medium text-[#0063f5] leading-[20px] tracking-[0.014px] whitespace-nowrap">
+                {isAr ? 'الذهاب للخطوة الحالية' : 'Go to current step'}
+              </p>
+              <div className="overflow-clip size-[20px] shrink-0">
+                <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
+              </div>
+            </button>
+          </div>
         </div>
 
-        <div className="flex px-4 py-5 gap-0">
-          {JOURNEY_STEPS.map((s, i) => (
-            <React.Fragment key={s.id}>
-              {i > 0 && <Connector done={JOURNEY_STEPS[i - 1].status === 'Passed'} />}
-              <button
-                onClick={() => setSelectedStep(i)}
-                className={cn(
-                  'flex flex-col items-center gap-2 px-3 py-3 rounded-xl transition-all shrink-0',
-                  i === selectedStep
-                    ? s.status === 'Paused'
-                      ? 'bg-[#fffaeb] border-2 border-[#f79009]'
-                      : 'bg-[#f5f9ff] border-2 border-[#0063f5]'
-                    : 'hover:bg-[#fafbfc] border-2 border-transparent'
-                )}
-              >
-                <div className="flex flex-col items-center gap-1">
-                  <p className="text-[10px] font-medium text-[#697586] whitespace-nowrap">
-                    {isAr ? `الخطوة ${i + 1}` : `Step ${i + 1}`}
-                  </p>
-                  <StepCircle status={s.status} />
+        {/* Card 1: Guest → Customer */}
+        <div className="bg-[#f5f9ff] border border-[#80b1fa] rounded-[9px] w-full overflow-clip">
+          <div className="flex items-start justify-between p-[12px]">
+            <div className="flex gap-[12px] items-start flex-1 min-w-0 pl-[6px]">
+              <div className="bg-[#0063f5] flex items-center justify-center p-[8px] rounded-[8px] shrink-0">
+                <div className="overflow-clip size-[24px]">
+                  <img alt="" className="block size-full" src="/journey-icons/image-user-check.svg" />
                 </div>
-                <div className="text-center">
-                  <p className="text-xs font-medium text-[#344054] whitespace-nowrap">{isAr ? s.labelAr : s.labelEn}</p>
-                  <p className={cn(
-                    'text-[10px] font-semibold mt-0.5',
-                    s.status === 'Passed'      ? 'text-[#17b26a]' :
-                    s.status === 'Paused'      ? 'text-[#f79009]' :
-                    s.status === 'Failed'      ? 'text-[#f04438]' :
-                                                 'text-[#98a2b3]'
-                  )}>
-                    {s.status === 'Passed' && (isAr ? 'ناجح' : 'Passed')}
-                    {s.status === 'Paused' && (isAr ? 'موقوف مؤقتاً' : 'Paused')}
-                    {s.status === 'Failed' && (isAr ? 'فاشل' : 'Failed')}
-                    {s.status === 'Not started' && (isAr ? 'لم يبدأ' : 'Not started')}
-                  </p>
-                  {i === selectedStep && (
-                    <p className="text-[10px] font-bold text-[#0063f5] mt-1 uppercase tracking-wide">
-                      {isAr ? 'الحالي' : 'Current'}
-                    </p>
-                  )}
+              </div>
+              <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0 font-bold whitespace-nowrap">
+                <p className="text-[8px] text-[#0063f5] uppercase tracking-[0.72px] leading-[12px]">
+                  {isAr ? 'ضيف ← عميل' : 'Guest → Customer'}
+                </p>
+                <p className="text-[18px] text-[#121a26] leading-[16.5px] tracking-[0.25px]">
+                  {isAr ? 'سجل الضيف أصبح الخطوة 1 من رحلة العميل' : 'Guest history is now Step 1 of this Customer journey'}
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#ecfdf3] border border-[#abefc6] flex items-center px-[12px] py-[4px] rounded-[16px] shrink-0">
+              <p className="text-[14px] font-medium text-[#067647] text-center whitespace-nowrap">
+                {isAr ? 'نفس خيط الملف' : 'Same profile thread'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Current stop */}
+        <div className="bg-white border-[#b54708] border-b border-l-4 border-r border-t rounded-[9px] w-full overflow-clip">
+          <div className="flex items-center justify-between p-[12px] pl-[16px]">
+            <div className="flex gap-[12px] items-center flex-1 min-w-0">
+              <div className="bg-[#dc6803] flex items-center justify-center p-[8px] rounded-[8px] shrink-0">
+                <div className="overflow-clip size-[24px]">
+                  <img alt="" className="block size-full" src="/journey-icons/marker-pin.svg" />
                 </div>
-              </button>
-            </React.Fragment>
-          ))}
+              </div>
+              <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0 font-bold whitespace-nowrap">
+                <p className="text-[8px] text-[#0063f5] uppercase tracking-[0.72px] leading-[12px]">
+                  {isAr ? 'التوقف الحالي' : 'Current stop'}
+                </p>
+                <p className="text-[16px] text-[#121a26] leading-[16.5px] tracking-[0.25px]">
+                  {isAr ? 'تقديم الطلب · التحقق من OTP تأكيد الطلب' : 'Order submission · Order confirmation OTP verified'}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-[40px] items-center h-[49px] px-[12px] py-[8px] flex-1 min-w-0 justify-end">
+              {[
+                { label: 'Status',      value: 'Paused',                      w: 47  },
+                { label: 'Waiting on',  value: 'Customer',                    w: 63  },
+                { label: 'Reference',   value: 'O-8821',                      w: 50  },
+                { label: 'Last update', value: 'Waiting since Jul 11 · 10:31', w: 174 },
+              ].map(m => (
+                <div key={m.label} className="flex flex-col gap-[4px] h-full items-start justify-center shrink-0" style={{ width: m.w }}>
+                  <p className="text-[10px] text-[#697586] leading-[10.5px] tracking-[0.25px] w-full">{m.label}</p>
+                  <p className="text-[12.5px] font-medium text-[#121a26] leading-[18px] tracking-[0.5px] w-full">{m.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Checkpoints card */}
-      <div className="bg-white border border-[#e3e8f1] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#eef1f6]">
-          <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-[#15212f]">
-              {isAr ? `نقاط التحقق: ${isAr ? step.labelAr : step.labelEn}` : `${step.labelEn} checkpoints`}
-            </h3>
-            <span className="px-2 py-0.5 rounded-full bg-[#f0f5ff] border border-[#c3d5fd] text-[#2f5fc4] text-xs font-medium">
-              {step.checkpoints.length} {isAr ? 'نقاط' : 'checkpoints'}
-            </span>
-          </div>
+      {/* ── Content below banner ─────────────────────────────────── */}
+      <div className="p-[8px] flex flex-col">
 
-          {/* Stats */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-bold text-[#15212f]">{passedCount}</span>
-              <span className="text-xs text-[#697586] leading-tight">{isAr ? 'اجتياز\nمطلوب' : 'Required\npassed'}</span>
-            </div>
-            <div className="w-px h-8 bg-[#e3e8f1]" />
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-bold text-[#15212f]">{pausedCount + notStarted}</span>
-              <span className="text-xs text-[#697586] leading-tight">{isAr ? 'مفتوح\nمطلوب' : 'Open\nrequired'}</span>
-            </div>
-            <div className="w-px h-8 bg-[#e3e8f1]" />
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-bold text-[#15212f]">0</span>
-              <span className="text-xs text-[#697586] leading-tight">{isAr ? 'اختياري' : 'Optional'}</span>
-            </div>
+        {/* Title row */}
+        <div className="flex items-center justify-between pt-[16px] w-full">
+          <p className="text-[25px] font-medium text-[#15212f] leading-[32px] flex-1 min-w-0">
+            {isAr ? 'رحلة العميل' : 'Customer journey'}
+          </p>
+          <div className="flex gap-[16px] h-[16px] items-start shrink-0">
+            {[
+              { color: '#079455', label: 'Passed' },
+              { color: '#f79009', label: 'Paused' },
+              { color: '#d92d20', label: 'Failed' },
+              { color: '#a4a7ae', label: 'Not started' },
+            ].map(l => (
+              <div key={l.label} className="flex gap-[4px] items-center self-stretch">
+                <div className="rounded-[3.5px] size-[7px] shrink-0" style={{ backgroundColor: l.color }} />
+                <p className="text-[12px] text-[#717680] whitespace-nowrap leading-[16px] tracking-[0.048px]">{l.label}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Info note */}
-        <div className="px-5 py-3 bg-[#f8f9fb] border-b border-[#eef1f6] flex items-start gap-2 text-xs text-[#697586]">
-          <span className="mt-0.5 shrink-0">ⓘ</span>
-          <span>
-            {isAr
-              ? 'الحالات المشروطة: الشروط غير مطلوبة إلا عند تحقق شرط تفعيلها، وهذه الشروط لا تُطبق لذلك.'
-              : 'Downstream hands can remain Not started. Conditional checkpoints shall not required when their condition does not apply.'}
-          </span>
-        </div>
-
-        {/* Checkpoint list */}
-        <div className="divide-y divide-[#f2f4f7]">
-          {step.checkpoints.map((cp, i) => {
-            const isExpanded = expandedCp === i;
-            const isPaused   = cp.status === 'Paused';
-            const isNS       = cp.status === 'Not started';
-
+        {/* Journey steps (horizontal) */}
+        <div className="flex items-start py-[20px] w-full">
+          {JOURNEY_STEPS.map((s, i) => {
+            const isSel    = i === selectedStep;
+            const isPaused = s.status === 'Paused';
             return (
-              <div
-                key={i}
-                className={cn(
-                  'px-5 py-4',
-                  isPaused ? 'bg-[#fffcf5]' : isNS ? 'bg-white' : 'bg-white'
+              <React.Fragment key={s.id}>
+                {i > 0 && (
+                  <div className="flex flex-[1_0_0] h-[48px] items-center justify-center min-w-px">
+                    <div className="flex-1 h-0 min-w-px relative">
+                      <div className="absolute inset-[-1px_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src="/journey-icons/line.svg" />
+                      </div>
+                    </div>
+                  </div>
                 )}
-              >
-                {/* Left accent bar */}
-                <div className="flex gap-3">
+                <button
+                  onClick={() => setSelectedStep(i)}
+                  className={cn(
+                    'flex flex-col gap-[8px] items-center rounded-[8px] shrink-0 text-start',
+                    isSel
+                      ? 'bg-[#0063f5] border-2 border-[#0063f5]'
+                      : 'bg-[#cdd4df] border border-[#cdd4df]'
+                  )}
+                >
                   <div className={cn(
-                    'w-1 rounded-full shrink-0 self-stretch',
-                    cp.status === 'Passed'      ? 'bg-[#17b26a]' :
-                    cp.status === 'Paused'      ? 'bg-[#f79009]' :
-                    cp.status === 'Failed'      ? 'bg-[#f04438]' :
-                                                  'bg-[#e3e8f1]'
-                  )} />
-
-                  <div className="flex-1 min-w-0">
-                    {/* Row: status dot + label + tag + timestamp + expand */}
-                    <div className="flex items-center gap-3">
-                      <CpStatusDot status={cp.status} />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-semibold text-[#98a2b3] uppercase tracking-wider mb-0.5">
-                          {isAr ? `نقطة التحقق ${i + 1}` : `Checkpoint ${i + 1}`}
-                        </p>
-                        <p className={cn('text-sm font-medium', isNS ? 'text-[#98a2b3]' : 'text-[#15212f]')}>
-                          {isAr ? cp.labelAr : cp.labelEn}
+                    'flex gap-[12px] items-start p-[12px] rounded-[8px] shrink-0',
+                    isSel
+                      ? 'bg-white border-2 border-[#0063f5]'
+                      : 'bg-white border border-[#cdd4df] w-[194px]'
+                  )}>
+                    {isPaused ? (
+                      <div className="bg-[#ca7404] border-[6px] border-[#fef4e8] flex items-center justify-center p-[4px] rounded-full shrink-0 w-[20px]">
+                        <div className="overflow-clip size-[12px]">
+                          <img alt="" className="block size-full" src="/journey-icons/pause-square.svg" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-[#079455] border-[6px] border-[#dcfae6] flex items-center justify-center p-[4px] rounded-full shrink-0 w-[20px]">
+                        <div className="overflow-clip size-[12px]">
+                          <img alt="" className="block size-full" src="/journey-icons/check.svg" />
+                        </div>
+                      </div>
+                    )}
+                    <div className={cn('flex flex-col gap-[16px] items-start', isSel ? 'w-[138px]' : 'flex-1 min-w-px')}>
+                      <div className="flex flex-col gap-[8px] w-full">
+                        <div className="flex gap-[2px] items-start font-bold text-[10px] tracking-[0.05px] leading-[14px] w-full">
+                          <span className="text-[#0063f5] whitespace-nowrap">Step {i + 1}</span>
+                          <span className="text-[#a4a7ae] whitespace-nowrap">·</span>
+                          <span className="text-[#a4a7ae] flex-1 min-w-px">{STEP_OVERLINES[i]}</span>
+                        </div>
+                        <p className="font-bold text-[14px] text-[#202a39] leading-[12.75px] tracking-[0.25px] w-full">
+                          {isAr ? s.labelAr : s.labelEn}
                         </p>
                       </div>
-                      <CheckpointTag tag={cp.tag} />
-                      {cp.timestamp && (
-                        <span className="text-xs text-[#697586] whitespace-nowrap">{cp.timestamp}</span>
-                      )}
-                      {!cp.timestamp && (
-                        <span className={cn('text-xs whitespace-nowrap', isNS ? 'text-[#98a2b3]' : 'text-[#f79009] font-medium')}>
-                          {isNS ? (isAr ? 'لم يبدأ' : 'Not started') : (isAr ? 'موقوف' : 'Paused')}
-                        </span>
+                    </div>
+                  </div>
+                  {isSel && (
+                    <div className="pb-[8px]">
+                      <p className="text-white text-[10px] font-bold leading-[14px] tracking-[0.05px] whitespace-nowrap">CURRENT</p>
+                    </div>
+                  )}
+                </button>
+              </React.Fragment>
+            );
+          })}
+        </div>
+
+        {/* Bottom area */}
+        <div className="flex gap-[16px] items-start">
+
+          {/* Left: detail panel */}
+          <div className="flex-1 min-w-0 bg-white border border-[#e9eaeb] rounded-[12px] p-[17px] flex flex-col gap-[16px] items-start">
+            {/* Step title */}
+            <div className="flex items-center gap-[8px] w-full">
+              <p className="text-[25px] font-medium text-[#15212f] leading-[32px] flex-1 min-w-0">
+                {isAr ? step.labelAr : step.labelEn}
+              </p>
+              {selectedStep === 0 && (
+                <div className="bg-[#fafafa] border border-[#e9eaeb] flex items-center px-[12px] py-[4px] rounded-[16px] shrink-0">
+                  <p className="text-[14px] font-medium text-[#414651] text-center whitespace-nowrap">4 sub-journey</p>
+                </div>
+              )}
+            </div>
+
+            {/* Sub-journeys (step 1 only) */}
+            {selectedStep === 0 && (
+              <div className="flex items-start py-[16px] w-full">
+                {SUB_JOURNEYS.map((sj, si) => {
+                  const isSjSel = si === selectedSubJourney;
+                  return (
+                    <React.Fragment key={si}>
+                      {si > 0 && (
+                        <div className="flex h-[48px] items-center justify-center shrink-0 w-[24px]">
+                          <div className="flex-1 h-0 relative">
+                            <div className="absolute inset-[-1px_0_0_0]">
+                              <img alt="" className="block max-w-none size-full" src="/journey-icons/line.svg" />
+                            </div>
+                          </div>
+                        </div>
                       )}
                       <button
-                        onClick={() => setExpandedCp(isExpanded ? -1 : i)}
-                        className="p-1 rounded hover:bg-[#f2f4f7] text-[#697586] shrink-0"
+                        onClick={() => setSelectedSubJourney(si)}
+                        className={cn(
+                          'flex flex-1 flex-col gap-[8px] items-start justify-center min-w-px rounded-[8px] text-start',
+                          isSjSel
+                            ? 'bg-[#0063f5] border-2 border-[#0063f5]'
+                            : 'bg-[#cdd4df] border border-[#cdd4df]'
+                        )}
                       >
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        <div className={cn(
+                          'flex gap-[16px] items-start p-[12px] rounded-[8px] shrink-0 w-full',
+                          isSjSel
+                            ? 'bg-[#f5f9ff] border-2 border-[#0063f5]'
+                            : 'bg-white border border-[#cdd4df]'
+                        )}>
+                          {isSjSel ? (
+                            <div className="bg-[#079455] border-[6px] border-[#dcfae6] flex items-center justify-center p-[4px] rounded-full shrink-0 w-[20px]">
+                              <div className="overflow-clip size-[12px]">
+                                <img alt="" className="block size-full" src="/journey-icons/check.svg" />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="bg-[#9aa4b2] border-[6px] border-[#f8fafc] flex items-center justify-center p-[4px] rounded-full shrink-0 w-[20px]">
+                              <div className="overflow-clip size-[12px]">
+                                <img alt="" className="block size-full" src="/journey-icons/circle-dot.svg" />
+                              </div>
+                            </div>
+                          )}
+                          <div className="flex flex-col gap-[8px] flex-1 min-w-px">
+                            <p className="font-bold text-[14px] text-[#202a39] leading-[12.75px] tracking-[0.25px]">{sj.labelEn}</p>
+                            <p className="text-[10px] text-[#697586]">{sj.count}</p>
+                          </div>
+                        </div>
                       </button>
-                    </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
 
-                    {/* Note */}
-                    {cp.noteEn && (
-                      <p className="mt-1.5 ms-8 text-xs text-[#697586]">{isAr ? cp.noteAr : cp.noteEn}</p>
-                    )}
+            {/* Checkpoints header */}
+            <div className="flex items-center gap-[8px] w-full">
+              <p className="text-[20px] text-[#15212f] leading-[32px] tracking-[0px] flex-1 min-w-0">
+                {selectedStep === 0
+                  ? `${SUB_JOURNEYS[selectedSubJourney].labelEn} checkpoints`
+                  : `${isAr ? step.labelAr : step.labelEn} checkpoints`}
+              </p>
+              <div className="bg-[#fafafa] border border-[#e9eaeb] flex items-center px-[12px] py-[4px] rounded-[16px] shrink-0">
+                <p className="text-[14px] font-medium text-[#414651] text-center whitespace-nowrap">
+                  {step.checkpoints.length} checkpoints
+                </p>
+              </div>
+            </div>
 
-                    {/* Expanded details */}
-                    {isExpanded && cp.details && (
-                      <div className="mt-3 ms-8 grid grid-cols-3 gap-x-8 gap-y-2">
+            {/* Checkpoint list */}
+            <div className="flex flex-col gap-[8px] w-full">
+              {step.checkpoints.map((cp, ci) => {
+                const isExp = expandedCp === ci;
+                const statusColor =
+                  cp.status === 'Passed' ? '#079455' :
+                  cp.status === 'Paused' ? '#ca7404' :
+                  cp.status === 'Failed' ? '#d92d20' : '#e9eaeb';
+                const statusLabel =
+                  cp.status === 'Passed'      ? (isAr ? 'مكتمل'    : 'Passed')      :
+                  cp.status === 'Paused'      ? (isAr ? 'موقوف'    : 'Paused')      :
+                  cp.status === 'Failed'      ? (isAr ? 'فشل'      : 'Failed')      :
+                                                (isAr ? 'لم يبدأ'  : 'Not started');
+                const detailNote =
+                  cp.status === 'Passed'      ? (isAr ? 'مكتمل بنجاح'              : 'Completed successfully')         :
+                  cp.status === 'Paused'      ? (isAr ? (cp.noteAr ?? 'في الانتظار') : (cp.noteEn ?? 'Waiting for action')) :
+                                                (isAr ? 'لم يبدأ بعد'              : 'Not started yet');
+                return (
+                  <div
+                    key={ci}
+                    className="bg-white border-solid overflow-clip rounded-[9px] w-full"
+                    style={isExp
+                      ? { borderWidth: '2px 2px 2px 4px', borderColor: '#0063f5' }
+                      : { borderWidth: '1px 1px 1px 4px', borderColor: statusColor, borderTopColor: '#e9eaeb', borderRightColor: '#e9eaeb', borderBottomColor: '#e9eaeb' }
+                    }
+                  >
+                    {/* Header row */}
+                    <button
+                      className="flex items-center justify-between p-[12px] pl-[16px] w-full text-start"
+                      onClick={() => setExpandedCp(isExp ? null : ci)}
+                    >
+                      <div className="flex flex-[1_0_0] gap-[22px] items-start min-w-px pl-[8px]">
+                        <div className="flex items-center py-[8px] shrink-0">
+                          {cp.status === 'Passed' && (
+                            <div className="bg-[#079455] border-[6px] border-[#dcfae6] flex items-center justify-center p-[4px] rounded-full w-[20px]">
+                              <div className="overflow-clip size-[12px]">
+                                <img alt="" className="block size-full" src="/journey-icons/check.svg" />
+                              </div>
+                            </div>
+                          )}
+                          {cp.status === 'Paused' && (
+                            <div className="bg-[#ca7404] border-[6px] border-[#fef4e8] flex items-center justify-center p-[4px] rounded-full w-[20px]">
+                              <div className="overflow-clip size-[12px]">
+                                <img alt="" className="block size-full" src="/journey-icons/pause-square.svg" />
+                              </div>
+                            </div>
+                          )}
+                          {(cp.status === 'Not started' || cp.status === 'Failed') && (
+                            <div className="bg-[#9aa4b2] border-[6px] border-[#f8fafc] flex items-center justify-center p-[4px] rounded-full w-[20px]">
+                              <div className="overflow-clip size-[12px]">
+                                <img alt="" className="block size-full" src="/journey-icons/circle-dot.svg" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-1 flex-col gap-[8px] items-start min-w-px whitespace-nowrap">
+                          <p className="font-bold text-[8px] text-[#0063f5] uppercase tracking-[0.72px] leading-[12px]">
+                            {isAr ? `نقطة التحقق ${ci + 1}` : `Checkpoint ${ci + 1}`}
+                          </p>
+                          <p className="font-bold text-[18px] text-[#121a26] leading-[16.5px] tracking-[0.25px]">
+                            {isAr ? cp.labelAr : cp.labelEn}
+                          </p>
+                          <p className="text-[10px] text-[#697586] leading-[12px] tracking-[0.25px]">{detailNote}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-[16px] items-center self-stretch shrink-0">
+                        {cp.tag === 'Mandatory' ? (
+                          <div className="bg-[#eaf2ff] border border-[#aacbfc] flex items-center px-[8px] py-[2px] rounded-[16px]">
+                            <p className="text-[12px] font-medium text-[#0053cc] whitespace-nowrap">{isAr ? 'إلزامي' : 'Mandatory'}</p>
+                          </div>
+                        ) : (
+                          <div className="bg-[#f8f9fb] border border-[#d0d5dd] flex items-center px-[8px] py-[2px] rounded-[16px]">
+                            <p className="text-[12px] font-medium text-[#697586] whitespace-nowrap">{isAr ? 'نظام' : 'System'}</p>
+                          </div>
+                        )}
+                        <div className="flex flex-col gap-[4px] items-end justify-center h-full w-[87px]">
+                          <p className="text-[10px] text-[#697586] leading-[10.5px] tracking-[0.25px] w-full text-end">{statusLabel}</p>
+                          <p className="text-[12.5px] font-medium text-[#121a26] leading-[18px] tracking-[0.5px] w-full text-end whitespace-nowrap">
+                            {cp.timestamp ?? '—'}
+                          </p>
+                        </div>
+                        <div className="overflow-clip size-[20px] shrink-0 transition-transform duration-200" style={{ transform: isExp ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                          <img alt="" className="block size-full" src="/journey-icons/chevron-down.svg" />
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Expanded detail panel */}
+                    {isExp && cp.details && (
+                      <div className="bg-[#f8fafc] border-t border-[#e3e8ef] flex gap-[8px] items-center pl-[64px] pr-[16px] py-[12px] w-full min-h-[57px]">
                         {[
-                          { label: isAr ? 'المصدر'           : 'Source',           value: cp.details.source          },
-                          { label: isAr ? 'المحاولات'        : 'Attempts',         value: String(cp.details.attempts) },
-                          { label: isAr ? 'في انتظار'        : 'Waiting on',       value: cp.details.waitingOn       },
-                          { label: isAr ? 'المدة'            : 'Duration',         value: cp.details.duration        },
-                          { label: isAr ? 'المرجع'           : 'Reference',        value: cp.details.reference       },
-                          { label: isAr ? 'نتيجة الأعمال'   : 'Business outcome', value: cp.details.businessOutcome },
+                          { label: isAr ? 'المصدر'         : 'Source',           value: cp.details.source          },
+                          { label: isAr ? 'المحاولات'      : 'Attempts',         value: String(cp.details.attempts) },
+                          { label: isAr ? 'في انتظار'      : 'Waiting on',       value: cp.details.waitingOn       },
+                          { label: isAr ? 'المدة'          : 'Duration',         value: cp.details.duration        },
+                          { label: isAr ? 'المرجع'         : 'Reference',        value: cp.details.reference       },
+                          { label: isAr ? 'نتيجة الأعمال' : 'Business outcome', value: cp.details.businessOutcome },
                         ].map(field => (
-                          <div key={field.label} className="flex flex-col gap-0.5">
-                            <span className="text-[10px] text-[#98a2b3] font-medium uppercase tracking-wide">{field.label}</span>
-                            <span className="text-xs font-medium text-[#344054]">{field.value}</span>
+                          <div key={field.label} className="flex flex-1 flex-col gap-[4px] h-full items-start justify-center min-w-px">
+                            <p className="text-[10px] text-[#697586] leading-[10.5px] tracking-[0.25px] w-full">{field.label}</p>
+                            <p className="text-[12.5px] font-medium text-[#121a26] leading-[18px] tracking-[0.5px] w-full">{field.value}</p>
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right: StepSidePanel */}
+          <div className="bg-[#f8fafc] border border-[#e3e8ef] rounded-[12px] p-[14px] flex flex-col gap-[16px] items-start w-[265px] shrink-0">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-[12px] text-[#697586] leading-[16px] tracking-[0.048px]">
+                {isAr ? 'التقدم المطلوب' : 'Required progress'}
+              </p>
+              <p className="text-[25px] text-[#121a26] leading-[32px]">{progress}%</p>
+            </div>
+            <div className="relative w-full h-[8px] bg-[#e9eaeb] rounded-[4px]">
+              <div
+                className="absolute bg-[#0063f5] h-[8px] left-0 rounded-[4px] top-0"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="flex gap-[4px] items-start w-full">
+              {[
+                { num: passed, label: 'Required passed' },
+                { num: open,   label: 'Open required'   },
+                { num: 0,      label: 'Optional'         },
+              ].map(stat => (
+                <div
+                  key={stat.label}
+                  className="bg-white border border-[#e9eaeb] flex-1 min-w-px rounded-[7px] flex flex-col gap-[4px] items-center p-[9px]"
+                >
+                  <p className="text-[25px] text-[#121827] text-center leading-[32px] whitespace-nowrap">{stat.num}</p>
+                  <p className="text-[10px] font-bold text-[#697386] text-center tracking-[0.05px] w-full leading-[14px]">{stat.label}</p>
                 </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -333,9 +530,9 @@ function SummaryCard({ title, source, status }: { title: string; source: string;
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function CustomerDetailPage({ profileId }: { profileId: string }) {
+export default function CustomerDetailPage({ profileId, forceLang, listPath = '/cps-official' }: { profileId: string; forceLang?: 'en' | 'ar'; listPath?: string }) {
   const { lang } = useLang();
-  const isAr = lang === 'ar';
+  const isAr = (forceLang ?? lang) === 'ar';
 
   const profile = PROFILES.find(p => p.id === profileId) ?? PROFILES[0];
   const assignedInitials = profile.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2);
@@ -358,7 +555,7 @@ export default function CustomerDetailPage({ profileId }: { profileId: string })
             <span className="font-bold text-[#121a26]">{profile.id}</span>
           </div>
           <Link
-            href="/cps-official"
+            href={listPath}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0063f5] text-white text-sm font-medium hover:bg-[#0052cc] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />

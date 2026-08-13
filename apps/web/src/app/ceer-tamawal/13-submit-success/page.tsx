@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function SubmitSuccessPage() {
+  const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(true);
 
   const ref = 'AELG-2026-05-18-1123';
@@ -26,7 +28,7 @@ export default function SubmitSuccessPage() {
             <div className="flex items-center gap-[10px]">
               <img
                 src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'}
-                alt="Tamawal"
+                alt={brandName}
                 className="h-8 w-auto"
               />
               <span className="w-px h-6" style={{ background: 'var(--border)' }} />

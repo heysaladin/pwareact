@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import WebNavbar from '@/components/WebNavbar';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 // ── Hero assets ──────────────────────────────────────────────────────────────
 const imgBg          = "http://localhost:3845/assets/99f675afb55c489754593b085eb84d227ae42bf5.svg";
@@ -61,29 +62,6 @@ function ArrowRight({ color = '#414651', className = 'w-5 h-5' }: { color?: stri
   );
 }
 
-const howItWorksSlides = [
-  {
-    img: '/works-summary/1.svg',
-    alt: '1',
-    title: 'Apply securely with Tamawal',
-    body: `It takes five minutes from start to finish. We'll just need some basic information about your data and apply for the loan type you want, only necessary information from your application will be used by our partners to generate personalized offers for you.\n\nWe do not share your contact details until you have chosen an offer.`,
-    list: [] as string[],
-  },
-  {
-    img: '/works-summary/3.svg',
-    alt: '3',
-    title: 'Compare tailored loan offers',
-    body: `You will see the details of all loan offers - personalized and unique to you. Compare and choose the loan that meets your needs! `,
-    list: ['Rates are Real;', 'No markups and no hidden fees;', 'Everything is 100% Transparent and Free'],
-  },
-  {
-    img: '/works-summary/2.svg',
-    alt: '2',
-    title: 'Get your money',
-    body: `After final checks and contract signing your offer and then receiving your loan amount.\n\nEnjoy your day!`,
-    list: [] as string[],
-  },
-];
 
 const loanProducts = [
   { img: '/products/personal.svg',  alt: 'personal',  title: 'Personal Loan',  subtitle: 'Up To 150,000 SAR', badgeBg: '' },
@@ -505,6 +483,37 @@ function OtpInput({ digits, onChange }: {
     </div>
   );
 }
+
+const howItWorksSlides = [
+  {
+    img: '/how-it-works/step1.svg',
+    alt: 'Enter your details',
+    title: 'Enter your details',
+    body: 'Tell us about yourself and your financing needs. It only takes a few minutes to fill in your information.',
+    list: [],
+  },
+  {
+    img: '/how-it-works/step2.svg',
+    alt: 'Compare offers',
+    title: 'Compare offers',
+    body: 'We instantly connect you with multiple licensed banks and financial institutions to find the best offer for you.',
+    list: [],
+  },
+  {
+    img: '/how-it-works/step3.svg',
+    alt: 'Choose & apply',
+    title: 'Choose & apply',
+    body: 'Pick the offer that suits you best and complete your application — fully digital, no branch visits required.',
+    list: [],
+  },
+  {
+    img: '/how-it-works/step4.svg',
+    alt: 'Get funded',
+    title: 'Get funded',
+    body: 'Once approved, the funds are transferred directly to your account. Track your application status in real time.',
+    list: [],
+  },
+];
 
 function HowItWorksSection() {
   const [current, setCurrent] = useState(0);

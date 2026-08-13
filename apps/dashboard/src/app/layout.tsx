@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/lib/language-context';
+import { GlobalSettingsProvider } from '@/lib/global-settings-context';
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -47,7 +48,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: langScript }} />
       </head>
       <body className={`${ibmPlexSans.variable} antialiased`}>
-        <LanguageProvider>{children}</LanguageProvider>
+        <GlobalSettingsProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </GlobalSettingsProvider>
       </body>
     </html>
   );

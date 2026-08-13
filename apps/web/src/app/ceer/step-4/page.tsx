@@ -5,6 +5,7 @@ import CeerNavbar from '../components/CeerNavbar';
 import CeerBreadcrumb from '../components/CeerBreadcrumb';
 import VehicleSidebar from '../components/VehicleSidebar';
 import CeerInnerStepper from '../components/CeerInnerStepper';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 const loans = [
   { bank: 'Alinma Bank',   logo: '/logos/alinma.png',  type: 'Personal Loan',        rate: 2.1, amount: 120000, months: 60,  rating: 4.5 },
@@ -49,6 +50,7 @@ function StarRating({ rating, size = 16 }: { rating: number; size?: number }) {
 }
 
 function TamawalPopup({ loan, onClose }: { loan: typeof loans[number]; onClose: () => void }) {
+  const { brandName } = useGlobalSettings();
   const [copied, setCopied] = useState(false);
   const deepLink = 'twl.app/web?ref=6114378a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t';
 
@@ -74,7 +76,7 @@ function TamawalPopup({ loan, onClose }: { loan: typeof loans[number]; onClose: 
           <div className="flex flex-col gap-[16px]">
             <h2 className="text-[32px] font-bold text-white leading-[1.25]">Scan QR Code to continue</h2>
             <p className="text-[15px] text-white/50 leading-[1.6] max-w-[400px]">
-              To continue and access the full range of Tamawal services, please scan the QR code to proceed in the Tamawal mobile application.
+              To continue and access the full range of {brandName} services, please scan the QR code to proceed in the {brandName} mobile application.
             </p>
             <p className="text-xs text-white/30">{loan.bank} · {loan.type}</p>
           </div>
@@ -126,6 +128,7 @@ function TamawalPopup({ loan, onClose }: { loan: typeof loans[number]; onClose: 
 }
 
 function LoanCard({ loan, onTamawal }: { loan: typeof loans[number]; onTamawal: () => void }) {
+  const { brandName } = useGlobalSettings();
   return (
     <div className="border border-white/[0.08] rounded-[16px] bg-[#0f0f0f] overflow-hidden mb-3">
       <div className="flex overflow-hidden">
@@ -206,7 +209,7 @@ function LoanCard({ loan, onTamawal }: { loan: typeof loans[number]; onTamawal: 
               onClick={onTamawal}
               className="bg-[#E87722] rounded-[20px] px-5 py-2.5 flex items-center justify-center flex-1"
             >
-              <span className="text-white text-[13px] font-bold">Tamawal</span>
+              <span className="text-white text-[13px] font-bold">{brandName}</span>
             </button>
           </div>
         </div>

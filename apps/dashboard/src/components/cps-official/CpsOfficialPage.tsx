@@ -930,9 +930,9 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
   );
 }
 
-export default function CpsOfficialPage() {
+export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-official' }: { forceLang?: 'en' | 'ar'; detailBasePath?: string } = {}) {
   const { lang } = useLang();
-  const isAr = lang === 'ar';
+  const isAr = (forceLang ?? lang) === 'ar';
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [search, setSearch] = useState('');
@@ -1091,7 +1091,7 @@ export default function CpsOfficialPage() {
                 {filtered.map((p, idx) => (
                   <tr
                     key={p.id}
-                    onClick={() => router.push(`/cps-official/${p.id}`)}
+                    onClick={() => router.push(`${detailBasePath}/${p.id}`)}
                     className={cn(
                       'border-b border-[#f2f4f7] dark:border-slate-800 hover:bg-[#f9fafb] dark:hover:bg-slate-800/50 transition-colors cursor-pointer',
                       idx % 2 === 1 && 'bg-[#fcfcfd] dark:bg-slate-900/30',
@@ -1186,7 +1186,7 @@ export default function CpsOfficialPage() {
                     {/* Action */}
                     <td className="px-4 py-3 text-center">
                       <button
-                        onClick={e => { e.stopPropagation(); router.push(`/cps-official/${p.id}`); }}
+                        onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}`); }}
                         className="p-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-[#667085] dark:text-slate-400 transition-colors"
                       >
                         <ExportIcon className="w-6 h-6" />

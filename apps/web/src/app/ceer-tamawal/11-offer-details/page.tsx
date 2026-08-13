@@ -1,317 +1,211 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
+import CeerSidebar from '../_components/CeerSidebar';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
-const CeerLogo = () => (
-  <svg className="ceer-logo-header" width="100" height="14" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clipPath="url(#clip0_3493_306)">
-      <path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"/>
-      <path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"/>
-      <path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"/>
-      <path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"/>
-      <path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"/>
-      <path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"/>
-      <path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"/>
-      <path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"/>
-      <path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"/>
-    </g>
-    <defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"/></clipPath></defs>
-  </svg>
-);
+const offerSummary = [
+  ['Financed Amount', 'SAR 183,000'],
+  ['Tenure', '60 Months'],
+  ['Down Payment (20%)', 'SAR 45,750'],
+  ['Profit Rate (APR)', '4.69%'],
+  ['Monthly Payment', 'SAR 3,648'],
+  ['First Payment', '30 days after disbursement'],
+];
+const paymentBreakdown = [
+  ['Vehicle Price (incl. VAT)', 'SAR 228,750'],
+  ['Down Payment (20%)', 'SAR 45,750'],
+  ['Amount to Finance', 'SAR 183,000'],
+  ['Total Profit', 'SAR 35,880'],
+  ['Total Payable', 'SAR 218,880'],
+];
+const keyFacts = [
+  ['Sharia-compliant financing', 'Yes'],
+  ['Fixed profit rate', 'Yes'],
+  ['Early settlement allowed', 'Yes'],
+  ['Insurance included', 'Comprehensive'],
+  ['Processing fees', 'SAR 0'],
+  ['Transfer of ownership', 'At end of term'],
+];
+const ratings = [
+  ['Customer satisfaction', 4.9],
+  ['Digital experience', 4.8],
+  ['Approval speed', 4.7],
+  ['Transparency', 4.8],
+];
 
 export default function OfferDetailsPage() {
+  const { brandName } = useGlobalSettings();
+  const [dark, setDark] = useState(true);
+
   return (
-    <>
-      <style>{`
-        :root {
-          --blue: #1a73f5;
-          --blue-dark: #0b57d0;
-          --navy: #14233c;
-          --text: #1c2b3a;
-          --muted: #5b6b7c;
-          --border: #e3e8ef;
-          --bg-light: #eaf2fe;
-          --bg-page: #f7f9fc;
-          --green: #1db954;
-          --green-dark: #14833b;
-          --amber: #f5a623;
-          --surface: #ffffff;
-        }
-        .page-11 { font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; color: var(--text); background: var(--bg-page); min-height: 100vh; display: flex; flex-direction: column; }
-        .tw-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; border-bottom: 1px solid var(--border); background: var(--surface); }
-        .logo { display: flex; align-items: center; gap: 10px; }
-        .logo-img { width: 112px; height: 33px; display: block; }
-        .logo-divider { width: 1px; height: 24px; background: var(--border); }
-        .ceer-logo-header { color: var(--text); width: 141px; height: auto; }
-        .stepper { display: flex; align-items: flex-start; gap: 0; padding: 18px 32px; border-bottom: 1px solid var(--border); background: var(--surface); }
-        .step { flex: 1; display: flex; align-items: center; gap: 10px; position: relative; font-size: 12px; }
-        .step-dot { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border); color: var(--muted); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; z-index: 1; }
-        .step.done .step-dot { background: var(--green); border-color: var(--green); color: #fff; }
-        .step.active .step-dot { border-color: var(--blue); color: var(--blue); }
-        .step .step-label b { display: block; font-size: 12px; }
-        .step.active .step-label b { color: var(--blue); }
-        .step::after { content: ""; flex: 1; height: 2px; background: var(--border); margin: 0 10px; }
-        .step.done::after { background: var(--green); }
-        .step:last-child::after { display: none; }
-        .page-wrap { display: flex; gap: 36px; padding: 24px 32px 40px; max-width: 1680px; margin: 0 auto; flex: 1; }
-        .sidebar { width: 330px; flex-shrink: 0; }
-        .main-col { flex: 1; min-width: 0; }
-        .car-card { border: 1px solid var(--border); border-radius: 16px; padding: 20px; background: var(--surface); }
-        .car-img { width: 100%; border-radius: 12px; background: url("/ceer-car-00.png") center / contain no-repeat, linear-gradient(160deg, #f4f6f8, #dde3e9); aspect-ratio: 16/10; display: block; }
-        .car-title { font-size: 16px; font-weight: 700; margin-top: 16px; }
-        .car-sub { color: var(--muted); margin-top: 4px; font-size: 14px; }
-        .kv { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; }
-        .kv .k { color: var(--muted); }
-        .kv .v { font-weight: 600; }
-        .spec-list { border-top: 1px solid var(--border); margin-top: 14px; padding-top: 6px; }
-        .price-block { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 14px; }
-        .amount-band { background: var(--bg-light); border-radius: 10px; padding: 12px 16px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-        .amount-band b { font-size: 15px; }
-        .total-band { background: var(--blue); color: #fff; border-radius: 10px; padding: 12px 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
-        .total-band b { font-size: 15px; }
-        .side-note { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 12.5px; line-height: 1.5; margin-top: 12px; background: var(--surface); }
-        .side-note b { display: block; font-size: 13px; }
-        .side-note span { color: var(--muted); }
-        .nafath-mark { display: inline-block; background: color-mix(in srgb, var(--green) 12%, var(--surface)); color: #2a7d4f; border-radius: 6px; padding: 2px 8px; font-weight: 800; font-size: 11px; }
-        .shield { width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%; background: var(--bg-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 17px; }
-        h1.page-title { font-size: 28px; font-weight: 800; color: var(--navy); font-family: "SF Pro Display", -apple-system, sans-serif; }
-        .page-sub { color: var(--muted); margin-top: 10px; font-size: 15px; line-height: 1.6; }
-        .back { display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-weight: 600; font-size: 14px; text-decoration: none; }
-        .card { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
-        .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; font-size: 12px; font-weight: 600; padding: 5px 12px; }
-        .badge-blue { border: 1px solid var(--blue); color: var(--blue); }
-        .btn { border: none; border-radius: 10px; padding: 13px 32px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; }
-        .btn-primary { background: var(--blue); color: #fff; }
-        .btn-outline { background: var(--surface); color: var(--blue); border: 1.5px solid var(--blue); }
-        .tw-footer { border-top: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; background: var(--surface); }
-        .content-cols { display: flex; gap: 24px; margin-top: 16px; align-items: flex-start; }
-        .center-col { flex: 1; min-width: 0; }
-        .rail { width: 300px; flex-shrink: 0; }
-        .hero { padding: 24px; }
-        .hero-top { display: flex; align-items: center; gap: 16px; }
-        .hero-logo { width: 62px; height: 62px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #1a6b3c; font-weight: 800; font-size: 15px; text-align: center; line-height: 1.2; }
-        .hero-name { font-size: 21px; font-weight: 800; color: var(--navy); }
-        .hero-stats { display: flex; gap: 12px; margin-top: 20px; }
-        .stat { flex: 1; background: var(--bg-page); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
-        .stat .l { color: var(--muted); font-size: 12px; }
-        .stat .v { font-weight: 800; font-size: 19px; margin-top: 5px; }
-        .stat .v.blue { color: var(--blue); }
-        .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-        .chip { display: inline-flex; align-items: center; gap: 7px; background: var(--bg-light); color: var(--blue); border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; }
-        .detail-grid { display: flex; gap: 20px; margin-top: 20px; }
-        .detail-grid .card { flex: 1; padding: 22px; }
-        .card h3 { font-size: 16px; color: var(--navy); margin-bottom: 8px; }
-        .row { display: flex; justify-content: space-between; font-size: 13.5px; padding: 9px 0; border-bottom: 1px solid #eef2f6; }
-        .row:last-child { border-bottom: none; }
-        .row .k { color: var(--muted); }
-        .row .v { font-weight: 700; }
-        .mo-highlight { background: var(--bg-light); border-radius: 10px; padding: 12px 16px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-        .mo-highlight b { color: var(--blue); font-size: 16px; }
-        .rating-head { display: flex; align-items: center; gap: 12px; }
-        .rating-big { font-size: 38px; font-weight: 800; color: var(--navy); }
-        .stars { color: var(--amber); font-size: 15px; letter-spacing: 1px; }
-        .rbar-row { display: flex; align-items: center; gap: 10px; font-size: 12.5px; margin-top: 12px; }
-        .rbar-row .lbl { width: 140px; color: var(--muted); flex-shrink: 0; }
-        .rbar { flex: 1; height: 6px; background: color-mix(in srgb, var(--muted) 20%, var(--surface)); border-radius: 999px; overflow: hidden; }
-        .rbar i { display: block; height: 100%; background: var(--blue); border-radius: 999px; }
-        .rbar-row .n { width: 26px; text-align: right; font-weight: 700; }
-        .rail .card { padding: 20px; margin-bottom: 16px; }
-        .feat { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 0; }
-        .check { width: 16px; height: 16px; flex-shrink: 0; background: var(--blue); border-radius: 50%; color: #fff; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; }
-        .check.green { background: var(--green); }
-        .doc-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eef2f6; font-size: 13.5px; font-weight: 600; color: var(--text); text-decoration: none; }
-        .doc-row:last-child { border-bottom: none; }
-        .doc-icon { width: 32px; height: 32px; flex-shrink: 0; border-radius: 8px; background: var(--bg-light); display: flex; align-items: center; justify-content: center; font-size: 15px; }
-        .next-item { display: flex; gap: 12px; margin-top: 14px; font-size: 13px; line-height: 1.4; }
-        .next-num { width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; background: var(--bg-light); color: var(--blue); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; }
-      `}</style>
-
-      <div className="page-11">
-        {/* Header */}
-        <header className="tw-header">
-          <div className="logo">
-            <img className="logo-img" alt="Tamawal" src="/logo-tamawal-web-blue.svg" />
-            <span className="logo-divider"></span>
-            <CeerLogo />
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-            Assessment ID<br /><b style={{ color: 'var(--text)' }}>AELG-2026-05-18-1123</b>
-          </div>
-        </header>
-
-        {/* Stepper */}
-        <div className="stepper">
-          <div className="step done"><div className="step-dot">✓</div><div className="step-label"><b>Vehicle Selected</b></div></div>
-          <div className="step done"><div className="step-dot">✓</div><div className="step-label"><b>Identity Verified</b></div></div>
-          <div className="step done"><div className="step-dot">✓</div><div className="step-label"><b>Reports Collected</b></div></div>
-          <div className="step active"><div className="step-dot">4</div><div className="step-label"><b>Offers Generated</b></div></div>
-          <div className="step"><div className="step-dot">5</div><div className="step-label"><b>SMAH Consent</b></div></div>
-          <div className="step"><div className="step-dot">6</div><div className="step-label"><b>Compare Offers</b></div></div>
-        </div>
-
-        {/* Page wrap */}
-        <div className="page-wrap">
-          {/* Left sidebar */}
-          <aside className="sidebar">
-            <h3 style={{ fontSize: 16, color: 'var(--navy)', marginBottom: 14 }}>Your selected vehicle</h3>
-            <div className="car-card">
-              <span className="car-img"></span>
-              <div className="car-title">EXOBOT SUV</div>
-              <div className="car-sub">Premium AWD – 2026</div>
-              <div className="spec-list">
-                <div className="kv"><span className="k">🎨 Exterior</span><span className="v">Quantum Grey</span></div>
-                <div className="kv"><span className="k">💺 Interior</span><span className="v">Onyx Black</span></div>
-                <div className="kv"><span className="k">✳️ Wheels</span><span className="v">21&quot; Alloy Sport</span></div>
-                <div className="kv"><span className="k">🔋 Battery</span><span className="v">108 kWh</span></div>
-                <div className="kv"><span className="k">📏 Range</span><span className="v">610 km</span></div>
-              </div>
-              <div className="price-block">
-                <div className="kv"><span className="k">Vehicle price (incl. VAT)</span><span className="v">SAR 228,750</span></div>
-                <div className="kv"><span className="k">Down payment (20%)</span><span className="v">SAR 45,750</span></div>
-              </div>
-              <div className="amount-band">
-                <span>Amount to finance</span>
-                <b>SAR 183,000</b>
-              </div>
-              <div className="kv" style={{ marginTop: 8 }}><span className="k">Tenure</span><span className="v">60 Months</span></div>
-              <div className="total-band">
-                <span>Monthly payment</span>
-                <span>From <b>SAR 3,648</b></span>
-              </div>
-            </div>
-
-            <div className="side-note">
-              <div className="shield" style={{ width: 34, height: 34, fontSize: 15 }}>🛡️</div>
-              <div>
-                <b>Your data is secure</b>
-                <span>We use bank-level encryption to protect your information.</span>
-              </div>
-            </div>
-            <div className="side-note">
-              <span className="nafath-mark">نفاذ Nafath</span>
-              <div><span>Verification powered by Nafath — government-trusted identity services.</span></div>
-            </div>
-          </aside>
-
-          {/* Main */}
-          <main className="main-col">
-            <Link className="back" href="/ceer-tamawal/10-compare-offers">‹ Back to Comparison</Link>
-
-            <div className="content-cols">
-              <div className="center-col">
-                {/* Hero */}
-                <div className="card hero">
-                  <div className="hero-top">
-                    <div className="hero-logo">SNB<br />الأهلي</div>
-                    <div>
-                      <div className="hero-name">Saudi National Bank</div>
-                      <span className="badge badge-blue" style={{ marginTop: 6 }}>English</span>
-                    </div>
-                  </div>
-                  <div className="hero-stats">
-                    <div className="stat"><div className="l">Annual Profit Rate (APR)</div><div className="v blue">4.69%</div></div>
-                    <div className="stat"><div className="l">Monthly Payment</div><div className="v">SAR 3,648</div></div>
-                    <div className="stat"><div className="l">Total Payable</div><div className="v">SAR 218,880</div></div>
-                    <div className="stat"><div className="l">Down Payment</div><div className="v">SAR 45,750</div></div>
-                  </div>
-                  <div className="chips">
-                    <span className="chip">✓ No Processing Fees</span>
-                    <span className="chip">✓ Early Settlement Benefit</span>
-                    <span className="chip">✓ Free Comprehensive Insurance</span>
-                    <span className="chip">✓ Advanced Digital Services</span>
-                  </div>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
+      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
+        <div className="text-4xl mb-4">🖥️</div>
+        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
+        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens.</p>
+      </div>
+      <div className="fixed inset-0 bg-black flex items-center justify-center">
+        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
+          <CeerSidebar backHref="/ceer-tamawal/09-eligibility-offers" />
+          <div className="flex-1 min-w-0 flex flex-col">
+            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
+                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
+                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
+                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
+                  </button>
                 </div>
+                <Link href="/ceer-tamawal/09-eligibility-offers" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>← Back to Offers</Link>
+              </div>
 
-                {/* Summary + Breakdown */}
-                <div className="detail-grid">
-                  <div className="card">
-                    <h3>Offer Summary</h3>
-                    <div className="row"><span className="k">Financed Amount</span><span className="v">SAR 183,000</span></div>
-                    <div className="row"><span className="k">Tenure</span><span className="v">60 Months</span></div>
-                    <div className="row"><span className="k">Down Payment (20%)</span><span className="v">SAR 45,750</span></div>
-                    <div className="row"><span className="k">Profit Rate (APR)</span><span className="v" style={{ color: 'var(--blue)' }}>4.69%</span></div>
-                    <div className="row"><span className="k">Monthly Payment</span><span className="v">SAR 3,648</span></div>
-                    <div className="row"><span className="k">First Payment</span><span className="v">30 days after disbursement</span></div>
-                  </div>
-                  <div className="card">
-                    <h3>Payment Breakdown</h3>
-                    <div className="row"><span className="k">Vehicle Price (incl. VAT)</span><span className="v">SAR 228,750</span></div>
-                    <div className="row"><span className="k">Down Payment (20%)</span><span className="v">SAR 45,750</span></div>
-                    <div className="row"><span className="k">Amount to Finance</span><span className="v">SAR 183,000</span></div>
-                    <div className="row"><span className="k">Total Profit</span><span className="v">SAR 35,880</span></div>
-                    <div className="row"><span className="k">Total Payable</span><span className="v">SAR 218,880</span></div>
-                    <div className="mo-highlight">
-                      <span>Indicative Monthly Payment</span>
-                      <span>From <b>SAR 3,648</b> <small style={{ color: 'var(--muted)' }}>/ month</small></span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Key Facts + Rating */}
-                <div className="detail-grid">
-                  <div className="card">
-                    <h3>Key Facts</h3>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Sharia-compliant financing</span><span className="v">Yes</span></div>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Fixed profit rate</span><span className="v">Yes</span></div>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Early settlement allowed</span><span className="v">Yes</span></div>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Insurance included</span><span className="v">Comprehensive</span></div>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Processing fees</span><span className="v">SAR 0</span></div>
-                    <div className="row"><span className="k"><span className="check green" style={{ marginRight: 6 }}>✓</span>Transfer of ownership</span><span className="v">At end of term</span></div>
-                  </div>
-                  <div className="card">
-                    <h3>Offer Rating</h3>
-                    <div className="rating-head">
-                      <span className="rating-big">4.8</span>
+              <div className="flex gap-5">
+                {/* Left main */}
+                <div className="flex-1 min-w-0 flex flex-col gap-4">
+                  {/* Bank header */}
+                  <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-[12px] flex items-center justify-center text-[14px] font-extrabold text-center" style={{ border: '1px solid var(--border)', color: '#1a6b3c', lineHeight: 1.2 }}>SNB<br/>الأهلي</div>
                       <div>
-                        <div className="stars">★★★★★</div>
-                        <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 3 }}>+728 reviews</div>
+                        <div className="text-[20px] font-extrabold" style={{ color: 'var(--heading)' }}>Saudi National Bank</div>
+                        <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>SNB الأهلي</div>
                       </div>
                     </div>
-                    <div className="rbar-row"><span className="lbl">Customer satisfaction</span><span className="rbar"><i style={{ width: '98%' }}></i></span><span className="n">4.9</span></div>
-                    <div className="rbar-row"><span className="lbl">Digital experience</span><span className="rbar"><i style={{ width: '96%' }}></i></span><span className="n">4.8</span></div>
-                    <div className="rbar-row"><span className="lbl">Approval speed</span><span className="rbar"><i style={{ width: '94%' }}></i></span><span className="n">4.7</span></div>
-                    <div className="rbar-row"><span className="lbl">Transparency</span><span className="rbar"><i style={{ width: '96%' }}></i></span><span className="n">4.8</span></div>
+                    <div className="mt-4 grid grid-cols-4 gap-3">
+                      {[['APR', '4.69%', true], ['Monthly Payment', 'SAR 3,648', false], ['Total Payable', 'SAR 218,880', false], ['Down Payment', 'SAR 45,750', false]].map(([k, v, blue]) => (
+                        <div key={k as string} className="rounded-[10px] p-3" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{k}</div>
+                          <div className="text-[16px] font-extrabold mt-1" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{v}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {['✓ No Processing Fees', '✓ Early Settlement Benefit', '✓ Free Comprehensive Insurance', '✓ Advanced Digital Services'].map(chip => (
+                        <span key={chip} className="px-3 py-1.5 rounded-full text-[11.5px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>{chip}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Offer Summary */}
+                    <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                      <div className="px-4 py-3 text-[13px] font-bold" style={{ borderBottom: '1px solid var(--border)', color: 'var(--heading)' }}>Offer Summary</div>
+                      {offerSummary.map(([k, v], i) => (
+                        <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: i < offerSummary.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                          <span style={{ color: 'var(--muted)' }}>{k}</span>
+                          <span className="font-semibold">{v}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Payment Breakdown */}
+                    <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                      <div className="px-4 py-3 text-[13px] font-bold" style={{ borderBottom: '1px solid var(--border)', color: 'var(--heading)' }}>Payment Breakdown</div>
+                      {paymentBreakdown.map(([k, v], i) => (
+                        <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: i < paymentBreakdown.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                          <span style={{ color: 'var(--muted)' }}>{k}</span>
+                          <span className="font-semibold">{v}</span>
+                        </div>
+                      ))}
+                      <div className="px-4 py-3 flex items-center justify-between rounded-b-[16px]" style={{ background: 'var(--highlight)' }}>
+                        <span className="text-[12px]">Indicative Monthly Payment</span>
+                        <span className="font-extrabold" style={{ color: 'var(--blue)' }}>SAR 3,648<span className="text-[11px] font-normal" style={{ color: 'var(--muted)' }}> / month</span></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Facts */}
+                  <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <div className="px-4 py-3 text-[13px] font-bold" style={{ borderBottom: '1px solid var(--border)', color: 'var(--heading)' }}>Key Facts</div>
+                    <div className="grid grid-cols-2">
+                      {keyFacts.map(([k, v], i) => (
+                        <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: '1px solid var(--border)', borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none' }}>
+                          <span style={{ color: 'var(--muted)' }}>✓ {k}</span>
+                          <span className="font-semibold">{v}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Offer Rating */}
+                  <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-[28px] font-extrabold" style={{ color: 'var(--heading)' }}>4.8</span>
+                      <div>
+                        <div style={{ color: '#f5a623' }}>★★★★★</div>
+                        <div className="text-[11px]" style={{ color: 'var(--muted)' }}>+728 reviews</div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {ratings.map(([label, score]) => (
+                        <div key={label as string} className="flex items-center gap-3 text-[12px]">
+                          <span className="w-40 shrink-0" style={{ color: 'var(--muted)' }}>{label}</span>
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                            <div className="h-full rounded-full" style={{ width: `${(score as number / 5) * 100}%`, background: 'var(--blue)' }} />
+                          </div>
+                          <span className="w-6 text-right font-semibold">{score}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right rail */}
+                <div className="flex flex-col gap-4" style={{ width: 280, flexShrink: 0 }}>
+                  {/* Why recommended */}
+                  <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--blue)', background: 'var(--highlight)' }}>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)' }}>Why this offer is recommended</h3>
+                    {['Lowest total payable', 'Competitive profit rate', 'No processing fees', 'Free comprehensive insurance', 'Advanced digital services'].map(reason => (
+                      <div key={reason} className="flex items-center gap-2 mb-2 text-[12.5px]">
+                        <span style={{ color: 'var(--green)' }}>✓</span>
+                        <span>{reason}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Key Documents */}
+                  <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)' }}>Key Documents</h3>
+                    {['App Facts Sheet', 'Terms & Conditions', 'Product Disclosure', 'Schedule of Charges'].map((doc, i, arr) => (
+                      <a key={doc} href="#" className="flex items-center gap-2.5 py-2 text-[12.5px] font-semibold" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none', color: 'var(--text)' }}>
+                        <span className="w-7 h-7 rounded-[6px] flex items-center justify-center text-[13px]" style={{ background: 'var(--bg)' }}>📄</span>
+                        {doc}
+                      </a>
+                    ))}
+                  </div>
+
+                  {/* Next Steps */}
+                  <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)' }}>Next Steps</h3>
+                    {['Review the key facts and terms', 'Accept the offer to proceed', 'Complete final verification', 'The bank will contact you for final approval'].map((step, i) => (
+                      <div key={i} className="flex gap-2.5 mb-2.5 text-[12px]">
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>{i + 1}</div>
+                        <span style={{ color: 'var(--muted)' }}>{step}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-
-              {/* Right rail */}
-              <aside className="rail">
-                <div className="card">
-                  <h3>Why this offer is recommended</h3>
-                  <div className="feat"><span className="check green">✓</span> Lowest total payable</div>
-                  <div className="feat"><span className="check green">✓</span> Competitive profit rate</div>
-                  <div className="feat"><span className="check green">✓</span> No processing fees</div>
-                  <div className="feat"><span className="check green">✓</span> Free comprehensive insurance</div>
-                  <div className="feat"><span className="check green">✓</span> Advanced digital services</div>
-                </div>
-                <div className="card">
-                  <h3>Key Documents</h3>
-                  <a className="doc-row" href="#"><span className="doc-icon">📄</span> App Facts Sheet</a>
-                  <a className="doc-row" href="#"><span className="doc-icon">📄</span> Terms &amp; Conditions</a>
-                  <a className="doc-row" href="#"><span className="doc-icon">📄</span> Product Disclosure</a>
-                  <a className="doc-row" href="#"><span className="doc-icon">📄</span> Schedule of Charges</a>
-                </div>
-                <div className="card">
-                  <h3>Next Steps</h3>
-                  <div className="next-item"><span className="next-num">1</span> Review the key facts and terms</div>
-                  <div className="next-item"><span className="next-num">2</span> Accept the offer to proceed</div>
-                  <div className="next-item"><span className="next-num">3</span> Complete final verification</div>
-                  <div className="next-item"><span className="next-num">4</span> The bank will contact you for final approval</div>
-                </div>
-              </aside>
             </div>
-          </main>
-        </div>
-
-        {/* Footer */}
-        <footer className="tw-footer">
-          <Link className="btn btn-outline" href="/ceer-tamawal/09-eligibility-offers">← Back to Offers</Link>
-          <div style={{ display: 'flex', gap: 14 }}>
-            <a className="btn btn-outline" href="#">Save This Offer</a>
-            <a className="btn btn-primary" style={{ background: '#f08a1d' }} href="#">Create Order &nbsp;→</a>
+            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <Link href="/ceer-tamawal/09-eligibility-offers" className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)' }}>← Back to Offers</Link>
+              <div className="flex items-center gap-3">
+                <button className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--border)', color: 'var(--text)', background: 'transparent' }}>Save This Offer</button>
+                <Link href="/ceer-tamawal/12-submit-order" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>Create Order →</Link>
+              </div>
+            </div>
           </div>
-        </footer>
+        </div>
       </div>
-    </>
+      <style>{`
+        [data-theme="dark"]{--bg:#0b1420;--card:#121e2e;--border:#2a3a4f;--text:#e6edf5;--muted:#93a4b8;--blue:#4f95ff;--heading:#dbe7f5;--highlight:#16283f;--green:#1db954;}
+        [data-theme="light"]{--bg:#f4f6f9;--card:#ffffff;--border:#dde3ec;--text:#1a2636;--muted:#64748b;--blue:#2563eb;--heading:#0f172a;--highlight:#eff6ff;--green:#16a34a;}
+        .viewport-warning{background:var(--bg);}
+        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
+        a{text-decoration:none;}
+      `}</style>
+    </div>
   );
 }

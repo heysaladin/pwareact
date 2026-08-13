@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 const PRICE = 399000;
 const APR = 0.0529;
@@ -17,6 +18,7 @@ function calcMonthly(fin: number, months: number) {
 }
 
 export default function ExploreFinancingPage() {
+  const { brandName } = useGlobalSettings();
   const [dp, setDp] = useState(20);
   const [term, setTerm] = useState(36);
   const [dark, setDark] = useState(true);
@@ -48,7 +50,7 @@ export default function ExploreFinancingPage() {
               <div className="pb-4 flex items-center gap-4">
                 <img
                   src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'}
-                  alt="Tamawal"
+                  alt={brandName}
                   className="h-8 w-auto"
                 />
                 <button

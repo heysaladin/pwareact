@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function SubmitOrderPage() {
+  const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(true);
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +36,7 @@ export default function SubmitOrderPage() {
             <div className="flex items-center gap-[10px]">
               <img
                 src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'}
-                alt="Tamawal"
+                alt={brandName}
                 className="h-8 w-auto"
               />
               <span className="w-px h-6" style={{ background: 'var(--border)' }} />

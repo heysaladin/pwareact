@@ -1,6 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import CeerSidebar from '../_components/CeerSidebar';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+
+const TERMS = [24, 36, 48, 60];
 
 const offers = [
   {
@@ -9,6 +13,9 @@ const offers = [
     bankEn: 'BANK ALJAZIRA',
     monthly: 'SAR 8,513',
     apr: '5.29%',
+    tenure: '36 Months',
+    financed: 'SAR 319,200',
+    dp: 'SAR 79,800',
     badge: 'Lowest monthly payment',
     feats: ['No processing fee', 'Early settlement available', 'Fast digital journey'],
   },
@@ -18,133 +25,214 @@ const offers = [
     bankEn: 'alinma bank',
     monthly: 'SAR 8,742',
     apr: '5.59%',
+    tenure: '36 Months',
+    financed: 'SAR 319,200',
+    dp: 'SAR 79,800',
     badge: '',
     feats: ['No processing fee', 'Flexible payment options', 'Early settlement available'],
   },
   {
     id: 'snb',
     bankAr: 'SNB الأهلي',
-    bankEn: '',
+    bankEn: 'Saudi National Bank',
     monthly: 'SAR 8,915',
     apr: '5.89%',
+    tenure: '36 Months',
+    financed: 'SAR 319,200',
+    dp: 'SAR 79,800',
     badge: '',
     feats: ['No processing fee', 'Early settlement available', 'Relationship benefits'],
   },
 ];
 
 export default function PreliminaryOffersPage() {
+  const { brandName } = useGlobalSettings();
+  const [dark, setDark] = useState(true);
+  const [term, setTerm] = useState(36);
   const [selected, setSelected] = useState('aljazira');
 
   return (
-    <div className="min-h-screen bg-[#0b1420] flex flex-col text-[#e6edf5]" style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a3a4f]">
-        <Link href="/ceer-tamawal" className="flex items-center gap-2 text-[#a4a7ae] text-sm font-medium">
-          ‹ Back
-        </Link>
-        <svg width="70" height="10" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
-          <g clipPath="url(#clip0_3493_306)">
-            <path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"/>
-            <path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"/>
-            <path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"/>
-            <path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"/>
-            <path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"/>
-            <path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"/>
-            <path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"/>
-            <path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"/>
-            <path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"/>
-          </g>
-          <defs><clipPath id="clip0_3493_306"><rect width="99.6471" height="14" fill="white"/></clipPath></defs>
-        </svg>
+      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
+        <div className="text-4xl mb-4">🖥️</div>
+        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
+        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens. Please open it on a laptop or desktop.</p>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-4">
+      <div className="fixed inset-0 bg-black flex items-center justify-center">
+        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
 
-        {/* Title */}
-        <div>
-          <h1 className="text-xl font-bold text-[#dbe7f5]">View preliminary offers</h1>
-          <p className="text-sm text-[#93a4b8] mt-1">Review indicative offers based on the details you entered.</p>
-        </div>
+          <CeerSidebar backHref="/ceer-tamawal" />
 
-        {/* Summary */}
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { icon: '🏷️', label: 'Down payment', value: 'SAR 79,800' },
-            { icon: '📅', label: 'Term', value: '36 Months' },
-            { icon: '📄', label: 'To finance', value: 'SAR 319,200' },
-          ].map(item => (
-            <div key={item.label} className="bg-[#121e2e] border border-[#2a3a4f] rounded-xl p-3">
-              <div className="text-base">{item.icon}</div>
-              <div className="text-[10px] text-[#93a4b8] mt-1">{item.label}</div>
-              <div className="text-xs font-bold mt-0.5">{item.value}</div>
-            </div>
-          ))}
-        </div>
+          <div className="flex-1 min-w-0 flex flex-col">
+            <div className="flex-1 flex flex-col gap-4 p-6 overflow-y-auto">
 
-        {/* Info banner */}
-        <div className="bg-[#121e2e] border border-[#2a3a4f] rounded-xl p-3 flex gap-3 items-start">
-          <span className="text-[#4f95ff] text-xs font-bold border border-[#4f95ff] rounded-full w-4 h-4 flex items-center justify-center flex-shrink-0 mt-0.5">i</span>
-          <p className="text-xs text-[#93a4b8]">These preliminary offers are based on your salary, existing commitments, down payment, and financing term. Final offers are confirmed after identity verification.</p>
-        </div>
-
-        {/* Offers */}
-        <div className="flex flex-col gap-3">
-          {offers.map(offer => (
-            <div
-              key={offer.id}
-              onClick={() => setSelected(offer.id)}
-              className={`bg-[#121e2e] rounded-xl p-4 border cursor-pointer ${selected === offer.id ? 'border-[#4f95ff]' : 'border-[#2a3a4f]'}`}
-            >
-              {offer.badge && (
-                <div className="inline-block bg-[#16283f] text-[#4f95ff] text-[10px] font-bold px-2 py-0.5 rounded-full mb-3">
-                  {offer.badge}
+              {/* Logo row */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
+                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
+                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
+                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
+                  </button>
                 </div>
-              )}
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <div className="font-bold text-base">{offer.bankAr}</div>
-                  {offer.bankEn && <div className="text-[10px] text-[#93a4b8] tracking-wide mt-0.5">{offer.bankEn}</div>}
+                <Link href="/ceer-tamawal/00-explore-financing" className="text-[13px] font-semibold flex items-center gap-1" style={{ color: 'var(--muted)' }}>
+                  ← Back
+                </Link>
+              </div>
+
+              {/* Filter bar */}
+              <div className="rounded-[14px] px-5 py-4 flex items-center gap-4 flex-wrap" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
+                  <span style={{ color: 'var(--blue)' }}>💼</span>
+                  <span className="font-semibold">SAR 25,000</span>
                 </div>
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selected === offer.id ? 'border-[#4f95ff]' : 'border-[#2a3a4f]'}`}>
-                  {selected === offer.id && <div className="w-2.5 h-2.5 rounded-full bg-[#4f95ff]" />}
+                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
+                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
+                  <span style={{ color: 'var(--blue)' }}>💼</span>
+                  <span className="font-semibold">SAR 3,500</span>
+                  <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
+                </div>
+                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
+                <div className="flex items-center gap-2 text-[13px]">
+                  <span>20%</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                </div>
+                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
+                <div className="flex gap-1">
+                  {TERMS.map(m => (
+                    <button
+                      key={m}
+                      onClick={() => setTerm(m)}
+                      className="px-3 py-1.5 rounded-lg text-[12px] font-semibold"
+                      style={term === m
+                        ? { background: 'var(--highlight)', border: '1.5px solid var(--blue)', color: 'var(--blue)' }
+                        : { background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--muted)' }
+                      }
+                    >
+                      {m}M
+                    </button>
+                  ))}
+                </div>
+                <div className="ml-auto">
+                  <button className="px-5 py-2 rounded-lg text-[13px] font-bold" style={{ background: 'var(--blue)', color: '#fff' }}>Apply</button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 border-t border-[#2a3a4f] pt-3">
-                <div>
-                  <div className="text-[10px] text-[#93a4b8]">Monthly payment from</div>
-                  <div className="text-[#4f95ff] font-bold text-base mt-0.5">{offer.monthly}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-[#93a4b8]">APR from</div>
-                  <div className="text-[#4f95ff] font-bold text-base mt-0.5">{offer.apr}</div>
-                </div>
+
+              {/* Disclaimer */}
+              <div className="rounded-xl px-4 py-3 flex items-start gap-2.5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                <span className="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
+                <p className="text-[12.5px] italic" style={{ color: 'var(--muted)' }}>Preliminary offers are indicative and based on the information provided. Final offers are subject to credit assessment and identity verification.</p>
               </div>
-              <div className="mt-3 flex flex-col gap-1">
-                {offer.feats.map(f => (
-                  <div key={f} className="text-xs text-[#93a4b8] flex items-center gap-1.5">
-                    <span className="text-[#4f95ff]">✓</span> {f}
+
+              {/* Summary bar */}
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { icon: '🏷️', label: 'Down payment', value: 'SAR 79,800 (20%)' },
+                  { icon: '📅', label: 'Financing term', value: `${term} Months` },
+                  { icon: '📄', label: 'Amount to finance', value: 'SAR 319,200' },
+                ].map(item => (
+                  <div key={item.label} className="rounded-[12px] px-4 py-3.5 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <span className="text-lg">{item.icon}</span>
+                    <div>
+                      <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
+                      <div className="text-[14px] font-bold mt-0.5">{item.value}</div>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-2 text-right text-[10px] text-[#4f95ff] font-bold">Preliminary offer</div>
+
+              {/* Offer list */}
+              <div className="flex flex-col gap-3">
+                {offers.map(offer => (
+                  <div
+                    key={offer.id}
+                    onClick={() => setSelected(offer.id)}
+                    className="rounded-[14px] px-5 py-4 cursor-pointer"
+                    style={{ background: 'var(--card)', border: `1.5px solid ${selected === offer.id ? 'var(--blue)' : 'var(--border)'}` }}
+                  >
+                    {offer.badge && (
+                      <div className="inline-flex mb-3 px-3 py-1 rounded-full text-[11px] font-bold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>
+                        {offer.badge}
+                      </div>
+                    )}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="text-[16px] font-bold">{offer.bankAr}</div>
+                        {offer.bankEn && <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>{offer.bankEn}</div>}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Monthly payment from</div>
+                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.monthly}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>APR from</div>
+                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.apr}</div>
+                        </div>
+                        <button className="px-4 py-2 rounded-lg text-[12px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)', background: 'transparent' }}>
+                          Preliminary offer
+                        </button>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 flex items-center gap-8" style={{ borderTop: '1px solid var(--border)' }}>
+                      <div className="flex flex-col gap-1.5">
+                        {offer.feats.map(f => (
+                          <div key={f} className="text-[12px] flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
+                            <span style={{ color: 'var(--green)' }}>✓</span> {f}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="ml-auto grid grid-cols-3 gap-x-6 text-[12px]">
+                        {[['Tenure', offer.tenure], ['Amount to finance', offer.financed], ['Down payment', offer.dp]].map(([k, v]) => (
+                          <div key={k}>
+                            <div style={{ color: 'var(--muted)' }}>{k}</div>
+                            <div className="font-semibold mt-0.5">{v}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
-          ))}
+
+            {/* Footer */}
+            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--muted)' }}>
+                <span>🛡️</span>
+                Preliminary offers are not a guarantee of financing approval.
+              </div>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/ceer-tamawal/02-what-happens-next"
+                  className="px-5 py-3 rounded-xl text-[14px] font-bold"
+                  style={{ border: '1.5px solid var(--border)', color: 'var(--muted)', background: 'transparent' }}
+                >
+                  See the flow
+                </Link>
+                <Link
+                  href="/ceer-tamawal/03-verify-id"
+                  className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
+                  style={{ background: 'var(--blue)' }}
+                >
+                  {brandName} →
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
-
       </div>
 
-      {/* CTA */}
-      <div className="px-5 py-4 border-t border-[#2a3a4f]">
-        <Link
-          href="/ceer-tamawal/02-what-happens-next"
-          className="w-full bg-[#4f95ff] text-white text-[15px] font-semibold py-4 rounded-full text-center flex items-center justify-center"
-        >
-          Tamawal →
-        </Link>
-      </div>
-
+      <style>{`
+        [data-theme="dark"]{--bg:#0b1420;--card:#121e2e;--border:#2a3a4f;--text:#e6edf5;--muted:#93a4b8;--blue:#4f95ff;--heading:#dbe7f5;--highlight:#16283f;--green:#1db954;--red:#e5484d;}
+        [data-theme="light"]{--bg:#f4f6f9;--card:#ffffff;--border:#dde3ec;--text:#1a2636;--muted:#64748b;--blue:#2563eb;--heading:#0f172a;--highlight:#eff6ff;--green:#16a34a;--red:#dc2626;}
+        .viewport-warning{background:var(--bg);}
+        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
+      `}</style>
     </div>
   );
 }

@@ -6,8 +6,10 @@ import CeerNavbar from '../components/CeerNavbar';
 import CeerBreadcrumb from '../components/CeerBreadcrumb';
 import VehicleSidebar from '../components/VehicleSidebar';
 import CeerInnerStepper from '../components/CeerInnerStepper';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function VerifyingMobilePage() {
+  const { brandName } = useGlobalSettings();
   const router = useRouter();
   const [checked, setChecked] = useState([false, false, false, false]);
 
@@ -34,9 +36,9 @@ export default function VerifyingMobilePage() {
             <div className="border border-white/15 rounded-full px-3 py-1 text-[11px] text-white/40 inline-block">
               Step 1 of 4 – SIMAH consent
             </div>
-            <h1 className="text-3xl font-bold text-white mt-4 font-ceer">Authorize Tamawal to check your credit profile</h1>
+            <h1 className="text-3xl font-bold text-white mt-4 font-ceer">Authorize {brandName} to check your credit profile</h1>
             <p className="text-sm text-white/50 mt-2">
-              Tamawal and its financing partner need your consent to retrieve your SIMAH credit information and continue your financing journey.
+              {brandName} and its financing partner need your consent to retrieve your SIMAH credit information and continue your financing journey.
             </p>
           </div>
 
@@ -48,7 +50,7 @@ export default function VerifyingMobilePage() {
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/20 mt-2">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
-              <p className="text-xs text-white/50 mt-4">By providing your consent, you allow Tamawal and its authorized financing partner to:</p>
+              <p className="text-xs text-white/50 mt-4">By providing your consent, you allow {brandName} and its authorized financing partner to:</p>
               <div className="flex flex-col gap-3 mt-4">
                 {[
                   'Retrieve my SIMAH credit report for financing assessment',
@@ -76,18 +78,18 @@ export default function VerifyingMobilePage() {
                   <span className="text-sm font-medium text-white">About this screen</span>
                 </div>
                 <p className="text-xs text-white/40 mt-2">
-                  This consent allows Tamawal and our financing partner to assess your eligibility for financing based on your credit history.
+                  This consent allows {brandName} and our financing partner to assess your eligibility for financing based on your credit history.
                 </p>
-                <p className="text-xs text-white/40 mt-1">You remain within the Tamawal journey.</p>
+                <p className="text-xs text-white/40 mt-1">You remain within the {brandName} journey.</p>
               </div>
 
               {/* Checkboxes */}
               <div className="flex flex-col gap-3">
                 {[
-                  { label: <><span className="text-[#E87722]">*</span> I consent to Tamawal and its authorized financing partner obtaining my SIMAH credit report for the purpose of assessing my financing eligibility.</>, required: true },
+                  { label: <><span className="text-[#E87722]">*</span> I consent to {brandName} and its authorized financing partner obtaining my SIMAH credit report for the purpose of assessing my financing eligibility.</>, required: true },
                   { label: <><span className="text-[#E87722]">*</span> I authorize the use of my identity and verified mobile information for this financing journey.</>, required: true },
                   { label: <><span className="text-[#E87722]">*</span> I agree to the{' '}<span className="text-[#E87722] cursor-pointer">Terms &amp; Conditions</span> and{' '}<span className="text-[#E87722] cursor-pointer">Privacy Notice</span>.</>, required: true },
-                  { label: <>I would like to receive marketing updates from Tamawal.{' '}<span className="ml-2 px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[10px] text-white/30">Optional</span></>, required: false },
+                  { label: <>I would like to receive marketing updates from {brandName}.{' '}<span className="ml-2 px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[10px] text-white/30">Optional</span></>, required: false },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4 p-4 bg-[#0C0C0C] rounded-xl cursor-pointer" onClick={() => toggle(i)}>
                     <div className={`w-5 h-5 rounded border flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${checked[i] ? 'bg-[#E87722] border-[#E87722]' : 'border-white/20 bg-transparent'}`}>
@@ -131,8 +133,8 @@ export default function VerifyingMobilePage() {
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                   </svg>
                 ),
-                title: 'No redirection outside Tamawal',
-                desc: 'You stay within the Tamawal platform throughout the journey.',
+                title: `No redirection outside ${brandName}`,
+                desc: `You stay within the ${brandName} platform throughout the journey.`,
               },
               {
                 icon: (
@@ -172,7 +174,7 @@ export default function VerifyingMobilePage() {
                 </svg>
                 Select all required consents to continue
               </div>
-              <span className="text-[11px] text-white/40">› Next: Review Tamawal financing terms</span>
+              <span className="text-[11px] text-white/40">› Next: Review {brandName} financing terms</span>
             </div>
           </div>
 

@@ -107,6 +107,10 @@ export type JourneyStep = {
   labelEn: string;
   labelAr: string;
   status: JourneyStepStatus;
+  subLabelEn?: string;
+  subLabelAr?: string;
+  waitingSince?: string;
+  waitingOn?: string;
   checkpoints: Checkpoint[];
 };
 
@@ -116,10 +120,12 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     labelEn: 'Created as Guest',
     labelAr: 'إنشاء كضيف',
     status: 'Passed',
+    subLabelEn: '4 guest stages · 3 checkpoints',
+    subLabelAr: '٤ مراحل ضيف · ٣ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'Guest record found',      labelAr: 'تم العثور على سجل الضيف',   status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:20' },
-      { labelEn: 'Interest data captured',  labelAr: 'تم تسجيل بيانات الاهتمام', status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:21' },
-      { labelEn: 'Guest session validated', labelAr: 'تم التحقق من جلسة الضيف',  status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:22' },
+      { labelEn: 'Guest record found',      labelAr: 'تم العثور على سجل الضيف',   status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:20', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Guest identified' } },
+      { labelEn: 'Interest data captured',  labelAr: 'تم تسجيل بيانات الاهتمام', status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:21', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '1m 02s', reference: 'S-1042', businessOutcome: 'Interest recorded' } },
+      { labelEn: 'Guest session validated', labelAr: 'تم التحقق من جلسة الضيف',  status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:22', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Session valid' } },
     ],
   },
   {
@@ -127,10 +133,12 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     labelEn: 'Customer access',
     labelAr: 'وصول العميل',
     status: 'Passed',
+    subLabelEn: '3 checkpoints',
+    subLabelAr: '٣ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'Identity verified',    labelAr: 'تم التحقق من الهوية',  status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:25' },
-      { labelEn: 'Mobile OTP confirmed', labelAr: 'تم تأكيد OTP الجوال', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:26' },
-      { labelEn: 'Account activated',    labelAr: 'تم تفعيل الحساب',      status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:27' },
+      { labelEn: 'Identity verified',    labelAr: 'تم التحقق من الهوية',  status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:25', details: { source: 'Nafath', attempts: 1, waitingOn: '—', duration: '2m 14s', reference: 'S-1042', businessOutcome: 'Identity confirmed' } },
+      { labelEn: 'Mobile OTP confirmed', labelAr: 'تم تأكيد OTP الجوال', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:26', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '43s', reference: 'S-1042', businessOutcome: 'OTP verified' } },
+      { labelEn: 'Account activated',    labelAr: 'تم تفعيل الحساب',      status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:27', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Account active' } },
     ],
   },
   {
@@ -138,9 +146,11 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     labelEn: 'Disclosure',
     labelAr: 'الإفصاح',
     status: 'Passed',
+    subLabelEn: '2 checkpoints',
+    subLabelAr: '٢ نقطتا تحقق',
     checkpoints: [
-      { labelEn: 'Terms & conditions shown',  labelAr: 'تم عرض الشروط والأحكام', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:28' },
-      { labelEn: 'Customer agreement signed', labelAr: 'تم توقيع الاتفاقية',      status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:28' },
+      { labelEn: 'Terms & conditions shown',  labelAr: 'تم عرض الشروط والأحكام', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:28', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Terms displayed' } },
+      { labelEn: 'Customer agreement signed', labelAr: 'تم توقيع الاتفاقية',      status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:28', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '18s', reference: 'S-1042', businessOutcome: 'Agreement signed' } },
     ],
   },
   {
@@ -148,10 +158,12 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     labelEn: 'Eligibility',
     labelAr: 'الأهلية',
     status: 'Passed',
+    subLabelEn: '3 checkpoints',
+    subLabelAr: '٣ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'SIMAH report fetched',  labelAr: 'تم جلب تقرير SIMAH',       status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29' },
-      { labelEn: 'MASDR data validated',  labelAr: 'تم التحقق من بيانات MASDR', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29' },
-      { labelEn: 'Eligibility decision',  labelAr: 'قرار الأهلية',               status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29' },
+      { labelEn: 'SIMAH report fetched',  labelAr: 'تم جلب تقرير SIMAH',       status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29', details: { source: 'SIMAH', attempts: 1, waitingOn: '—', duration: '3s', reference: 'S-1042', businessOutcome: 'Report received' } },
+      { labelEn: 'MASDR data validated',  labelAr: 'تم التحقق من بيانات MASDR', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29', details: { source: 'MASDR', attempts: 1, waitingOn: '—', duration: '4s', reference: 'S-1042', businessOutcome: 'Data validated' } },
+      { labelEn: 'Eligibility decision',  labelAr: 'قرار الأهلية',               status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'Engine', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Eligible' } },
     ],
   },
   {
@@ -159,10 +171,14 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     labelEn: 'Order submission',
     labelAr: 'تقديم الطلب',
     status: 'Paused',
+    subLabelEn: '6 checkpoints',
+    subLabelAr: '٦ نقاط تحقق',
+    waitingSince: 'Jul 11 · 10:31',
+    waitingOn: 'Customer',
     checkpoints: [
-      { labelEn: 'Offer selected',                 labelAr: 'تم اختيار العرض',            status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29' },
-      { labelEn: 'Order created',                  labelAr: 'تم إنشاء الطلب',             status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:30' },
-      { labelEn: 'Confirmation OTP sent',          labelAr: 'تم إرسال OTP التأكيد',       status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 10:31' },
+      { labelEn: 'Offer selected',                 labelAr: 'تم اختيار العرض',            status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '8m 12s', reference: 'O-8821', businessOutcome: 'Offer locked' } },
+      { labelEn: 'Order created',                  labelAr: 'تم إنشاء الطلب',             status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:30', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'Order draft' } },
+      { labelEn: 'Confirmation OTP sent',          labelAr: 'تم إرسال OTP التأكيد',       status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 10:31', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'OTP dispatched' } },
       {
         labelEn: 'Order confirmation OTP verified',
         labelAr: 'تم التحقق من OTP تأكيد الطلب',

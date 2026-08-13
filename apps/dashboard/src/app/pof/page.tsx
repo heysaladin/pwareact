@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, KeyboardEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import TamawalLogo from '@/components/ui/TamawalLogo';
+import { useGlobalSettings } from '@/lib/global-settings-context';
 
 type Step = 'login' | 'otp';
 type Lang = 'en' | 'ar';
@@ -56,13 +57,14 @@ function OtpInputs({ isAr }: { isAr: boolean }) {
 // ── Login form ───────────────────────────────────────────────────────────────
 
 function LoginForm({ isAr, onSubmit }: { isAr: boolean; onSubmit: () => void }) {
+  const { brandName } = useGlobalSettings();
   const [remember, setRemember] = useState(false);
   return (
     <div className="flex flex-col gap-12">
       {/* Heading */}
       <div className={isAr ? 'text-right' : ''}>
         <p className="text-[25px] font-medium text-[#121a26] leading-8 mb-0.5">
-          {isAr ? 'أهلا بكم في تموّل®' : 'Welcome to Tamawal®'}
+          {isAr ? 'أهلا بكم في تموّل®' : `Welcome to ${brandName}®`}
         </p>
         <p className="text-[14px] text-[#697586] leading-[22px]">
           {isAr ? 'يرجى تسجيل الدخول إلى حسابك والبدء في إدارته' : 'Please sign-in to your account and start managing'}

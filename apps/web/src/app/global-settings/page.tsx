@@ -1,16 +1,16 @@
 'use client';
 import Link from 'next/link';
 import TamawalLogo from '@/components/ui/TamawalLogo';
-import { useGlobalSettings, LogoMode } from '@/contexts/GlobalSettingsContext';
+import { useGlobalSettings, LogoMode, getBrandName } from '@/contexts/GlobalSettingsContext';
 
 const options: { id: LogoMode; label: string; description: string }[] = [
-  { id: 'tamawal', label: 'Tamawal', description: 'Default wordmark' },
+  { id: 'tamawal', label: 'Tamawal', description: 'Default wordmark — white & blue variants' },
   { id: 'tamweel', label: 'Tamweel', description: 'Alternative brand name' },
-  { id: 'blur', label: 'Blur Logo', description: 'Hide brand identity' },
+  { id: 'blur', label: 'Blur', description: 'Hide brand identity' },
 ];
 
 export default function GlobalSettingsPage() {
-  const { settings, updateSettings } = useGlobalSettings();
+  const { settings, updateSettings, brandName } = useGlobalSettings();
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#080d14] flex flex-col">
@@ -75,7 +75,7 @@ export default function GlobalSettingsPage() {
                   }`}
                 >
                   {/* Preview */}
-                  <div className="h-10 flex items-center">
+                  <div className="flex items-center min-h-10">
                     <LogoPreview mode={opt.id} />
                   </div>
 
@@ -110,7 +110,7 @@ export default function GlobalSettingsPage() {
       {/* Footer */}
       <footer className="border-t border-[#eef1f6] dark:border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
-          <p className="text-xs text-[#9aa4b2] dark:text-white/25">Tamawal Design</p>
+          <p className="text-xs text-[#9aa4b2] dark:text-white/25">{brandName} Design</p>
           <p className="text-xs text-[#9aa4b2] dark:text-white/25">{new Date().getFullYear()}</p>
         </div>
       </footer>
@@ -132,7 +132,18 @@ function LogoPreview({ mode }: { mode: LogoMode }) {
     </svg>
   );
 
-  const wordmark = (
+  const iconWhite = (
+    <svg width="28" height="28" viewBox="0 0 34.3273 34.3273" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="16.6912" height="4.409" transform="matrix(-1 0 0 1 25.509 8.818)" fill="white" />
+      <path d="M19.2107 8.818H14.8017V29.918L19.2107 34.327V8.818Z" fill="white" />
+      <path d="M14.8016 29.918L19.2106 34.327L29.918 34.327L34.327 29.918L14.8016 29.918Z" fill="rgba(255,255,255,0.75)" />
+      <path d="M29.917 0L34.326 4.409V29.918L29.917 34.327V0Z" fill="white" />
+      <path d="M0 4.409L4.409 0L29.918 0L34.327 4.409L0 4.409Z" fill="rgba(255,255,255,0.75)" />
+      <path d="M4.41 0L0.001 4.409V29.918L4.41 34.327V0Z" fill="white" />
+    </svg>
+  );
+
+  const wordmarkBlue = (
     <svg width="60" height="12" viewBox="0 0 71.8098 13.1178" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15.3715 4.07874H17.2745V12.8888H15.3715V11.6201C14.655 12.6186 13.6271 13.1178 12.288 13.1178C11.0781 13.1178 10.0444 12.6715 9.18687 11.7787C8.32936 10.8742 7.90061 9.77589 7.90061 8.48376C7.90061 7.17987 8.32936 6.08156 9.18687 5.18881C10.0444 4.29606 11.0781 3.84968 12.288 3.84968C13.6271 3.84968 14.655 4.34304 15.3715 5.32977V4.07874ZM10.5965 10.5101C11.1251 11.0387 11.7888 11.303 12.5875 11.303C13.3863 11.303 14.05 11.0387 14.5786 10.5101C15.1072 9.96971 15.3715 9.29428 15.3715 8.48376C15.3715 7.67323 15.1072 7.00367 14.5786 6.47507C14.05 5.93472 13.3863 5.66455 12.5875 5.66455C11.7888 5.66455 11.1251 5.93472 10.5965 6.47507C10.0679 7.00367 9.80357 7.67323 9.80357 8.48376C9.80357 9.29428 10.0679 9.96971 10.5965 10.5101Z" fill="#0063F5" />
       <path d="M29.1131 3.84968C30.1116 3.84968 30.9162 4.17272 31.527 4.81878C32.1379 5.46485 32.4433 6.33411 32.4433 7.42655V12.8888H30.5403V7.54989C30.5403 6.93907 30.3876 6.4692 30.0822 6.14029C29.7768 5.79963 29.3598 5.62931 28.8312 5.62931C28.2438 5.62931 27.774 5.82313 27.4216 6.21077C27.0809 6.59841 26.9106 7.17987 26.9106 7.95516V12.8888H25.0076V7.54989C25.0076 6.93907 24.8608 6.4692 24.5671 6.14029C24.2852 5.79963 23.8799 5.62931 23.3513 5.62931C22.7757 5.62931 22.3059 5.829 21.9417 6.22839C21.5776 6.61603 21.3955 7.19162 21.3955 7.95516V12.8888H19.4925V4.07874H21.3955V5.13595C21.9593 4.27844 22.7992 3.84968 23.9152 3.84968C25.0429 3.84968 25.8769 4.31368 26.4172 5.24167C27.0046 4.31368 27.9032 3.84968 29.1131 3.84968Z" fill="#0063F5" />
@@ -144,11 +155,40 @@ function LogoPreview({ mode }: { mode: LogoMode }) {
     </svg>
   );
 
+  const wordmarkWhite = (
+    <svg width="60" height="12" viewBox="0 0 71.8098 13.1178" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15.3715 4.07874H17.2745V12.8888H15.3715V11.6201C14.655 12.6186 13.6271 13.1178 12.288 13.1178C11.0781 13.1178 10.0444 12.6715 9.18687 11.7787C8.32936 10.8742 7.90061 9.77589 7.90061 8.48376C7.90061 7.17987 8.32936 6.08156 9.18687 5.18881C10.0444 4.29606 11.0781 3.84968 12.288 3.84968C13.6271 3.84968 14.655 4.34304 15.3715 5.32977V4.07874ZM10.5965 10.5101C11.1251 11.0387 11.7888 11.303 12.5875 11.303C13.3863 11.303 14.05 11.0387 14.5786 10.5101C15.1072 9.96971 15.3715 9.29428 15.3715 8.48376C15.3715 7.67323 15.1072 7.00367 14.5786 6.47507C14.05 5.93472 13.3863 5.66455 12.5875 5.66455C11.7888 5.66455 11.1251 5.93472 10.5965 6.47507C10.0679 7.00367 9.80357 7.67323 9.80357 8.48376C9.80357 9.29428 10.0679 9.96971 10.5965 10.5101Z" fill="white" />
+      <path d="M29.1131 3.84968C30.1116 3.84968 30.9162 4.17272 31.527 4.81878C32.1379 5.46485 32.4433 6.33411 32.4433 7.42655V12.8888H30.5403V7.54989C30.5403 6.93907 30.3876 6.4692 30.0822 6.14029C29.7768 5.79963 29.3598 5.62931 28.8312 5.62931C28.2438 5.62931 27.774 5.82313 27.4216 6.21077C27.0809 6.59841 26.9106 7.17987 26.9106 7.95516V12.8888H25.0076V7.54989C25.0076 6.93907 24.8608 6.4692 24.5671 6.14029C24.2852 5.79963 23.8799 5.62931 23.3513 5.62931C22.7757 5.62931 22.3059 5.829 21.9417 6.22839C21.5776 6.61603 21.3955 7.19162 21.3955 7.95516V12.8888H19.4925V4.07874H21.3955V5.13595C21.9593 4.27844 22.7992 3.84968 23.9152 3.84968C25.0429 3.84968 25.8769 4.31368 26.4172 5.24167C27.0046 4.31368 27.9032 3.84968 29.1131 3.84968Z" fill="white" />
+      <path d="M41.4575 4.07874H43.3604V12.8888H41.4575V11.6201C40.7409 12.6186 39.7131 13.1178 38.3739 13.1178C37.164 13.1178 36.1303 12.6715 35.2728 11.7787C34.4153 10.8742 33.9865 9.77589 33.9865 8.48376C33.9865 7.17987 34.4153 6.08156 35.2728 5.18881C36.1303 4.29606 37.164 3.84968 38.3739 3.84968C39.7131 3.84968 40.7409 4.34304 41.4575 5.32977V4.07874ZM36.6824 10.5101C37.211 11.0387 37.8747 11.303 38.6735 11.303C39.4723 11.303 40.1359 11.0387 40.6645 10.5101C41.1931 9.96971 41.4575 9.29428 41.4575 8.48376C41.4575 7.67323 41.1931 7.00367 40.6645 6.47507C40.1359 5.93472 39.4723 5.66455 38.6735 5.66455C37.8747 5.66455 37.211 5.93472 36.6824 6.47507C36.1538 7.00367 35.8895 7.67323 35.8895 8.48376C35.8895 9.29428 36.1538 9.96971 36.6824 10.5101Z" fill="white" />
+      <path d="M55.7276 4.07874H57.7363L54.97 12.8888H53.1022L51.2698 6.95081L49.4196 12.8888H47.5519L44.7856 4.07874H46.7943L48.5034 10.1577L50.3535 4.07874H52.1684L54.0009 10.1577L55.7276 4.07874Z" fill="white" />
+      <path d="M65.7711 4.07874H67.674V12.8888H65.7711V11.6201C65.0545 12.6186 64.0267 13.1178 62.6876 13.1178C61.4776 13.1178 60.4439 12.6715 59.5864 11.7787C58.7289 10.8742 58.3002 9.77589 58.3002 8.48376C58.3002 7.17987 58.7289 6.08156 59.5864 5.18881C60.4439 4.29606 61.4776 3.84968 62.6876 3.84968C64.0267 3.84968 65.0545 4.34304 65.7711 5.32977V4.07874ZM60.996 10.5101C61.5246 11.0387 62.1883 11.303 62.9871 11.303C63.7859 11.303 64.4496 11.0387 64.9782 10.5101C65.5068 9.96971 65.7711 9.29428 65.7711 8.48376C65.7711 7.67323 65.5068 7.00367 64.9782 6.47507C64.4496 5.93472 63.7859 5.66455 62.9871 5.66455C62.1883 5.66455 61.5246 5.93472 60.996 6.47507C60.4674 7.00367 60.2031 7.67323 60.2031 8.48376C60.2031 9.29428 60.4674 9.96971 60.996 10.5101Z" fill="white" />
+      <path d="M69.852 12.8888V0.57102L71.8098 0V12.8794L69.852 12.8888Z" fill="white" />
+      <path d="M8.8005 0.652595V2.56553H5.40109V12.8258H3.41666V2.56553H0V0.652595H8.8005Z" fill="white" />
+    </svg>
+  );
+
   if (mode === 'blur') {
     return (
       <div className="flex items-center gap-2" style={{ filter: 'blur(3px)' }}>
         {icon}
-        <div className="flex flex-col leading-none gap-[3px]">{wordmark}</div>
+        <div className="flex flex-col leading-none gap-[3px]">{wordmarkBlue}</div>
+      </div>
+    );
+  }
+
+  if (mode === 'tamawal') {
+    return (
+      <div className="flex flex-col gap-2">
+        {/* Blue variant — light bg */}
+        <div className="flex items-center gap-2 bg-white rounded px-2 py-1">
+          {icon}
+          <div className="flex flex-col leading-none gap-[3px]">{wordmarkBlue}</div>
+        </div>
+        {/* White variant — dark bg */}
+        <div className="flex items-center gap-2 bg-[#000921] rounded px-2 py-1">
+          {iconWhite}
+          <div className="flex flex-col leading-none gap-[3px]">{wordmarkWhite}</div>
+        </div>
       </div>
     );
   }
@@ -157,9 +197,7 @@ function LogoPreview({ mode }: { mode: LogoMode }) {
     <div className="flex items-center gap-2">
       {icon}
       <div className="flex flex-col leading-none gap-[3px]">
-        {mode === 'tamawal' ? wordmark : (
-          <span className="text-[#0063F5] font-semibold leading-none" style={{ fontSize: 13 }}>Tamweel</span>
-        )}
+        <span className="text-[#0063F5] font-semibold leading-none" style={{ fontSize: 13 }}>Tamweel</span>
       </div>
     </div>
   );

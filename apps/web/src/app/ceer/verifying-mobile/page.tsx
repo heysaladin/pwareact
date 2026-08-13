@@ -1,9 +1,13 @@
+'use client';
+
 import CeerNavbar from '../components/CeerNavbar';
 import CeerBreadcrumb from '../components/CeerBreadcrumb';
 import VehicleSidebar from '../components/VehicleSidebar';
 import CeerInnerStepper from '../components/CeerInnerStepper';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function VerifyingMobilePage() {
+  const { brandName } = useGlobalSettings();
   return (
     <div className="min-h-screen bg-[#0C0C0C] text-white flex flex-col">
       <CeerNavbar variant={2} />
@@ -170,7 +174,7 @@ export default function VerifyingMobilePage() {
                 </svg>
                 Select all required consents to continue
               </div>
-              <span className="text-[11px] text-white/40">› Next: Review Tamawal financing terms</span>
+              <span className="text-[11px] text-white/40">› Next: Review {brandName} financing terms</span>
             </div>
           </div>
 

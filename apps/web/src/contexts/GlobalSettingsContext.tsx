@@ -3,6 +3,10 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 export type LogoMode = 'tamawal' | 'tamweel' | 'blur';
 
+export function getBrandName(mode: LogoMode): string {
+  return mode === 'tamweel' ? 'Tamweel' : 'Tamawal';
+}
+
 type GlobalSettings = {
   logoMode: LogoMode;
 };
@@ -10,6 +14,7 @@ type GlobalSettings = {
 type GlobalSettingsContextType = {
   settings: GlobalSettings;
   updateSettings: (updates: Partial<GlobalSettings>) => void;
+  brandName: string;
 };
 
 const defaultSettings: GlobalSettings = {
@@ -19,6 +24,7 @@ const defaultSettings: GlobalSettings = {
 const GlobalSettingsContext = createContext<GlobalSettingsContextType>({
   settings: defaultSettings,
   updateSettings: () => {},
+  brandName: getBrandName(defaultSettings.logoMode),
 });
 
 export function GlobalSettingsProvider({ children }: { children: React.ReactNode }) {
@@ -42,7 +48,7 @@ export function GlobalSettingsProvider({ children }: { children: React.ReactNode
   };
 
   return (
-    <GlobalSettingsContext.Provider value={{ settings, updateSettings }}>
+    <GlobalSettingsContext.Provider value={{ settings, updateSettings, brandName: getBrandName(settings.logoMode) }}>
       {children}
     </GlobalSettingsContext.Provider>
   );

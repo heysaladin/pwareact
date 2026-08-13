@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 const imgLogoBlue  = "/logo-tamawal-web-blue.svg";
 const imgLogoWhite = "/logo-tamawal-web.svg";
@@ -32,9 +33,11 @@ function ChevronDown({ color }: { color: string }) {
 }
 
 export default function Navbar({ onMenuOpen, dark = false, langHref, langLabel = 'عربي', lang = 'en' }: { onMenuOpen: () => void; dark?: boolean; langHref?: string; langLabel?: string; lang?: 'en' | 'ar' }) {
+  const { settings, brandName } = useGlobalSettings();
+  const { logoMode } = settings;
   const navLinks = lang === 'ar' ? navLinksAr : navLinksEn;
   const isRtl = lang === 'ar';
-  const businessLabel = lang === 'ar' ? 'تمويل أعمال' : 'Tamawal Business';
+  const businessLabel = lang === 'ar' ? 'تمويل أعمال' : `${brandName} Business`;
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -58,7 +61,13 @@ export default function Navbar({ onMenuOpen, dark = false, langHref, langLabel =
         >
           {/* Logo + nav */}
           <div className="flex items-center gap-[56px]">
-            <img src={dark ? imgLogoWhite : imgLogoBlue} alt="Tamawal" className="h-[33px] w-auto" />
+            {logoMode === 'blur' ? (
+              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[33px] w-auto" style={{ filter: 'blur(4px)' }} />
+            ) : logoMode === 'tamweel' ? (
+              <span className="font-semibold text-[18px]" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
+            ) : (
+              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[33px] w-auto" />
+            )}
             <nav className="flex items-center gap-[40px]">
               {navLinks.map(({ label, href, active, dropdown }) => (
                 <a
@@ -66,7 +75,7 @@ export default function Navbar({ onMenuOpen, dark = false, langHref, langLabel =
                   href={href}
                   className={`flex items-center gap-[6px] text-[16px] font-medium ${active ? activeLinkColor + ' font-bold' : linkColor}`}
                 >
-                  {label}
+                  {label === 'Tamawal' ? brandName : label}
                   {dropdown && <ChevronDown color={active ? (dark ? '#ffffff' : '#000000') : (dark ? '#98a2b3' : '#344054')} />}
                 </a>
               ))}
@@ -100,7 +109,13 @@ export default function Navbar({ onMenuOpen, dark = false, langHref, langLabel =
         <button onClick={onMenuOpen} className="shrink-0 size-6 cursor-pointer">
           <img src={imgMenuIcon} alt="Menu" className="size-6" style={dark ? { filter: 'brightness(0) invert(1)' } : undefined} />
         </button>
-        <img src={dark ? imgLogoWhite : imgLogoBlue} alt="Tamawal" className="h-8 w-auto" />
+        {logoMode === 'blur' ? (
+          <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-8 w-auto" style={{ filter: 'blur(4px)' }} />
+        ) : logoMode === 'tamweel' ? (
+          <span className="font-semibold text-[16px]" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
+        ) : (
+          <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-8 w-auto" />
+        )}
         {langHref ? (
           <a href={langHref} className={`border rounded-full w-11 h-11 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}>
             <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>

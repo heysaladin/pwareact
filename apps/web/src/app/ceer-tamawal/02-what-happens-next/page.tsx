@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 const CEER = ({ id }: { id: string }) => (
   <svg width="100" height="14" viewBox="0 0 100 14" fill="none" style={{ color: 'var(--text)' }}>
@@ -20,6 +21,7 @@ const CEER = ({ id }: { id: string }) => (
 );
 
 export default function WhatHappensNextPage() {
+  const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(false);
 
   return (
@@ -33,7 +35,7 @@ export default function WhatHappensNextPage() {
       {/* Header */}
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 32px', borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="Tamawal" style={{ width: 112, height: 33 }} />
+          <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} style={{ width: 112, height: 33 }} />
           <div style={{ width: 1, height: 24, background: 'var(--border)' }} />
           <CEER id="ceer-02" />
         </div>
@@ -53,7 +55,7 @@ export default function WhatHappensNextPage() {
           {[
             { num: 1, label: 'Start' },
             { num: 2, label: 'Check CEER Login' },
-            { num: 3, label: 'Check Tamawal Customer' },
+            { num: 3, label: `Check ${brandName} Customer` },
             { num: 4, label: 'Next Step' },
           ].map((s, i) => (
             <div key={s.num} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, color: 'var(--blue)' }}>
@@ -70,7 +72,7 @@ export default function WhatHappensNextPage() {
           <div style={{ border: '1px solid var(--border)', borderRadius: 14, background: 'var(--surface)', padding: '22px 18px', textAlign: 'center', position: 'relative' }}>
             <div style={{ width: 44, height: 44, margin: '0 auto 12px', fontSize: 19, background: 'var(--bg-light)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🔍</div>
             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--navy)', lineHeight: 1.4 }}>You selected a preliminary offer</div>
-            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Click Tamawal to continue</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Click {brandName} to continue</div>
             <div style={{ position: 'absolute', top: '50%', right: -40, width: 40, height: 2, background: 'var(--blue)' }} />
           </div>
 
@@ -86,7 +88,7 @@ export default function WhatHappensNextPage() {
 
           <div style={{ border: '1.5px solid var(--blue)', borderRadius: 14, background: 'var(--bg-light)', padding: '22px 18px', textAlign: 'center', position: 'relative' }}>
             <div style={{ width: 44, height: 44, margin: '0 auto 12px', fontSize: 19, background: 'var(--surface)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🧾</div>
-            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--navy)', lineHeight: 1.4 }}>Are you already a Tamawal customer?</div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--navy)', lineHeight: 1.4 }}>Are you already a {brandName} customer?</div>
             <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8 }}>Yes / No</div>
             <div style={{ position: 'absolute', top: '50%', right: -40, width: 40, height: 2, background: 'var(--blue)' }} />
             <div style={{ position: 'absolute', left: '50%', bottom: -56, height: 56, width: 2, background: 'var(--red)' }} />
@@ -97,7 +99,7 @@ export default function WhatHappensNextPage() {
           <div style={{ border: '1.5px solid var(--green)', borderRadius: 14, background: 'rgba(29,185,84,0.08)', padding: '22px 18px', textAlign: 'center' }}>
             <div style={{ width: 44, height: 44, margin: '0 auto 12px', fontSize: 19, background: 'rgba(29,185,84,0.15)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🔑</div>
             <div style={{ fontWeight: 700, fontSize: 14, color: '#14833b', lineHeight: 1.4 }}>Enter your login</div>
-            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Welcome back! Enter your Tamawal PIN</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Welcome back! Enter your {brandName} PIN</div>
           </div>
 
           {/* Row 2 */}
@@ -111,7 +113,7 @@ export default function WhatHappensNextPage() {
 
           <div style={{ border: '1px solid var(--border)', borderRadius: 14, background: 'var(--surface)', padding: '22px 18px', textAlign: 'center' }}>
             <div style={{ width: 44, height: 44, margin: '0 auto 12px', fontSize: 19, background: 'var(--bg-light)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➕</div>
-            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--navy)', lineHeight: 1.4 }}>Create your Tamawal account</div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--navy)', lineHeight: 1.4 }}>Create your {brandName} account</div>
             <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, lineHeight: 1.5 }}>Quick sign-up to get started</div>
           </div>
 
@@ -124,7 +126,7 @@ export default function WhatHappensNextPage() {
         {[
           { n: '1️⃣', title: 'You selected an offer', desc: 'You choose the offer that fits you best' },
           { n: '2️⃣', title: 'We check your CEER login', desc: 'Not logged in → CEER login/sign up. Logged in → continue.' },
-          { n: '3️⃣', title: 'We check your Tamawal status', desc: 'Existing customer → Enter your PIN. New customer → Create account.' },
+          { n: '3️⃣', title: `We check your ${brandName} status`, desc: 'Existing customer → Enter your PIN. New customer → Create account.' },
           { n: '🔒', title: "You're all set!", desc: 'Enter your PIN and continue your financing journey' },
         ].map((step, i) => (
           <div key={step.n} style={{ flex: 1, padding: '16px 20px', borderRight: i < 3 ? '1px solid var(--border)' : 'none' }}>
@@ -139,7 +141,7 @@ export default function WhatHappensNextPage() {
       <footer style={{ borderTop: '1px solid var(--border)', padding: '18px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--surface)', marginTop: 40 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: 'var(--muted)' }}>
           <div style={{ width: 38, height: 38, flexShrink: 0, borderRadius: '50%', background: 'var(--bg-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17 }}>🛡️</div>
-          <div>Your data is safe with us. Tamawal is licensed and regulated by the Saudi Central Bank (SAMA).<br /><span style={{ fontWeight: 600 }}>Need help?</span> Contact us 24/7</div>
+          <div>Your data is safe with us. {brandName} is licensed and regulated by the Saudi Central Bank (SAMA).<br /><span style={{ fontWeight: 600 }}>Need help?</span> Contact us 24/7</div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <Link href="/ceer-tamawal/01-preliminary-offers" style={{ padding: '12px 24px', borderRadius: 10, border: '1.5px solid var(--blue)', color: 'var(--blue)', fontWeight: 700, fontSize: 14 }}>← Back to offers</Link>
