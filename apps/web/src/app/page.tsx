@@ -48,6 +48,19 @@ const projects = [
     ),
   },
   {
+    id: 'sme',
+    name: 'SME',
+    description: 'Business financing platform for SMEs — smart matching for company funding needs.',
+    href: '/sme',
+    tag: 'SME',
+    accentColor: '#FFDD33',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
     id: 'ceer-tamawal',
     name: 'CEER x Tamawal',
     description: 'Co-branded experience between CEER and Tamawal.',
