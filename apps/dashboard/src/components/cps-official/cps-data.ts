@@ -118,7 +118,7 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   {
     id: 'guest-history',
     labelEn: 'Created as Guest',
-    labelAr: 'إنشاء كضيف',
+    labelAr: 'إنشاء حساب ضيف',
     status: 'Passed',
     subLabelEn: '4 guest stages · 3 checkpoints',
     subLabelAr: '٤ مراحل ضيف · ٣ نقاط تحقق',
@@ -178,10 +178,10 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     checkpoints: [
       { labelEn: 'Offer selected',                 labelAr: 'تم اختيار العرض',            status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '8m 12s', reference: 'O-8821', businessOutcome: 'Offer locked' } },
       { labelEn: 'Order created',                  labelAr: 'تم إنشاء الطلب',             status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:30', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'Order draft' } },
-      { labelEn: 'Confirmation OTP sent',          labelAr: 'تم إرسال OTP التأكيد',       status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 10:31', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'OTP dispatched' } },
+      { labelEn: 'Confirmation OTP sent',          labelAr: 'تم إرسال رمز تأكيد الطلب',   status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 10:31', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'OTP dispatched' } },
       {
         labelEn: 'Order confirmation OTP verified',
-        labelAr: 'تم التحقق من OTP تأكيد الطلب',
+        labelAr: 'تم التحقق من رمز تأكيد الطلب',
         status: 'Paused',
         tag: 'Mandatory',
         noteEn: 'OTP was sent and remains valid for 4 minutes.',

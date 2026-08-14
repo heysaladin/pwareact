@@ -60,7 +60,7 @@ const CUSTOMER_TABS: MainTab[] = [
 ];
 
 
-const STEP_OVERLINES = [
+const STEP_OVERLINES_EN = [
   'Preserved history',
   'Repeatable login',
   'Versioned',
@@ -68,11 +68,19 @@ const STEP_OVERLINES = [
   'Repeatable order',
 ];
 
+const STEP_OVERLINES_AR = [
+  'سجل محفوظ',
+  'دخول متكرر',
+  'نسخة محفوظة',
+  'محرك متكرر',
+  'طلب متكرر',
+];
+
 const SUB_JOURNEYS = [
-  { labelEn: 'Guest registration', count: '5/5 passed' },
-  { labelEn: 'Product search',     count: '4/4 passed' },
-  { labelEn: 'Search payment',     count: '4/4 passed' },
-  { labelEn: 'Customer conversion', count: '10/10 passed' },
+  { labelEn: 'Guest registration',  labelAr: 'إنشاء حساب ضيف',  count: '5/5 passed' },
+  { labelEn: 'Product search',      labelAr: 'البحث عن المنتجات', count: '4/4 passed' },
+  { labelEn: 'Search payment',      labelAr: 'دفع رسوم البحث',   count: '4/4 passed' },
+  { labelEn: 'Customer conversion', labelAr: 'التحويل إلى عميل', count: '10/10 passed' },
 ];
 
 function JourneyContent({ isAr }: { isAr: boolean }) {
@@ -133,13 +141,13 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
                   {isAr ? 'ضيف ← عميل' : 'Guest → Customer'}
                 </p>
                 <p className="text-[18px] text-[#121a26] leading-[16.5px] tracking-[0.25px]">
-                  {isAr ? 'سجل الضيف أصبح الخطوة 1 من رحلة العميل' : 'Guest history is now Step 1 of this Customer journey'}
+                  {isAr ? 'يُعد سجل الضيف الآن الخطوة الأولى في رحلة العميل هذه' : 'Guest history is now Step 1 of this Customer journey'}
                 </p>
               </div>
             </div>
             <div className="bg-[#ecfdf3] border border-[#abefc6] flex items-center px-[12px] py-[4px] rounded-[16px] shrink-0">
               <p className="text-[14px] font-medium text-[#067647] text-center whitespace-nowrap">
-                {isAr ? 'نفس خيط الملف' : 'Same profile thread'}
+                {isAr ? 'نفس الموضوع' : 'Same profile thread'}
               </p>
             </div>
           </div>
@@ -159,7 +167,7 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
                   {isAr ? 'التوقف الحالي' : 'Current stop'}
                 </p>
                 <p className="text-[16px] text-[#121a26] leading-[16.5px] tracking-[0.25px]">
-                  {isAr ? 'تقديم الطلب · التحقق من OTP تأكيد الطلب' : 'Order submission · Order confirmation OTP verified'}
+                  {isAr ? 'تقديم الطلب · التحقق من رمز تأكيد الطلب' : 'Order submission · Order confirmation OTP verified'}
                 </p>
               </div>
             </div>
@@ -252,7 +260,7 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
                         <div className="flex gap-[2px] items-start font-bold text-[10px] tracking-[0.05px] leading-[14px] w-full">
                           <span className="text-[#0063f5] whitespace-nowrap">Step {i + 1}</span>
                           <span className="text-[#a4a7ae] whitespace-nowrap">·</span>
-                          <span className="text-[#a4a7ae] flex-1 min-w-px">{STEP_OVERLINES[i]}</span>
+                          <span className="text-[#a4a7ae] flex-1 min-w-px">{isAr ? STEP_OVERLINES_AR[i] : STEP_OVERLINES_EN[i]}</span>
                         </div>
                         <p className="font-bold text-[14px] text-[#202a39] leading-[12.75px] tracking-[0.25px] w-full">
                           {isAr ? s.labelAr : s.labelEn}
@@ -333,7 +341,7 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
                             </div>
                           )}
                           <div className="flex flex-col gap-[8px] flex-1 min-w-px">
-                            <p className="font-bold text-[14px] text-[#202a39] leading-[12.75px] tracking-[0.25px]">{sj.labelEn}</p>
+                            <p className="font-bold text-[14px] text-[#202a39] leading-[12.75px] tracking-[0.25px]">{isAr ? sj.labelAr : sj.labelEn}</p>
                             <p className="text-[10px] text-[#697586]">{sj.count}</p>
                           </div>
                         </div>
@@ -485,9 +493,9 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
             </div>
             <div className="flex gap-[4px] items-start w-full">
               {[
-                { num: passed, label: 'Required passed' },
-                { num: open,   label: 'Open required'   },
-                { num: 0,      label: 'Optional'         },
+                { num: passed, label: isAr ? 'مطلوب اجتياز' : 'Required passed' },
+                { num: open,   label: isAr ? 'مطلوب فتح'   : 'Open required'   },
+                { num: 0,      label: isAr ? 'الي'           : 'Optional'        },
               ].map(stat => (
                 <div
                   key={stat.label}
@@ -551,7 +559,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
         {/* Page header bar */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-[#e2e3e4] bg-white sticky top-0 z-10">
           <div className="flex items-center gap-2 text-sm text-[#697586]">
-            <span className="font-medium">{isAr ? 'رقم العميل' : 'Customer ID'}</span>
+            <span className="font-medium">{isAr ? 'معرف المستخدم' : 'Customer ID'}</span>
             <span className="font-bold text-[#121a26]">{profile.id}</span>
           </div>
           <Link
@@ -559,7 +567,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0063f5] text-white text-sm font-medium hover:bg-[#0052cc] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            {isAr ? 'رجوع' : 'Back'}
+            {isAr ? 'خلف' : 'Back'}
           </Link>
         </div>
 
@@ -574,7 +582,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
               <div className="flex flex-col gap-2 min-w-0">
                 <span className="text-lg font-semibold text-[#1e2228] truncate">{isAr ? profile.nameAr : profile.name}</span>
                 <span className="self-start px-4 py-1.5 rounded-full bg-[#ecfdf3] border border-[#12b76a] text-[#12b76a] text-sm font-medium">
-                  {isAr ? 'نشط' : 'Active'}
+                  {isAr ? 'نشيط' : 'Active'}
                 </span>
               </div>
             </div>

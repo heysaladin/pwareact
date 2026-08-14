@@ -82,7 +82,7 @@ const kpis = [
   {
     label: { en: 'Need attention', ar: 'تحتاج اهتماماً' },
     value: '312',
-    sub: { en: 'Action required', ar: 'مطلوب إجراء' },
+    sub: { en: 'Action required', ar: '٨٩ غير مخصصة حاليًا' },
     bg: 'bg-white dark:bg-slate-900',
     border: 'border-[#eef1f6] dark:border-slate-700',
     iconBg: 'bg-[#f8fafc] dark:bg-slate-800',
@@ -100,15 +100,15 @@ const TABS: { key: Tab; label: { en: string; ar: string } }[] = [
   { key: 'guests',    label: { en: 'Guests',        ar: 'الضيوف' } },
 ];
 
-function JourneyBadge({ result }: { result: Profile['journeyResult'] }) {
-  if (result === 'Passed')  return <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium"><Check className="w-3 h-3" />Passed</span>;
-  if (result === 'Failed')  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">Failed</span>;
-  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">Pending</span>;
+function JourneyBadge({ result, isAr }: { result: Profile['journeyResult']; isAr?: boolean }) {
+  if (result === 'Passed')  return <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium"><Check className="w-3 h-3" />{isAr ? 'اجتاز' : 'Passed'}</span>;
+  if (result === 'Failed')  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">{isAr ? 'فشل' : 'Failed'}</span>;
+  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">{isAr ? 'قيد الانتظار' : 'Pending'}</span>;
 }
 
-function RecordBadge({ type }: { type: Profile['type'] }) {
-  if (type === 'Customer') return <span className="px-3 py-0.5 rounded-full bg-[#eaf2ff] border border-[#aacbfc] text-[#0053cc] text-xs font-medium">Customer</span>;
-  return <span className="px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">Guest</span>;
+function RecordBadge({ type, isAr }: { type: Profile['type']; isAr?: boolean }) {
+  if (type === 'Customer') return <span className="px-3 py-0.5 rounded-full bg-[#eaf2ff] border border-[#aacbfc] text-[#0053cc] text-xs font-medium">{isAr ? 'عميل' : 'Customer'}</span>;
+  return <span className="px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">{isAr ? 'ضيف' : 'Guest'}</span>;
 }
 
 function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
@@ -123,9 +123,9 @@ function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
   );
 }
 
-function YesNoBadge({ value }: { value: boolean }) {
-  if (value) return <span className="px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium">Yes</span>;
-  return <span className="px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">No</span>;
+function YesNoBadge({ value, isAr }: { value: boolean; isAr?: boolean }) {
+  if (value) return <span className="px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium">{isAr ? 'نعم' : 'Yes'}</span>;
+  return <span className="px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">{isAr ? 'لا' : 'No'}</span>;
 }
 
 type SummaryCardStatus = 'Available' | 'Expired' | 'Failed' | 'Completed';
@@ -297,10 +297,10 @@ const JOURNEY_STEPS: JourneyStep[] = [
     checkpoints: [
       { labelEn: 'Offer selected',           labelAr: 'تم اختيار العرض',           status: 'Passed'      },
       { labelEn: 'Order created',            labelAr: 'تم إنشاء الطلب',            status: 'Passed'      },
-      { labelEn: 'OTP transmitted',          labelAr: 'تم إرسال OTP',              status: 'Passed'      },
+      { labelEn: 'OTP transmitted',          labelAr: 'تم إرسال رمز تأكيد الطلب',   status: 'Passed'      },
       {
         labelEn: 'Confirmation OTP verified',
-        labelAr: 'تم التحقق من OTP التأكيد',
+        labelAr: 'تم التحقق من رمز تأكيد الطلب',
         status: 'Paused',
         noteEn: 'OTP was sent and remains valid for 4 minutes.',
         noteAr: 'تم إرسال OTP ولا يزال صالحاً لمدة ٤ دقائق.',
@@ -308,8 +308,8 @@ const JOURNEY_STEPS: JourneyStep[] = [
         passedCount: 3,
         totalCount: 6,
       },
-      { labelEn: 'Order reviewed',           labelAr: 'مراجعة الطلب',              status: 'Not started' },
-      { labelEn: 'Order finalized',          labelAr: 'اكتمال الطلب',              status: 'Not started' },
+      { labelEn: 'Order reviewed',           labelAr: 'تم تأكيد الطلب',                    status: 'Not started' },
+      { labelEn: 'Order finalized',          labelAr: 'تم إرسال الطلب إلى مقدم التمويل', status: 'Not started' },
     ],
   },
 ];
@@ -963,7 +963,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
           <div className="flex items-center gap-2">
             <BarChart2 className="w-6 h-6 text-[#0063f5]" />
             <h1 className="text-[25px] font-semibold text-[#0063f5] leading-8">
-              {isAr ? 'نظام إدارة الملفات' : 'Customer profiling system'}
+              {isAr ? 'لوحة العمليات' : 'Customer profiling system'}
             </h1>
           </div>
           <button className="relative flex items-center gap-1 px-[14px] py-[10px] border border-[#d5d7da] rounded-lg bg-white text-[#414651] text-sm font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
@@ -1043,7 +1043,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
               <button className="relative flex items-center gap-[6px] px-4 py-[10px] border border-[#cdd4df] rounded-lg bg-white text-[#364152] text-base font-medium hover:bg-gray-50 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
                 <div aria-hidden className="absolute inset-0 rounded-lg pointer-events-none bg-white dark:bg-transparent" />
                 <FilterMixerIcon className="w-5 h-[14px] shrink-0" />
-                <span className="px-0.5">{isAr ? 'فلتر' : 'Filter'}</span>
+                <span className="px-0.5">{isAr ? 'التصنيف حسب' : 'Filter'}</span>
                 <ChevronDown className="w-5 h-5" />
                 <div className="absolute inset-0 rounded-lg pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
               </button>
@@ -1132,7 +1132,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     </td>
 
                     {/* Record type */}
-                    <td className="px-4 py-3"><RecordBadge type={p.type} /></td>
+                    <td className="px-4 py-3"><RecordBadge type={p.type} isAr={isAr} /></td>
 
                     {/* Current stage */}
                     <td className="px-4 py-3">
@@ -1140,7 +1140,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     </td>
 
                     {/* Journey result */}
-                    <td className="px-4 py-3"><JourneyBadge result={p.journeyResult} /></td>
+                    <td className="px-4 py-3"><JourneyBadge result={p.journeyResult} isAr={isAr} /></td>
 
                     {/* Assigned to */}
                     <td className="px-4 py-3">
@@ -1163,8 +1163,8 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     {/* SIMAH + MASDR (customers tab only) */}
                     {activeTab === 'customers' && (
                       <>
-                        <td className="px-4 py-3"><YesNoBadge value={p.simah} /></td>
-                        <td className="px-4 py-3"><YesNoBadge value={p.masdr} /></td>
+                        <td className="px-4 py-3"><YesNoBadge value={p.simah} isAr={isAr} /></td>
+                        <td className="px-4 py-3"><YesNoBadge value={p.masdr} isAr={isAr} /></td>
                       </>
                     )}
 
