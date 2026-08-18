@@ -1,22 +1,7 @@
 import Link from 'next/link';
 import TamawalLogo from '@/components/ui/TamawalLogo';
 
-const projects = [
-  {
-    id: 'pof',
-    name: 'Portal Auth Flow',
-    description: 'Manage and configure authentication flows for the portal.',
-    href: '/pof',
-    tag: 'POF',
-    accentColor: '#0D9488',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="12" cy="16" r="1.25" fill="currentColor"/>
-      </svg>
-    ),
-  },
+const featured = [
   {
     id: 'oms',
     name: 'Order Management',
@@ -29,6 +14,38 @@ const projects = [
         <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M9 12h6M9 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'cps',
+    name: 'Customer Profile System',
+    description: 'Customer profiling system — all profiles, customers, and guests with SIMAH/MASDR data.',
+    href: '/cps',
+    tag: 'CPS',
+    accentColor: '#0063F5',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+];
+
+const general = [
+  {
+    id: 'pof',
+    name: 'Portal Auth Flow',
+    description: 'Manage and configure authentication flows for the portal.',
+    href: '/pof',
+    tag: 'POF',
+    accentColor: '#0D9488',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="16" r="1.25" fill="currentColor"/>
       </svg>
     ),
   },
@@ -62,10 +79,10 @@ const projects = [
     ),
   },
   {
-    id: 'cps',
-    name: 'Customer Profile System',
+    id: 'cps-alternative',
+    name: 'CPS Alternative',
     description: 'View and manage customer profiles, credit scores, and account status.',
-    href: '/cps',
+    href: '/cps-alternative',
     tag: 'CPS',
     accentColor: '#059669',
     icon: (
@@ -75,21 +92,42 @@ const projects = [
       </svg>
     ),
   },
-  {
-    id: 'cps-official',
-    name: 'CPS Official',
-    description: 'Customer profiling system — all profiles, customers, and guests with SIMAH/MASDR data.',
-    href: '/cps-official',
-    tag: 'CPS',
-    accentColor: '#0063F5',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
 ];
+
+function ProjectCard({ project }: { project: typeof featured[number] }) {
+  return (
+    <Link
+      href={project.href}
+      className="group bg-white dark:bg-[#080d14] p-7 flex flex-col gap-6 hover:bg-[#f8fafc] dark:hover:bg-white/[0.02] transition-colors"
+    >
+      <div className="flex items-center justify-between">
+        <div
+          className="w-9 h-9 rounded-lg flex items-center justify-center text-white shrink-0"
+          style={{ backgroundColor: project.accentColor }}
+        >
+          {project.icon}
+        </div>
+        <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
+          {project.tag}
+        </span>
+      </div>
+      <div className="flex-1">
+        <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
+          {project.name}
+        </h2>
+        <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">
+          {project.description}
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5 text-xs font-medium text-[#9aa4b2] dark:text-white/25 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
+        Open
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+    </Link>
+  );
+}
 
 export default function LandingPage() {
   return (
@@ -122,47 +160,26 @@ export default function LandingPage() {
           </p>
         </section>
 
-        {/* Projects */}
+        {/* Featured */}
+        <section className="pt-12 pb-8 border-b border-[#eef1f6] dark:border-white/[0.06]">
+          <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
+            Featured
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#eef1f6] dark:bg-white/[0.06] border border-[#eef1f6] dark:border-white/[0.06] rounded-xl overflow-hidden">
+            {featured.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </section>
+
+        {/* General */}
         <section className="py-12">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
-            Select a project
+            General
           </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#eef1f6] dark:bg-white/[0.06] border border-[#eef1f6] dark:border-white/[0.06] rounded-xl overflow-hidden">
-            {projects.map((project) => (
-              <Link
-                key={project.id}
-                href={project.href}
-                className="group bg-white dark:bg-[#080d14] p-7 flex flex-col gap-6 hover:bg-[#f8fafc] dark:hover:bg-white/[0.02] transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white shrink-0"
-                    style={{ backgroundColor: project.accentColor }}
-                  >
-                    {project.icon}
-                  </div>
-                  <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
-                    {project.tag}
-                  </span>
-                </div>
-
-                <div className="flex-1">
-                  <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
-                    {project.name}
-                  </h2>
-                  <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs font-medium text-[#9aa4b2] dark:text-white/25 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
-                  Open
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </Link>
+            {general.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         </section>

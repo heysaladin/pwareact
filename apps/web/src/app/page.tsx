@@ -1,21 +1,7 @@
 import Link from 'next/link';
 import TamawalLogo from '../components/ui/TamawalLogo';
 
-const projects = [
-  {
-    id: 'web',
-    name: 'Landing',
-    description: 'The public-facing website for Tamawal — bilingual Arabic and English.',
-    href: '/landing',
-    tag: 'WEB',
-    accentColor: '#0063F5',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M3 12h18M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
+const featured = [
   {
     id: 'app',
     name: 'App',
@@ -30,6 +16,23 @@ const projects = [
       </svg>
     ),
   },
+  {
+    id: 'web',
+    name: 'Landing',
+    description: 'The public-facing website for Tamawal — bilingual Arabic and English.',
+    href: '/landing',
+    tag: 'WEB',
+    accentColor: '#0063F5',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 12h18M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+];
+
+const general = [
   {
     id: 'ceer',
     name: 'Ceer',
@@ -76,6 +79,41 @@ const projects = [
   },
 ];
 
+function ProjectCard({ project }: { project: typeof featured[number] }) {
+  return (
+    <Link
+      href={project.href}
+      className="group bg-white dark:bg-[#080d14] p-7 flex flex-col gap-6 hover:bg-[#f8fafc] dark:hover:bg-white/[0.02] transition-colors"
+    >
+      <div className="flex items-center justify-between">
+        <div
+          className="w-9 h-9 rounded-lg flex items-center justify-center text-white shrink-0"
+          style={{ backgroundColor: project.accentColor }}
+        >
+          {project.icon}
+        </div>
+        <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
+          {project.tag}
+        </span>
+      </div>
+      <div className="flex-1">
+        <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
+          {project.name}
+        </h2>
+        <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">
+          {project.description}
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5 text-xs font-medium text-[#9aa4b2] dark:text-white/25 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
+        Open
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+    </Link>
+  );
+}
+
 export default function HubPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#080d14] flex flex-col">
@@ -117,47 +155,26 @@ export default function HubPage() {
           </p>
         </section>
 
-        {/* Projects */}
+        {/* Featured */}
+        <section className="pt-12 pb-8 border-b border-[#eef1f6] dark:border-white/[0.06]">
+          <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
+            Featured
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#eef1f6] dark:bg-white/[0.06] border border-[#eef1f6] dark:border-white/[0.06] rounded-xl overflow-hidden">
+            {featured.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </section>
+
+        {/* General */}
         <section className="py-12 border-b border-[#eef1f6] dark:border-white/[0.06]">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
-            Select a project
+            General
           </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#eef1f6] dark:bg-white/[0.06] border border-[#eef1f6] dark:border-white/[0.06] rounded-xl overflow-hidden">
-            {projects.map((project) => (
-              <Link
-                key={project.id}
-                href={project.href}
-                className="group bg-white dark:bg-[#080d14] p-7 flex flex-col gap-6 hover:bg-[#f8fafc] dark:hover:bg-white/[0.02] transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white shrink-0"
-                    style={{ backgroundColor: project.accentColor }}
-                  >
-                    {project.icon}
-                  </div>
-                  <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
-                    {project.tag}
-                  </span>
-                </div>
-
-                <div className="flex-1">
-                  <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
-                    {project.name}
-                  </h2>
-                  <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs font-medium text-[#9aa4b2] dark:text-white/25 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
-                  Open
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </Link>
+            {general.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         </section>

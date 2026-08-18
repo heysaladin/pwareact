@@ -1,5 +1,5 @@
-import CustomersPage from '@/components/customers/CustomersPage';
+import CpsOfficialPage from '@/components/cps-official/CpsOfficialPage';
 
 export default function CpsPage() {
-  return <CustomersPage />;
+  return <CpsOfficialPage />;
 }
