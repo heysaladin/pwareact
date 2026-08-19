@@ -50,17 +50,16 @@ const general = [
     ),
   },
   {
-    id: 'ode',
-    name: 'Offer & Discount Engine',
-    description: 'Create and manage offers, discounts, and promotions across your platform.',
-    href: '/ode',
-    tag: 'ODE',
-    accentColor: '#7C3AED',
+    id: 'cps-alternative',
+    name: 'CPS Alternative',
+    description: 'View and manage customer profiles, credit scores, and account status.',
+    href: '/cps-alternative',
+    tag: 'CPS',
+    accentColor: '#059669',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -79,16 +78,17 @@ const general = [
     ),
   },
   {
-    id: 'cps-alternative',
-    name: 'CPS Alternative',
-    description: 'View and manage customer profiles, credit scores, and account status.',
-    href: '/cps-alternative',
-    tag: 'CPS',
-    accentColor: '#059669',
+    id: 'ode',
+    name: 'Offer & Discount Engine',
+    description: 'Create and manage offers, discounts, and promotions across your platform.',
+    href: '/ode',
+    tag: 'ODE',
+    accentColor: '#7C3AED',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -161,7 +161,7 @@ export default function LandingPage() {
         </section>
 
         {/* Featured */}
-        <section className="pt-12 pb-8 border-b border-[#eef1f6] dark:border-white/[0.06]">
+        <section className="pt-12 pb-8">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
             Featured
           </p>

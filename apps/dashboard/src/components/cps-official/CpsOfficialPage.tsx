@@ -616,10 +616,10 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
                 {ACTIVITY_LOG.map((item, i) => (
                   <div key={i} className={cn('flex items-center justify-between py-3', i > 0 && 'border-t border-[#edf0f5]')}>
                     <div className="flex flex-col gap-1">
-                      <span className="text-sm font-semibold text-black">{item.event}</span>
-                      <span className="text-xs text-[#697586]">{item.detail}</span>
+                      <span className="text-sm font-semibold text-black">{isAr ? item.eventAr : item.event}</span>
+                      <span className="text-xs text-[#697586]">{isAr ? item.detailAr : item.detail}</span>
                     </div>
-                    <span className="text-xs text-[#697586] whitespace-nowrap ms-4">{item.time}</span>
+                    <span className="text-xs text-[#697586] whitespace-nowrap ms-4">{isAr ? item.timeAr : item.time}</span>
                   </div>
                 ))}
               </div>
@@ -859,10 +859,10 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
                 {ACTIVITY_LOG.map((item, i) => (
                   <div key={i} className={cn('flex items-center justify-between py-3', i > 0 && 'border-t border-[#edf0f5]')}>
                     <div className="flex flex-col gap-1">
-                      <span className="text-sm font-semibold text-black">{item.event}</span>
-                      <span className="text-xs text-[#697586]">{item.detail}</span>
+                      <span className="text-sm font-semibold text-black">{isAr ? item.eventAr : item.event}</span>
+                      <span className="text-xs text-[#697586]">{isAr ? item.detailAr : item.detail}</span>
                     </div>
-                    <span className="text-xs text-[#697586] whitespace-nowrap ms-4">{item.time}</span>
+                    <span className="text-xs text-[#697586] whitespace-nowrap ms-4">{isAr ? item.timeAr : item.time}</span>
                   </div>
                 ))}
               </div>
@@ -1040,12 +1040,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                 )}
               </div>
 
-              <button className="relative flex items-center gap-[6px] px-4 py-[10px] border border-[#cdd4df] rounded-lg bg-white text-[#364152] text-base font-medium hover:bg-gray-50 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
-                <div aria-hidden className="absolute inset-0 rounded-lg pointer-events-none bg-white dark:bg-transparent" />
-                <FilterMixerIcon className="w-5 h-[14px] shrink-0" />
-                <span className="px-0.5">{isAr ? 'التصنيف حسب' : 'Filter'}</span>
-                <ChevronDown className="w-5 h-5" />
-                <div className="absolute inset-0 rounded-lg pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+              <button className="relative flex items-center justify-center gap-[6px] px-4 py-[10px] min-w-[120px] overflow-clip border border-[#cdd4df] rounded-[8px] text-[#364152] text-base font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:border-slate-700 dark:text-slate-200">
+                <div aria-hidden className="absolute inset-0 rounded-[8px] pointer-events-none bg-white dark:bg-slate-900" />
+                <FilterMixerIcon className="w-5 h-5 shrink-0 relative" />
+                <span className="px-0.5 relative">{isAr ? 'التصنيف حسب' : 'Filter'}</span>
+                <ChevronDown className="w-5 h-5 relative" aria-hidden />
+                <div className="absolute inset-0 rounded-[8px] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
               </button>
             </div>
           </div>

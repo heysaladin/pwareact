@@ -11,6 +11,7 @@ const t = {
     langBtn: 'عربي',
     orders: 'Orders (Home)',
     offers: 'Offers & Discount Engine',
+    cps: 'Customer Profiling',
     viewProfile: 'View Profile',
     profileSettings: 'Profile Settings',
     logout: 'Logout',
@@ -19,6 +20,7 @@ const t = {
     langBtn: 'En',
     orders: 'إدارة الطلبات',
     offers: 'محرك العروض والخصومات',
+    cps: 'Customer Profiling',
     viewProfile: 'عرض الملف الشخصي',
     profileSettings: 'إعدادات الملف الشخصي',
     logout: 'تسجيل الخروج',
@@ -94,6 +96,13 @@ export default function Topbar() {
                 <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-[13px] text-[#363b44] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800">
                   <Settings2 className="w-4 h-4 text-[#667085] dark:text-slate-400 shrink-0" />
                   {i18n.offers}
+                </button>
+                <button
+                  onClick={() => router.push('/cps')}
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-[13px] text-[#363b44] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800"
+                >
+                  <Briefcase className="w-4 h-4 text-[#667085] dark:text-slate-400 shrink-0" />
+                  {i18n.cps}
                 </button>
               </div>
 

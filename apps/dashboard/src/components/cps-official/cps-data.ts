@@ -82,10 +82,10 @@ export const PROFILES: Profile[] = [
 ];
 
 export const ACTIVITY_LOG = [
-  { event: 'Mobile app opened',     detail: 'iPhone · Riyadh · Existing trusted device', time: 'Today, 09:42'  },
-  { event: 'Profile data reviewed', detail: 'Admin portal · Customer Success',            time: 'Jul 26, 15:12' },
-  { event: 'Profile data reviewed', detail: 'Admin portal · Customer Success',            time: 'Jul 26, 15:12' },
-  { event: 'Profile data reviewed', detail: 'Admin portal · Customer Success',            time: 'Jul 26, 15:12' },
+  { event: 'Mobile app opened',     eventAr: 'فُتح التطبيق',           detail: 'iPhone · Riyadh · Existing trusted device', detailAr: 'iPhone · الرياض · جهاز موثوق',     time: 'Today, 09:42',  timeAr: 'اليوم، 09:42'    },
+  { event: 'Profile data reviewed', eventAr: 'تمت مراجعة ملف العميل', detail: 'Admin portal · Customer Success',            detailAr: 'بوابة الإدارة · خدمة العملاء',    time: 'Jul 26, 15:12', timeAr: '٢٦ يوليو، 15:12' },
+  { event: 'Profile data reviewed', eventAr: 'تمت مراجعة ملف العميل', detail: 'Admin portal · Customer Success',            detailAr: 'بوابة الإدارة · خدمة العملاء',    time: 'Jul 26, 15:12', timeAr: '٢٦ يوليو، 15:12' },
+  { event: 'Profile data reviewed', eventAr: 'تمت مراجعة ملف العميل', detail: 'Admin portal · Customer Success',            detailAr: 'بوابة الإدارة · خدمة العملاء',    time: 'Jul 26, 15:12', timeAr: '٢٦ يوليو، 15:12' },
 ];
 
 export type CheckpointStatus  = 'Passed' | 'Paused' | 'Failed' | 'Not started';
@@ -95,7 +95,7 @@ export type Checkpoint = {
   labelEn: string;
   labelAr: string;
   status: CheckpointStatus;
-  tag: 'Mandatory' | 'System';
+  tag: 'Mandatory' | 'System' | 'Conditional';
   timestamp?: string;
   noteEn?: string;
   noteAr?: string;
@@ -138,7 +138,21 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     checkpoints: [
       { labelEn: 'Identity verified',    labelAr: 'تم التحقق من الهوية',  status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:25', details: { source: 'Nafath', attempts: 1, waitingOn: '—', duration: '2m 14s', reference: 'S-1042', businessOutcome: 'Identity confirmed' } },
       { labelEn: 'Mobile OTP confirmed', labelAr: 'تم تأكيد OTP الجوال', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:26', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '43s', reference: 'S-1042', businessOutcome: 'OTP verified' } },
-      { labelEn: 'Account activated',    labelAr: 'تم تفعيل الحساب',      status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:27', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Account active' } },
+      { labelEn: 'Account activated',    labelAr: 'تم تفعيل الحساب',     status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:27', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Account active' } },
+    ],
+  },
+  {
+    id: 'payment',
+    labelEn: 'Payment',
+    labelAr: 'الدفع',
+    status: 'Passed',
+    subLabelEn: '4 checkpoints',
+    subLabelAr: '٤ نقاط تحقق',
+    checkpoints: [
+      { labelEn: 'Payment method selected', labelAr: 'تم اختيار طريقة الدفع', status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:34', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '45s', reference: 'S-1042', businessOutcome: 'Method locked' } },
+      { labelEn: 'Payment initiated',       labelAr: 'تم بدء الدفع',           status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:35', details: { source: 'Payment gateway', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Payment sent' } },
+      { labelEn: 'Payment confirmed',       labelAr: 'تم تأكيد الدفع',         status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:35', details: { source: 'Payment gateway', attempts: 1, waitingOn: '—', duration: '2s', reference: 'S-1042', businessOutcome: 'Funds received' } },
+      { labelEn: 'Receipt generated',       labelAr: 'تم إنشاء الإيصال',       status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:35', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Receipt sent' } },
     ],
   },
   {
@@ -149,47 +163,86 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     subLabelEn: '2 checkpoints',
     subLabelAr: '٢ نقطتا تحقق',
     checkpoints: [
-      { labelEn: 'Terms & conditions shown',  labelAr: 'تم عرض الشروط والأحكام', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:28', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Terms displayed' } },
-      { labelEn: 'Customer agreement signed', labelAr: 'تم توقيع الاتفاقية',      status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:28', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '18s', reference: 'S-1042', businessOutcome: 'Agreement signed' } },
+      { labelEn: 'Terms & conditions shown',  labelAr: 'تم عرض الشروط والأحكام', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:36', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Terms displayed' } },
+      { labelEn: 'Customer agreement signed', labelAr: 'تم توقيع الاتفاقية',     status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:37', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '18s', reference: 'S-1042', businessOutcome: 'Agreement signed' } },
+    ],
+  },
+  {
+    id: 'data-validation',
+    labelEn: 'Data validation',
+    labelAr: 'التحقق من البيانات',
+    status: 'Paused',
+    subLabelEn: '15 checkpoints · 3 sub-steps',
+    subLabelAr: '١٥ نقطة تحقق · ٣ مراحل فرعية',
+    waitingSince: 'Aug 12 · 09:52',
+    waitingOn: 'SIMAH',
+    checkpoints: [
+      // ── Report validity (0–2) ──────────────────────────────────────────────
+      { labelEn: 'MASDAR report valid',          labelAr: 'تقرير MASDAR صالح',              status: 'Passed',      tag: 'Mandatory',   timestamp: 'Aug 12 · 09:44', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '1s', reference: 'MSD-10042', businessOutcome: 'Report valid' } },
+      { labelEn: 'SIMAH report valid',           labelAr: 'تقرير SIMAH صالح',               status: 'Passed',      tag: 'Mandatory',   timestamp: 'Aug 12 · 09:45', details: { source: 'SIMAH', attempts: 1, waitingOn: '—', duration: '1s', reference: 'SMH-62019', businessOutcome: 'Report valid' } },
+      { labelEn: 'Required action complete',     labelAr: 'اكتملت الإجراءات المطلوبة',       status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:45', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Pre-checks cleared' } },
+      // ── MASDR & employment (3–8) ───────────────────────────────────────────
+      { labelEn: 'MASDAR request sent',          labelAr: 'تم إرسال طلب MASDAR',            status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:46', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'MSD-10042', businessOutcome: 'Request sent' } },
+      { labelEn: 'MASDAR response received',     labelAr: 'تم استلام رد MASDAR',             status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:47', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '1s', reference: 'MSD-10042', businessOutcome: 'Response received' } },
+      { labelEn: 'Primary employment validated', labelAr: 'تم التحقق من التوظيف الأساسي',   status: 'Passed',      tag: 'Conditional', timestamp: 'Aug 12 · 09:47', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'MSD-10042', businessOutcome: 'Employment confirmed' } },
+      { labelEn: 'Manual entry required',        labelAr: 'يلزم الإدخال اليدوي',             status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:48', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Manual step triggered' } },
+      { labelEn: 'Manual employment data',       labelAr: 'بيانات التوظيف اليدوية',          status: 'Passed',      tag: 'Conditional', timestamp: 'Aug 12 · 09:49', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Manual data recorded' } },
+      { labelEn: 'Employment snapshot captured', labelAr: 'تم التقاط لقطة التوظيف',          status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:49', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Snapshot stored' } },
+      // ── SIMAH credit data (9–14) ───────────────────────────────────────────
+      { labelEn: 'SIMAH request initiated',               labelAr: 'تم إرسال طلب SIMAH',               status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:50', details: { source: 'SIMAH', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Request sent' } },
+      {
+        labelEn: 'SIMAH response unavailable',
+        labelAr: 'استجابة SIMAH غير متاحة',
+        status: 'Paused',
+        tag: 'Mandatory',
+        timestamp: 'Aug 12 · 09:52',
+        noteEn: 'SIMAH response is unavailable. Automatic retry scheduled.',
+        noteAr: 'استجابة SIMAH غير متاحة. تمت جدولة إعادة المحاولة تلقائيًا.',
+        details: { source: 'SIMAH', attempts: 1, waitingOn: 'SIMAH', duration: '—', reference: 'SMH-62019', businessOutcome: 'Technical unavailability · No eligibility result' },
+      },
+      { labelEn: 'Customer-facing error displayed',       labelAr: 'تم عرض رسالة الخطأ للعميل',        status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:52', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Error shown to customer' } },
+      { labelEn: 'Automatic SIMAH retry scheduled',       labelAr: 'تمت جدولة إعادة محاولة SIMAH',     status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:53', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Retry queued' } },
+      { labelEn: 'Customer qualification notification',   labelAr: 'إشعار تأهيل العميل',               status: 'Not started', tag: 'Conditional' },
+      { labelEn: 'SIMAH result linked to Engine request', labelAr: 'ربط نتيجة SIMAH بطلب المحرك',      status: 'Not started', tag: 'System' },
     ],
   },
   {
     id: 'eligibility',
-    labelEn: 'Eligibility',
-    labelAr: 'الأهلية',
-    status: 'Passed',
-    subLabelEn: '3 checkpoints',
-    subLabelAr: '٣ نقاط تحقق',
+    labelEn: 'Eligibility & Decision Engine',
+    labelAr: 'الأهلية ومحرك القرار',
+    status: 'Not started',
+    subLabelEn: '10 checkpoints',
+    subLabelAr: '١٠ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'SIMAH report fetched',  labelAr: 'تم جلب تقرير SIMAH',       status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29', details: { source: 'SIMAH', attempts: 1, waitingOn: '—', duration: '3s', reference: 'S-1042', businessOutcome: 'Report received' } },
-      { labelEn: 'MASDR data validated',  labelAr: 'تم التحقق من بيانات MASDR', status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:29', details: { source: 'MASDR', attempts: 1, waitingOn: '—', duration: '4s', reference: 'S-1042', businessOutcome: 'Data validated' } },
-      { labelEn: 'Eligibility decision',  labelAr: 'قرار الأهلية',               status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'Engine', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Eligible' } },
+      { labelEn: 'Credit score threshold met',    labelAr: 'استيفاء حد درجة الائتمان',    status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Income ratio validated',         labelAr: 'التحقق من نسبة الدخل',         status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Debt burden calculated',         labelAr: 'حساب عبء الديون',               status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Employment stability checked',   labelAr: 'التحقق من استقرار التوظيف',     status: 'Not started', tag: 'System'      },
+      { labelEn: 'Age eligibility verified',       labelAr: 'التحقق من أهلية العمر',          status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Nationality criteria met',       labelAr: 'استيفاء معايير الجنسية',          status: 'Not started', tag: 'System'      },
+      { labelEn: 'Financing amount validated',     labelAr: 'التحقق من مبلغ التمويل',          status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Down payment confirmed',         labelAr: 'تأكيد الدفعة المقدمة',            status: 'Not started', tag: 'Conditional' },
+      { labelEn: 'Engine decision requested',      labelAr: 'طلب قرار المحرك',                status: 'Not started', tag: 'System'      },
+      { labelEn: 'Eligibility result issued',      labelAr: 'إصدار نتيجة الأهلية',             status: 'Not started', tag: 'Mandatory'   },
     ],
   },
   {
     id: 'order-submission',
     labelEn: 'Order submission',
     labelAr: 'تقديم الطلب',
-    status: 'Paused',
-    subLabelEn: '6 checkpoints',
-    subLabelAr: '٦ نقاط تحقق',
-    waitingSince: 'Jul 11 · 10:31',
-    waitingOn: 'Customer',
+    status: 'Not started',
+    subLabelEn: '9 checkpoints',
+    subLabelAr: '٩ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'Offer selected',                 labelAr: 'تم اختيار العرض',            status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '8m 12s', reference: 'O-8821', businessOutcome: 'Offer locked' } },
-      { labelEn: 'Order created',                  labelAr: 'تم إنشاء الطلب',             status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:30', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'Order draft' } },
-      { labelEn: 'Confirmation OTP sent',          labelAr: 'تم إرسال رمز تأكيد الطلب',   status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 10:31', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'O-8821', businessOutcome: 'OTP dispatched' } },
-      {
-        labelEn: 'Order confirmation OTP verified',
-        labelAr: 'تم التحقق من رمز تأكيد الطلب',
-        status: 'Paused',
-        tag: 'Mandatory',
-        noteEn: 'OTP was sent and remains valid for 4 minutes.',
-        noteAr: 'تم إرسال OTP ولا يزال صالحاً لمدة ٤ دقائق.',
-        details: { source: 'OTP service', attempts: 1, waitingOn: 'Customer', duration: '—', reference: 'O-8821', businessOutcome: '—' },
-      },
-      { labelEn: 'Order confirmed',             labelAr: 'تم تأكيد الطلب',           status: 'Not started', tag: 'Mandatory' },
-      { labelEn: 'Order submitted to provider', labelAr: 'تم إرسال الطلب للمزود',    status: 'Not started', tag: 'System' },
+      { labelEn: 'Offer presented to customer', labelAr: 'تقديم العرض للعميل',       status: 'Not started', tag: 'System'      },
+      { labelEn: 'Offer selected',              labelAr: 'تم اختيار العرض',           status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Terms reviewed',              labelAr: 'مراجعة الشروط',              status: 'Not started', tag: 'System'      },
+      { labelEn: 'OTP confirmed',               labelAr: 'تأكيد OTP',                 status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'IVR call completed',          labelAr: 'اكتمال مكالمة IVR',          status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Order created',               labelAr: 'تم إنشاء الطلب',             status: 'Not started', tag: 'System'      },
+      { labelEn: 'Order confirmed',             labelAr: 'تم تأكيد الطلب',             status: 'Not started', tag: 'Mandatory'   },
+      { labelEn: 'Provider notified',           labelAr: 'تم إبلاغ المزود',             status: 'Not started', tag: 'System'      },
+      { labelEn: 'Order submitted',             labelAr: 'تم تقديم الطلب',              status: 'Not started', tag: 'Mandatory'   },
     ],
   },
 ];
