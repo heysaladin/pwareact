@@ -17,6 +17,9 @@ import {
   Gift, Shield, Receipt, FileSearch, ClipboardMinus, ArrowUpCircle,
   File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2,
 } from 'lucide-react';
+import ViewSwitcherModal from './ViewSwitcherModal';
+import InternalSidebar from './InternalSidebar';
+import ProviderSidebar from './ProviderSidebar';
 
 function FilterMixerIcon({ className }: { className?: string }) {
   return (
@@ -930,12 +933,13 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
   );
 }
 
-export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-official' }: { forceLang?: 'en' | 'ar'; detailBasePath?: string } = {}) {
+export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-official', isProvider }: { forceLang?: 'en' | 'ar'; detailBasePath?: string; isProvider?: boolean } = {}) {
   const { lang } = useLang();
   const isAr = (forceLang ?? lang) === 'ar';
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [search, setSearch] = useState('');
+  const [showSwitcher, setShowSwitcher] = useState(false);
 
   const filtered = PROFILES.filter(p => {
     if (activeTab === 'customers' && p.type !== 'Customer') return false;
@@ -953,8 +957,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
   });
 
   return (
-    <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950 relative" dir={isAr ? 'rtl' : 'ltr'}>
-      <Topbar />
+    <div className="h-screen flex flex-row dark:bg-slate-950 relative" dir={isAr ? 'rtl' : 'ltr'}>
+      {isProvider ? <ProviderSidebar /> : <InternalSidebar />}
+
+      <div className="flex flex-col flex-1 min-w-0 bg-[#f8fafc] dark:bg-slate-950">
+      <Topbar onProfileClick={() => setShowSwitcher(true)} isProvider={isProvider} hasSidebar />
+      {showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
 
       <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0 overflow-y-auto">
 
@@ -977,7 +985,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
 
         {/* KPIs */}
         <div className="flex flex-wrap gap-2 shrink-0">
-          {kpis.map((kpi) => {
+          {(isProvider ? kpis.slice(0, 3) : kpis).map((kpi) => {
             const Icon = kpi.icon;
             return (
               <div key={kpi.label.en} className={cn('flex flex-1 gap-6 items-start min-w-[220px] max-w-[350px] p-2.5 rounded-lg border', kpi.bg, kpi.border)}>
@@ -1067,10 +1075,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                   <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[120px]">
                     {isAr ? 'نتيجة الرحلة' : 'Journey result'}
                   </th>
-                  <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[180px]">
-                    {isAr ? 'المسؤول' : 'Assigned to'}
-                  </th>
-                  {activeTab === 'customers' && (
+                  {!isProvider && (
+                    <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[180px]">
+                      {isAr ? 'المسؤول' : 'Assigned to'}
+                    </th>
+                  )}
+                  {!isProvider && activeTab === 'customers' && (
                     <>
                       <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[80px]">SIMAH</th>
                       <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[80px]">MASDR</th>
@@ -1079,7 +1089,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                   <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[180px]">
                     {isAr ? 'تاريخ الانضمام' : 'Joined date'}
                   </th>
-                  {activeTab === 'customers' && (
+                  {!isProvider && activeTab === 'customers' && (
                     <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[100px]">
                       {isAr ? 'عدد الطلبات' : 'Order count'}
                     </th>
@@ -1143,25 +1153,27 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     <td className="px-4 py-3"><JourneyBadge result={p.journeyResult} isAr={isAr} /></td>
 
                     {/* Assigned to */}
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#bbd5fb] border border-white dark:border-slate-800 flex items-center justify-center text-xs font-semibold text-[#0063f5] shrink-0">
-                          {p.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
-                            {isAr ? p.assignedNameAr : p.assignedName}
-                          </span>
-                          <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
-                            <Briefcase className="w-3 h-3 shrink-0" />
-                            <span>{p.assignedRole}</span>
+                    {!isProvider && (
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-[#bbd5fb] border border-white dark:border-slate-800 flex items-center justify-center text-xs font-semibold text-[#0063f5] shrink-0">
+                            {p.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
+                              {isAr ? p.assignedNameAr : p.assignedName}
+                            </span>
+                            <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                              <Briefcase className="w-3 h-3 shrink-0" />
+                              <span>{p.assignedRole}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
+                    )}
 
-                    {/* SIMAH + MASDR (customers tab only) */}
-                    {activeTab === 'customers' && (
+                    {/* SIMAH + MASDR (customers tab only, internal only) */}
+                    {!isProvider && activeTab === 'customers' && (
                       <>
                         <td className="px-4 py-3"><YesNoBadge value={p.simah} isAr={isAr} /></td>
                         <td className="px-4 py-3"><YesNoBadge value={p.masdr} isAr={isAr} /></td>
@@ -1176,8 +1188,8 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       </div>
                     </td>
 
-                    {/* Order count (customers tab only) */}
-                    {activeTab === 'customers' && (
+                    {/* Order count (customers tab only, internal only) */}
+                    {!isProvider && activeTab === 'customers' && (
                       <td className="px-4 py-3">
                         <span className="text-sm font-medium text-[#121a26] dark:text-slate-100">{p.orderCount}</span>
                       </td>
@@ -1211,7 +1223,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
           </CardFooterSlot>
         </Card>
       </main>
-
+      </div>
     </div>
   );
 }

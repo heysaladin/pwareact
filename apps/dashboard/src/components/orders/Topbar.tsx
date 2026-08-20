@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { Bell, ChevronDown, ChevronUp, Briefcase, Settings2 } from 'lucide-react';
+import { Bell, ChevronDown, ChevronUp, ChevronRight, Briefcase, Settings2 } from 'lucide-react';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -25,7 +25,7 @@ const t = {
   },
 } as const;
 
-export default function Topbar() {
+export default function Topbar({ onProfileClick, isProvider, hasSidebar }: { onProfileClick?: () => void; isProvider?: boolean; hasSidebar?: boolean } = {}) {
   const { lang, toggle: toggleLang } = useLang();
   const i18n = t[lang];
   const [open, setOpen] = useState(false);
@@ -44,7 +44,13 @@ export default function Topbar() {
 
   return (
     <header className="bg-white border-b border-[#e2e7e9] flex items-center justify-between px-6 py-4 h-[66px] shrink-0 dark:bg-slate-950 dark:border-slate-800">
-      <Image src="/logo.svg" alt="Tamawal" width={119} height={35} priority />
+      {hasSidebar ? (
+        <button className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-[#667085] dark:text-slate-400">
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      ) : (
+        <Image src="/logo.svg" alt="Tamawal" width={119} height={35} priority />
+      )}
 
       <div className="flex items-center gap-4">
         <button
@@ -63,17 +69,21 @@ export default function Topbar() {
 
         <div className="relative" ref={dropdownRef}>
           <button
-            onClick={() => setOpen(v => !v)}
+            onClick={() => onProfileClick ? onProfileClick() : setOpen(v => !v)}
             className="flex items-center gap-1 rounded-lg px-1 py-0.5 hover:bg-gray-50 dark:hover:bg-slate-800"
           >
             <div className="flex items-center gap-2">
-              <div className="flex items-center -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-[#e2e7e9] border border-white z-10 flex items-center justify-center text-xs font-semibold text-[#4b5565] dark:bg-slate-800 dark:border-slate-950 dark:text-slate-200">MM</div>
+              {isProvider ? (
                 <div className="w-8 h-8 rounded-full bg-[#bbd5fb] border border-white flex items-center justify-center text-xs font-semibold text-[#0063f5] dark:border-slate-950">AB</div>
-              </div>
+              ) : (
+                <div className="flex items-center -space-x-2">
+                  <div className="w-8 h-8 rounded-full bg-[#e2e7e9] border border-white z-10 flex items-center justify-center text-xs font-semibold text-[#4b5565] dark:bg-slate-800 dark:border-slate-950 dark:text-slate-200">MM</div>
+                  <div className="w-8 h-8 rounded-full bg-[#bbd5fb] border border-white flex items-center justify-center text-xs font-semibold text-[#0063f5] dark:border-slate-950">AB</div>
+                </div>
+              )}
               <div className="flex flex-col">
-                <span className="text-[#363b44] text-[14px] font-semibold leading-tight dark:text-slate-100">Mohammed Mahdi</span>
-                <span className="text-[#667085] text-[10px] leading-tight dark:text-slate-400">Alinma Bank</span>
+                <span className="text-[#363b44] text-[14px] font-semibold leading-tight dark:text-slate-100">{isProvider ? 'Abdullah Ayyad' : 'Mohammed Mahdi'}</span>
+                <span className="text-[#667085] text-[10px] leading-tight dark:text-slate-400">{isProvider ? 'abuayyad@tamawal.sa' : 'Alinma Bank'}</span>
               </div>
             </div>
             <div className="flex items-center justify-center w-6 h-6 rounded-full p-1">
