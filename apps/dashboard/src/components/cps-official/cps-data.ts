@@ -95,7 +95,11 @@ export type Checkpoint = {
   labelEn: string;
   labelAr: string;
   status: CheckpointStatus;
+<<<<<<< HEAD
   tag: 'Mandatory' | 'System' | 'Conditional';
+=======
+  tag: 'Mandatory' | 'System' | 'Optional';
+>>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
   timestamp?: string;
   noteEn?: string;
   noteAr?: string;
@@ -123,9 +127,11 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     subLabelEn: '4 guest stages · 3 checkpoints',
     subLabelAr: '٤ مراحل ضيف · ٣ نقاط تحقق',
     checkpoints: [
-      { labelEn: 'Guest record found',      labelAr: 'تم العثور على سجل الضيف',   status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:20', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Guest identified' } },
-      { labelEn: 'Interest data captured',  labelAr: 'تم تسجيل بيانات الاهتمام', status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:21', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '1m 02s', reference: 'S-1042', businessOutcome: 'Interest recorded' } },
-      { labelEn: 'Guest session validated', labelAr: 'تم التحقق من جلسة الضيف',  status: 'Passed', tag: 'System',    timestamp: 'Jul 11 · 10:22', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1042', businessOutcome: 'Session valid' } },
+      { labelEn: 'Mobile number entered',     labelAr: 'تم إدخال رقم الجوال',         status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: '+966 55 214 8...', businessOutcome: '—' } },
+      { labelEn: 'Registration OTP verified', labelAr: 'تم التحقق من رمز التسجيل',    status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'SMS gateway', attempts: 1, waitingOn: '—', duration: '43s', reference: 'S-1108', businessOutcome: 'OTP verified' } },
+      { labelEn: 'Guest PIN created',         labelAr: 'تم إنشاء رمز الضيف',           status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN set' } },
+      { labelEn: 'Guest PIN confirmed',        labelAr: 'تم تأكيد رمز الضيف',          status: 'Passed', tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN confirmed' } },
+      { labelEn: 'Optional profile details',  labelAr: 'تفاصيل الملف الشخصي الاختيارية', status: 'Passed', tag: 'Optional', timestamp: 'Jul 11 · 10:29', noteEn: 'Name, gender, email and date of birth added voluntarily', noteAr: 'تمت إضافة الاسم والجنس والبريد الإلكتروني وتاريخ الميلاد طوعاً', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Profile enriched' } },
     ],
   },
   {
@@ -157,8 +163,8 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   },
   {
     id: 'disclosure',
-    labelEn: 'Disclosure',
-    labelAr: 'الإفصاح',
+    labelEn: 'Payment',
+    labelAr: 'الدفع',
     status: 'Passed',
     subLabelEn: '2 checkpoints',
     subLabelAr: '٢ نقطتا تحقق',
@@ -208,11 +214,19 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   },
   {
     id: 'eligibility',
+<<<<<<< HEAD
     labelEn: 'Eligibility & Decision Engine',
     labelAr: 'الأهلية ومحرك القرار',
     status: 'Not started',
     subLabelEn: '10 checkpoints',
     subLabelAr: '١٠ نقاط تحقق',
+=======
+    labelEn: 'Disclosure',
+    labelAr: 'الإفصاح',
+    status: 'Passed',
+    subLabelEn: '3 checkpoints',
+    subLabelAr: '٣ نقاط تحقق',
+>>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
     checkpoints: [
       { labelEn: 'Credit score threshold met',    labelAr: 'استيفاء حد درجة الائتمان',    status: 'Not started', tag: 'Mandatory'   },
       { labelEn: 'Income ratio validated',         labelAr: 'التحقق من نسبة الدخل',         status: 'Not started', tag: 'Mandatory'   },
@@ -228,11 +242,21 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   },
   {
     id: 'order-submission',
+<<<<<<< HEAD
     labelEn: 'Order submission',
     labelAr: 'تقديم الطلب',
     status: 'Not started',
     subLabelEn: '9 checkpoints',
     subLabelAr: '٩ نقاط تحقق',
+=======
+    labelEn: 'Data Validation',
+    labelAr: 'التحقق من البيانات',
+    status: 'Paused',
+    subLabelEn: '6 checkpoints',
+    subLabelAr: '٦ نقاط تحقق',
+    waitingSince: 'Jul 11 · 10:31',
+    waitingOn: 'Customer',
+>>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
     checkpoints: [
       { labelEn: 'Offer presented to customer', labelAr: 'تقديم العرض للعميل',       status: 'Not started', tag: 'System'      },
       { labelEn: 'Offer selected',              labelAr: 'تم اختيار العرض',           status: 'Not started', tag: 'Mandatory'   },

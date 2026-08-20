@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="13.3333" height="13.3333" viewBox="0 0 13.3333 13.3333" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path id="Icon" d="M0.833333 6.66667H12.5M6.66667 12.5L12.5 6.66667L6.66667 0.833333" stroke="#0063F5" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+=======
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.16699 10.0013H15.8337M10.0003 15.8346L15.8337 10.0013L10.0003 4.16797" stroke="#0063F5" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+>>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
 </svg>
