@@ -210,8 +210,8 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   },
   {
     id: 'eligibility',
-    labelEn: 'Disclosure',
-    labelAr: 'الإفصاح',
+    labelEn: 'Eligibility',
+    labelAr: 'الأهلية',
     status: 'Passed',
     subLabelEn: '3 checkpoints',
     subLabelAr: '٣ نقاط تحقق',
@@ -230,8 +230,8 @@ export const JOURNEY_STEPS: JourneyStep[] = [
   },
   {
     id: 'order-submission',
-    labelEn: 'Data Validation',
-    labelAr: 'التحقق من البيانات',
+    labelEn: 'Order submission',
+    labelAr: 'تقديم الطلب',
     status: 'Paused',
     subLabelEn: '6 checkpoints',
     subLabelAr: '٦ نقاط تحقق',
@@ -253,7 +253,7 @@ export const JOURNEY_STEPS: JourneyStep[] = [
 
 // ─── Guest journey ────────────────────────────────────────────────────────────
 
-export type GuestJourneyStep = {
+export type SubJourney = {
   id: string;
   labelEn: string;
   labelAr: string;
@@ -263,48 +263,201 @@ export type GuestJourneyStep = {
   checkpoints: Checkpoint[];
 };
 
+export type GuestJourneyStep = {
+  id: string;
+  labelEn: string;
+  labelAr: string;
+  overlineEn: string;
+  overlineAr: string;
+  status: JourneyStepStatus;
+  checkpoints: Checkpoint[];
+  subJourneys?: SubJourney[];
+};
+
 export const GUEST_JOURNEY_STEPS: GuestJourneyStep[] = [
   {
-    id: 'guest-registration',
-    labelEn: 'Guest registration',
-    labelAr: 'تسجيل الضيف',
-    overlineEn: 'Account access',
-    overlineAr: 'الوصول إلى الحساب',
-    status: 'Passed',
-    checkpoints: [
-      { labelEn: 'Mobile number entered',     labelAr: 'تم إدخال رقم الجوال',              status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'Saudi mobile format validated',            noteAr: 'تم التحقق من تنسيق الجوال السعودي',    details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—',    reference: 'O-8821', businessOutcome: '—'            } },
-      { labelEn: 'Registration OTP verified', labelAr: 'تم التحقق من رمز التسجيل',         status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'Verified on the first attempt',            noteAr: 'تم التحقق في المحاولة الأولى',         details: { source: 'SMS gateway', attempts: 1, waitingOn: '—',      duration: '43s',  reference: 'S-1108', businessOutcome: 'OTP verified' } },
-      { labelEn: 'Guest PIN created',         labelAr: 'تم إنشاء رمز الضيف',               status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN policy passed',                        noteAr: 'اجتاز سياسة PIN',                      details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN set'      } },
-      { labelEn: 'Guest PIN confirmed',       labelAr: 'تم تأكيد رمز الضيف',               status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN confirmation matched',                 noteAr: 'تطابقت تأكيد PIN',                     details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN confirmed' } },
-      { labelEn: 'Optional profile details',  labelAr: 'تفاصيل الملف الشخصي الاختيارية',  status: 'Not started', tag: 'Optional',                               noteEn: 'Skipped without blocking the guest journey', noteAr: 'تم التخطي دون إعاقة رحلة الضيف' },
+    id: 'created-as-guest',
+    labelEn: 'Created as Guest',
+    labelAr: 'تم الإنشاء كضيف',
+    overlineEn: 'Preserved history',
+    overlineAr: 'سجل محفوظ',
+    status: 'Paused',
+    checkpoints: [],
+    subJourneys: [
+      {
+        id: 'guest-registration',
+        labelEn: 'Guest registration',
+        labelAr: 'تسجيل الضيف',
+        overlineEn: 'Account access',
+        overlineAr: 'الوصول إلى الحساب',
+        status: 'Passed',
+        checkpoints: [
+          { labelEn: 'Mobile number entered',     labelAr: 'تم إدخال رقم الجوال',             status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'Saudi mobile format validated',               noteAr: 'تم التحقق من تنسيق الجوال السعودي', details: { source: 'Mobile app',  attempts: 1, waitingOn: 'No one', duration: '—',    reference: 'O-8821', businessOutcome: '—'            } },
+          { labelEn: 'Registration OTP verified', labelAr: 'تم التحقق من رمز التسجيل',        status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'Verified on the first attempt',               noteAr: 'تم التحقق في المحاولة الأولى',      details: { source: 'SMS gateway', attempts: 1, waitingOn: '—',      duration: '43s',  reference: 'S-1108', businessOutcome: 'OTP verified' } },
+          { labelEn: 'Guest PIN created',         labelAr: 'تم إنشاء رمز الضيف',              status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN policy passed',                           noteAr: 'اجتاز سياسة PIN',                   details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN set'      } },
+          { labelEn: 'Guest PIN confirmed',       labelAr: 'تم تأكيد رمز الضيف',              status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN confirmation matched',                    noteAr: 'تطابقت تأكيد PIN',                  details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN confirmed' } },
+          { labelEn: 'Optional profile details',  labelAr: 'تفاصيل الملف الشخصي الاختيارية', status: 'Not started', tag: 'Optional',                               noteEn: 'Skipped without blocking the guest journey',  noteAr: 'تم التخطي دون إعاقة رحلة الضيف' },
+        ],
+      },
+      {
+        id: 'product-search',
+        labelEn: 'Product search',
+        labelAr: 'البحث عن المنتجات',
+        overlineEn: 'Repeatable',
+        overlineAr: 'قابل للتكرار',
+        status: 'Paused',
+        checkpoints: [
+          { labelEn: 'Search started',            labelAr: 'بدأ البحث',                 status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded',                        noteAr: 'لا يوجد نشاط مسجل',                 details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+          { labelEn: 'Search criteria submitted', labelAr: 'تم إرسال معايير البحث',     status: 'Not started', tag: 'Mandatory',                               noteEn: 'Waiting for guest input',                     noteAr: 'في انتظار إدخال الضيف' },
+          { labelEn: 'Results generated',         labelAr: 'تم إنشاء النتائج',          status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                        noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Result selected',           labelAr: 'تم اختيار النتيجة',         status: 'Not started', tag: 'Mandatory',                               noteEn: 'Required only when the guest continues from a result', noteAr: 'مطلوب فقط عند متابعة الضيف من نتيجة' },
+          { labelEn: 'Register interest form',    labelAr: 'نموذج تسجيل الاهتمام',      status: 'Not started', tag: 'Mandatory',                               noteEn: 'Optional and does not affect search completion', noteAr: 'اختياري ولا يؤثر على اكتمال البحث' },
+        ],
+      },
+      {
+        id: 'search-payment',
+        labelEn: 'Search payment',
+        labelAr: 'دفع البحث',
+        overlineEn: 'Linked to search',
+        overlineAr: 'مرتبط بالبحث',
+        status: 'Not started',
+        checkpoints: [
+          { labelEn: 'Payment initiated',         labelAr: 'بدأ الدفع',                  status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل', details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+          { labelEn: 'Gateway response received', labelAr: 'تم استلام استجابة البوابة',  status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Payment successful',        labelAr: 'تم الدفع بنجاح',             status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Invoice generated',         labelAr: 'تم إنشاء الفاتورة',          status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+        ],
+      },
+      {
+        id: 'customer-conversion',
+        labelEn: 'Customer conversion',
+        labelAr: 'التحويل إلى عميل',
+        overlineEn: 'GTC flow',
+        overlineAr: 'مسار GTC',
+        status: 'Not started',
+        checkpoints: [
+          { labelEn: 'National / Iqama ID entered', labelAr: 'تم إدخال رقم الهوية / الإقامة', status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل',                          details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+          { labelEn: 'Conversion terms accepted',   labelAr: 'تم قبول شروط التحويل',          status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Conversion OTP verified',     labelAr: 'تم التحقق من رمز التحويل',      status: 'Not started', tag: 'Mandatory',                               noteEn: 'Starts after terms are accepted',                                  noteAr: 'يبدأ بعد قبول الشروط' },
+          { labelEn: 'Nafath verified',             labelAr: 'تم التحقق عبر نفاذ',            status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Mobile ownership verified',   labelAr: 'تم التحقق من ملكية الجوال',     status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'TCC confirmed',               labelAr: 'تم تأكيد TCC',                  status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Customer PIN created',        labelAr: 'تم إنشاء رمز العميل',           status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Customer PIN confirmed',      labelAr: 'تم تأكيد رمز العميل',           status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Customer contract accepted',  labelAr: 'تم قبول عقد العميل',            status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded',                                             noteAr: 'لا يوجد نشاط مسجل' },
+          { labelEn: 'Profile converted to Customer', labelAr: 'تم تحويل الملف إلى عميل',    status: 'Not started', tag: 'Mandatory',                               noteEn: 'The same profile ID is retained; no second profile is created',    noteAr: 'يتم الاحتفاظ بنفس رقم الملف ولا يُنشأ ملف ثانٍ' },
+        ],
+      },
     ],
   },
   {
-    id: 'product-search',
-    labelEn: 'Product search',
-    labelAr: 'البحث عن المنتجات',
-    overlineEn: 'Repeatable',
-    overlineAr: 'قابل للتكرار',
+    id: 'customer-access',
+    labelEn: 'Customer access',
+    labelAr: 'وصول العميل',
+    overlineEn: 'Repeatable login',
+    overlineAr: 'تسجيل دخول متكرر',
     status: 'Paused',
-    checkpoints: [],
+    checkpoints: [
+      { labelEn: 'Login identifier accepted',              labelAr: 'تم قبول معرف تسجيل الدخول',          status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل', details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+      { labelEn: 'Login OTP sent',                         labelAr: 'تم إرسال رمز تسجيل الدخول',          status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:43', noteEn: 'OTP dispatched via SMS', noteAr: 'تم إرسال الرمز عبر الرسائل القصيرة' },
+      { labelEn: 'Login OTP verified',                     labelAr: 'تم التحقق من رمز تسجيل الدخول',     status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:44', noteEn: 'Verified on the first attempt', noteAr: 'تم التحقق في المحاولة الأولى' },
+      { labelEn: 'Customer PIN entered',                   labelAr: 'تم إدخال رمز العميل',                status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Customer PIN verified',                  labelAr: 'تم التحقق من رمز العميل',            status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Reset or change PIN',                    labelAr: 'إعادة تعيين أو تغيير الرمز',         status: 'Not started', tag: 'Optional',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Authenticated session created',          labelAr: 'تم إنشاء جلسة مصادقة',              status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Customer access confirmed',              labelAr: 'تم تأكيد وصول العميل',              status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Payment and report validity evaluated',  labelAr: 'تم تقييم صلاحية الدفع والتقرير',    status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Updated terms confirmation',             labelAr: 'تأكيد الشروط المحدثة',               status: 'Not started', tag: 'Optional',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
   },
   {
     id: 'payment',
     labelEn: 'Payment',
     labelAr: 'الدفع',
-    overlineEn: 'Linked to search',
-    overlineAr: 'مرتبط بالبحث',
-    status: 'Not started',
-    checkpoints: [],
+    overlineEn: '15-day validity',
+    overlineAr: 'صلاحية ١٥ يومًا',
+    status: 'Paused',
+    checkpoints: [
+      { labelEn: 'Login identifier accepted',         labelAr: 'تم قبول معرف تسجيل الدخول',   status: 'Paused',      tag: 'System',    timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل', details: { source: 'Billing service', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+      { labelEn: 'Login OTP verified',                labelAr: 'تم التحقق من رمز تسجيل الدخول', status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:43', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order confirmed',                   labelAr: 'تم تأكيد الطلب',               status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Payment initiated',                 labelAr: 'بدأ الدفع',                     status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Gateway response received',         labelAr: 'تم استلام استجابة البوابة',     status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Payment successful',                labelAr: 'تم الدفع بنجاح',                status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Invoice or receipt linked to profile', labelAr: 'تم ربط الفاتورة بالملف',    status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
   },
   {
-    id: 'customer-conversion',
-    labelEn: 'Customer conversion',
-    labelAr: 'التحويل إلى عميل',
-    overlineEn: 'GTC flow',
-    overlineAr: 'مسار GTC',
+    id: 'disclosure',
+    labelEn: 'Disclosure',
+    labelAr: 'الإفصاح',
+    overlineEn: 'Versioned snapshot',
+    overlineAr: 'لقطة إصدار',
+    status: 'Paused',
+    checkpoints: [
+      { labelEn: 'Personal details completed',                   labelAr: 'تم اكتمال التفاصيل الشخصية',             status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل', details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: '—' } },
+      { labelEn: 'Declaration accepted',                         labelAr: 'تم قبول الإقرار',                        status: 'Not started', tag: 'Mandatory',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Employment captured',                          labelAr: 'تم تسجيل بيانات التوظيف',               status: 'Not started', tag: 'System',                                  noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Additional income captured',                   labelAr: 'تم تسجيل الدخل الإضافي',                status: 'Not started', tag: 'Optional',                               noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Commitments captured',                         labelAr: 'تم تسجيل الالتزامات',                   status: 'Not started', tag: 'System',                                  noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Disclosure submitted',                         labelAr: 'تم تقديم الإفصاح',                      status: 'Not started', tag: 'System',                                  noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Financial frequency set to monthly',           labelAr: 'تم تعيين التكرار المالي شهريًا',        status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:43', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Disclosure submitted',                         labelAr: 'تم تقديم الإفصاح',                      status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Disclosure snapshot recorded',                 labelAr: 'تم تسجيل لقطة الإفصاح',                status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:44', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Disclosure snapshot ready for Eligibility',    labelAr: 'لقطة الإفصاح جاهزة للأهلية',           status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:45', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
+  },
+  {
+    id: 'data-validation',
+    labelEn: 'Data Validation',
+    labelAr: 'التحقق من البيانات',
+    overlineEn: 'Report validity',
+    overlineAr: 'صلاحية التقرير',
+    status: 'Paused',
+    checkpoints: [
+      { labelEn: 'MASDAR report validity evaluated',   labelAr: 'تم تقييم صلاحية تقرير مصدر',  status: 'Paused',      tag: 'System',    timestamp: 'Jul 11 · 09:42', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل', details: { source: 'MASDAR', attempts: 1, waitingOn: 'No one', duration: '—', reference: 'O-8821', businessOutcome: 'Expired · new request required' } },
+      { labelEn: 'SIMAH report validity evaluated',    labelAr: 'تم تقييم صلاحية تقرير سيمه',  status: 'Passed',      tag: 'System',    timestamp: 'Jul 11 · 09:43', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Required report action determined',  labelAr: 'تم تحديد الإجراء المطلوب للتقرير', status: 'Not started', tag: 'Mandatory',                          noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
+  },
+  {
+    id: 'eligibility',
+    labelEn: 'Eligibility',
+    labelAr: 'الأهلية',
+    overlineEn: 'Decision Engine',
+    overlineAr: 'محرك القرار',
     status: 'Not started',
-    checkpoints: [],
+    checkpoints: [
+      { labelEn: 'Eligibility request created',           labelAr: 'تم إنشاء طلب الأهلية',              status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Disclosure snapshot linked',            labelAr: 'تم ربط لقطة الإفصاح',              status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Payment decision or reference linked',  labelAr: 'تم ربط قرار الدفع أو مرجعه',       status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Employment snapshot linked',            labelAr: 'تم ربط لقطة التوظيف',              status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'SIMAH result linked',                   labelAr: 'تم ربط نتيجة سيمه',                status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Required data validated',               labelAr: 'تم التحقق من البيانات المطلوبة',   status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Engine started',                        labelAr: 'تم تشغيل المحرك',                  status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Engine completed',                      labelAr: 'اكتمل المحرك',                     status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Eligibility result returned',           labelAr: 'تم إرجاع نتيجة الأهلية',          status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Offers generated',                      labelAr: 'تم إنشاء العروض',                  status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
+  },
+  {
+    id: 'order-submission',
+    labelEn: 'Order submission',
+    labelAr: 'تقديم الطلب',
+    overlineEn: 'OTP & IVR',
+    overlineAr: 'OTP وIVR',
+    status: 'Not started',
+    checkpoints: [
+      { labelEn: 'Offer or product selected',              labelAr: 'تم اختيار العرض أو المنتج',         status: 'Not started', tag: 'Mandatory', noteEn: 'No Order ID · waiting for eligibility', noteAr: 'لا يوجد رقم طلب · في انتظار الأهلية', details: { source: 'Mobile app', attempts: 0, waitingOn: 'No one', duration: '—', reference: '—', businessOutcome: '—' } },
+      { labelEn: 'Order created',                          labelAr: 'تم إنشاء الطلب',                   status: 'Not started', tag: 'Mandatory', noteEn: 'No Order ID · waiting for eligibility', noteAr: 'لا يوجد رقم طلب · في انتظار الأهلية' },
+      { labelEn: 'Order confirmation OTP sent',            labelAr: 'تم إرسال رمز تأكيد الطلب',         status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order confirmation OTP verified',        labelAr: 'تم التحقق من رمز تأكيد الطلب',    status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order confirmed',                        labelAr: 'تم تأكيد الطلب',                   status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order submitted',                        labelAr: 'تم تقديم الطلب',                   status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order IVR completed',                    labelAr: 'اكتمل IVR الطلب',                  status: 'Not started', tag: 'Mandatory', noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Provider or Brokerage receipt recorded', labelAr: 'تم تسجيل إيصال المزود أو الوسيط', status: 'Not started', tag: 'Optional',  noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+      { labelEn: 'Order closed',                           labelAr: 'تم إغلاق الطلب',                   status: 'Not started', tag: 'System',    noteEn: 'No activity recorded', noteAr: 'لا يوجد نشاط مسجل' },
+    ],
   },
 ];
 

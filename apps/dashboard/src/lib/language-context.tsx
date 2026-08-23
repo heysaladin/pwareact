@@ -9,11 +9,12 @@ const LanguageContext = createContext<{ lang: Lang; toggle: () => void }>({
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => {
-    if (typeof window === 'undefined') return 'en';
+  const [lang, setLang] = useState<Lang>('en');
+
+  useEffect(() => {
     const stored = localStorage.getItem('lang') as Lang | null;
-    return stored === 'ar' || stored === 'en' ? stored : 'en';
-  });
+    if (stored === 'ar' || stored === 'en') setLang(stored);
+  }, []);
 
   function toggle() {
     const next: Lang = lang === 'en' ? 'ar' : 'en';

@@ -21,6 +21,21 @@ const featured = [
 
 const general = [
   {
+    id: 'pay',
+    name: 'Pay',
+    description: 'Payment experience design for Tamawal — checkout flows, payment methods, and confirmation screens.',
+    href: '/pay',
+    tag: 'PAY',
+    accentColor: '#10B981',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M6 15h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
     id: 'app',
     name: 'App',
     description: 'Customer-facing mobile app simulation — browse, apply, and track financing.',
