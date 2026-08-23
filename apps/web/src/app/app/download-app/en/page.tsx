@@ -3,15 +3,17 @@
 import WebNavbar from '@/components/WebNavbar';
 import WebFooter from '@/components/WebFooter';
 
-const imgQr       = "/qr-code.svg";
-const imgMockup   = "/mockup.png";
-const imgAppStore = "/appstore.svg";
-const imgPlayStore = "/playstore.svg";
+const imgQr          = "/qr-code.svg";
+const imgMockup      = "/mockup.png";
+const imgAppStore    = "/appstore.svg";
+const imgPlayStore   = "/playstore.svg";
+const imgHeroBadge   = "/badge.svg";
+const imgBadgeCenter = "/badge-center.svg";
 
 export default function DownloadAppEnPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <WebNavbar lang="en" dark={true} />
+      <WebNavbar lang="en" dark={true} otherLangHref="/app/download-app" />
 
       <main className="flex-1 bg-[#f9f8fd]">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[75px] py-[40px]">
@@ -76,9 +78,18 @@ export default function DownloadAppEnPage() {
             </div>
 
             {/* Phone container */}
-            <div className="bg-[rgba(0,99,245,0.16)] h-[600px] w-[480px] rounded-[40px] relative overflow-hidden shrink-0 flex items-end justify-center">
-              <img src={imgMockup} alt="" className="relative z-[1] w-[364px] object-contain object-bottom h-full" />
-              <div className="absolute bottom-0 left-0 right-0 h-[80px] bg-gradient-to-b from-transparent to-[#d1e0fc] z-[2]" />
+            <div className="relative shrink-0 w-[499px] h-[601px]">
+              {/* Blue rect */}
+              <div className="absolute bg-[#0063F5] rounded-[41px] top-[130px] left-0 w-[470px] h-[360px]" />
+              {/* Phone mockup */}
+              <div className="absolute left-[21px] top-0 w-[427px] h-[601px]">
+                <img src={imgMockup} alt="Tamawal App" className="w-full h-full object-contain" />
+              </div>
+              {/* Spinning SAMA badge */}
+              <div className="absolute left-[21px] top-[248px] w-[157px] h-[157px]">
+                <img src={imgHeroBadge} alt="" className="absolute inset-0 w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+                <img src={imgBadgeCenter} alt="Licensed by SAMA" className="absolute inset-0 w-full h-full" />
+              </div>
             </div>
 
           </div>

@@ -3,15 +3,17 @@
 import WebNavbar from '@/components/WebNavbar';
 import WebFooter from '@/components/WebFooter';
 
-const imgQr       = "/qr-code.svg";
-const imgMockup   = "/mockup.png";
-const imgAppStore = "/appstore.svg";
-const imgPlayStore = "/playstore.svg";
+const imgQr         = "/qr-code.svg";
+const imgMockup     = "/mockup.png";
+const imgAppStore   = "/appstore.svg";
+const imgPlayStore  = "/playstore.svg";
+const imgHeroBadge  = "/badge.svg";
+const imgBadgeCenter = "/badge-center.svg";
 
 export default function DownloadAppPage() {
   return (
     <div dir="rtl" className="min-h-screen flex flex-col">
-      <WebNavbar lang="ar" dark={true} />
+      <WebNavbar lang="ar" dark={true} otherLangHref="/app/download-app/en" />
 
       <main className="flex-1 bg-[#f9f8fd]">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-[75px] py-[40px]">
@@ -46,10 +48,10 @@ export default function DownloadAppPage() {
           </div>
 
           {/* Desktop */}
-          <div className="hidden lg:flex items-center gap-[96px] flex-row-reverse">
+          <div className="hidden lg:flex items-center gap-[96px]">
 
             {/* Text column (right in RTL) */}
-            <div className="flex flex-col gap-[24px] items-end flex-1 min-w-0">
+            <div className="flex flex-col gap-[24px] items-start flex-1 min-w-0">
               <div className="w-full">
                 <h1 className="text-[56px] font-bold text-[#171717] leading-[64px] tracking-[-0.56px] text-right">
                   حمّل التطبيق الآن
@@ -76,9 +78,18 @@ export default function DownloadAppPage() {
             </div>
 
             {/* Phone container (left in RTL) */}
-            <div className="bg-[rgba(0,99,245,0.16)] h-[600px] w-[480px] rounded-[40px] relative overflow-hidden shrink-0 flex items-end justify-center">
-              <img src={imgMockup} alt="" className="relative z-[1] w-[364px] object-contain object-bottom h-full" />
-              <div className="absolute bottom-0 left-0 right-0 h-[80px] bg-gradient-to-b from-transparent to-[#d1e0fc] z-[2]" />
+            <div className="relative shrink-0 w-[499px] h-[601px]">
+              {/* Blue rect */}
+              <div className="absolute bg-[#0063F5] rounded-[41px] top-[130px] left-0 w-[470px] h-[360px]" />
+              {/* Phone mockup */}
+              <div className="absolute left-[21px] top-0 w-[427px] h-[601px]">
+                <img src={imgMockup} alt="Tamawal App" className="w-full h-full object-contain" />
+              </div>
+              {/* Spinning SAMA badge */}
+              <div className="absolute left-[21px] top-[248px] w-[157px] h-[157px]">
+                <img src={imgHeroBadge} alt="" className="absolute inset-0 w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+                <img src={imgBadgeCenter} alt="مرخص من ساما" className="absolute inset-0 w-full h-full" />
+              </div>
             </div>
 
           </div>

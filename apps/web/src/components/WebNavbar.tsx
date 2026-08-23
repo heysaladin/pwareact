@@ -79,7 +79,7 @@ function ServicesDropdown({ lang, dark }: { lang: Lang; dark: boolean }) {
   );
 }
 
-export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: boolean }) {
+export default function WebNavbar({ lang, dark = false, otherLangHref }: { lang: Lang; dark?: boolean; otherLangHref?: string }) {
   const { settings, brandName } = useGlobalSettings();
   const { logoMode } = settings;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -128,7 +128,7 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
               {businessLabel}
             </a>
             <div
-              onClick={() => { window.location.href = lang === 'ar' ? '/app/en' : '/app'; }}
+              onClick={() => { window.location.href = otherLangHref ?? (lang === 'ar' ? '/app/en' : '/app'); }}
               className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center cursor-pointer shrink-0 ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
             >
               <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
@@ -151,7 +151,7 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
             )}
           </a>
           <div
-            onClick={() => { window.location.href = lang === 'ar' ? '/app/en' : '/app'; }}
+            onClick={() => { window.location.href = otherLangHref ?? (lang === 'ar' ? '/app/en' : '/app'); }}
             className={`border rounded-full w-9 h-9 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
           >
             <span className={`text-[12px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>

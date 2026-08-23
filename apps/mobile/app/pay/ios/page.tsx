@@ -1,29 +1,19 @@
 import { headers } from 'next/headers';
 
-const imgApplePay    = "http://localhost:3845/assets/7af2d423cd6a99828cfac01cf7b71aca74243fd7.svg";
-const imgStcPay      = "http://localhost:3845/assets/c3e7678ec763b30b0620df0e5e392d85d540feb9.svg";
-const imgAmex        = "http://localhost:3845/assets/ef31a6bbdebe2419092be657fc8e2e76ad861d9a.svg";
-const imgMastercard  = "http://localhost:3845/assets/361286fc5c9b281d30995b65c523a334eb96a1aa.svg";
-const imgVisa        = "http://localhost:3845/assets/78b5dadee8e42f752be9bcfc98dd139ac3bcf29b.svg";
-const imgMada        = "http://localhost:3845/assets/dba994955adae3a504d5068b5f73d7b533d2cade.svg";
-const imgSarTop      = "http://localhost:3845/assets/7480f49b9c396b960ab1d5c7d87981a736d58847.svg";
-const imgSarBottom   = "http://localhost:3845/assets/3d9ce772c74eeb1f9c6e334897c3ff9e19989abc.svg";
-const imgStatusTime  = "http://localhost:3845/assets/d9802173c52a1e99f0b08b5c4980b15b1da2cf4a.svg";
-const imgBattery     = "http://localhost:3845/assets/9f4c5ec1a515760208346507c7774f8d4828ab52.svg";
-const imgBatteryNub  = "http://localhost:3845/assets/12b81915f261f2ee71c2a998d0b15abd22bab1d5.svg";
-const imgBatteryFill = "http://localhost:3845/assets/30b0b7670f77d5b9d1764ec82b060200f6b24acc.svg";
-const imgWifi        = "http://localhost:3845/assets/4ce729f4a553df3008816d044113238095ab8ffb.svg";
-const imgSignal      = "http://localhost:3845/assets/cc43c48fea24a10ea47762b8694e792b4ea48b42.svg";
+const imgApplePay   = "/pay/apple-pay.svg";
+const imgStcPay     = "/pay/stc-pay.svg";
+const imgAmex       = "/pay/card-amex.svg";
+const imgMastercard = "/pay/card-mastercard.svg";
+const imgVisa       = "/pay/card-visa.svg";
+const imgMada       = "/pay/card-mada.svg";
+const imgUnionPay   = "/pay/card-unionpay.svg";
+const imgSar        = "/pay/sar.svg";
+const imgStatusBar  = "/pay/status-bar.svg";
 
 function SarSymbol() {
   return (
     <div className="h-[18px] w-[16px] relative shrink-0 overflow-clip">
-      <div className="absolute inset-[81.41%_0_0_58.82%]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgSarTop} />
-      </div>
-      <div className="absolute inset-[0_0_7.54%_0]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgSarBottom} />
-      </div>
+      <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgSar} />
     </div>
   );
 }
@@ -31,24 +21,7 @@ function SarSymbol() {
 function StatusBar() {
   return (
     <div className="h-[38px] w-full overflow-clip relative shrink-0">
-      <div className="absolute left-[33px] top-1/2 -translate-y-1/2 h-[11px] w-[28px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgStatusTime} />
-      </div>
-      <div className="absolute right-[17px] top-1/2 -translate-y-1/2 h-[11px] w-[22px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgBattery} />
-      </div>
-      <div className="absolute right-[15px] top-1/2 -translate-y-1/2 h-[4px] w-[1.3px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgBatteryNub} />
-      </div>
-      <div className="absolute right-[19px] top-1/2 -translate-y-1/2 h-[7px] w-[18px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgBatteryFill} />
-      </div>
-      <div className="absolute right-[44px] top-1/2 -translate-y-1/2 h-[11px] w-[15px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgWifi} />
-      </div>
-      <div className="absolute right-[64px] top-1/2 -translate-y-1/2 h-[11px] w-[17px]">
-        <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgSignal} />
-      </div>
+      <img alt="" className="absolute inset-0 size-full max-w-none block" src={imgStatusBar} />
     </div>
   );
 }
@@ -130,6 +103,9 @@ function Screen({ mobile }: { mobile: boolean }) {
               </div>
               <div className="w-[34px] h-[23.4px] rounded-[4px] border border-[#f5f5f5] bg-white shrink-0 flex items-center justify-center px-1.5 py-1">
                 <img alt="Mada" className="block h-[9px] w-[24px]" src={imgMada} />
+              </div>
+              <div className="w-[34px] h-[24px] rounded-[4px] border border-[#f5f5f5] bg-white shrink-0 flex items-center justify-center px-1.5 py-1">
+                <img alt="UnionPay" className="block h-[14px] w-[21px]" src={imgUnionPay} />
               </div>
             </div>
           </div>
