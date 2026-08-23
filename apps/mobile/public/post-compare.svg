@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 500" width="375" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0046c0"/>
+      <stop offset="60%" stop-color="#0063F5"/>
+      <stop offset="100%" stop-color="#1a3a8f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5c842" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#f5a623" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="375" height="500" fill="url(#bg)"/>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="375" height="6" fill="url(#accent)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="320" cy="80" r="120" fill="white" fill-opacity="0.04"/>
+  <circle cx="60" cy="400" r="90" fill="white" fill-opacity="0.04"/>
+
+  <!-- Grid icon (compare) -->
+  <g transform="translate(140, 80)">
+    <rect x="0" y="0" width="40" height="40" rx="8" fill="white" fill-opacity="0.2"/>
+    <rect x="50" y="0" width="40" height="40" rx="8" fill="white" fill-opacity="0.2"/>
+    <rect x="0" y="50" width="40" height="40" rx="8" fill="white" fill-opacity="0.2"/>
+    <rect x="50" y="50" width="40" height="40" rx="8" fill="white" fill-opacity="0.35"/>
+    <!-- checkmark on last box -->
+    <polyline points="60,70 68,78 82,62" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Main text Arabic -->
+  <text x="187" y="240" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="46" font-weight="800" fill="white" text-anchor="middle" direction="rtl">قارن واختر</text>
+  <text x="187" y="295" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="20" font-weight="400" fill="white" fill-opacity="0.75" text-anchor="middle" direction="rtl">كل خيارات التمويل في مكان واحد</text>
+
+  <!-- Divider -->
+  <rect x="140" y="320" width="95" height="2" rx="1" fill="white" fill-opacity="0.25"/>
+
+  <!-- Tagline -->
+  <text x="187" y="355" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="15" font-weight="500" fill="white" fill-opacity="0.6" text-anchor="middle" direction="rtl">Simple. Fast. Flexible.</text>
+
+  <!-- Bottom branding -->
+  <rect x="0" y="430" width="375" height="70" fill="black" fill-opacity="0.2"/>
+
+  <!-- Tamawal logo text -->
+  <text x="32" y="474" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white" direction="rtl">تموّل</text>
+  <text x="32" y="490" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="white" fill-opacity="0.6">Tamawal®</text>
+
+  <!-- SAMA text -->
+  <text x="340" y="468" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">خاضع لرقابة وإشراف</text>
+  <text x="340" y="482" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">البنك المركزي السعودي</text>
+  <text x="340" y="494" font-family="Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.45" text-anchor="end">Saudi Central Bank</text>
+</svg>

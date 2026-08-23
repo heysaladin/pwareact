@@ -25,6 +25,7 @@ import ProductDetailsPanel from './ProductDetailsPanel';
 import DataGroupHeader from './DataGroupHeader';
 import OrdersBoardView from './OrdersBoardView';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { useLang } from '@/lib/language-context';
 
 type RightPanel = 'customer' | 'product' | null;
 
@@ -34,6 +35,7 @@ export default function OrdersPage() {
   const [view, setView] = useState<'board' | 'table'>('table');
   const windowWidth = useWindowWidth();
   const isWide = windowWidth > 1440;
+  const { lang } = useLang();
 
   const isSplitView = selectedOrderId !== null;
   const { orders, justEscalated } = useOrderSimulation(isSplitView);
@@ -69,7 +71,7 @@ export default function OrdersPage() {
   // Board mode with selected order: show board + detail panel side by side
   if (view === 'board' && selectedOrderId) {
     return (
-      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <Topbar />
         <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
           <Card className="flex-1 flex flex-row overflow-visible min-h-0">
@@ -114,7 +116,7 @@ export default function OrdersPage() {
   // Table mode split view
   if (view === 'table' && isSplitView) {
     return (
-      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950">
+      <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <Topbar />
         <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0">
           <Card className="flex-1 flex flex-row overflow-visible min-h-0">

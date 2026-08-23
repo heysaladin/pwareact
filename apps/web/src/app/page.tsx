@@ -34,23 +34,6 @@ const featured = [
 
 const general = [
   {
-    id: 'ceer',
-    name: 'Ceer',
-    description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
-    href: '/ceer',
-    tag: 'EV',
-    accentColor: '#0D0D0D',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 12.5h1.5M19.5 12.5H21M5 9.5l1.5 3h11l1.5-3H5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M6.5 12.5v1.5a1 1 0 001 1h9a1 1 0 001-1v-1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="8.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="15.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M8 9.5l1-3h6l1 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
     id: 'sme',
     name: 'SME',
     description: 'Business financing platform for SMEs — smart matching for company funding needs.',
@@ -74,6 +57,23 @@ const general = [
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="9" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
         <circle cx="15" cy="12" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'ceer',
+    name: 'Ceer (Alternative)',
+    description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
+    href: '/ceer-alternative',
+    tag: 'EV',
+    accentColor: '#0D0D0D',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12.5h1.5M19.5 12.5H21M5 9.5l1.5 3h11l1.5-3H5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M6.5 12.5v1.5a1 1 0 001 1h9a1 1 0 001-1v-1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="8.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="15.5" cy="15.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8 9.5l1-3h6l1 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -156,7 +156,7 @@ export default function HubPage() {
         </section>
 
         {/* Featured */}
-        <section className="pt-12 pb-8 border-b border-[#eef1f6] dark:border-white/[0.06]">
+        <section className="pt-12 pb-8">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
             Featured
           </p>
@@ -168,7 +168,7 @@ export default function HubPage() {
         </section>
 
         {/* General */}
-        <section className="py-12 border-b border-[#eef1f6] dark:border-white/[0.06]">
+        <section className="py-12">
           <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
             General
           </p>
@@ -179,41 +179,6 @@ export default function HubPage() {
           </div>
         </section>
 
-        {/* Landing sub-pages */}
-        <section className="py-12">
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#667085] dark:text-white/30 mb-8">
-            Landing pages
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#eef1f6] dark:bg-white/[0.06] border border-[#eef1f6] dark:border-white/[0.06] rounded-xl overflow-hidden">
-            {[
-              { label: 'About Us', ar: '/landing/about-us', en: '/landing/en/about-us' },
-              { label: 'Contact Us', ar: '/landing/contact-us', en: '/landing/en/contact-us' },
-              { label: 'Terms', ar: '/landing/terms', en: '/landing/en/terms' },
-              { label: 'Be a Partner', ar: '/landing/be-partner', en: '/landing/en/be-partner' },
-              { label: 'Be a Customer', ar: '/landing/be-customer', en: '/landing/en/be-customer' },
-            ].map((page) => (
-              <div key={page.label} className="bg-white dark:bg-[#080d14] p-6 flex flex-col gap-4">
-                <p className="text-sm font-semibold text-[#101828] dark:text-white">{page.label}</p>
-                <div className="flex gap-3">
-                  <Link
-                    href={page.ar}
-                    className="flex items-center gap-1 text-xs font-medium text-[#667085] dark:text-white/40 hover:text-[#0063F5] dark:hover:text-[#0063F5] transition-colors border border-[#eef1f6] dark:border-white/[0.08] rounded-md px-2.5 py-1.5"
-                  >
-                    AR
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </Link>
-                  <Link
-                    href={page.en}
-                    className="flex items-center gap-1 text-xs font-medium text-[#667085] dark:text-white/40 hover:text-[#0063F5] dark:hover:text-[#0063F5] transition-colors border border-[#eef1f6] dark:border-white/[0.08] rounded-md px-2.5 py-1.5"
-                  >
-                    EN
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 2.5 10 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
       </main>
 

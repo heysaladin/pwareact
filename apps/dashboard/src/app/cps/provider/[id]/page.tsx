@@ -6,5 +6,5 @@ export default async function CpsProviderDetailRoute({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <CustomerDetailPage profileId={id} listPath="/cps/provider" />;
+  return <CustomerDetailPage profileId={id} listPath="/cps/provider" isProvider />;
 }

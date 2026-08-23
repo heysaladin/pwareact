@@ -95,11 +95,7 @@ export type Checkpoint = {
   labelEn: string;
   labelAr: string;
   status: CheckpointStatus;
-<<<<<<< HEAD
-  tag: 'Mandatory' | 'System' | 'Conditional';
-=======
   tag: 'Mandatory' | 'System' | 'Optional';
->>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
   timestamp?: string;
   noteEn?: string;
   noteAr?: string;
@@ -190,9 +186,9 @@ export const JOURNEY_STEPS: JourneyStep[] = [
       // ── MASDR & employment (3–8) ───────────────────────────────────────────
       { labelEn: 'MASDAR request sent',          labelAr: 'تم إرسال طلب MASDAR',            status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:46', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'MSD-10042', businessOutcome: 'Request sent' } },
       { labelEn: 'MASDAR response received',     labelAr: 'تم استلام رد MASDAR',             status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:47', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '1s', reference: 'MSD-10042', businessOutcome: 'Response received' } },
-      { labelEn: 'Primary employment validated', labelAr: 'تم التحقق من التوظيف الأساسي',   status: 'Passed',      tag: 'Conditional', timestamp: 'Aug 12 · 09:47', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'MSD-10042', businessOutcome: 'Employment confirmed' } },
+      { labelEn: 'Primary employment validated', labelAr: 'تم التحقق من التوظيف الأساسي',   status: 'Passed',      tag: 'Optional', timestamp: 'Aug 12 · 09:47', details: { source: 'MASDAR', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'MSD-10042', businessOutcome: 'Employment confirmed' } },
       { labelEn: 'Manual entry required',        labelAr: 'يلزم الإدخال اليدوي',             status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:48', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Manual step triggered' } },
-      { labelEn: 'Manual employment data',       labelAr: 'بيانات التوظيف اليدوية',          status: 'Passed',      tag: 'Conditional', timestamp: 'Aug 12 · 09:49', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Manual data recorded' } },
+      { labelEn: 'Manual employment data',       labelAr: 'بيانات التوظيف اليدوية',          status: 'Passed',      tag: 'Optional', timestamp: 'Aug 12 · 09:49', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Manual data recorded' } },
       { labelEn: 'Employment snapshot captured', labelAr: 'تم التقاط لقطة التوظيف',          status: 'Passed',      tag: 'System',      timestamp: 'Aug 12 · 09:49', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'S-1108', businessOutcome: 'Snapshot stored' } },
       // ── SIMAH credit data (9–14) ───────────────────────────────────────────
       { labelEn: 'SIMAH request initiated',               labelAr: 'تم إرسال طلب SIMAH',               status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:50', details: { source: 'SIMAH', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Request sent' } },
@@ -208,25 +204,17 @@ export const JOURNEY_STEPS: JourneyStep[] = [
       },
       { labelEn: 'Customer-facing error displayed',       labelAr: 'تم عرض رسالة الخطأ للعميل',        status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:52', details: { source: 'App', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Error shown to customer' } },
       { labelEn: 'Automatic SIMAH retry scheduled',       labelAr: 'تمت جدولة إعادة محاولة SIMAH',     status: 'Passed',      tag: 'System',    timestamp: 'Aug 12 · 09:53', details: { source: 'Platform', attempts: 1, waitingOn: '—', duration: '< 1s', reference: 'SMH-62019', businessOutcome: 'Retry queued' } },
-      { labelEn: 'Customer qualification notification',   labelAr: 'إشعار تأهيل العميل',               status: 'Not started', tag: 'Conditional' },
+      { labelEn: 'Customer qualification notification',   labelAr: 'إشعار تأهيل العميل',               status: 'Not started', tag: 'Optional' },
       { labelEn: 'SIMAH result linked to Engine request', labelAr: 'ربط نتيجة SIMAH بطلب المحرك',      status: 'Not started', tag: 'System' },
     ],
   },
   {
     id: 'eligibility',
-<<<<<<< HEAD
-    labelEn: 'Eligibility & Decision Engine',
-    labelAr: 'الأهلية ومحرك القرار',
-    status: 'Not started',
-    subLabelEn: '10 checkpoints',
-    subLabelAr: '١٠ نقاط تحقق',
-=======
     labelEn: 'Disclosure',
     labelAr: 'الإفصاح',
     status: 'Passed',
     subLabelEn: '3 checkpoints',
     subLabelAr: '٣ نقاط تحقق',
->>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
     checkpoints: [
       { labelEn: 'Credit score threshold met',    labelAr: 'استيفاء حد درجة الائتمان',    status: 'Not started', tag: 'Mandatory'   },
       { labelEn: 'Income ratio validated',         labelAr: 'التحقق من نسبة الدخل',         status: 'Not started', tag: 'Mandatory'   },
@@ -235,20 +223,13 @@ export const JOURNEY_STEPS: JourneyStep[] = [
       { labelEn: 'Age eligibility verified',       labelAr: 'التحقق من أهلية العمر',          status: 'Not started', tag: 'Mandatory'   },
       { labelEn: 'Nationality criteria met',       labelAr: 'استيفاء معايير الجنسية',          status: 'Not started', tag: 'System'      },
       { labelEn: 'Financing amount validated',     labelAr: 'التحقق من مبلغ التمويل',          status: 'Not started', tag: 'Mandatory'   },
-      { labelEn: 'Down payment confirmed',         labelAr: 'تأكيد الدفعة المقدمة',            status: 'Not started', tag: 'Conditional' },
+      { labelEn: 'Down payment confirmed',         labelAr: 'تأكيد الدفعة المقدمة',            status: 'Not started', tag: 'Optional' },
       { labelEn: 'Engine decision requested',      labelAr: 'طلب قرار المحرك',                status: 'Not started', tag: 'System'      },
       { labelEn: 'Eligibility result issued',      labelAr: 'إصدار نتيجة الأهلية',             status: 'Not started', tag: 'Mandatory'   },
     ],
   },
   {
     id: 'order-submission',
-<<<<<<< HEAD
-    labelEn: 'Order submission',
-    labelAr: 'تقديم الطلب',
-    status: 'Not started',
-    subLabelEn: '9 checkpoints',
-    subLabelAr: '٩ نقاط تحقق',
-=======
     labelEn: 'Data Validation',
     labelAr: 'التحقق من البيانات',
     status: 'Paused',
@@ -256,7 +237,6 @@ export const JOURNEY_STEPS: JourneyStep[] = [
     subLabelAr: '٦ نقاط تحقق',
     waitingSince: 'Jul 11 · 10:31',
     waitingOn: 'Customer',
->>>>>>> 1c5c995c952a6f6969b4ddebee69783d434a4f3b
     checkpoints: [
       { labelEn: 'Offer presented to customer', labelAr: 'تقديم العرض للعميل',       status: 'Not started', tag: 'System'      },
       { labelEn: 'Offer selected',              labelAr: 'تم اختيار العرض',           status: 'Not started', tag: 'Mandatory'   },
@@ -267,6 +247,141 @@ export const JOURNEY_STEPS: JourneyStep[] = [
       { labelEn: 'Order confirmed',             labelAr: 'تم تأكيد الطلب',             status: 'Not started', tag: 'Mandatory'   },
       { labelEn: 'Provider notified',           labelAr: 'تم إبلاغ المزود',             status: 'Not started', tag: 'System'      },
       { labelEn: 'Order submitted',             labelAr: 'تم تقديم الطلب',              status: 'Not started', tag: 'Mandatory'   },
+    ],
+  },
+];
+
+// ─── Guest journey ────────────────────────────────────────────────────────────
+
+export type GuestJourneyStep = {
+  id: string;
+  labelEn: string;
+  labelAr: string;
+  overlineEn: string;
+  overlineAr: string;
+  status: JourneyStepStatus;
+  checkpoints: Checkpoint[];
+};
+
+export const GUEST_JOURNEY_STEPS: GuestJourneyStep[] = [
+  {
+    id: 'guest-registration',
+    labelEn: 'Guest registration',
+    labelAr: 'تسجيل الضيف',
+    overlineEn: 'Account access',
+    overlineAr: 'الوصول إلى الحساب',
+    status: 'Passed',
+    checkpoints: [
+      { labelEn: 'Mobile number entered',     labelAr: 'تم إدخال رقم الجوال',              status: 'Paused',      tag: 'Mandatory', timestamp: 'Jul 11 · 09:42', noteEn: 'Saudi mobile format validated',            noteAr: 'تم التحقق من تنسيق الجوال السعودي',    details: { source: 'Mobile app', attempts: 1, waitingOn: 'No one', duration: '—',    reference: 'O-8821', businessOutcome: '—'            } },
+      { labelEn: 'Registration OTP verified', labelAr: 'تم التحقق من رمز التسجيل',         status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'Verified on the first attempt',            noteAr: 'تم التحقق في المحاولة الأولى',         details: { source: 'SMS gateway', attempts: 1, waitingOn: '—',      duration: '43s',  reference: 'S-1108', businessOutcome: 'OTP verified' } },
+      { labelEn: 'Guest PIN created',         labelAr: 'تم إنشاء رمز الضيف',               status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN policy passed',                        noteAr: 'اجتاز سياسة PIN',                      details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN set'      } },
+      { labelEn: 'Guest PIN confirmed',       labelAr: 'تم تأكيد رمز الضيف',               status: 'Passed',      tag: 'Mandatory', timestamp: 'Jul 11 · 10:29', noteEn: 'PIN confirmation matched',                 noteAr: 'تطابقت تأكيد PIN',                     details: { source: 'App',         attempts: 1, waitingOn: '—',      duration: '< 1s', reference: 'S-1108', businessOutcome: 'PIN confirmed' } },
+      { labelEn: 'Optional profile details',  labelAr: 'تفاصيل الملف الشخصي الاختيارية',  status: 'Not started', tag: 'Optional',                               noteEn: 'Skipped without blocking the guest journey', noteAr: 'تم التخطي دون إعاقة رحلة الضيف' },
+    ],
+  },
+  {
+    id: 'product-search',
+    labelEn: 'Product search',
+    labelAr: 'البحث عن المنتجات',
+    overlineEn: 'Repeatable',
+    overlineAr: 'قابل للتكرار',
+    status: 'Paused',
+    checkpoints: [],
+  },
+  {
+    id: 'payment',
+    labelEn: 'Payment',
+    labelAr: 'الدفع',
+    overlineEn: 'Linked to search',
+    overlineAr: 'مرتبط بالبحث',
+    status: 'Not started',
+    checkpoints: [],
+  },
+  {
+    id: 'customer-conversion',
+    labelEn: 'Customer conversion',
+    labelAr: 'التحويل إلى عميل',
+    overlineEn: 'GTC flow',
+    overlineAr: 'مسار GTC',
+    status: 'Not started',
+    checkpoints: [],
+  },
+];
+
+// ─── Provider journey ─────────────────────────────────────────────────────────
+
+export type ProviderCheckpointResult = 'Passed' | 'Valid at request' | 'Failed' | 'Pending';
+
+export type ProviderCheckpoint = {
+  nameEn: string;
+  nameAr: string;
+  recordedValue: string;
+  result: ProviderCheckpointResult;
+  eventTime: string;
+};
+
+export type ProviderStep = {
+  id: string;
+  labelEn: string;
+  labelAr: string;
+  overlineEn: string;
+  overlineAr: string;
+  status: 'Passed' | 'Paused' | 'Not started';
+  checkpoints: ProviderCheckpoint[];
+};
+
+export const PROVIDER_JOURNEY_STEPS: ProviderStep[] = [
+  {
+    id: 'customer-verification',
+    labelEn: 'Customer Verification',
+    labelAr: 'التحقق من العميل',
+    overlineEn: 'Customer & report checks',
+    overlineAr: 'فحوصات العميل والتقارير',
+    status: 'Passed',
+    checkpoints: [
+      { nameEn: 'Identity and customer profile', nameAr: 'الهوية وملف العميل',      recordedValue: 'Verified',       result: 'Passed',           eventTime: '09:11 AM' },
+      { nameEn: 'MASDAR report',                 nameAr: 'تقرير مصدر',               recordedValue: 'MSD-•••-804',    result: 'Valid at request', eventTime: '09:13 AM' },
+      { nameEn: 'SIMAH report',                  nameAr: 'تقرير سيمه',               recordedValue: 'SMH-•••-173',    result: 'Valid at request', eventTime: '09:14 AM' },
+    ],
+  },
+  {
+    id: 'eligibility',
+    labelEn: 'Eligibility',
+    labelAr: 'الأهلية',
+    overlineEn: 'Engine request & result',
+    overlineAr: 'طلب المحرك والنتيجة',
+    status: 'Passed',
+    checkpoints: [
+      { nameEn: 'Eligibility engine request',    nameAr: 'طلب محرك الأهلية',         recordedValue: 'Approved',       result: 'Passed',           eventTime: '09:15 AM' },
+      { nameEn: 'Credit score threshold',        nameAr: 'حد درجة الائتمان',          recordedValue: '720 pts',        result: 'Passed',           eventTime: '09:15 AM' },
+      { nameEn: 'Debt burden ratio',             nameAr: 'نسبة عبء الديون',           recordedValue: '28%',            result: 'Passed',           eventTime: '09:16 AM' },
+      { nameEn: 'Engine decision',               nameAr: 'قرار المحرك',               recordedValue: 'Pre-approved',   result: 'Passed',           eventTime: '09:16 AM' },
+    ],
+  },
+  {
+    id: 'order-submission',
+    labelEn: 'Order Submission',
+    labelAr: 'تقديم الطلب',
+    overlineEn: 'Confirmation & handoff',
+    overlineAr: 'التأكيد والإحالة',
+    status: 'Passed',
+    checkpoints: [
+      { nameEn: 'Provider selection',            nameAr: 'اختيار المزود',             recordedValue: 'Namaa Finance',  result: 'Passed',           eventTime: '09:20 AM' },
+      { nameEn: 'Order created',                 nameAr: 'إنشاء الطلب',               recordedValue: 'O-8740',         result: 'Passed',           eventTime: '09:21 AM' },
+      { nameEn: 'Provider notified',             nameAr: 'إشعار المزود',              recordedValue: 'Confirmed',      result: 'Passed',           eventTime: '09:21 AM' },
+    ],
+  },
+  {
+    id: 'provider-outcome',
+    labelEn: 'Provider Outcome',
+    labelAr: 'نتيجة المزود',
+    overlineEn: 'Provider / OMS outcome',
+    overlineAr: 'نتيجة المزود / OMS',
+    status: 'Passed',
+    checkpoints: [
+      { nameEn: 'Provider order status',         nameAr: 'حالة طلب المزود',           recordedValue: 'Closed',         result: 'Passed',           eventTime: '03:18 PM' },
+      { nameEn: 'Final disbursement',            nameAr: 'الصرف النهائي',             recordedValue: 'SAR 150,000',    result: 'Passed',           eventTime: '03:18 PM' },
+      { nameEn: 'Provider confirmation',         nameAr: 'تأكيد المزود',              recordedValue: 'Namaa Finance',  result: 'Passed',           eventTime: '03:18 PM' },
     ],
   },
 ];

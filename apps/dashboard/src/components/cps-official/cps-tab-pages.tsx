@@ -57,25 +57,99 @@ export function SummaryContent({ isAr }: { isAr: boolean }) {
           </h3>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2 p-3 rounded-lg border border-[#e3e8f1]">
-            <span className="text-xs text-[#697586]">MASDR</span>
-            <span className="text-sm font-medium text-[#b54708]">{isAr ? 'سجلات التوظيف منتهية الصلاحية' : 'Employment records expired'}</span>
-            <Badge variant="yellow">{isAr ? 'منتهي' : 'Expired'}</Badge>
+          {/* MASDR — warning */}
+          <div className="flex flex-col">
+            <div className="bg-[#fef8f0] border border-[#fed095] rounded-t-[8px] p-4 flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-[#181d27] flex-1 min-w-0">{isAr ? 'سجلات التوظيف منتهية الصلاحية' : 'Employment records expired'}</p>
+                <img src="/img/logo-masdr.png" alt="MASDR" className="h-6 w-[60px] object-contain shrink-0" />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-circle-check.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'أُنشئ في 04 أغسطس 2026' : 'Generated on 04 Aug 2026'}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-clock.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'صالح حتى 03 سبتمبر 2026' : 'Valid until 03 Sep 2026'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#fef8f0] border-b border-l border-r border-[#fed095] rounded-b-[8px] px-4 pt-3 pb-4 flex items-center justify-between">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#fffaeb] border border-[#fedf89] text-[#b54708]">{isAr ? 'منتهي' : 'Expired'}</span>
+              <img src="/img/icon-eye.svg" alt="" className="size-5" />
+            </div>
           </div>
-          <div className="flex flex-col gap-2 p-3 rounded-lg border border-[#e3e8f1]">
-            <span className="text-xs text-[#697586]">SIMAH</span>
-            <span className="text-sm font-medium text-[#15212f]">{isAr ? 'تقارير الائتمان: ٣' : 'Credit reports found: 3'}</span>
-            <Badge variant="green">{isAr ? 'متاح' : 'Available'}</Badge>
+
+          {/* SIMAH — success */}
+          <div className="flex flex-col">
+            <div className="bg-[#f6fef9] border border-[#abefc6] rounded-t-[8px] p-4 flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-[#181d27] flex-1 min-w-0">{isAr ? 'تقارير الائتمان: ٣' : 'Credit reports found: 3'}</p>
+                <img src="/img/logo-simah.png" alt="SIMAH" className="h-6 w-[60px] object-contain shrink-0" />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-circle-check.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'أُنشئ في 04 أغسطس 2026' : 'Generated on 04 Aug 2026'}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-clock.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'صالح حتى 03 سبتمبر 2026' : 'Valid until 03 Sep 2026'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#f6fef9] border-b border-l border-r border-[#abefc6] rounded-b-[8px] px-4 pt-3 pb-4 flex items-center justify-between">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#ecfdf3] border border-[#abefc6] text-[#067647]">{isAr ? 'متاح' : 'Available'}</span>
+              <div className="flex items-center gap-6">
+                <img src="/img/icon-list.svg" alt="" className="size-5" />
+                <img src="/img/icon-eye.svg" alt="" className="size-5" />
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 p-3 rounded-lg border border-[#e3e8f1]">
-            <span className="text-xs text-[#697586]">Nafath</span>
-            <span className="text-sm font-medium text-[#b42318]">{isAr ? 'فشل التحقق' : 'Verification failed'}</span>
-            <Badge variant="red">{isAr ? 'فشل' : 'Failed'}</Badge>
+
+          {/* Nafath — error */}
+          <div className="flex flex-col">
+            <div className="bg-[#fffafa] border border-[#fecaca] rounded-t-[8px] p-4 flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-[#181d27] flex-1 min-w-0">{isAr ? 'فشل التحقق' : 'Verification failed'}</p>
+                <img src="/img/logo-nafath.png" alt="Nafath" className="h-6 w-[60px] object-contain shrink-0" />
+              </div>
+              <div className="flex items-center">
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-circle-check.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'أُنشئ في 04 أغسطس 2026' : 'Generated on 04 Aug 2026'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#fffafa] border-b border-l border-r border-[#fecaca] rounded-b-[8px] px-4 pt-3 pb-4 flex items-center justify-between">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#fef3f2] border border-[#fecdca] text-[#b42318]">{isAr ? 'فشل' : 'Failed'}</span>
+              <img src="/img/icon-eye.svg" alt="" className="size-5" />
+            </div>
           </div>
-          <div className="flex flex-col gap-2 p-3 rounded-lg border border-[#e3e8f1]">
-            <span className="text-xs text-[#697586]">Tamawal</span>
-            <span className="text-sm font-medium text-[#15212f]">{isAr ? 'تقرير الفحص متاح' : 'Screening report available'}</span>
-            <Badge variant="green">{isAr ? 'مكتمل' : 'Completed'}</Badge>
+
+          {/* Tamawal — success */}
+          <div className="flex flex-col">
+            <div className="bg-[#f6fef9] border border-[#abefc6] rounded-t-[8px] p-4 flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-[#181d27] flex-1 min-w-0">{isAr ? 'تقرير الفحص متاح' : 'Screening report available'}</p>
+                <img src="/logo-tamawal-web.svg" alt="Tamawal" className="h-6 w-[60px] object-contain shrink-0" />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-circle-check.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'أُنشئ في 04 أغسطس 2026' : 'Generated on 04 Aug 2026'}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <img src="/img/icon-clock.svg" alt="" className="size-3" />
+                  <span className="text-[10px] font-bold text-[#a4a7ae]">{isAr ? 'صالح حتى 03 سبتمبر 2026' : 'Valid until 03 Sep 2026'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#f6fef9] border-b border-l border-r border-[#abefc6] rounded-b-[8px] px-4 pt-3 pb-4 flex items-center justify-between">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#ecfdf3] border border-[#abefc6] text-[#067647]">{isAr ? 'مكتمل' : 'Completed'}</span>
+              <img src="/img/icon-eye.svg" alt="" className="size-5" />
+            </div>
           </div>
         </div>
       </Card>

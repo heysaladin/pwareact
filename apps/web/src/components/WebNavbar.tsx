@@ -101,13 +101,15 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
         <div className="hidden lg:flex items-center justify-between max-w-[1440px] mx-auto px-[75px] h-[64px]">
           {/* Left group: logo + nav links */}
           <div className="flex items-center gap-[56px]">
-            {logoMode === 'blur' ? (
-              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[30px] w-auto shrink-0" style={{ filter: 'blur(4px)' }} />
-            ) : logoMode === 'tamweel' ? (
-              <span className="font-semibold text-[18px] shrink-0" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
-            ) : (
-              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[30px] w-auto shrink-0" />
-            )}
+            <a href="/">
+              {logoMode === 'blur' ? (
+                <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[30px] w-auto shrink-0" style={{ filter: 'blur(4px)' }} />
+              ) : logoMode === 'tamweel' ? (
+                <span className="font-semibold text-[18px] shrink-0" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
+              ) : (
+                <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-[30px] w-auto shrink-0" />
+              )}
+            </a>
             <div className="flex items-center gap-[40px]">
               {links.map((l) =>
                 l.dropdown ? (
@@ -126,7 +128,7 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
               {businessLabel}
             </a>
             <div
-              onClick={() => { window.location.href = lang === 'ar' ? '/app' : '/app/ar'; }}
+              onClick={() => { window.location.href = lang === 'ar' ? '/app/en' : '/app'; }}
               className={`border rounded-full w-[44px] h-[44px] flex items-center justify-center cursor-pointer shrink-0 ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
             >
               <span className={`text-[13px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>
@@ -139,15 +141,17 @@ export default function WebNavbar({ lang, dark = false }: { lang: Lang; dark?: b
           <button onClick={() => setMobileOpen(true)} className="size-6 cursor-pointer">
             <img src={imgMenuDark} alt="Menu" className="size-6" style={dark ? { filter: 'brightness(0) invert(1)' } : undefined} />
           </button>
-          {logoMode === 'blur' ? (
-            <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-7 w-auto" style={{ filter: 'blur(4px)' }} />
-          ) : logoMode === 'tamweel' ? (
-            <span className="font-semibold text-[16px]" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
-          ) : (
-            <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-7 w-auto" />
-          )}
+          <a href="/">
+            {logoMode === 'blur' ? (
+              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-7 w-auto" style={{ filter: 'blur(4px)' }} />
+            ) : logoMode === 'tamweel' ? (
+              <span className="font-semibold text-[16px]" style={{ color: dark ? '#ffffff' : '#0063F5' }}>Tamweel</span>
+            ) : (
+              <img src={dark ? imgLogoWhite : imgLogoBlue} alt={brandName} className="h-7 w-auto" />
+            )}
+          </a>
           <div
-            onClick={() => { window.location.href = lang === 'ar' ? '/app' : '/app/ar'; }}
+            onClick={() => { window.location.href = lang === 'ar' ? '/app/en' : '/app'; }}
             className={`border rounded-full w-9 h-9 flex items-center justify-center ${dark ? 'border-[#344054]' : 'border-[#EAECF0]'}`}
           >
             <span className={`text-[12px] font-medium ${dark ? 'text-[#98a2b3]' : 'text-[#344054]'}`}>{langLabel}</span>

@@ -4,7 +4,7 @@ import TamawalLogo from '@/components/ui/TamawalLogo';
 const featured = [
   {
     id: 'oms',
-    name: 'Order Management',
+    name: 'OMS - v2 (Under Development)',
     description: 'Track, manage and process customer orders in real time.',
     href: '/oms',
     tag: 'OMS',
@@ -19,11 +19,12 @@ const featured = [
   },
   {
     id: 'cps',
-    name: 'Customer Profile System',
+    name: 'CPS - v1 (NEW)',
     description: 'Customer profiling system — all profiles, customers, and guests with SIMAH/MASDR data.',
     href: '/cps',
     tag: 'CPS',
     accentColor: '#0063F5',
+    status: 'on designing',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
@@ -34,6 +35,35 @@ const featured = [
 ];
 
 const general = [
+  {
+    id: 'fom',
+    name: 'OMS - v1 (Existing)',
+    description: 'Legacy order management system — v1.',
+    href: '/fom',
+    tag: 'FOM',
+    accentColor: '#7C3AED',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M9 12h6M9 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'cps-alternative',
+    name: 'CPS - v2 (Proposal - Never Approved)',
+    description: 'View and manage customer profiles, credit scores, and account status.',
+    href: '/cps-alternative',
+    tag: 'CPS',
+    accentColor: '#059669',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
   {
     id: 'pof',
     name: 'Portal Auth Flow',
@@ -46,20 +76,6 @@ const general = [
         <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <circle cx="12" cy="16" r="1.25" fill="currentColor"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'cps-alternative',
-    name: 'CPS Alternative',
-    description: 'View and manage customer profiles, credit scores, and account status.',
-    href: '/cps-alternative',
-    tag: 'CPS',
-    accentColor: '#059669',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -107,9 +123,16 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
         >
           {project.icon}
         </div>
-        <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
-          {project.tag}
-        </span>
+        <div className="flex items-center gap-4">
+          {'status' in project && project.status && (
+            <span className="animate-border-ping text-[10px] font-semibold uppercase text-[#EA580C] border border-[#EA580C] rounded-full px-2 py-0.5">
+              {project.status}
+            </span>
+          )}
+          <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
+            {project.tag}
+          </span>
+        </div>
       </div>
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
@@ -131,7 +154,7 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#080d14] flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-[#080d14] flex flex-col" dir="ltr">
 
       {/* Nav */}
       <header className="sticky top-0 z-10 border-b border-[#eef1f6] dark:border-white/[0.06] bg-white/90 dark:bg-[#080d14]/90 backdrop-blur-sm">

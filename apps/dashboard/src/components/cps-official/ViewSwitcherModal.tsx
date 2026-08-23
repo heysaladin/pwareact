@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 export default function ViewSwitcherModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
-  const currentView = pathname.startsWith('/cps/provider') ? 'provider' : 'internal';
+  const currentView = pathname?.startsWith('/cps/provider') ? 'provider' : 'internal';
 
   function handleSelect(view: 'internal' | 'provider') {
     onClose();
@@ -20,6 +20,7 @@ export default function ViewSwitcherModal({ onClose }: { onClose: () => void }) 
     >
       <div
         className="relative w-[440px] bg-[#0f1117] rounded-2xl border border-[#2a2d36] shadow-2xl p-6 flex flex-col gap-5"
+        dir="ltr"
         onClick={e => e.stopPropagation()}
       >
         <button

@@ -961,7 +961,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
       {isProvider ? <ProviderSidebar /> : <InternalSidebar />}
 
       <div className="flex flex-col flex-1 min-w-0 bg-[#f8fafc] dark:bg-slate-950">
-      <Topbar onProfileClick={() => setShowSwitcher(true)} isProvider={isProvider} hasSidebar />
+      <Topbar onProfileClick={() => setShowSwitcher(true)} isProvider={isProvider} hasSidebar langHref={forceLang === 'ar' ? '/cps/en' : forceLang === 'en' ? '/cps' : undefined} />
       {showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
 
       <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0 overflow-y-auto">

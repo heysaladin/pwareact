@@ -28,24 +28,12 @@ const themeScript = `
   })();
 `;
 
-const langScript = `
-  (() => {
-    try {
-      const lang = localStorage.getItem('lang');
-      if (lang === 'ar') {
-        document.documentElement.dir = 'rtl';
-        document.documentElement.lang = 'ar';
-      }
-    } catch (_) {}
-  })();
-`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <script dangerouslySetInnerHTML={{ __html: langScript }} />
       </head>
       <body className={`${ibmPlexSans.variable} antialiased`}>
         <GlobalSettingsProvider>

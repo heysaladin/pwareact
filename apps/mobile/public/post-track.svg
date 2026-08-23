@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 500" width="375" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#001a5e"/>
+      <stop offset="55%" stop-color="#0048b3"/>
+      <stop offset="100%" stop-color="#0063F5"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="375" height="500" fill="url(#bg)"/>
+  <rect x="0" y="0" width="375" height="5" fill="#f5c842"/>
+
+  <!-- Decorative bg shapes -->
+  <circle cx="300" cy="100" r="130" fill="white" fill-opacity="0.04"/>
+  <circle cx="30" cy="450" r="100" fill="white" fill-opacity="0.03"/>
+
+  <!-- Phone/app icon with progress -->
+  <g transform="translate(130, 55)">
+    <!-- Phone outline -->
+    <rect x="10" y="0" width="95" height="160" rx="14" fill="white" fill-opacity="0.1" stroke="white" stroke-width="2" stroke-opacity="0.4"/>
+    <!-- Screen -->
+    <rect x="20" y="16" width="75" height="120" rx="4" fill="white" fill-opacity="0.08"/>
+    <!-- Home indicator -->
+    <rect x="42" y="146" width="31" height="4" rx="2" fill="white" fill-opacity="0.3"/>
+
+    <!-- Progress steps inside screen -->
+    <!-- Step 1 - done -->
+    <circle cx="36" cy="38" r="7" fill="#22c55e"/>
+    <polyline points="32,38 35,42 41,34" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="47" y="35" width="38" height="5" rx="2.5" fill="white" fill-opacity="0.35"/>
+
+    <!-- Step 2 - done -->
+    <circle cx="36" cy="62" r="7" fill="#22c55e"/>
+    <polyline points="32,62 35,66 41,58" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="47" y="59" width="32" height="5" rx="2.5" fill="white" fill-opacity="0.35"/>
+
+    <!-- Step 3 - active -->
+    <circle cx="36" cy="86" r="7" fill="#f5c842"/>
+    <text x="36" y="90" font-family="Arial" font-size="9" font-weight="700" fill="#0046c0" text-anchor="middle">3</text>
+    <rect x="47" y="83" width="40" height="5" rx="2.5" fill="white" fill-opacity="0.5"/>
+
+    <!-- Step 4 - pending -->
+    <circle cx="36" cy="110" r="7" fill="white" fill-opacity="0.15" stroke="white" stroke-opacity="0.3" stroke-width="1.5"/>
+    <rect x="47" y="107" width="28" height="5" rx="2.5" fill="white" fill-opacity="0.2"/>
+
+    <!-- Connector lines -->
+    <line x1="36" y1="46" x2="36" y2="54" stroke="white" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <line x1="36" y1="70" x2="36" y2="78" stroke="white" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <line x1="36" y1="94" x2="36" y2="102" stroke="white" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="2,2"/>
+  </g>
+
+  <!-- Arabic text -->
+  <text x="187" y="256" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="40" font-weight="800" fill="white" text-anchor="middle" direction="rtl">تابع طلبك</text>
+  <text x="187" y="297" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="40" font-weight="800" fill="white" text-anchor="middle" direction="rtl">في كل خطوة</text>
+
+  <text x="187" y="335" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="16" font-weight="400" fill="white" fill-opacity="0.65" text-anchor="middle" direction="rtl">اعرف وين وصل طلب التمويل</text>
+
+  <!-- Divider -->
+  <rect x="148" y="355" width="79" height="1.5" rx="1" fill="white" fill-opacity="0.2"/>
+
+  <!-- Status badges -->
+  <rect x="82" y="370" width="90" height="28" rx="14" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="127" y="389" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="12" fill="#86efac" text-anchor="middle" direction="rtl">قيد المراجعة</text>
+
+  <rect x="200" y="370" width="90" height="28" rx="14" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="245" y="389" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="12" fill="white" fill-opacity="0.6" text-anchor="middle" direction="rtl">لحظي · مباشر</text>
+
+  <!-- Bottom branding -->
+  <rect x="0" y="430" width="375" height="70" fill="black" fill-opacity="0.22"/>
+
+  <text x="32" y="474" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white" direction="rtl">تموّل</text>
+  <text x="32" y="490" font-family="Arial, sans-serif" font-size="11" fill="white" fill-opacity="0.55">Tamawal®</text>
+
+  <text x="340" y="468" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">خاضع لرقابة وإشراف</text>
+  <text x="340" y="482" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">البنك المركزي السعودي</text>
+  <text x="340" y="494" font-family="Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.4" text-anchor="end">Saudi Central Bank</text>
+</svg>

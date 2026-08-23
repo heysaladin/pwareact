@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 500" width="375" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1f5c"/>
+      <stop offset="45%" stop-color="#0052cc"/>
+      <stop offset="100%" stop-color="#0063F5"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="375" height="500" fill="url(#bg)"/>
+  <rect x="0" y="0" width="375" height="5" fill="#f5c842"/>
+
+  <!-- Background decoration -->
+  <circle cx="50" cy="120" r="160" fill="white" fill-opacity="0.03"/>
+  <circle cx="360" cy="390" r="130" fill="white" fill-opacity="0.04"/>
+
+  <!-- Lightbulb icon -->
+  <g transform="translate(152, 65)">
+    <!-- Bulb -->
+    <path d="M35 15 C15 15 0 30 0 49 C0 62 8 73 19 79 L19 90 L51 90 L51 79 C62 73 70 62 70 49 C70 30 55 15 35 15 Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/>
+    <!-- Filament lines -->
+    <line x1="19" y1="90" x2="51" y2="90" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+    <line x1="22" y1="98" x2="48" y2="98" stroke="white" stroke-width="2" stroke-opacity="0.35"/>
+    <!-- Shine -->
+    <line x1="35" y1="5" x2="35" y2="0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
+    <line x1="60" y1="13" x2="64" y2="9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
+    <line x1="10" y1="13" x2="6" y2="9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
+  </g>
+
+  <!-- Main Arabic text -->
+  <text x="187" y="236" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="800" fill="white" text-anchor="middle" direction="rtl">اسأل السؤال</text>
+  <text x="187" y="278" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="800" fill="white" text-anchor="middle" direction="rtl">الأذكى</text>
+
+  <!-- Subtext -->
+  <text x="187" y="318" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="16" font-weight="400" fill="white" fill-opacity="0.7" text-anchor="middle" direction="rtl">وش المنتج الأنسب لاحتياجك؟</text>
+
+  <!-- Divider -->
+  <rect x="148" y="338" width="79" height="1.5" rx="1" fill="white" fill-opacity="0.2"/>
+
+  <!-- Three feature pills -->
+  <g direction="rtl">
+    <rect x="62" y="354" width="74" height="28" rx="14" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="99" y="373" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="12" fill="white" fill-opacity="0.8" text-anchor="middle" direction="rtl">تمويل شخصي</text>
+
+    <rect x="150" y="354" width="74" height="28" rx="14" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="187" y="373" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="12" fill="white" fill-opacity="0.8" text-anchor="middle" direction="rtl">تمويل عقاري</text>
+
+    <rect x="238" y="354" width="74" height="28" rx="14" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="275" y="373" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="12" fill="white" fill-opacity="0.8" text-anchor="middle" direction="rtl">تمويل سيارة</text>
+  </g>
+
+  <!-- Bottom branding -->
+  <rect x="0" y="430" width="375" height="70" fill="black" fill-opacity="0.22"/>
+
+  <text x="32" y="474" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white" direction="rtl">تموّل</text>
+  <text x="32" y="490" font-family="Arial, sans-serif" font-size="11" fill="white" fill-opacity="0.55">Tamawal®</text>
+
+  <text x="340" y="468" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">خاضع لرقابة وإشراف</text>
+  <text x="340" y="482" font-family="'SF Arabic', 'Segoe UI', Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.55" text-anchor="end" direction="rtl">البنك المركزي السعودي</text>
+  <text x="340" y="494" font-family="Arial, sans-serif" font-size="9" fill="white" fill-opacity="0.4" text-anchor="end">Saudi Central Bank</text>
+</svg>
