@@ -104,21 +104,21 @@ const TABS: { key: Tab; label: { en: string; ar: string } }[] = [
 ];
 
 function JourneyBadge({ result, isAr }: { result: Profile['journeyResult']; isAr?: boolean }) {
-  if (result === 'Passed')  return <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium"><Check className="w-3 h-3" />{isAr ? 'اجتاز' : 'Passed'}</span>;
-  if (result === 'Failed')  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">{isAr ? 'فشل' : 'Failed'}</span>;
-  return <span className="inline-flex px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">{isAr ? 'قيد الانتظار' : 'Pending'}</span>;
+  if (result === 'Passed')  return <span className="inline-flex items-center gap-1 px-[12px] py-[4px] rounded-2xl bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-sm font-medium"><Check className="w-3.5 h-3.5" />{isAr ? 'اجتاز' : 'Passed'}</span>;
+  if (result === 'Failed')  return <span className="inline-flex px-[12px] py-[4px] rounded-2xl bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-sm font-medium">{isAr ? 'فشل' : 'Failed'}</span>;
+  return <span className="inline-flex px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'قيد الانتظار' : 'Pending'}</span>;
 }
 
 function RecordBadge({ type, isAr }: { type: Profile['type']; isAr?: boolean }) {
-  if (type === 'Customer') return <span className="px-3 py-0.5 rounded-full bg-[#eaf2ff] border border-[#aacbfc] text-[#0053cc] text-xs font-medium">{isAr ? 'عميل' : 'Customer'}</span>;
-  return <span className="px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">{isAr ? 'ضيف' : 'Guest'}</span>;
+  if (type === 'Customer') return <span className="px-[12px] py-[4px] rounded-2xl bg-[#eaf2ff] border border-[#aacbfc] text-[#0053cc] text-sm font-medium">{isAr ? 'عميل' : 'Customer'}</span>;
+  return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'ضيف' : 'Guest'}</span>;
 }
 
 function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="self-start px-3 py-0.5 rounded-full bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-xs font-medium">{stage}</span>
-      <div className="flex items-center gap-1 text-[#697586] text-xs">
+    <div className="flex flex-col gap-2">
+      <span className="self-start px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{stage}</span>
+      <div className="flex items-center gap-1 text-[#697586] text-sm">
         <ChevronsLeft className="w-3 h-3" />
         <span>{subStage}</span>
       </div>
@@ -127,8 +127,8 @@ function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
 }
 
 function YesNoBadge({ value, isAr }: { value: boolean; isAr?: boolean }) {
-  if (value) return <span className="px-3 py-0.5 rounded-full bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-xs font-medium">{isAr ? 'نعم' : 'Yes'}</span>;
-  return <span className="px-3 py-0.5 rounded-full bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-xs font-medium">{isAr ? 'لا' : 'No'}</span>;
+  if (value) return <span className="px-[12px] py-[4px] rounded-2xl bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-sm font-medium">{isAr ? 'نعم' : 'Yes'}</span>;
+  return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-sm font-medium">{isAr ? 'لا' : 'No'}</span>;
 }
 
 type SummaryCardStatus = 'Available' | 'Expired' | 'Failed' | 'Completed';
@@ -942,6 +942,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
   const [showSwitcher, setShowSwitcher] = useState(false);
 
   const filtered = PROFILES.filter(p => {
+    if (isProvider && p.type === 'Guest') return false;
     if (activeTab === 'customers' && p.type !== 'Customer') return false;
     if (activeTab === 'guests'    && p.type !== 'Guest')    return false;
     if (search) {
@@ -1007,29 +1008,35 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
 
           {/* Card header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#eef1f6] dark:border-slate-800 shrink-0">
-            {/* Tabs */}
-            <div className="flex isolate rounded-lg overflow-hidden">
-              {TABS.map((tab, i) => {
-                const isActive = activeTab === tab.key;
-                return (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActiveTab(tab.key)}
-                    className={cn(
-                      'flex items-center justify-center min-h-[40px] px-4 py-2 text-sm font-medium border-t border-b whitespace-nowrap',
-                      i === 0 && (isAr ? 'rounded-r-lg border-r' : 'rounded-l-lg border-l'),
-                      i === TABS.length - 1 && (isAr ? 'rounded-l-lg border-l' : 'rounded-r-lg border-r'),
-                      isActive
-                        ? 'bg-[#f5f9ff] border-[#0063f5] text-[#0063f5] z-10'
-                        : 'bg-white border-[#d5d7da] text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300',
-                      !isActive && i > 0 && 'border-s-0',
-                    )}
-                  >
-                    {isAr ? tab.label.ar : tab.label.en}
-                  </button>
-                );
-              })}
-            </div>
+            {/* Tabs (internal) / Title (provider) */}
+            {isProvider ? (
+              <p className="text-[18px] font-semibold text-[#181d27] dark:text-slate-100 leading-[28px] tracking-[0.027px]">
+                {isAr ? 'العملاء' : 'Customers'}
+              </p>
+            ) : (
+              <div className="flex isolate rounded-lg overflow-hidden">
+                {TABS.map((tab, i) => {
+                  const isActive = activeTab === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key)}
+                      className={cn(
+                        'flex items-center justify-center min-h-[40px] px-4 py-2 text-sm font-medium border-t border-b whitespace-nowrap',
+                        i === 0 && (isAr ? 'rounded-r-lg border-r' : 'rounded-l-lg border-l'),
+                        i === TABS.length - 1 && (isAr ? 'rounded-l-lg border-l' : 'rounded-r-lg border-r'),
+                        isActive
+                          ? 'bg-[#f5f9ff] border-[#0063f5] text-[#0063f5] z-10'
+                          : 'bg-white border-[#d5d7da] text-[#414651] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300',
+                        !isActive && i > 0 && 'border-s-0',
+                      )}
+                    >
+                      {isAr ? tab.label.ar : tab.label.en}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Search + filter */}
             <div className="flex items-center gap-3">
@@ -1063,38 +1070,38 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
             <table className="w-full min-w-max">
               <thead>
                 <tr className="bg-white dark:bg-slate-900 border-b border-[#f2f4f7] dark:border-slate-800">
-                  <th className="ps-6 pe-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[300px]">
+                  <th className="ps-6 pe-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[300px]">
                     {isAr ? 'الملف الشخصي' : 'Profile'}
                   </th>
-                  <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[120px]">
+                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
                     {isAr ? 'نوع السجل' : 'Record type'}
                   </th>
-                  <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[220px]">
+                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[220px]">
                     {isAr ? 'المرحلة الحالية' : 'Current stage'}
                   </th>
-                  <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[120px]">
+                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
                     {isAr ? 'نتيجة الرحلة' : 'Journey result'}
                   </th>
                   {!isProvider && (
-                    <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[180px]">
+                    <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
                       {isAr ? 'المسؤول' : 'Assigned to'}
                     </th>
                   )}
                   {!isProvider && activeTab === 'customers' && (
                     <>
-                      <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[80px]">SIMAH</th>
-                      <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[80px]">MASDR</th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">SIMAH</th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">MASDR</th>
                     </>
                   )}
-                  <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[180px]">
+                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
                     {isAr ? 'تاريخ الانضمام' : 'Joined date'}
                   </th>
                   {!isProvider && activeTab === 'customers' && (
-                    <th className="px-4 py-3 text-start text-xs font-medium text-[#697586] dark:text-slate-400 w-[100px]">
+                    <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[100px]">
                       {isAr ? 'عدد الطلبات' : 'Order count'}
                     </th>
                   )}
-                  <th className="px-4 py-3 text-center text-xs font-medium text-[#697586] dark:text-slate-400 w-[48px]" />
+                  <th className="px-4 py-3 text-center text-sm font-medium text-[#697586] dark:text-slate-400 w-[48px]" />
                 </tr>
               </thead>
               <tbody>
@@ -1183,8 +1190,8 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     {/* Joined date */}
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
-                        <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 whitespace-nowrap">{p.joinedDate}</span>
-                        <span className="text-xs text-[#697586] dark:text-slate-400">{p.joinedTime}</span>
+                        <span className="text-base font-medium text-[#121a26] dark:text-slate-100 leading-[26px] whitespace-nowrap">{p.joinedDate}</span>
+                        <span className="text-sm text-[#697586] dark:text-slate-400">{p.joinedTime}</span>
                       </div>
                     </td>
 

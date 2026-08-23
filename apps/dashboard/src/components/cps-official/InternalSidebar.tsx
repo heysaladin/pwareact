@@ -36,14 +36,8 @@ export default function InternalSidebar() {
   return (
     <div className="w-[220px] h-full bg-[#0063f5] flex flex-col shrink-0 overflow-hidden">
       {/* Logo header */}
-      <div className="flex items-center gap-2.5 px-4 py-3.5 shrink-0 h-[66px]">
-        <div className="w-8 h-8 shrink-0">
-          <Image src="/favicon.svg" alt="Tamawal" width={32} height={32} style={{ filter: 'brightness(0) invert(1)' }} />
-        </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-white text-[14px] font-bold leading-tight">Tamawal</span>
-          <span className="text-white/60 text-[9px] font-semibold uppercase tracking-wider leading-tight">Internal Team</span>
-        </div>
+      <div className="flex items-center px-4 shrink-0 h-[66px]">
+        <Image src="/logo-tamawal-web.svg" alt="Tamawal" width={112} height={33} />
       </div>
 
       {/* Nav */}

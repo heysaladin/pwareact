@@ -177,50 +177,139 @@ export function SummaryContent({ isAr }: { isAr: boolean }) {
 
 // ─── CommentsContent (0-2) ────────────────────────────────────────────────────
 
+import { useState } from 'react';
+
 const COMMENTS_DATA = [
-  { initials: 'NA', name: 'Noura Alqahtani', nameAr: 'نورة القحطاني', timeEn: 'Yesterday 14:26',   timeAr: 'أمس 14:26',          textEn: 'Identity checks complete. Waiting for next customer action.',     textAr: 'اكتملت عمليات التحقق من الهوية. في انتظار الإجراء التالي من العميل.' },
-  { initials: 'AA', name: 'Ahmed Al-Dosari', nameAr: 'أحمد الدوسري',  timeEn: 'Aug 12, 10:15',     timeAr: 'أغسطس 12، 10:15',   textEn: 'SIMAH retry has been scheduled. Should resolve within 24h.',      textAr: 'تمت جدولة إعادة محاولة SIMAH. من المتوقع حله خلال 24 ساعة.'       },
-  { initials: 'NA', name: 'Noura Alqahtani', nameAr: 'نورة القحطاني', timeEn: 'Aug 12, 11:30',     timeAr: 'أغسطس 12، 11:30',   textEn: 'Customer contacted via phone. Confirmed awareness of the delay.', textAr: 'تم التواصل مع العميل عبر الهاتف. أكد علمه بالتأخير.'               },
-] as const;
+  {
+    name: 'Agent Omar Radwan', nameAr: 'الوكيل عمر رضوان',
+    role: 'Customer Care', roleAr: 'خدمة العملاء',
+    dateEn: '4 Apr 2026, 03:27 AM', dateAr: '٤ أبريل 2026، 03:27 ص',
+    titleEn: 'A Comment Title', titleAr: 'عنوان التعليق',
+    textEn: "It is essential to thoroughly verify the status of the related order before proceeding with any final resolution, as this step plays a critical role in ensuring accuracy, consistency, and proper decision-making throughout the entire process. By confirming the current state of the order, whether it is still in progress, pending, completed, canceled, or even partially fulfilled, you establish a clear and reliable foundation for any subsequent actions. Skipping this verification could lead to unintended consequences such as duplicate processing, conflicting updates, or even negatively impacting the user experience due to incorrect assumptions about the order's status.",
+    textAr: 'من الضروري التحقق الشامل من حالة الطلب المرتبط قبل المضي قدمًا في أي قرار نهائي.',
+    pinned: true,
+  },
+  {
+    name: 'Agent Omar Radwan', nameAr: 'الوكيل عمر رضوان',
+    role: 'Customer Care', roleAr: 'خدمة العملاء',
+    dateEn: '4 Apr 2026, 03:27 AM', dateAr: '٤ أبريل 2026، 03:27 ص',
+    titleEn: 'A Comment Title', titleAr: 'عنوان التعليق',
+    textEn: "It is essential to thoroughly verify the status of the related order before proceeding with any final resolution the order's status.",
+    textAr: "من الضروري التحقق الشامل من حالة الطلب المرتبط قبل المضي قدمًا في أي قرار نهائي.",
+    pinned: false,
+  },
+  {
+    name: 'Agent Omar Radwan', nameAr: 'الوكيل عمر رضوان',
+    role: 'Customer Care', roleAr: 'خدمة العملاء',
+    dateEn: '4 Apr 2026, 03:27 AM', dateAr: '٤ أبريل 2026، 03:27 ص',
+    titleEn: 'A Comment Title', titleAr: 'عنوان التعليق',
+    textEn: "It is essential to thoroughly verify the status of the related order before proceeding with any final resolution the order's status.",
+    textAr: "من الضروري التحقق الشامل من حالة الطلب المرتبط قبل المضي قدمًا في أي قرار نهائي.",
+    pinned: false,
+  },
+];
+
+function PinIcon({ filled, className }: { filled?: boolean; className?: string }) {
+  return filled ? (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#b54708" stroke="#b54708" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ) : (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#9aa3b0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
 
 export function CommentsContent({ isAr }: { isAr: boolean; profile: Profile }) {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const maxChars = 2000;
+
   return (
-    <Card>
-      <SectionTitle>{isAr ? 'التعليقات الداخلية' : 'Internal Comments'}</SectionTitle>
-      <div className="flex flex-col gap-4 mb-5">
-        {COMMENTS_DATA.map((c, i) => (
-          <div key={i} className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#dfeeff] flex items-center justify-center text-xs font-bold text-[#0d5fcd] shrink-0 mt-0.5">
-              {c.initials}
-            </div>
-            <div className="flex flex-col gap-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-[#15212f]">{isAr ? c.nameAr : c.name}</span>
-                <span className="text-xs text-[#697586]">{isAr ? c.timeAr : c.timeEn}</span>
-              </div>
-              <p className="text-sm text-[#414651]">{isAr ? c.textAr : c.textEn}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="border-t border-[#e3e8f1] pt-4">
-        <div className="flex gap-3">
-          <div className="w-8 h-8 rounded-full bg-[#dfeeff] flex items-center justify-center text-xs font-bold text-[#0d5fcd] shrink-0" />
-          <div className="flex-1 min-w-0">
-            <textarea
-              rows={3}
-              placeholder={isAr ? 'أضف تعليقاً...' : 'Add a comment...'}
-              className="w-full rounded-lg border border-[#d5d7da] px-3 py-2 text-sm text-[#1e2228] placeholder:text-[#9aa3b0] resize-none focus:outline-none focus:border-[#0063f5]"
-            />
-            <div className="flex justify-end mt-2">
-              <button className="px-4 py-2 rounded-lg bg-[#0063f5] text-white text-sm font-medium hover:bg-[#0052cc] transition-colors">
-                {isAr ? 'إرسال' : 'Post comment'}
-              </button>
-            </div>
+    <div className="flex gap-6 items-start">
+      {/* Left: Add comment form */}
+      <div className="w-[340px] shrink-0 flex flex-col gap-4">
+        <h2 className="text-[22px] font-semibold text-[#15212f] leading-[28px]">
+          {isAr ? 'إضافة تعليق داخلي' : 'Add internal comment'}
+        </h2>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#414651]">{isAr ? 'العنوان' : 'Title'}</label>
+          <input
+            type="text"
+            placeholder={isAr ? 'أدخل عنوان الرد' : 'Enter the reply title'}
+            className="w-full rounded-lg border border-[#d5d7da] px-3 py-2 text-sm text-[#1e2228] placeholder:text-[#9aa3b0] focus:outline-none focus:border-[#0063f5]"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#414651]">
+            {isAr ? 'نص الرسالة' : 'Message Body'} <span className="text-[#d92d20]">*</span>
+          </label>
+          <textarea
+            rows={5}
+            value={body}
+            onChange={e => setBody(e.target.value.slice(0, maxChars))}
+            placeholder={isAr ? 'اكتب ردك...' : 'Write your response...'}
+            className="w-full rounded-lg border border-[#d5d7da] px-3 py-2 text-sm text-[#1e2228] placeholder:text-[#9aa3b0] resize-none focus:outline-none focus:border-[#0063f5]"
+          />
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#697586]">{maxChars - body.length} {isAr ? 'حرف متبقٍ' : 'characters Remaining'}</span>
+            <button
+              onClick={() => setBody('')}
+              className="flex items-center gap-1 px-2 py-1 rounded border border-[#fecdca] text-[#b42318] text-xs font-medium hover:bg-[#fef3f2] transition-colors"
+            >
+              <span>✕</span>
+              {isAr ? 'مسح الكل' : 'Clear all'}
+            </button>
           </div>
         </div>
+
+        <button className="w-full py-2.5 rounded-lg border border-[#0063f5] text-[#0063f5] text-sm font-medium hover:bg-[#f0f7ff] transition-colors">
+          {isAr ? 'إرسال ملاحظة داخلية' : 'Send internal note'}
+        </button>
       </div>
-    </Card>
+
+      {/* Right: Comments timeline */}
+      <div className="flex-1 min-w-0 flex flex-col gap-0">
+        <h3 className="text-base font-semibold text-[#15212f] mb-4">{isAr ? 'التعليقات' : 'Comments'}</h3>
+
+        <div className="flex flex-col">
+          {COMMENTS_DATA.map((c, i) => (
+            <div key={i} className="flex gap-3">
+              {/* Timeline dot + line */}
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-[10px] h-[10px] rounded-full bg-[#c8cdd6] mt-[6px] shrink-0" />
+                {i < COMMENTS_DATA.length - 1 && (
+                  <div className="w-[1px] flex-1 bg-[#e3e8f1] mt-1" />
+                )}
+              </div>
+
+              {/* Comment card */}
+              <div className={`flex-1 min-w-0 rounded-lg border p-4 mb-4 ${c.pinned ? 'bg-[#fffef0] border-[#e8e0a0]' : 'bg-white border-[#e3e8f1]'}`}>
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <span className="text-xs text-[#697586]">{isAr ? c.dateAr : c.dateEn}</span>
+                  <button className="shrink-0 mt-0.5">
+                    <PinIcon filled={c.pinned} />
+                  </button>
+                </div>
+                <p className="text-xs text-[#697586] mb-2">
+                  {isAr ? c.nameAr : c.name} ({isAr ? c.roleAr : c.role})
+                </p>
+                <p className="text-sm font-semibold text-[#15212f] mb-1">{isAr ? c.titleAr : c.titleEn}</p>
+                <p className="text-sm text-[#414651] leading-relaxed">{isAr ? c.textAr : c.textEn}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button className="flex items-center gap-1 text-sm font-medium text-[#0063f5] hover:underline self-center mt-1">
+          {isAr ? 'عرض السجل الكامل' : 'View Full History'}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#0063f5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
   );
 }
 

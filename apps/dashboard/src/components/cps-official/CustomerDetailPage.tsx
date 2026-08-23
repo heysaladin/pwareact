@@ -62,6 +62,27 @@ const CUSTOMER_TABS: MainTab[] = [
 ];
 
 
+const PROVIDER_TABS: MainTab[] = [
+  { key: 'overview',       labelEn: 'Overview',          labelAr: 'نظرة عامة',       iconSrc: '/tab-icons/bar-chart-square-03.svg',  sub: [
+    { key: 'summary',       labelEn: 'Summary',          labelAr: 'ملخص',          iconSrc: '/tab-icons/bar-chart-square-03.svg'   },
+    { key: 'journey',       labelEn: 'User Journey',     labelAr: 'رحلة المستخدم', iconSrc: '/tab-icons/arrow-circle-up-right.svg' },
+  ]},
+  { key: 'reports',        labelEn: 'Customer Reports',  labelAr: 'تقارير العميل',   iconSrc: '/tab-icons/clipboard-minus.svg',      sub: [
+    { key: 'kyc',           labelEn: 'KYC',              labelAr: 'KYC',           Icon: UserCircle },
+    { key: 'masdr',         labelEn: 'MASDR',            labelAr: 'MASDR',         Icon: Building2  },
+    { key: 'simah',         labelEn: 'SIMAH',            labelAr: 'SIMAH',         Icon: Building   },
+  ]},
+  { key: 'financing',      labelEn: 'Financing Journey', labelAr: 'رحلة التمويل',    iconSrc: '/tab-icons/briefcase-02.svg',         sub: [
+    { key: 'preliminary',   labelEn: 'Preliminary',      labelAr: 'تمهيدي',        Icon: List       },
+    { key: 'applications',  labelEn: 'Applications',     labelAr: 'التطبيقات',      Icon: CreditCard },
+    { key: 'decisions',     labelEn: 'Decisions',        labelAr: 'القرارات',        Icon: CheckCircle2 },
+    { key: 'orders',        labelEn: 'Orders',           labelAr: 'طلبات',          Icon: ClipboardList },
+  ]},
+  { key: 'communications', labelEn: 'Communications',    labelAr: 'الاتصالات',       iconSrc: '/tab-icons/message-dots-circle.svg',  sub: [
+    { key: 'notifications', labelEn: 'Notifications',    labelAr: 'إشعارات',        Icon: Bell       },
+  ]},
+];
+
 const GUEST_TABS: MainTab[] = [
   { key: 'overview',       labelEn: 'Overview',          labelAr: 'ملخص',               iconSrc: '/tab-icons/bar-chart-square-03.svg',  sub: [
     { key: 'summary',       labelEn: 'Summary',          labelAr: 'ملخص',          iconSrc: '/tab-icons/bar-chart-square-03.svg'   },
@@ -682,18 +703,13 @@ const GUEST_JOURNEYS = [
 
 function GuestJourneyContent({ isAr }: { isAr: boolean }) {
   const [selectedStep,        setSelectedStep]        = useState(0);
-  const [selectedSubJourney,  setSelectedSubJourney]  = useState(0);
   const [expandedCp,          setExpandedCp]          = useState<number | null>(0);
   const [journeyDropdownOpen, setJourneyDropdownOpen] = useState(false);
 
-  const step           = GUEST_JOURNEY_STEPS[selectedStep];
-  const hasSubJourneys = !!step.subJourneys?.length;
-  const activeCheckpoints = hasSubJourneys
-    ? (step.subJourneys![selectedSubJourney]?.checkpoints ?? [])
-    : step.checkpoints;
-  const activeLabel = hasSubJourneys
-    ? (isAr ? step.subJourneys![selectedSubJourney]?.labelAr : step.subJourneys![selectedSubJourney]?.labelEn)
-    : (isAr ? step.labelAr : step.labelEn);
+  const guestSteps     = GUEST_JOURNEY_STEPS[0].subJourneys!;
+  const step           = guestSteps[selectedStep];
+  const activeCheckpoints = step.checkpoints;
+  const activeLabel    = isAr ? step.labelAr : step.labelEn;
   const requiredCps = activeCheckpoints.filter(c => c.status === 'Passed' || c.tag === 'Mandatory');
   const passed      = requiredCps.filter(c => c.status === 'Passed').length;
   const open        = requiredCps.filter(c => c.status !== 'Passed').length;
@@ -838,7 +854,7 @@ function GuestJourneyContent({ isAr }: { isAr: boolean }) {
 
         {/* Journey steps (horizontal) */}
         <div className="flex items-start py-[20px] w-full overflow-x-auto">
-          {GUEST_JOURNEY_STEPS.map((s, i) => {
+          {guestSteps.map((s, i) => {
             const isSel = i === selectedStep;
             return (
               <React.Fragment key={s.id}>
@@ -852,7 +868,7 @@ function GuestJourneyContent({ isAr }: { isAr: boolean }) {
                   </div>
                 )}
                 <button
-                  onClick={() => { setSelectedStep(i); setSelectedSubJourney(0); setExpandedCp(null); }}
+                  onClick={() => { setSelectedStep(i); setExpandedCp(null); }}
                   className={cn(
                     'flex flex-col gap-[8px] items-center rounded-[8px] shrink-0 text-start',
                     isSel
@@ -909,42 +925,6 @@ function GuestJourneyContent({ isAr }: { isAr: boolean }) {
                 {isAr ? step.labelAr : step.labelEn}
               </p>
             </div>
-
-            {/* Sub-journey tabs (step 1 only) */}
-            {hasSubJourneys && (
-              <div className="flex gap-[8px] w-full overflow-x-auto pb-[2px]">
-                {step.subJourneys!.map((sj, sji) => {
-                  const isSelSj = sji === selectedSubJourney;
-                  return (
-                    <button
-                      key={sj.id}
-                      onClick={() => { setSelectedSubJourney(sji); setExpandedCp(null); }}
-                      className={cn(
-                        'flex flex-col gap-[4px] items-start px-[12px] py-[8px] rounded-[8px] border shrink-0 text-start transition-colors',
-                        isSelSj
-                          ? 'bg-[#eaf2ff] border-[#aacbfc]'
-                          : 'bg-white border-[#e9eaeb] hover:bg-[#f8fafc]'
-                      )}
-                    >
-                      <div className="flex items-center gap-[6px]">
-                        <div className="overflow-clip size-[14px] shrink-0">
-                          <img alt="" className="block size-full" src={
-                            sj.status === 'Passed'      ? '/journey-icons/state-completed.svg'  :
-                            sj.status === 'Paused'      ? '/journey-icons/state-paused.svg'     :
-                            sj.status === 'Failed'      ? '/journey-icons/state-error.svg'      :
-                                                          '/journey-icons/state-not-started.svg'
-                          } />
-                        </div>
-                        <p className={cn('text-[13px] font-medium whitespace-nowrap', isSelSj ? 'text-[#0063f5]' : 'text-[#414651]')}>
-                          {isAr ? sj.labelAr : sj.labelEn}
-                        </p>
-                      </div>
-                      <p className="text-[10px] text-[#697586] whitespace-nowrap">{isAr ? sj.overlineAr : sj.overlineEn}</p>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
 
             {activeCheckpoints.length > 0 ? (
               <>
@@ -1136,7 +1116,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const profile = PROFILES.find(p => p.id === profileId) ?? PROFILES[0];
   const assignedInitials = profile.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2);
   const isGuest = profile.type === 'Guest';
-  const activeTabs = isGuest ? GUEST_TABS : CUSTOMER_TABS;
+  const activeTabs = isGuest ? GUEST_TABS : isProvider ? PROVIDER_TABS : CUSTOMER_TABS;
 
   const [activeMainTab, setActiveMainTab] = useState(0);
   const [activeSubTab,  setActiveSubTab]  = useState(1); // default: User Journey
@@ -1248,20 +1228,20 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
         </div>
 
         {/* Main tabs */}
-        <div className="border-b border-[#e2e3e4] bg-white overflow-x-auto">
-          <div className="flex min-w-max px-6">
+        <div className="bg-white border-b border-[#e2e3e4] h-[57px]">
+          <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
             {activeTabs.map((tab, i) => (
               <button
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
+                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
                   i === activeMainTab
-                    ? 'border-[#0063f5] text-[#202a39] bg-white'
-                    : 'border-transparent text-[#697586] hover:bg-gray-50'
+                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
+                    : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
                 )}
               >
-                <img src={tab.iconSrc} alt="" className="w-[18px] h-[18px] shrink-0" />
+                <img src={tab.iconSrc} alt="" className="w-6 h-6 shrink-0" />
                 {isAr ? tab.labelAr : tab.labelEn}
               </button>
             ))}

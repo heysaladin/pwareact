@@ -77,15 +77,7 @@ export default function ProviderSidebar() {
     <div className="w-[240px] h-full bg-white border-r border-[#e2e7e9] flex flex-col shrink-0 overflow-hidden">
       {/* Logo header */}
       <div className="flex items-center justify-between px-4 shrink-0 h-[66px] border-b border-[#e2e7e9]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 shrink-0">
-            <Image src="/favicon.svg" alt="Tamawal" width={32} height={32} />
-          </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-[#121a26] text-[14px] font-bold leading-tight">Tamawal</span>
-            <span className="text-[#9ca3af] text-[9px] font-semibold uppercase tracking-wider leading-tight">Internal Team</span>
-          </div>
-        </div>
+        <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={112} height={33} />
         <button className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[#f8fafc] text-[#9ca3af] shrink-0">
           <ChevronLeft className="w-4 h-4" />
         </button>

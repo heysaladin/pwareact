@@ -31,6 +31,13 @@ export const PROFILES: Profile[] = [
     simah: true, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 8,
   },
   {
+    id: '1061847293', initials: 'LO', name: 'Lina Omar Al-Shehri', nameAr: 'لينا عمر الشهري',
+    phone: '+966501234567', country: 'Saudi Arabia', email: 'lina.shehri@gmail.com', type: 'Guest',
+    stage: 'Product search', stageAr: 'البحث عن المنتج', subStage: 'Browsing', subStageAr: 'التصفح',
+    journeyResult: 'Pending', assignedName: '', assignedNameAr: '', assignedRole: '',
+    simah: false, masdr: false, joinedDate: 'October 02. 2025', joinedTime: '11:05 AM', orderCount: 0,
+  },
+  {
     id: '1055273904', initials: 'SA', name: 'Sara Khalid Al-Qahtani', nameAr: 'سارة خالد القحطاني',
     phone: '+966512345678', country: 'Saudi Arabia', email: 'sara.qahtani@email.com', type: 'Customer',
     stage: 'Active', stageAr: 'نشط', subStage: 'Financing', subStageAr: 'التمويل',
@@ -52,32 +59,18 @@ export const PROFILES: Profile[] = [
     simah: true, masdr: true, joinedDate: 'June 03. 2025', joinedTime: '09:15 AM', orderCount: 12,
   },
   {
+    id: '1031759482', initials: 'TM', name: 'Tariq Mohammed Al-Dossari', nameAr: 'طارق محمد الدوسري',
+    phone: '+966567891234', country: 'Saudi Arabia', email: 'tariq.dossari@email.com', type: 'Guest',
+    stage: 'Registration', stageAr: 'التسجيل', subStage: 'OTP pending', subStageAr: 'انتظار OTP',
+    journeyResult: 'Pending', assignedName: '', assignedNameAr: '', assignedRole: '',
+    simah: false, masdr: false, joinedDate: 'April 30. 2025', joinedTime: '03:22 PM', orderCount: 0,
+  },
+  {
     id: '1027364819', initials: 'KZ', name: 'Khalid Saeed Al-Zahrani', nameAr: 'خالد سعيد الزهراني',
     phone: '+966556781234', country: 'Saudi Arabia', email: 'khalid.zahrani@email.com', type: 'Customer',
     stage: 'Suspended', stageAr: 'موقوف', subStage: 'Compliance', subStageAr: 'الامتثال',
     journeyResult: 'Failed', assignedName: 'Nora Al-Harbi', assignedNameAr: 'نورة الحربي', assignedRole: 'Risk',
     simah: false, masdr: true, joinedDate: 'May 18. 2025', joinedTime: '01:00 PM', orderCount: 5,
-  },
-  {
-    id: '2091038462', initials: 'AB', name: 'Abdullah Tariq Al-Ghamdi', nameAr: 'عبدالله طارق الغامدي',
-    phone: '+966567890123', country: 'Saudi Arabia', email: 'abdullah.ghamdi@gmail.com', type: 'Guest',
-    stage: 'Registration', stageAr: 'التسجيل', subStage: 'Onboarding', subStageAr: 'الإعداد',
-    journeyResult: 'Pending', assignedName: 'Ahmed Al-Dosari', assignedNameAr: 'أحمد الدوسري', assignedRole: 'Retail',
-    simah: false, masdr: false, joinedDate: 'September 12. 2025', joinedTime: '11:00 AM', orderCount: 0,
-  },
-  {
-    id: '2087364125', initials: 'HB', name: 'Hessa Ali Al-Bishi', nameAr: 'هسة علي البيشي',
-    phone: '+966578901234', country: 'Saudi Arabia', email: 'hessa.bishi@email.com', type: 'Guest',
-    stage: 'Email verification', stageAr: 'التحقق من البريد', subStage: 'Onboarding', subStageAr: 'الإعداد',
-    journeyResult: 'Pending', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Digital',
-    simah: false, masdr: false, joinedDate: 'August 28. 2025', joinedTime: '03:22 PM', orderCount: 0,
-  },
-  {
-    id: '2074930185', initials: 'YM', name: 'Yazid Hamad Al-Mutairi', nameAr: 'يزيد حمد المطيري',
-    phone: '+966589012345', country: 'Saudi Arabia', email: 'yazid.mutairi@email.com', type: 'Guest',
-    stage: 'ID upload', stageAr: 'رفع الهوية', subStage: 'Onboarding', subStageAr: 'الإعداد',
-    journeyResult: 'Pending', assignedName: 'Nora Al-Harbi', assignedNameAr: 'نورة الحربي', assignedRole: 'Digital',
-    simah: false, masdr: false, joinedDate: 'July 05. 2025', joinedTime: '08:40 AM', orderCount: 0,
   },
 ];
 

@@ -259,8 +259,8 @@ const howItWorksSlides = [
     list: ['Rates are Real;', 'No markups and no hidden fees;', 'Everything is 100% Transparent and Free'],
   },
   {
-    img: '/works-summary/2.svg',
-    alt: '2',
+    img: '/ill-3.png',
+    alt: 'Get your money',
     title: 'Get your money',
     body: `After final checks and contract signing your offer and then receiving your loan amount.\n\nEnjoy your day!`,
     list: [] as string[],
@@ -273,64 +273,81 @@ function HowItWorksSection() {
   const prev = () => setCurrent((c) => (c - 1 + total) % total);
   const next = () => setCurrent((c) => (c + 1) % total);
   const slide = howItWorksSlides[current];
+  const isFirst = current === 0;
+  const isLast = current === total - 1;
+
+  const ArrowBtn = ({ onClick, dir, disabled }: { onClick: () => void; dir: 'prev' | 'next'; disabled: boolean }) => (
+    <button
+      onClick={onClick}
+      className={`p-7 rounded-full shrink-0 transition-colors cursor-pointer ${disabled ? 'bg-white border border-[#d0d5dd]' : 'bg-[#03163b]'}`}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`h-6 w-6 ${disabled ? 'text-[#101828]' : 'text-white'}`}>
+        {dir === 'prev'
+          ? <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          : <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        }
+      </svg>
+    </button>
+  );
 
   return (
     <div className="bg-white">
-      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
-        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">How it works summary</h2>
-        <div className="relative">
-          <div className="w-full overflow-x-hidden rounded-xl pt-5 md:pt-10 pb-20">
-            <div className="w-full text-[#101828]">
-              <div className="grid grid-cols-2 place-content-center gap-4 md:gap-8">
-                <img
-                  alt={slide.alt}
-                  width={400}
-                  height={400}
-                  className="mx-auto me-0 w-full md:w-[400px] h-[400px] object-contain"
-                  src={slide.img}
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-[94px]">
+        <h2 className="text-center font-semibold text-3xl md:text-[40px] text-[#101828] mb-16">How it works summary</h2>
+
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-24 min-h-[400px] justify-center px-7">
+          <ArrowBtn onClick={prev} dir="prev" disabled={isFirst} />
+          <div className="flex-1 max-w-[500px] flex items-center justify-center">
+            <img src={slide.img} alt={slide.alt} className="w-[200px] h-[200px] object-contain" />
+          </div>
+          <div className="flex-1 max-w-[500px] flex flex-col gap-6">
+            <h3 className="text-[40px] font-bold text-[#101828] leading-[1.35] tracking-[0.15px]">{slide.title}</h3>
+            <p className="text-[16px] leading-[1.5] text-black whitespace-pre-line">{slide.body}</p>
+            {slide.list.length > 0 && (
+              <ul className="list-disc text-[16px] leading-[1.5] ms-6">
+                {slide.list.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            )}
+            <div className="flex gap-2 mt-2">
+              {howItWorksSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`block cursor-pointer rounded-[4px] transition-all ${i === current ? 'bg-[#0063f5] h-2 w-[42px]' : 'bg-[#d5d7da] h-[6px] w-4'}`}
                 />
-                <div className="my-auto mx-0 md:me-20 lg:mx-0">
-                  <h3 className="text-2xl font-semibold mb-5">{slide.title}</h3>
-                  <p className="text-sm font-medium max-w-sm whitespace-pre-line">{slide.body}</p>
-                  {slide.list.length > 0 && (
-                    <ul className="list-disc text-sm font-medium max-w-sm whitespace-pre-line ms-6 mt-2">
-                      {slide.list.map((item) => <li key={item}>{item}</li>)}
-                    </ul>
-                  )}
-                </div>
+              ))}
+            </div>
+          </div>
+          <ArrowBtn onClick={next} dir="next" disabled={isLast} />
+        </div>
+
+        {/* Mobile */}
+        <div className="md:hidden relative">
+          <div className="w-full overflow-x-hidden pt-5 pb-20">
+            <div className="flex flex-col gap-6 items-center text-[#101828]">
+              <img src={slide.img} alt={slide.alt} className="w-[200px] h-[200px] object-contain" />
+              <div>
+                <h3 className="text-2xl font-semibold mb-5 text-center">{slide.title}</h3>
+                <p className="text-sm font-medium whitespace-pre-line">{slide.body}</p>
+                {slide.list.length > 0 && (
+                  <ul className="list-disc text-sm font-medium ms-6 mt-2">
+                    {slide.list.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                )}
               </div>
             </div>
           </div>
-
-          {/* Dots */}
           <div className="absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 gap-2">
             {howItWorksSlides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`block h-1 cursor-pointer rounded-2xl transition-all bg-[#5CACF3] ${i === current ? 'w-8' : 'w-4 border rounded-full border-[#5CACF3] opacity-[24%]'}`}
-              />
+              <button key={i} onClick={() => setCurrent(i)} className={`block h-1 cursor-pointer rounded-2xl transition-all bg-[#5CACF3] ${i === current ? 'w-8' : 'w-4 opacity-[24%]'}`} />
             ))}
           </div>
-
-          {/* Prev */}
-          <button
-            onClick={prev}
-            className="hidden sm:flex absolute top-1/2 left-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
+          <button onClick={prev} className="hidden sm:flex absolute top-1/2 left-4 -translate-y-1/2 cursor-pointer border p-4 rounded-full items-center justify-center text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
           </button>
-
-          {/* Next */}
-          <button
-            onClick={next}
-            className="hidden sm:flex absolute top-1/2 right-4 -translate-y-1/2 transition ease-in-out duration-300 text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] cursor-pointer border p-4 rounded-full items-center justify-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
+          <button onClick={next} className="hidden sm:flex absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer border p-4 rounded-full items-center justify-center text-[#101828] hover:text-white hover:bg-[#03163B] hover:border-[#03163B] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
           </button>
         </div>
       </div>
@@ -347,22 +364,22 @@ const loanProducts = [
 
 function FeaturedLoansSection() {
   return (
-    <div className="bg-white">
-      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-2 py-10 md:py-20">
-        <h2 className="text-center font-semibold text-3xl md:text-4xl text-[#101828] mb-5">Featured loans products</h2>
+    <div className="bg-[#f9f8fd]">
+      <div className="md:max-w-3xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-0 md:mx-auto lg:mx-auto px-5 lg:px-8 py-10 md:py-20">
+        <h2 className="text-center font-semibold text-3xl md:text-[40px] text-[#101828] mb-5">Featured loans products</h2>
         <div className="relative">
-          <div className="w-full overflow-x-hidden flex rounded-xl pt-5 md:pt-10 pb-20 sm:pb-5 md:grid md:grid-cols-2 xl:grid-cols-4 md:place-content-center md:gap-8">
+          <div className="w-full overflow-x-hidden flex pt-5 md:pt-10 pb-5 md:grid md:grid-cols-2 xl:grid-cols-4 md:place-content-center md:gap-8">
             {loanProducts.map((p) => (
               <div key={p.alt} className="w-full inline-block flex-none md:w-auto">
-                <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 md:max-w-[20rem] overflow-hidden mx-auto w-full shadow-none">
-                  <div className="bg-clip-border overflow-hidden bg-transparent text-gray-700 shadow-none m-0 rounded-none relative">
+                <div className="relative flex flex-col bg-white rounded-[12px] overflow-hidden mx-auto w-full max-w-[300px]">
+                  <div className="overflow-hidden bg-transparent relative">
                     <img src={p.img} alt={p.alt} className="w-full px-5" />
                     <div className={`uppercase w-full text-center py-2 text-sm ${p.badgeBg} text-white font-medium tracking-widest rounded mt-1`}>
                       Coming soon
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="lg:text-2xl font-semibold mb-3 text-[#292929]">{p.title}</h3>
+                    <h3 className="text-[24px] leading-[32px] font-semibold mb-3 text-[#292929]">{p.title}</h3>
                     <p className="text-md text-gray-500 font-medium">{p.subtitle}</p>
                   </div>
                 </div>
