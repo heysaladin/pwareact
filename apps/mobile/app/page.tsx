@@ -49,6 +49,21 @@ const general = [
       </svg>
     ),
   },
+  {
+    id: 'car-scan',
+    name: 'Car Scan',
+    description: 'Scan a vehicle to instantly retrieve specs, valuation, and financing eligibility.',
+    href: '/car-scan',
+    tag: 'SCAN',
+    accentColor: '#F97316',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="9" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M13 15h6M13 18h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
 ];
 
 function ProjectCard({ project }: { project: typeof featured[number] }) {

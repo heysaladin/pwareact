@@ -10,8 +10,8 @@ import { PROFILES, ACTIVITY_LOG, type Profile } from './cps-data';
 import {
   Users, UserCircle, Smile, Info,
   BarChart2,
-  Search, ChevronDown, X,
-  MapPin, Mail, Briefcase, ChevronsLeft, Phone,
+  Search, ChevronDown, ChevronLeft, X,
+  MapPin, Mail, Briefcase, ChevronsLeft, Phone, Flag,
   Check, Calendar, Pencil, MessageSquare, ArrowRight,
   Banknote, Building2, Building, Landmark, ArrowRightCircle,
   Gift, Shield, Receipt, FileSearch, ClipboardMinus, ArrowUpCircle,
@@ -1010,9 +1010,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#eef1f6] dark:border-slate-800 shrink-0">
             {/* Tabs (internal) / Title (provider) */}
             {isProvider ? (
-              <p className="text-[18px] font-semibold text-[#181d27] dark:text-slate-100 leading-[28px] tracking-[0.027px]">
-                {isAr ? 'العملاء' : 'Customers'}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-[18px] font-semibold text-[#181d27] dark:text-slate-100 leading-[28px] tracking-[0.027px]">
+                  {isAr ? 'العملاء' : 'Customers'}
+                </p>
+                <span className="text-[14px] font-medium text-[#697586] dark:text-slate-400">18,420</span>
+              </div>
             ) : (
               <div className="flex isolate rounded-lg overflow-hidden">
                 {TABS.map((tab, i) => {
@@ -1070,27 +1073,35 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
             <table className="w-full min-w-max">
               <thead>
                 <tr className="bg-white dark:bg-slate-900 border-b border-[#f2f4f7] dark:border-slate-800">
-                  <th className="ps-6 pe-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[300px]">
+                  {!isProvider && <th className="ps-6 pe-2 py-3 w-[48px]" />}
+                  <th className="ps-2 pe-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[300px]">
                     {isAr ? 'الملف الشخصي' : 'Profile'}
                   </th>
-                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
-                    {isAr ? 'نوع السجل' : 'Record type'}
-                  </th>
-                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[220px]">
-                    {isAr ? 'المرحلة الحالية' : 'Current stage'}
-                  </th>
-                  <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
-                    {isAr ? 'نتيجة الرحلة' : 'Journey result'}
-                  </th>
-                  {!isProvider && (
-                    <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
-                      {isAr ? 'المسؤول' : 'Assigned to'}
-                    </th>
-                  )}
-                  {!isProvider && activeTab === 'customers' && (
+                  {isProvider ? (
                     <>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">SIMAH</th>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">MASDR</th>
+                    </>
+                  ) : (
+                    <>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
+                        {isAr ? 'نوع السجل' : 'Record type'}
+                      </th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[220px]">
+                        {isAr ? 'المرحلة الحالية' : 'Current stage'}
+                      </th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
+                        {isAr ? 'نتيجة الرحلة' : 'Journey result'}
+                      </th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
+                        {isAr ? 'المسؤول' : 'Assigned to'}
+                      </th>
+                      {activeTab === 'customers' && (
+                        <>
+                          <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">SIMAH</th>
+                          <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[80px]">MASDR</th>
+                        </>
+                      )}
                     </>
                   )}
                   <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
@@ -1101,7 +1112,6 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       {isAr ? 'عدد الطلبات' : 'Order count'}
                     </th>
                   )}
-                  <th className="px-4 py-3 text-center text-sm font-medium text-[#697586] dark:text-slate-400 w-[48px]" />
                 </tr>
               </thead>
               <tbody>
@@ -1114,8 +1124,20 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       idx % 2 === 1 && 'bg-[#fcfcfd] dark:bg-slate-900/30',
                     )}
                   >
+                    {/* Action */}
+                    {!isProvider && (
+                      <td className="ps-6 pe-2 py-3">
+                        <button
+                          onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}`); }}
+                          className="bg-white border border-[#e3e8ef] rounded-full p-2 flex items-center justify-center hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 transition-colors"
+                        >
+                          <ChevronLeft className="w-4 h-4 text-[#697586] dark:text-slate-400" />
+                        </button>
+                      </td>
+                    )}
+
                     {/* Profile */}
-                    <td className="ps-6 pe-4 py-3">
+                    <td className={cn('pe-4 py-3', isProvider ? 'ps-6' : 'ps-2')}>
                       <div className="flex items-start gap-4">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#eaf2ff] border border-[#aacbfc] text-[#0053cc] text-sm font-semibold shrink-0">
                           {p.initials}
@@ -1135,7 +1157,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                                 <span>{p.phone}</span>
                               </div>
                               <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
-                                <MapPin className="w-3 h-3 shrink-0" />
+                                <Flag className="w-3 h-3 shrink-0" />
                                 <span>{isAr ? 'المملكة العربية السعودية' : p.country}</span>
                               </div>
                               <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
@@ -1148,42 +1170,50 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       </div>
                     </td>
 
-                    {/* Record type */}
-                    <td className="px-4 py-3"><RecordBadge type={p.type} isAr={isAr} /></td>
-
-                    {/* Current stage */}
-                    <td className="px-4 py-3">
-                      <StageBadge stage={isAr ? p.stageAr : p.stage} subStage={isAr ? p.subStageAr : p.subStage} />
-                    </td>
-
-                    {/* Journey result */}
-                    <td className="px-4 py-3"><JourneyBadge result={p.journeyResult} isAr={isAr} /></td>
-
-                    {/* Assigned to */}
-                    {!isProvider && (
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#bbd5fb] border border-white dark:border-slate-800 flex items-center justify-center text-xs font-semibold text-[#0063f5] shrink-0">
-                            {p.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                          </div>
-                          <div className="flex flex-col min-w-0">
-                            <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
-                              {isAr ? p.assignedNameAr : p.assignedName}
-                            </span>
-                            <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
-                              <Briefcase className="w-3 h-3 shrink-0" />
-                              <span>{p.assignedRole}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    )}
-
-                    {/* SIMAH + MASDR (customers tab only, internal only) */}
-                    {!isProvider && activeTab === 'customers' && (
+                    {isProvider ? (
                       <>
+                        {/* SIMAH + MASDR always visible for provider */}
                         <td className="px-4 py-3"><YesNoBadge value={p.simah} isAr={isAr} /></td>
                         <td className="px-4 py-3"><YesNoBadge value={p.masdr} isAr={isAr} /></td>
+                      </>
+                    ) : (
+                      <>
+                        {/* Record type */}
+                        <td className="px-4 py-3"><RecordBadge type={p.type} isAr={isAr} /></td>
+
+                        {/* Current stage */}
+                        <td className="px-4 py-3">
+                          <StageBadge stage={isAr ? p.stageAr : p.stage} subStage={isAr ? p.subStageAr : p.subStage} />
+                        </td>
+
+                        {/* Journey result */}
+                        <td className="px-4 py-3"><JourneyBadge result={p.journeyResult} isAr={isAr} /></td>
+
+                        {/* Assigned to */}
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#bbd5fb] border border-white dark:border-slate-800 flex items-center justify-center text-xs font-semibold text-[#0063f5] shrink-0">
+                              {p.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </div>
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
+                                {isAr ? p.assignedNameAr : p.assignedName}
+                              </span>
+                              <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                                <Briefcase className="w-3 h-3 shrink-0" />
+                                <span>{p.assignedRole}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* SIMAH + MASDR (customers tab only) */}
+                        {activeTab === 'customers' && (
+                          <>
+                            <td className="px-4 py-3"><YesNoBadge value={p.simah} isAr={isAr} /></td>
+                            <td className="px-4 py-3"><YesNoBadge value={p.masdr} isAr={isAr} /></td>
+                          </>
+                        )}
                       </>
                     )}
 
@@ -1202,15 +1232,6 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       </td>
                     )}
 
-                    {/* Action */}
-                    <td className="px-4 py-3 text-center">
-                      <button
-                        onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}`); }}
-                        className="p-1 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-[#667085] dark:text-slate-400 transition-colors"
-                      >
-                        <ExportIcon className="w-6 h-6" />
-                      </button>
-                    </td>
                   </tr>
                 ))}
 

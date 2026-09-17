@@ -1,5 +1,5 @@
 import CustomerDetailPage from '@/components/cps-official/CustomerDetailPage';
-import ProviderSidebar from '@/components/cps-official/ProviderSidebar';
+import CpsCustomerSidebar from '@/components/cps-official/CpsCustomerSidebar';
 
 export default async function CpsProviderDetailRoute({
   params,
@@ -9,7 +9,7 @@ export default async function CpsProviderDetailRoute({
   const { id } = await params;
   return (
     <div className="flex h-screen overflow-hidden">
-      <ProviderSidebar />
+      <CpsCustomerSidebar currentId={id} basePath="/cps/provider" />
       <div className="flex-1 min-w-0 overflow-hidden">
         <CustomerDetailPage profileId={id} listPath="/cps/provider" isProvider />
       </div>

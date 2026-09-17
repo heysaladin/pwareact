@@ -1,5 +1,5 @@
 import CpsOfficialPage from '@/components/cps-official/CpsOfficialPage';
 
 export default function CpsOfficialRoute() {
-  return <CpsOfficialPage forceLang="en" detailBasePath="/cps" />;
+  return <CpsOfficialPage forceLang="ar" detailBasePath="/cps" />;
 }
