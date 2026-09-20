@@ -15,7 +15,7 @@ import {
   Check, Calendar, Pencil, MessageSquare, ArrowRight,
   Banknote, Building2, Building, Landmark, ArrowRightCircle,
   Gift, Shield, Receipt, FileSearch, ClipboardMinus, ArrowUpCircle,
-  File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2,
+  File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2, IdCard,
 } from 'lucide-react';
 import ViewSwitcherModal from './ViewSwitcherModal';
 import InternalSidebar from './InternalSidebar';
@@ -527,8 +527,8 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
       </div>
 
       {/* Main tabs */}
-      <div className="border-b border-[#e2e3e4] shrink-0 overflow-x-auto">
-        <div className="flex min-w-max">
+      <div className="bg-white border-b border-[#e2e3e4] h-[57px] shrink-0">
+        <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
           {CUSTOMER_TABS.map((tab, i) => {
             const TabIcon = tab.Icon;
             return (
@@ -536,13 +536,13 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
+                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
                   i === activeMainTab
-                    ? 'border-[#0063f5] text-[#202a39] bg-white'
-                    : 'border-transparent text-[#202a39] hover:bg-gray-50'
+                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
+                    : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
                 )}
               >
-                <TabIcon className="w-4 h-4 shrink-0" />
+                <TabIcon className="w-6 h-6 shrink-0" />
                 {isAr ? tab.labelAr : tab.labelEn}
               </button>
             );
@@ -550,36 +550,38 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
         </div>
       </div>
 
+      {/* Sub-tabs row */}
+      {CUSTOMER_TABS[activeMainTab].sub.length > 0 && (
+        <div className="bg-white border-b border-[#e2e3e4] px-6 py-[14px] shrink-0">
+          <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
+            {CUSTOMER_TABS[activeMainTab].sub.map((subTab, i) => {
+              const SubIcon = subTab.Icon;
+              return (
+                <button
+                  key={subTab.key}
+                  onClick={() => setActiveSubTab(i)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
+                    activeSubTab === i
+                      ? 'bg-[#f5f9ff] text-[#0063f5]'
+                      : 'bg-white text-[#414651] hover:bg-gray-50'
+                  )}
+                >
+                  <SubIcon className="w-4 h-4 shrink-0" />
+                  {isAr ? subTab.labelAr : subTab.labelEn}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <div className="flex gap-4 p-4">
 
           {/* Left: summary section + recent activity */}
           <div className="flex-1 min-w-0 flex flex-col gap-4">
-
-            {/* Sub-tab group — changes per active main tab */}
-            {CUSTOMER_TABS[activeMainTab].sub.length > 0 && (
-              <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
-                {CUSTOMER_TABS[activeMainTab].sub.map((subTab, i) => {
-                  const SubIcon = subTab.Icon;
-                  return (
-                    <button
-                      key={subTab.key}
-                      onClick={() => setActiveSubTab(i)}
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
-                        activeSubTab === i
-                          ? 'bg-[#f5f9ff] text-[#0063f5]'
-                          : 'bg-white text-[#414651] hover:bg-gray-50'
-                      )}
-                    >
-                      <SubIcon className="w-4 h-4 shrink-0" />
-                      {isAr ? subTab.labelAr : subTab.labelEn}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
 
             {/* Content switches per sub-tab */}
             {activeMainTab === 0 && activeSubTab === 1 ? (
@@ -765,8 +767,8 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
       </div>
 
       {/* Main tabs */}
-      <div className="border-b border-[#e2e3e4] shrink-0 overflow-x-auto">
-        <div className="flex min-w-max">
+      <div className="bg-white border-b border-[#e2e3e4] h-[57px] shrink-0">
+        <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
           {GUEST_TABS.map((tab, i) => {
             const TabIcon = tab.Icon;
             return (
@@ -774,13 +776,13 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
+                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
                   i === activeMainTab
-                    ? 'border-[#0063f5] text-[#202a39] bg-white'
-                    : 'border-transparent text-[#202a39] hover:bg-gray-50'
+                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
+                    : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
                 )}
               >
-                <TabIcon className="w-4 h-4 shrink-0" />
+                <TabIcon className="w-6 h-6 shrink-0" />
                 {isAr ? tab.labelAr : tab.labelEn}
               </button>
             );
@@ -788,36 +790,38 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
         </div>
       </div>
 
+      {/* Sub-tabs row */}
+      {GUEST_TABS[activeMainTab].sub.length > 0 && (
+        <div className="bg-white border-b border-[#e2e3e4] px-6 py-[14px] shrink-0">
+          <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
+            {GUEST_TABS[activeMainTab].sub.map((subTab, i) => {
+              const SubIcon = subTab.Icon;
+              return (
+                <button
+                  key={subTab.key}
+                  onClick={() => setActiveSubTab(i)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
+                    activeSubTab === i
+                      ? 'bg-[#f5f9ff] text-[#0063f5]'
+                      : 'bg-white text-[#414651] hover:bg-gray-50'
+                  )}
+                >
+                  <SubIcon className="w-4 h-4 shrink-0" />
+                  {isAr ? subTab.labelAr : subTab.labelEn}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <div className="flex gap-4 p-4">
 
           {/* Left: interest info + recent activity */}
           <div className="flex-1 min-w-0 flex flex-col gap-4">
-
-            {/* Sub-tab group — changes per active main tab */}
-            {GUEST_TABS[activeMainTab].sub.length > 0 && (
-              <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
-                {GUEST_TABS[activeMainTab].sub.map((subTab, i) => {
-                  const SubIcon = subTab.Icon;
-                  return (
-                    <button
-                      key={subTab.key}
-                      onClick={() => setActiveSubTab(i)}
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
-                        activeSubTab === i
-                          ? 'bg-[#f5f9ff] text-[#0063f5]'
-                          : 'bg-white text-[#414651] hover:bg-gray-50'
-                      )}
-                    >
-                      <SubIcon className="w-4 h-4 shrink-0" />
-                      {isAr ? subTab.labelAr : subTab.labelEn}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
 
             {/* Interest information */}
             <div className="bg-white border border-[#e3e8f1] rounded-xl p-4">
@@ -1163,6 +1167,10 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                               <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
                                 <Mail className="w-3 h-3 shrink-0" />
                                 <span>{p.email}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                                <IdCard className="w-3 h-3 shrink-0" />
+                                <span>{p.nationalId}</span>
                               </div>
                             </>
                           )}

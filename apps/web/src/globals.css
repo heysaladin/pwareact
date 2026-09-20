@@ -50,6 +50,15 @@ body {
   to   { transform: rotate(360deg); }
 }
 
+@keyframes border-ping {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-border-ping {
+  animation: border-ping 1.5s ease-in-out infinite;
+}
+
 /* Theme toggle icons — CSS drives visibility, no JS state needed */
 #icon-sun  { display: none; }
 #icon-moon { display: block; }

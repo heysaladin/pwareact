@@ -3,6 +3,23 @@ import TamawalLogo from '@/components/ui/TamawalLogo';
 
 const featured = [
   {
+    id: 'tamweel-dashboard',
+    name: 'Tamweel Dashboard',
+    description: 'Overview and management of the Tamweel platform.',
+    href: '/tamweel-dashboard',
+    tag: 'TWD',
+    accentColor: '#0063F5',
+    status: 'on designing',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+  {
     id: 'oms',
     name: 'OMS - v2 (Under Development)',
     description: 'Track, manage and process customer orders in real time.',
@@ -24,7 +41,7 @@ const featured = [
     href: '/cps',
     tag: 'CPS',
     accentColor: '#0063F5',
-    status: 'on designing',
+    status: 'on review',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
@@ -139,9 +156,15 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
         </div>
         <div className="flex items-center gap-4">
           {'status' in project && project.status && (
-            <span className="animate-border-ping text-[10px] font-semibold uppercase text-[#EA580C] border border-[#EA580C] rounded-full px-2 py-0.5">
-              {project.status}
-            </span>
+            project.status === 'on designing' ? (
+              <span className="animate-border-ping text-[10px] font-semibold uppercase text-[#EA580C] border border-[#EA580C] rounded-full px-2 py-0.5">
+                {project.status}
+              </span>
+            ) : (
+              <span className="text-[10px] font-semibold uppercase text-[#0063F5] border border-[#0063F5] rounded-full px-2 py-0.5">
+                {project.status}
+              </span>
+            )
           )}
           <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
             {project.tag}
@@ -226,12 +249,10 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-[#eef1f6] dark:border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
-          <p className="text-xs text-[#9aa4b2] dark:text-white/25">
-            Tamweel Platform
-          </p>
-          <p className="text-xs text-[#9aa4b2] dark:text-white/25">
-            {new Date().getFullYear()}
-          </p>
+          <Link href="/tamweel-dashboard" className="text-xs text-[#9aa4b2] dark:text-white/25 hover:text-[#0063F5] transition-colors">
+            Platform Hub
+          </Link>
+          <p className="text-xs text-[#9aa4b2] dark:text-white/25">{new Date().getFullYear()}</p>
         </div>
       </footer>
 

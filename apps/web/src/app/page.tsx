@@ -3,11 +3,27 @@ import TamawalLogo from '../components/ui/TamawalLogo';
 
 const featured = [
   {
+    id: 'tamweel-web',
+    name: 'Tamweel Web',
+    description: 'Brand identity, guidelines, and downloadable assets for the Tamweel web presence.',
+    href: '/tamweel-web',
+    tag: 'WEB',
+    badge: 'on designing',
+    accentColor: '#0063F5',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
     id: 'app',
     name: 'App',
     description: 'Mobile application design for the customer-facing Tamawal experience.',
     href: '/app',
     tag: 'APP',
+    badge: null,
     accentColor: '#7C3AED',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,6 +38,7 @@ const featured = [
     description: 'The public-facing website for Tamawal — bilingual Arabic and English.',
     href: '/landing',
     tag: 'WEB',
+    badge: null,
     accentColor: '#0063F5',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,6 +56,7 @@ const general = [
     description: 'Payment experience design for Tamawal — checkout flows, payment methods, and confirmation screens.',
     href: '/pay',
     tag: 'PAY',
+    badge: null,
     accentColor: '#10B981',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,6 +72,7 @@ const general = [
     description: 'Business financing platform for SMEs — smart matching for company funding needs.',
     href: '/sme',
     tag: 'SME',
+    badge: null,
     accentColor: '#FFDD33',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,6 +86,7 @@ const general = [
     description: 'Co-branded experience between CEER and Tamawal.',
     href: '/ceer-tamawal',
     tag: 'CO-BRAND',
+    badge: null,
     accentColor: '#0063F5',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,6 +101,7 @@ const general = [
     description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
     href: '/ceer-alternative',
     tag: 'EV',
+    badge: null,
     accentColor: '#0D0D0D',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,9 +128,16 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
         >
           {project.icon}
         </div>
-        <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
-          {project.tag}
-        </span>
+        <div className="flex items-center gap-2">
+          {project.badge && (
+            <span className="animate-border-ping text-[10px] font-semibold uppercase text-[#EA580C] border border-[#EA580C] rounded-full px-2 py-0.5">
+              {project.badge}
+            </span>
+          )}
+          <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
+            {project.tag}
+          </span>
+        </div>
       </div>
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">

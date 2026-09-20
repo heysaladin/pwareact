@@ -1060,11 +1060,11 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                   </div>
                   <div className="flex items-start justify-between px-4 py-2.5 bg-[#f9fbfc]">
                     <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'رقم الجوال' : 'Mobile No.'}</span>
-                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end">{profile.phone}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
+                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end min-w-0"><span className="truncate">{profile.phone}</span><Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
                   </div>
                   <div className="flex items-start justify-between px-4 py-2.5">
                     <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'البريد الإلكتروني' : 'Email'}</span>
-                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end">{profile.email ?? '—'}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
+                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end min-w-0"><span className="truncate">{profile.email ?? '—'}</span><Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
                   </div>
                 </div>
                 <div className="border border-[#eef1f6] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
@@ -1148,38 +1148,40 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
           </div>
         </div>
 
+        {/* Sub-tabs row */}
+        {activeTabs[activeMainTab].sub.length > 0 && (
+          <div className="bg-white border-b border-[#e2e3e4] px-6 py-[14px] shrink-0">
+            <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
+              {activeTabs[activeMainTab].sub.map((subTab, i) => {
+                const SubIcon = subTab.Icon;
+                return (
+                  <button
+                    key={subTab.key}
+                    onClick={() => setActiveSubTab(i)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
+                      activeSubTab === i
+                        ? 'bg-[#f5f9ff] text-[#0063f5]'
+                        : 'bg-white text-[#414651] hover:bg-gray-50'
+                    )}
+                  >
+                    {subTab.iconSrc
+                      ? <img src={subTab.iconSrc} alt="" className="w-4 h-4 shrink-0" />
+                      : SubIcon ? <SubIcon className="w-4 h-4 shrink-0" /> : null
+                    }
+                    {isAr ? subTab.labelAr : subTab.labelEn}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Page content */}
         <div className="flex gap-6 px-6 py-5">
 
           {/* Left column */}
           <div className="flex-1 min-w-0 flex flex-col gap-5">
-
-            {/* Sub-tabs */}
-            {activeTabs[activeMainTab].sub.length > 0 && (
-              <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
-                {activeTabs[activeMainTab].sub.map((subTab, i) => {
-                  const SubIcon = subTab.Icon;
-                  return (
-                    <button
-                      key={subTab.key}
-                      onClick={() => setActiveSubTab(i)}
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
-                        activeSubTab === i
-                          ? 'bg-[#f5f9ff] text-[#0063f5]'
-                          : 'bg-white text-[#414651] hover:bg-gray-50'
-                      )}
-                    >
-                      {subTab.iconSrc
-                        ? <img src={subTab.iconSrc} alt="" className="w-4 h-4 shrink-0" />
-                        : SubIcon ? <SubIcon className="w-4 h-4 shrink-0" /> : null
-                      }
-                      {isAr ? subTab.labelAr : subTab.labelEn}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
 
             {/* Journey or tab page content */}
             {isJourneyTab ? (

@@ -48,7 +48,7 @@ const offers = [
     tenor: 60,
     rate: 5.0,
     tagEn: 'Low Monthly',
-    tagColor: '#F97316',
+    tagColor: '#D4A800',
   },
 ];
 
@@ -128,7 +128,7 @@ function ScanScreen({ onCapture }: { onCapture: (dataUrl: string) => void }) {
   }, [onCapture]);
 
   return (
-    <div className="flex flex-col h-full bg-black text-white select-none">
+    <div className="flex flex-col h-full bg-black text-white select-none font-sans">
       <style>{css}</style>
 
       {/* Status bar */}
@@ -145,7 +145,7 @@ function ScanScreen({ onCapture }: { onCapture: (dataUrl: string) => void }) {
         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
-        <span className="text-[15px] font-semibold">Car Scan</span>
+        <img src="/home/Logo.svg" alt="Tamweel" style={{ height: '20px', width: 'auto' }} />
         <div className="w-8 h-8" />
       </div>
 
@@ -183,7 +183,7 @@ function ScanScreen({ onCapture }: { onCapture: (dataUrl: string) => void }) {
           <div className="relative" style={{ width: '78%', aspectRatio: '4/3' }}>
             {/* Scan line */}
             <div
-              className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#F97316] to-transparent"
+              className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FFD233] to-transparent"
               style={{ animation: 'scan-line 2.2s ease-in-out infinite' }}
             />
             {/* Corners */}
@@ -193,7 +193,7 @@ function ScanScreen({ onCapture }: { onCapture: (dataUrl: string) => void }) {
               'bottom-0 left-0 border-b-[3px] border-l-[3px]',
               'bottom-0 right-0 border-b-[3px] border-r-[3px]',
             ].map((cls, i) => (
-              <div key={i} className={`absolute ${cls} w-7 h-7 border-[#F97316] rounded-sm`} />
+              <div key={i} className={`absolute ${cls} w-7 h-7 border-[#FFD233] rounded-sm`} />
             ))}
           </div>
         </div>
@@ -232,7 +232,7 @@ function ScanScreen({ onCapture }: { onCapture: (dataUrl: string) => void }) {
 
 function LoadingScreen({ photo }: { photo: string }) {
   return (
-    <div className="flex flex-col h-full bg-[#0a0a0a]">
+    <div className="flex flex-col h-full bg-[#0a0a0a] font-sans">
       <style>{css}</style>
 
       {/* Captured photo fills top half, dimmed */}
@@ -246,9 +246,9 @@ function LoadingScreen({ photo }: { photo: string }) {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-5">
             <div className="relative w-20 h-20 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-[3px] border-[#F97316]/30" style={{ animation: 'pulse-ring 1.4s ease-out infinite' }} />
+              <div className="absolute inset-0 rounded-full border-[3px] border-[#FFD233]/30" style={{ animation: 'pulse-ring 1.4s ease-out infinite' }} />
               <div
-                className="w-16 h-16 rounded-full border-[3px] border-[#f8fafc]/20 border-t-[#F97316]"
+                className="w-16 h-16 rounded-full border-[3px] border-[#f8fafc]/20 border-t-[#FFD233]"
                 style={{ animation: 'spin 0.9s linear infinite' }}
               />
             </div>
@@ -271,12 +271,13 @@ function ResultsScreen({ photo }: { photo: string }) {
   const [applied, setApplied] = useState<number | null>(null);
 
   return (
-    <div className="flex flex-col h-full bg-[#f8fafc]">
+    <div className="flex flex-col h-full bg-[#f8fafc] font-sans">
       <style>{css}</style>
 
       {/* Status bar */}
       <div className="h-[44px] shrink-0 bg-white flex items-end justify-between px-6 pb-2">
         <span className="text-[15px] font-semibold text-[#101828]">9:41</span>
+        <span className="text-[13px] font-semibold text-[#0063F5]">Tamweel</span>
         <div className="flex items-center gap-1.5">
           <svg width="16" height="12" viewBox="0 0 16 12" fill="#101828"><rect x="0" y="3" width="3" height="9" rx="0.5"/><rect x="4.5" y="2" width="3" height="10" rx="0.5"/><rect x="9" y="0.5" width="3" height="11.5" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5" opacity="0.3"/></svg>
           <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" stroke="#101828" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="2.5" fill="#101828"/><path d="M23.5 4.5v3a1.5 1.5 0 000-3z" fill="#101828" fillOpacity="0.4"/></svg>
@@ -301,7 +302,7 @@ function ResultsScreen({ photo }: { photo: string }) {
         {/* Car details card */}
         <div
           className="bg-white px-5 pt-5 pb-6"
-          style={{ animation: 'fade-up 0.4s ease 0.05s both' }}
+          style={{ animation: 'fade-up 0.4s ease 0.05s both', boxShadow: '0 4px 16px rgba(0,99,245,0.08)' }}
         >
           {!photo && (
             <div className="w-full h-[180px] bg-[#f8fafc] rounded-xl mb-5 flex items-center justify-center">
@@ -316,7 +317,7 @@ function ResultsScreen({ photo }: { photo: string }) {
           <div className="flex items-start gap-3">
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-[11px] font-semibold tracking-widest uppercase text-[#F97316]">Detected</span>
+                <span className="text-[11px] font-semibold tracking-widest uppercase text-[#0063F5]">Detected</span>
                 <div className="flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                   <span className="text-[10px] font-medium text-green-600">Verified</span>
@@ -354,7 +355,7 @@ function ResultsScreen({ photo }: { photo: string }) {
               <div
                 key={offer.id}
                 className="bg-white rounded-2xl overflow-hidden border border-[#eef1f6]"
-                style={{ animation: `fade-up 0.4s ease ${0.12 + i * 0.08}s both` }}
+                style={{ animation: `fade-up 0.4s ease ${0.12 + i * 0.08}s both`, boxShadow: '0 2px 12px rgba(0,99,245,0.07)' }}
               >
                 <div className="flex items-center gap-3 px-4 pt-4 pb-3">
                   <div
@@ -459,7 +460,7 @@ export function Screen({ mobile }: { mobile: boolean }) {
     <div className="min-h-screen bg-[#eef1f6] flex items-center justify-center py-12">
       <div
         className="relative overflow-hidden rounded-[44px] shadow-2xl"
-        style={{ width: '375px', height: '812px', border: '10px solid #1a1a2e' }}
+        style={{ width: '375px', height: '812px', border: '10px solid #1a1a2e', boxShadow: '0 32px 64px rgba(0,99,245,0.25), 0 8px 24px rgba(0,0,0,0.3)' }}
       >
         {content}
       </div>

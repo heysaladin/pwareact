@@ -2,6 +2,21 @@ import Link from 'next/link';
 
 const featured = [
   {
+    id: 'tamweel-mobile',
+    name: 'Tamweel Mobile',
+    description: 'Customer-facing mobile experience — financing, news, and account management.',
+    href: '/tamweel-mobile',
+    tag: 'MOBILE',
+    accentColor: '#7C3AED',
+    badge: 'on designing',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="18" r="1" fill="currentColor"/>
+      </svg>
+    ),
+  },
+  {
     id: 'news',
     name: 'Feeds',
     description: 'Latest news and updates from Tamawal and the Saudi financing ecosystem.',
@@ -55,7 +70,7 @@ const general = [
     description: 'Scan a vehicle to instantly retrieve specs, valuation, and financing eligibility.',
     href: '/car-scan',
     tag: 'SCAN',
-    accentColor: '#F97316',
+    accentColor: '#D4A800',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -79,9 +94,16 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
         >
           {project.icon}
         </div>
-        <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
-          {project.tag}
-        </span>
+        <div className="flex items-center gap-2">
+          {'badge' in project && project.badge && (
+            <span className="animate-border-ping text-[10px] font-semibold uppercase text-[#EA580C] border border-[#EA580C] rounded-full px-2 py-0.5">
+              {project.badge}
+            </span>
+          )}
+          <span className="text-[10px] font-semibold tracking-widest uppercase text-[#9aa4b2] dark:text-white/25">
+            {project.tag}
+          </span>
+        </div>
       </div>
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-[#101828] dark:text-white mb-1.5 group-hover:text-[#0063F5] dark:group-hover:text-[#0063F5] transition-colors">
@@ -162,9 +184,9 @@ export default function MobileHubPage() {
           <p className="text-xs text-[#9aa4b2] dark:text-white/25">
             Tamawal Mobile
           </p>
-          <p className="text-xs text-[#9aa4b2] dark:text-white/25">
-            {new Date().getFullYear()}
-          </p>
+          <Link href="/tamweel-mobile" className="text-xs text-[#9aa4b2] dark:text-white/25 hover:text-[#0063F5] transition-colors">
+            Platform Hub →
+          </Link>
         </div>
       </footer>
 
