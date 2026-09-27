@@ -91,7 +91,7 @@
   --color-error-100: #fee2e2;
   --color-error-600: #d91c1c;
   --color-secondary-light: #ffdd33;
-  --font-family-base: "IBM Plex Sans", sans-serif;
+  --font-family-base: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-arabic: "SF Arabic", "SF Pro", -apple-system, sans-serif;
   --spacing-0: 0px;
   --spacing-2: 2px;

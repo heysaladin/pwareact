@@ -15,7 +15,7 @@ import {
   Check, Calendar, Pencil, MessageSquare, ArrowRight,
   Banknote, Building2, Building, Landmark, ArrowRightCircle,
   Gift, Shield, Receipt, FileSearch, ClipboardMinus, ArrowUpCircle,
-  File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2, IdCard,
+  File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2,
 } from 'lucide-react';
 import ViewSwitcherModal from './ViewSwitcherModal';
 import InternalSidebar from './InternalSidebar';
@@ -85,7 +85,7 @@ const kpis = [
   {
     label: { en: 'Need attention', ar: 'تحتاج اهتماماً' },
     value: '312',
-    sub: { en: 'Action required', ar: '٨٩ غير مخصصة حاليًا' },
+    sub: { en: '89 currently unassigned', ar: '٨٩ غير مخصصة حاليًا' },
     bg: 'bg-white dark:bg-slate-900',
     border: 'border-[#eef1f6] dark:border-slate-700',
     iconBg: 'bg-[#f8fafc] dark:bg-slate-800',
@@ -126,7 +126,8 @@ function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
   );
 }
 
-function YesNoBadge({ value, isAr }: { value: boolean; isAr?: boolean }) {
+function YesNoBadge({ value, isAr }: { value: boolean | 'Expired'; isAr?: boolean }) {
+  if (value === 'Expired') return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'منتهي' : 'Expired'}</span>;
   if (value) return <span className="px-[12px] py-[4px] rounded-2xl bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-sm font-medium">{isAr ? 'نعم' : 'Yes'}</span>;
   return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-sm font-medium">{isAr ? 'لا' : 'No'}</span>;
 }
@@ -527,8 +528,8 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
       </div>
 
       {/* Main tabs */}
-      <div className="bg-white border-b border-[#e2e3e4] h-[57px] shrink-0">
-        <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
+      <div className="border-b border-[#e2e3e4] shrink-0 overflow-x-auto">
+        <div className="flex min-w-max">
           {CUSTOMER_TABS.map((tab, i) => {
             const TabIcon = tab.Icon;
             return (
@@ -536,13 +537,13 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
+                  'flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
                   i === activeMainTab
-                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
-                    : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
+                    ? 'border-[#0063f5] text-[#202a39] bg-white'
+                    : 'border-transparent text-[#202a39] hover:bg-gray-50'
                 )}
               >
-                <TabIcon className="w-6 h-6 shrink-0" />
+                <TabIcon className="w-4 h-4 shrink-0" />
                 {isAr ? tab.labelAr : tab.labelEn}
               </button>
             );
@@ -550,38 +551,36 @@ function CustomerDetailPanel({ profile, onClose, isAr }: { profile: Profile; onC
         </div>
       </div>
 
-      {/* Sub-tabs row */}
-      {CUSTOMER_TABS[activeMainTab].sub.length > 0 && (
-        <div className="bg-white border-b border-[#e2e3e4] px-6 py-[14px] shrink-0">
-          <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
-            {CUSTOMER_TABS[activeMainTab].sub.map((subTab, i) => {
-              const SubIcon = subTab.Icon;
-              return (
-                <button
-                  key={subTab.key}
-                  onClick={() => setActiveSubTab(i)}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
-                    activeSubTab === i
-                      ? 'bg-[#f5f9ff] text-[#0063f5]'
-                      : 'bg-white text-[#414651] hover:bg-gray-50'
-                  )}
-                >
-                  <SubIcon className="w-4 h-4 shrink-0" />
-                  {isAr ? subTab.labelAr : subTab.labelEn}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <div className="flex gap-4 p-4">
 
           {/* Left: summary section + recent activity */}
           <div className="flex-1 min-w-0 flex flex-col gap-4">
+
+            {/* Sub-tab group — changes per active main tab */}
+            {CUSTOMER_TABS[activeMainTab].sub.length > 0 && (
+              <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
+                {CUSTOMER_TABS[activeMainTab].sub.map((subTab, i) => {
+                  const SubIcon = subTab.Icon;
+                  return (
+                    <button
+                      key={subTab.key}
+                      onClick={() => setActiveSubTab(i)}
+                      className={cn(
+                        'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
+                        activeSubTab === i
+                          ? 'bg-[#f5f9ff] text-[#0063f5]'
+                          : 'bg-white text-[#414651] hover:bg-gray-50'
+                      )}
+                    >
+                      <SubIcon className="w-4 h-4 shrink-0" />
+                      {isAr ? subTab.labelAr : subTab.labelEn}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Content switches per sub-tab */}
             {activeMainTab === 0 && activeSubTab === 1 ? (
@@ -767,8 +766,8 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
       </div>
 
       {/* Main tabs */}
-      <div className="bg-white border-b border-[#e2e3e4] h-[57px] shrink-0">
-        <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
+      <div className="border-b border-[#e2e3e4] shrink-0 overflow-x-auto">
+        <div className="flex min-w-max">
           {GUEST_TABS.map((tab, i) => {
             const TabIcon = tab.Icon;
             return (
@@ -776,13 +775,13 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
+                  'flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
                   i === activeMainTab
-                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
-                    : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
+                    ? 'border-[#0063f5] text-[#202a39] bg-white'
+                    : 'border-transparent text-[#202a39] hover:bg-gray-50'
                 )}
               >
-                <TabIcon className="w-6 h-6 shrink-0" />
+                <TabIcon className="w-4 h-4 shrink-0" />
                 {isAr ? tab.labelAr : tab.labelEn}
               </button>
             );
@@ -790,38 +789,36 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
         </div>
       </div>
 
-      {/* Sub-tabs row */}
-      {GUEST_TABS[activeMainTab].sub.length > 0 && (
-        <div className="bg-white border-b border-[#e2e3e4] px-6 py-[14px] shrink-0">
-          <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
-            {GUEST_TABS[activeMainTab].sub.map((subTab, i) => {
-              const SubIcon = subTab.Icon;
-              return (
-                <button
-                  key={subTab.key}
-                  onClick={() => setActiveSubTab(i)}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
-                    activeSubTab === i
-                      ? 'bg-[#f5f9ff] text-[#0063f5]'
-                      : 'bg-white text-[#414651] hover:bg-gray-50'
-                  )}
-                >
-                  <SubIcon className="w-4 h-4 shrink-0" />
-                  {isAr ? subTab.labelAr : subTab.labelEn}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <div className="flex gap-4 p-4">
 
           {/* Left: interest info + recent activity */}
           <div className="flex-1 min-w-0 flex flex-col gap-4">
+
+            {/* Sub-tab group — changes per active main tab */}
+            {GUEST_TABS[activeMainTab].sub.length > 0 && (
+              <div className="flex isolate rounded-lg overflow-hidden border border-[#d5d7da] self-start">
+                {GUEST_TABS[activeMainTab].sub.map((subTab, i) => {
+                  const SubIcon = subTab.Icon;
+                  return (
+                    <button
+                      key={subTab.key}
+                      onClick={() => setActiveSubTab(i)}
+                      className={cn(
+                        'flex items-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap border-e border-[#d5d7da] last:border-e-0 transition-colors',
+                        activeSubTab === i
+                          ? 'bg-[#f5f9ff] text-[#0063f5]'
+                          : 'bg-white text-[#414651] hover:bg-gray-50'
+                      )}
+                    >
+                      <SubIcon className="w-4 h-4 shrink-0" />
+                      {isAr ? subTab.labelAr : subTab.labelEn}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Interest information */}
             <div className="bg-white border border-[#e3e8f1] rounded-xl p-4">
@@ -944,6 +941,17 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [search, setSearch] = useState('');
   const [showSwitcher, setShowSwitcher] = useState(false);
+  const [openLabelDropdown, setOpenLabelDropdown] = useState<string | null>(null);
+  const [labelSearch, setLabelSearch] = useState('');
+
+  const AGENTS = [
+    { name: 'Omar Almutairi' },
+    { name: 'Mustafa Alotaibi' },
+    { name: 'Alya Alkatiri' },
+    { name: 'Fatima Alumayyah' },
+    { name: 'Falah Alhadid' },
+    { name: 'Olivia Rhye' },
+  ];
 
   const filtered = PROFILES.filter(p => {
     if (isProvider && p.type === 'Guest') return false;
@@ -969,7 +977,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
       <Topbar onProfileClick={() => setShowSwitcher(true)} isProvider={isProvider} hasSidebar langHref={forceLang === 'ar' ? '/cps/en' : forceLang === 'en' ? '/cps' : undefined} />
       {showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
 
-      <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0 overflow-y-auto">
+      <main className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-4 min-h-0 overflow-y-auto" onClick={() => openLabelDropdown && setOpenLabelDropdown(null)}>
 
         {/* Page header */}
         <div className="flex items-center justify-between shrink-0">
@@ -1047,7 +1055,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
 
             {/* Search + filter */}
             <div className="flex items-center gap-3">
-              <div className="bg-white border border-[#cdd4df] rounded-lg flex items-center gap-2 px-[14px] py-[10px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-[260px] dark:bg-slate-900 dark:border-slate-700">
+              <div className="bg-white border border-[#d5d7da] rounded-lg flex items-center gap-2 px-[14px] py-[10px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-[260px] dark:bg-slate-900 dark:border-slate-700">
                 <Search className="w-5 h-5 text-[#697586] dark:text-slate-400 shrink-0" />
                 <input
                   value={search}
@@ -1062,7 +1070,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                 )}
               </div>
 
-              <button className="relative flex items-center justify-center gap-[6px] px-4 py-[10px] min-w-[120px] overflow-clip border border-[#cdd4df] rounded-[8px] text-[#364152] text-base font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:border-slate-700 dark:text-slate-200">
+              <button className="relative flex items-center justify-center gap-[6px] px-4 py-[10px] min-w-[120px] overflow-clip border border-[#d5d7da] rounded-[8px] text-[#364152] text-base font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:border-slate-700 dark:text-slate-200">
                 <div aria-hidden className="absolute inset-0 rounded-[8px] pointer-events-none bg-white dark:bg-slate-900" />
                 <FilterMixerIcon className="w-5 h-5 shrink-0 relative" />
                 <span className="px-0.5 relative">{isAr ? 'التصنيف حسب' : 'Filter'}</span>
@@ -1090,6 +1098,9 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     <>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
                         {isAr ? 'نوع السجل' : 'Record type'}
+                      </th>
+                      <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[200px]">
+                        {isAr ? 'التصنيف' : 'Label(s)'}
                       </th>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[220px]">
                         {isAr ? 'المرحلة الحالية' : 'Current stage'}
@@ -1169,8 +1180,20 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                                 <span>{p.email}</span>
                               </div>
                               <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
-                                <IdCard className="w-3 h-3 shrink-0" />
-                                <span>{p.nationalId}</span>
+                                <CreditCard className="w-3 h-3 shrink-0" />
+                                <span dir="ltr">{p.nationalId}</span>
+                              </div>
+                            </>
+                          )}
+                          {p.type === 'Guest' && (
+                            <>
+                              <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                                <Phone className="w-3 h-3 shrink-0" />
+                                <span>{p.phone}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                                <CreditCard className="w-3 h-3 shrink-0" />
+                                <span dir="ltr">{p.nationalId}</span>
                               </div>
                             </>
                           )}
@@ -1188,6 +1211,55 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       <>
                         {/* Record type */}
                         <td className="px-4 py-3"><RecordBadge type={p.type} isAr={isAr} /></td>
+
+                        {/* Label(s) */}
+                        <td className="px-4 py-3" style={{ overflow: 'visible' }}>
+                          <div className="relative flex items-center gap-2">
+                            <span className="px-3 py-1 rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium whitespace-nowrap">
+                              {p.label || 'Priority Follow-up'}
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenLabelDropdown(openLabelDropdown === p.id ? null : p.id);
+                                setLabelSearch('');
+                              }}
+                              className="relative flex items-center justify-center w-9 h-9 rounded-[8px] border border-[#d5d7da] bg-white hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] shrink-0"
+                            >
+                              <ChevronDown className="w-5 h-5 text-[#697586] dark:text-slate-400" />
+                              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+                            </button>
+                            {openLabelDropdown === p.id && (
+                              <div
+                                className="absolute top-full start-0 mt-1 w-[200px] bg-white dark:bg-slate-900 border border-[#e3e8ef] dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="p-2 border-b border-[#f2f4f7] dark:border-slate-800">
+                                  <div className="flex items-center gap-2 px-3 py-1.5 border border-[#d5d7da] dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800">
+                                    <Search className="w-4 h-4 text-[#697586] dark:text-slate-400 shrink-0" />
+                                    <input
+                                      value={labelSearch}
+                                      onChange={(e) => setLabelSearch(e.target.value)}
+                                      className="flex-1 text-sm bg-transparent focus:outline-none text-[#121a26] dark:text-slate-100 placeholder:text-[#697586] dark:placeholder:text-slate-400"
+                                      placeholder="Search"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="py-1 max-h-[200px] overflow-y-auto">
+                                  {AGENTS.filter(a => a.name.toLowerCase().includes(labelSearch.toLowerCase())).map((agent) => (
+                                    <button
+                                      key={agent.name}
+                                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#121a26] dark:text-slate-100 hover:bg-[#f9fafb] dark:hover:bg-slate-800 text-start"
+                                      onClick={() => setOpenLabelDropdown(null)}
+                                    >
+                                      {agent.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </td>
 
                         {/* Current stage */}
                         <td className="px-4 py-3">
@@ -1207,10 +1279,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                               <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
                                 {isAr ? p.assignedNameAr : p.assignedName}
                               </span>
-                              <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
-                                <Briefcase className="w-3 h-3 shrink-0" />
-                                <span>{p.assignedRole}</span>
-                              </div>
+                              {p.assignedRole && (
+                                <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
+                                  <Briefcase className="w-3 h-3 shrink-0" />
+                                  <span>at {p.assignedRole}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </td>
