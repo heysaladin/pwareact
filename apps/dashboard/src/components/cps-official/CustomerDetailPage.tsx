@@ -955,7 +955,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const activeTabs = isGuest ? GUEST_TABS : isProvider ? PROVIDER_TABS : CUSTOMER_TABS;
 
   const [activeMainTab, setActiveMainTab] = useState(0);
-  const [activeSubTab,  setActiveSubTab]  = useState(isProvider ? 0 : 1);
+  const [activeSubTab,  setActiveSubTab]  = useState(0);
   const [showSwitcher, setShowSwitcher] = useState(false);
 
   const activeSubTabKey = activeTabs[activeMainTab]?.sub[activeSubTab]?.key ?? '';
@@ -969,56 +969,60 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
       <div className="flex-1 overflow-y-auto">
 
         {/* Page header bar */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-[#eef1f6] bg-white sticky top-0 z-10">
+        <div className="flex items-center justify-between pl-6 pr-4 py-3 border-b border-[#f5f5f5] bg-white sticky top-0 z-10">
           <div className="flex items-center gap-2">
-            <span className="text-[12px] text-[#697586]">{isAr ? 'معرف المستخدم' : 'User ID'}</span>
-            <span className="text-[18px] font-semibold text-[#202a39] leading-[28px] tracking-[0.027px]">{profile.id}</span>
+            <span className="text-[12px] font-medium text-[#717680] leading-[18px] tracking-[0.012px]">{isAr ? 'معرف المستخدم' : 'User ID'}</span>
+            <span className="text-[18px] font-semibold text-[#252b37] leading-[28px] tracking-[0.027px]">{profile.id}</span>
           </div>
           <Link
             href={listPath}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg bg-white border border-[#fda29b] text-[#d92d20] text-[14px] font-medium hover:bg-[#fef3f2] transition-colors shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]"
+            className="relative flex items-center gap-1 px-3 py-2 rounded-lg bg-white border border-[#fda29b] text-[#d92d20] text-[14px] font-medium leading-5 tracking-[0.014px] hover:bg-[#fef3f2] transition-colors shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]"
           >
-            <ArrowLeft className="w-4 h-4" style={{ transform: isAr ? 'scaleX(-1)' : undefined }} />
+            <ArrowLeft className="w-5 h-5" style={{ transform: isAr ? 'scaleX(-1)' : undefined }} />
             {isAr ? 'خلف' : 'Back'}
+            <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
           </Link>
         </div>
 
         {/* Profile header */}
         <div className="flex items-stretch gap-3 px-6 py-4 border-b border-[#eef1f6] bg-white">
           {/* Avatar + name + status + actions */}
-          <div className="bg-white border border-[#eef1f6] rounded-[6px] flex-[1_0_0] min-w-0">
+          <div className="bg-white border border-[#f5f5f5] rounded-[6px] flex-[1_0_0] min-w-0">
             <div className="flex gap-[24px] items-center p-[16px] h-full">
               <div className="w-[100px] h-[100px] rounded-full bg-[#eaf2ff] border border-[#aacbfc] flex items-center justify-center text-2xl font-semibold text-[#0053cc] shrink-0">
                 {profile.initials}
               </div>
               <div className="flex flex-col gap-[24px] flex-1 min-w-0 h-full justify-center">
                 <div className="flex flex-col gap-[12px] items-start">
-                  <span className="text-[18px] font-semibold text-[#1e2228] leading-[28px] tracking-[0.027px] truncate">{isAr ? profile.nameAr : profile.name}</span>
+                  <span className="text-[18px] font-semibold text-[#181d27] leading-[28px] tracking-[0.027px] truncate">{isAr ? profile.nameAr : profile.name}</span>
                   <div className="flex gap-[12px] items-center">
-                    <span className="px-4 py-[4px] rounded-full bg-[#ecfdf3] border border-[#12b76a] text-[#12b76a] text-[14px] font-medium leading-[24px] whitespace-nowrap">
+                    <span className="px-4 py-[4px] rounded-full bg-[#ecfdf3] border border-[#079455] text-[#17b26a] text-[14px] font-medium leading-[24px] whitespace-nowrap">
                       {isAr ? 'نشيط' : 'Active'}
                     </span>
-                    <button className="flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       {isAr ? 'إرسال رسالة' : 'Send Message'}
                       <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
                         <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
                       </div>
+                      <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
                     </button>
                   </div>
                 </div>
                 {!isProvider && (
                   <div className="flex gap-[12px] items-start">
-                    <button className="flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       <div className="overflow-clip size-[20px] shrink-0">
                         <img alt="" className="block size-full" src="/tab-icons/profile-delete.svg" />
                       </div>
                       {isAr ? 'إلغاء التنشيط' : 'Deactivate'}
+                      <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
                     </button>
-                    <button className="flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       <div className="overflow-clip size-[20px] shrink-0">
                         <img alt="" className="block size-full" src="/tab-icons/shield-cross.svg" />
                       </div>
                       {isAr ? 'تعليق' : 'Suspend'}
+                      <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
                     </button>
                   </div>
                 )}
@@ -1030,55 +1034,55 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
           <div className="flex gap-[12px] items-stretch flex-1 min-w-0">
             {isProvider ? (
               <>
-                <div className="border border-[#eef1f6] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
+                <div className="border border-[#f5f5f5] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">NIN</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.nationalId}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">NIN</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.nationalId}</span>
                   </div>
                 </div>
-                <div className="border border-[#eef1f6] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
+                <div className="border border-[#f5f5f5] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'جنسية' : 'Nationality'}</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.country}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'جنسية' : 'Nationality'}</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.country}</span>
                   </div>
-                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#f9fbfc]">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">DOB</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.dob ?? '—'}</span>
+                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#fafafa]">
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">DOB</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.dob ?? '—'}</span>
                   </div>
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'النوع' : 'Gender'}</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.gender ?? '—'}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'النوع' : 'Gender'}</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.gender ?? '—'}</span>
                   </div>
                 </div>
               </>
             ) : (
               <>
-                <div className="border border-[#eef1f6] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
+                <div className="border border-[#f5f5f5] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'الهوية / الإقامة' : 'NIN'}</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.nationalId}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'الهوية / الإقامة' : 'NIN'}</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.nationalId}</span>
                   </div>
-                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#f9fbfc]">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'رقم الجوال' : 'Mobile No.'}</span>
-                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end">{profile.phone}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
+                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#fafafa]">
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'رقم الجوال' : 'Mobile No.'}</span>
+                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#181d27] text-end">{profile.phone}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
                   </div>
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'البريد الإلكتروني' : 'Email'}</span>
-                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#1e2228] text-end">{profile.email ?? '—'}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'البريد الإلكتروني' : 'Email'}</span>
+                    <span className="flex items-center gap-1.5 text-sm font-medium text-[#181d27] text-end">{profile.email ?? '—'}<Eye className="w-[14px] h-[14px] text-[#98a2b3] shrink-0" /></span>
                   </div>
                 </div>
-                <div className="border border-[#eef1f6] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
+                <div className="border border-[#f5f5f5] rounded-[6px] bg-white flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'الجنسية' : 'Nationality'}</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{isAr ? 'المملكة العربية السعودية' : profile.country}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'الجنسية' : 'Nationality'}</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{isAr ? 'المملكة العربية السعودية' : profile.country}</span>
                   </div>
-                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#f9fbfc]">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">DOB</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.dob ?? '—'}</span>
+                  <div className="flex items-start justify-between px-4 py-2.5 bg-[#fafafa]">
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">DOB</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.dob ?? '—'}</span>
                   </div>
                   <div className="flex items-start justify-between px-4 py-2.5">
-                    <span className="text-xs text-[#667085] w-[110px] shrink-0">{isAr ? 'النوع' : 'Gender'}</span>
-                    <span className="text-sm font-medium text-[#1e2228] text-end">{profile.gender ?? '—'}</span>
+                    <span className="text-xs font-medium text-[#717680] tracking-[0.012px] w-[110px] shrink-0">{isAr ? 'النوع' : 'Gender'}</span>
+                    <span className="text-sm font-medium text-[#181d27] text-end">{profile.gender ?? '—'}</span>
                   </div>
                 </div>
               </>
@@ -1087,14 +1091,14 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
 
           {/* AML — customers only */}
           {!isGuest && (
-            <div className="bg-white border border-[#eef1f6] rounded-[6px] flex flex-col items-center justify-between p-[24px] h-[180px] shrink-0">
+            <div className="bg-white border border-[#f5f5f5] rounded-[6px] flex flex-col items-center justify-between p-[24px] h-[180px] shrink-0">
               <div className="flex flex-col items-center gap-[4px]">
-                <span className="text-[12px] text-[#7d89a3] leading-[18px] whitespace-nowrap">{isAr ? 'درجة AML' : 'AML Score'}</span>
-                <span className="text-[32px] font-bold text-[#1e2228] leading-[40px]">86<span className="text-[25px] leading-[32px]">%</span></span>
+                <span className="text-[12px] font-medium text-[#717680] leading-[18px] tracking-[0.012px] whitespace-nowrap">{isAr ? 'درجة AML' : 'AML Score'}</span>
+                <span className="text-[32px] font-bold text-[#181d27] leading-[40px]">86<span className="text-[25px] font-medium leading-[32px]">%</span></span>
               </div>
               <div className="flex flex-col items-center gap-[8px]">
-                <span className="text-[12px] text-[#7d89a3] leading-[18px] whitespace-nowrap">{isAr ? 'حالة AML' : 'AML Status'}</span>
-                <span className="px-[20px] py-[4px] rounded-full bg-[#ecfdf3] border border-[#12b76a] text-[#12b76a] text-[14px] font-medium whitespace-nowrap">
+                <span className="text-[12px] font-medium text-[#717680] leading-[18px] tracking-[0.012px] whitespace-nowrap">{isAr ? 'حالة AML' : 'AML Status'}</span>
+                <span className="px-[20px] py-[4px] rounded-full bg-[#ecfdf3] border border-[#079455] text-[#17b26a] text-[14px] font-medium whitespace-nowrap">
                   {isAr ? 'اجتاز' : 'Passed'}
                 </span>
               </div>
@@ -1128,16 +1132,16 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
         </div>
 
         {/* Main tabs */}
-        <div className="bg-white border-b border-[#e2e3e4] h-[57px]">
+        <div className="bg-white border-b border-[#d5d7da] h-[57px]">
           <div className="flex h-full px-6 overflow-x-auto scrollbar-none">
             {activeTabs.map((tab, i) => (
               <button
                 key={tab.key}
                 onClick={() => { setActiveMainTab(i); setActiveSubTab(0); }}
                 className={cn(
-                  'flex items-center gap-2 px-6 text-[14px] font-medium whitespace-nowrap transition-colors text-[#202a39]',
+                  'flex items-center gap-2 px-6 py-1 text-[14px] leading-5 font-medium tracking-[0.014px] whitespace-nowrap transition-colors text-[#252b37]',
                   i === activeMainTab
-                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#e2e3e4] rounded-tl-[6px] rounded-tr-[6px] bg-white'
+                    ? 'h-full mb-[-1px] border-t border-l border-r border-[#fdfdfd] rounded-tl-[6px] rounded-tr-[6px] bg-white'
                     : 'h-[53px] self-end hover:bg-[#f8fafc] rounded-t-[6px]'
                 )}
               >
