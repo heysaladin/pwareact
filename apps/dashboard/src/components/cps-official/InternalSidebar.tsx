@@ -3,22 +3,21 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import {
   BarChart2, BadgeCheck, Bell, Settings, Settings2, Gift, Briefcase, Landmark,
-  Users, UserCircle, ClipboardCheck, LayoutList, Gauge, KeyRound,
+  Network, UserCircle, ClipboardCheck, LayoutList, Gauge, KeyRound,
   GitBranch, Headset, CircleX, FileBarChart, AlignLeft,
   Search, ChevronDown, LifeBuoy,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { label: 'Orders',                icon: BarChart2,      hasChevron: false },
-  { label: 'AML',                   icon: BadgeCheck,     hasChevron: true  },
-  { label: 'Notification',          icon: Bell,           hasChevron: true  },
-  { label: 'Configuration',         icon: Settings,       hasChevron: false },
-  { label: 'Rewards System',        icon: Gift,           hasChevron: true  },
-  { label: 'Product Utilities',     icon: Briefcase,      hasChevron: true  },
-  { label: 'Institutions',          icon: Landmark,       hasChevron: false },
-  { label: 'Customers',             icon: Users,          hasChevron: false },
-  { label: 'Guest',                 icon: UserCircle,     hasChevron: false },
-  { label: 'Order Managment',       icon: ClipboardCheck, hasChevron: true  },
+  { label: 'Orders',                   icon: BarChart2,      hasChevron: false },
+  { label: 'AML',                      icon: BadgeCheck,     hasChevron: true  },
+  { label: 'Notification',             icon: Bell,           hasChevron: true  },
+  { label: 'Configuration',            icon: Settings,       hasChevron: false },
+  { label: 'Rewards System',           icon: Gift,           hasChevron: true  },
+  { label: 'Product Utilities',        icon: Briefcase,      hasChevron: true  },
+  { label: 'Institutions',             icon: Landmark,       hasChevron: false },
+  { label: 'CPS (Customer Profiling)', icon: Network,        hasChevron: false, active: true },
+  { label: 'Order Managment',          icon: ClipboardCheck, hasChevron: true  },
   { label: 'Lists Management',      icon: LayoutList,     hasChevron: true  },
   { label: 'Scoring Management',    icon: Gauge,          hasChevron: true  },
   { label: 'Roles and Permissions', icon: KeyRound,       hasChevron: false },
@@ -47,14 +46,19 @@ export default function InternalSidebar() {
           return (
             <button
               key={item.label}
-              className="w-full flex items-center justify-between gap-2 px-3 py-[9px] rounded-lg text-[13px] font-medium text-white hover:bg-white/10 transition-colors mb-0.5"
+              className={cn(
+                'w-full flex items-center justify-between gap-2 px-3 py-[9px] rounded-lg text-[13px] font-medium transition-colors mb-0.5',
+                item.active
+                  ? 'bg-[#FBBF24] text-gray-900'
+                  : 'text-white hover:bg-white/10'
+              )}
             >
               <div className="flex items-center gap-3 min-w-0">
-                <Icon className="w-[18px] h-[18px] shrink-0 text-white" />
+                <Icon className={cn('w-[18px] h-[18px] shrink-0', item.active ? 'text-gray-900' : 'text-white')} />
                 <span className="truncate">{item.label}</span>
               </div>
               {item.hasChevron && (
-                <ChevronDown className="w-3.5 h-3.5 shrink-0 text-white/70" />
+                <ChevronDown className={cn('w-3.5 h-3.5 shrink-0', item.active ? 'text-gray-900/70' : 'text-white/70')} />
               )}
             </button>
           );

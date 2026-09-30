@@ -11,14 +11,15 @@ import {
   Users, UserCircle, Smile, Info,
   BarChart2,
   Search, ChevronDown, ChevronLeft, X,
-  MapPin, Mail, Briefcase, ChevronsLeft, Phone, Flag,
-  Check, Calendar, Pencil, MessageSquare, ArrowRight,
+  MapPin, Mail, Briefcase, Phone, Flag,
+  Check, Calendar, Pencil, MessageSquare, ArrowRight, ArrowLeft, Pause, XCircle,
   Banknote, Building2, Building, Landmark, ArrowRightCircle,
   Gift, Shield, Receipt, FileSearch, ClipboardMinus, ArrowUpCircle,
   File, Globe, List, Bell, CreditCard, ClipboardList, CheckCircle2,
 } from 'lucide-react';
 import ViewSwitcherModal from './ViewSwitcherModal';
 import InternalSidebar from './InternalSidebar';
+import InternalSidebarAr from './InternalSidebarAr';
 import ProviderSidebar from './ProviderSidebar';
 
 function FilterMixerIcon({ className }: { className?: string }) {
@@ -105,8 +106,17 @@ const TABS: { key: Tab; label: { en: string; ar: string } }[] = [
 
 function JourneyBadge({ result, isAr }: { result: Profile['journeyResult']; isAr?: boolean }) {
   if (result === 'Passed')  return <span className="inline-flex items-center gap-1 px-[12px] py-[4px] rounded-2xl bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-sm font-medium"><Check className="w-3.5 h-3.5" />{isAr ? 'اجتاز' : 'Passed'}</span>;
-  if (result === 'Failed')  return <span className="inline-flex px-[12px] py-[4px] rounded-2xl bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-sm font-medium">{isAr ? 'فشل' : 'Failed'}</span>;
-  return <span className="inline-flex px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'قيد الانتظار' : 'Pending'}</span>;
+  if (result === 'Failed')  return <span className="inline-flex items-center gap-1 px-[12px] py-[4px] rounded-2xl bg-[#fef3f2] border border-[#fecdca] text-[#b42318] text-sm font-medium"><XCircle className="w-3.5 h-3.5" />{isAr ? 'فشل' : 'Failed'}</span>;
+  return <span className="inline-flex items-center gap-1 px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium"><Pause className="w-3.5 h-3.5" />{isAr ? 'مؤجل' : 'Paused'}</span>;
+}
+
+const RED_LABELS = new Set(['Suspected Fraud', 'Annoying', 'Do Not Contact', 'High Risk']);
+const GRAY_LABELS = new Set(['Test Profile', 'Null Profile']);
+
+function getLabelStyle(enLabel: string) {
+  if (RED_LABELS.has(enLabel)) return 'bg-[#fef3f2] border-[#fecdca] text-[#b42318]';
+  if (GRAY_LABELS.has(enLabel)) return 'bg-white border-[#d0d5dd] text-[#697586]';
+  return 'bg-[#fffaeb] border-[#fedf89] text-[#b54708]';
 }
 
 function RecordBadge({ type, isAr }: { type: Profile['type']; isAr?: boolean }) {
@@ -114,13 +124,14 @@ function RecordBadge({ type, isAr }: { type: Profile['type']; isAr?: boolean }) 
   return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'ضيف' : 'Guest'}</span>;
 }
 
-function StageBadge({ stage, subStage }: { stage: string; subStage: string }) {
+function StageBadge({ stage, subStage, isAr }: { stage: string; subStage: string; isAr?: boolean }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="self-start px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{stage}</span>
-      <div className="flex items-center gap-1 text-[#697586] text-sm">
-        <ChevronsLeft className="w-3 h-3" />
+      <span className="self-start px-[12px] py-[4px] rounded-2xl bg-white border border-[#d0d5dd] text-[#344054] text-sm font-medium">{stage}</span>
+      <div className="flex items-center gap-1 text-[#0063f5] text-sm">
+        {isAr && <ArrowLeft className="w-3 h-3 shrink-0" />}
         <span>{subStage}</span>
+        {!isAr && <ArrowRight className="w-3 h-3 shrink-0" />}
       </div>
     </div>
   );
@@ -944,13 +955,32 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
   const [openLabelDropdown, setOpenLabelDropdown] = useState<string | null>(null);
   const [labelSearch, setLabelSearch] = useState('');
 
-  const AGENTS = [
-    { name: 'Omar Almutairi' },
-    { name: 'Mustafa Alotaibi' },
-    { name: 'Alya Alkatiri' },
-    { name: 'Fatima Alumayyah' },
-    { name: 'Falah Alhadid' },
-    { name: 'Olivia Rhye' },
+  const LABEL_OPTIONS = [
+    'Urgent Customer',
+    'VIP Customer',
+    'Priority Follow-up',
+    'Escalated Customer',
+    'Special Assistance Required',
+    'Suspected Fraud',
+    'Annoying',
+    'Incomplete Profile',
+    'Do Not Contact',
+    'Test Profile',
+    'High Risk',
+  ];
+
+  const LABEL_OPTIONS_AR = [
+    'عميل عاجل',
+    'عميل مميز',
+    'متابعة ذات أولوية',
+    'عميل تم تصعيده',
+    'يحتاج مساعدة خاصة',
+    'مشبوه في الاحتيال',
+    'عميل مزعج',
+    'ملف غير مكتمل',
+    'لا يتم التواصل',
+    'ملف تجريبي',
+    'خطر عالٍ',
   ];
 
   const filtered = PROFILES.filter(p => {
@@ -971,7 +1001,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
 
   return (
     <div className="h-screen flex flex-row dark:bg-slate-950 relative" dir={isAr ? 'rtl' : 'ltr'}>
-      {isProvider ? <ProviderSidebar /> : <InternalSidebar />}
+      {isProvider ? <ProviderSidebar /> : isAr ? <InternalSidebarAr /> : <InternalSidebar />}
 
       <div className="flex flex-col flex-1 min-w-0 bg-[#f8fafc] dark:bg-slate-950">
       <Topbar onProfileClick={() => setShowSwitcher(true)} isProvider={isProvider} hasSidebar langHref={forceLang === 'ar' ? '/cps/en' : forceLang === 'en' ? '/cps' : undefined} />
@@ -1214,56 +1244,64 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
 
                         {/* Label(s) */}
                         <td className="px-4 py-3" style={{ overflow: 'visible' }}>
-                          <div className="relative flex items-center gap-2">
-                            <span className="px-3 py-1 rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium whitespace-nowrap">
-                              {p.label || 'Priority Follow-up'}
-                            </span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setOpenLabelDropdown(openLabelDropdown === p.id ? null : p.id);
-                                setLabelSearch('');
-                              }}
-                              className="relative flex items-center justify-center w-9 h-9 rounded-[8px] border border-[#d5d7da] bg-white hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] shrink-0"
-                            >
-                              <ChevronDown className="w-5 h-5 text-[#697586] dark:text-slate-400" />
-                              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-                            </button>
-                            {openLabelDropdown === p.id && (
-                              <div
-                                className="absolute top-full start-0 mt-1 w-[200px] bg-white dark:bg-slate-900 border border-[#e3e8ef] dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden"
-                                onClick={(e) => e.stopPropagation()}
+                          <div className="flex flex-col gap-1.5">
+                            <div className="relative flex items-center gap-2">
+                              <span className={cn('px-3 py-1 rounded-2xl border text-sm font-medium whitespace-nowrap', getLabelStyle(p.labels[0] || ''))}>
+                                {(isAr ? p.labelsAr : p.labels)[0] || 'Priority Follow-up'}
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenLabelDropdown(openLabelDropdown === p.id ? null : p.id);
+                                  setLabelSearch('');
+                                }}
+                                className="relative flex items-center justify-center w-9 h-9 rounded-[8px] border border-[#d5d7da] bg-white hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] shrink-0"
                               >
-                                <div className="p-2 border-b border-[#f2f4f7] dark:border-slate-800">
-                                  <div className="flex items-center gap-2 px-3 py-1.5 border border-[#d5d7da] dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800">
-                                    <Search className="w-4 h-4 text-[#697586] dark:text-slate-400 shrink-0" />
-                                    <input
-                                      value={labelSearch}
-                                      onChange={(e) => setLabelSearch(e.target.value)}
-                                      className="flex-1 text-sm bg-transparent focus:outline-none text-[#121a26] dark:text-slate-100 placeholder:text-[#697586] dark:placeholder:text-slate-400"
-                                      placeholder="Search"
-                                    />
+                                <ChevronDown className="w-5 h-5 text-[#697586] dark:text-slate-400" />
+                                <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+                              </button>
+                              {openLabelDropdown === p.id && (
+                                <div
+                                  className="absolute top-full start-0 mt-1 w-[220px] bg-white dark:bg-slate-900 border border-[#e3e8ef] dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <div className="p-2 border-b border-[#f2f4f7] dark:border-slate-800">
+                                    <div className="flex items-center gap-2 px-3 py-1.5 border border-[#d5d7da] dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800">
+                                      <Search className="w-4 h-4 text-[#697586] dark:text-slate-400 shrink-0" />
+                                      <input
+                                        value={labelSearch}
+                                        onChange={(e) => setLabelSearch(e.target.value)}
+                                        className="flex-1 text-sm bg-transparent focus:outline-none text-[#121a26] dark:text-slate-100 placeholder:text-[#697586] dark:placeholder:text-slate-400"
+                                        placeholder="Search"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="py-1 max-h-[220px] overflow-y-auto">
+                                    {(isAr ? LABEL_OPTIONS_AR : LABEL_OPTIONS).filter(l => l.toLowerCase().includes(labelSearch.toLowerCase())).map((lbl, i) => (
+                                      <button
+                                        key={lbl}
+                                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#121a26] dark:text-slate-100 hover:bg-[#f9fafb] dark:hover:bg-slate-800 text-start"
+                                        onClick={() => setOpenLabelDropdown(null)}
+                                      >
+                                        <span>{lbl}</span>
+                                        {(isAr ? p.labelsAr : p.labels).includes(isAr ? LABEL_OPTIONS_AR[i] : LABEL_OPTIONS[i]) && <Check className="w-4 h-4 text-[#0063f5] shrink-0" />}
+                                      </button>
+                                    ))}
                                   </div>
                                 </div>
-                                <div className="py-1 max-h-[200px] overflow-y-auto">
-                                  {AGENTS.filter(a => a.name.toLowerCase().includes(labelSearch.toLowerCase())).map((agent) => (
-                                    <button
-                                      key={agent.name}
-                                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#121a26] dark:text-slate-100 hover:bg-[#f9fafb] dark:hover:bg-slate-800 text-start"
-                                      onClick={() => setOpenLabelDropdown(null)}
-                                    >
-                                      {agent.name}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
+                            {(isAr ? p.labelsAr : p.labels).slice(1).map((lbl, i) => (
+                              <span key={lbl} className={cn('self-start px-3 py-1 rounded-2xl border text-sm font-medium whitespace-nowrap', getLabelStyle(p.labels[i + 1] || ''))}>
+                                {lbl}
+                              </span>
+                            ))}
                           </div>
                         </td>
 
                         {/* Current stage */}
                         <td className="px-4 py-3">
-                          <StageBadge stage={isAr ? p.stageAr : p.stage} subStage={isAr ? p.subStageAr : p.subStage} />
+                          <StageBadge stage={isAr ? p.stageAr : p.stage} subStage={isAr ? p.subStageAr : p.subStage} isAr={isAr} />
                         </td>
 
                         {/* Journey result */}

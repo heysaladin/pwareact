@@ -14,7 +14,7 @@ export type Profile = {
   stageAr: string;
   subStage: string;
   subStageAr: string;
-  journeyResult: 'Passed' | 'Failed' | 'Pending';
+  journeyResult: 'Passed' | 'Failed' | 'Paused';
   assignedName: string;
   assignedNameAr: string;
   assignedRole: string;
@@ -23,58 +23,66 @@ export type Profile = {
   joinedDate: string;
   joinedTime: string;
   orderCount: number;
-  label?: string;
+  labels: string[];
+  labelsAr: string[];
 };
 
 export const PROFILES: Profile[] = [
   {
     id: '1066388128', initials: 'MA', name: 'Mustafa Ibrahim Barakat Alotaibi', nameAr: 'مصطفى إبراهيم بركات العتيبي',
     phone: '+966543346498', country: 'Saudi Arabia', email: 'mustafa.barakat@gmail.com', nationalId: '9573566234', dob: '23-03-1993', gender: 'Male', type: 'Customer',
-    stage: 'Terms confirmation pending', stageAr: 'في انتظار تأكيد الشروط', subStage: 'Onboarding', subStageAr: 'الإعداد',
-    journeyResult: 'Passed', assignedName: 'Noura Alqahtani', assignedNameAr: 'نورة القحطاني', assignedRole: 'Customer Success',
-    simah: true, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 8, label: 'Priority Follow-up',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم تقديم الطلب',
+    journeyResult: 'Passed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
+    simah: true, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 8,
+    labels: ['Priority Follow-up', 'Annoying'], labelsAr: ['متابعة ذات أولوية', 'عميل مزعج'],
   },
   {
     id: '1061847293', initials: 'LO', name: 'Lina Omar Al-Shehri', nameAr: 'لينا عمر الشهري',
     phone: '+966501234567', country: 'Saudi Arabia', email: 'lina.shehri@gmail.com', nationalId: '1061847293', type: 'Guest',
-    stage: 'Product search', stageAr: 'البحث عن المنتج', subStage: 'Browsing', subStageAr: 'التصفح',
-    journeyResult: 'Pending', assignedName: '', assignedNameAr: '', assignedRole: '',
-    simah: false, masdr: false, joinedDate: 'October 02. 2025', joinedTime: '11:05 AM', orderCount: 0, label: 'Priority Follow-up',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
+    journeyResult: 'Paused', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
+    simah: false, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 0,
+    labels: ['Test Profile', 'Incomplete Profile'], labelsAr: ['ملف تجريبي', 'ملف غير مكتمل'],
   },
   {
     id: '1055273904', initials: 'SA', name: 'Sara Khalid Al-Qahtani', nameAr: 'سارة خالد القحطاني',
     phone: '+966512345678', country: 'Saudi Arabia', email: 'sara.qahtani@email.com', nationalId: '1055273904', type: 'Customer',
-    stage: 'Active', stageAr: 'نشط', subStage: 'Financing', subStageAr: 'التمويل',
-    journeyResult: 'Passed', assignedName: 'Nora Al-Harbi', assignedNameAr: 'نورة الحربي', assignedRole: 'Retail',
-    simah: 'Expired', masdr: false, joinedDate: 'August 14. 2025', joinedTime: '10:30 AM', orderCount: 3, label: 'Active Client',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
+    journeyResult: 'Failed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
+    simah: 'Expired', masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 3,
+    labels: ['Suspected Fraud', 'Annoying'], labelsAr: ['مشبوه في الاحتيال', 'عميل مزعج'],
   },
   {
     id: '1048192037', initials: 'FA', name: 'Faisal Abdulaziz Al-Anzi', nameAr: 'فيصل عبدالعزيز العنزي',
     phone: '+966598765432', country: 'Saudi Arabia', email: 'faisal.alanzi@email.com', nationalId: '1048192037', type: 'Customer',
-    stage: 'Document review', stageAr: 'مراجعة المستندات', subStage: 'KYC', subStageAr: 'اعرف عميلك',
-    journeyResult: 'Pending', assignedName: 'Ahmed Al-Dosari', assignedNameAr: 'أحمد الدوسري', assignedRole: 'Brokerage',
-    simah: false, masdr: false, joinedDate: 'July 22. 2025', joinedTime: '04:45 PM', orderCount: 0, label: 'Priority Follow-up',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
+    journeyResult: 'Passed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
+    simah: false, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 0,
+    labels: ['Priority Follow-up', 'Annoying'], labelsAr: ['متابعة ذات أولوية', 'عميل مزعج'],
   },
   {
     id: '1039847261', initials: 'NA', name: 'Noura Mohammed Al-Harbi', nameAr: 'نورة محمد الحربي',
     phone: '+966534567890', country: 'Saudi Arabia', email: 'noura.harbi@email.com', nationalId: '1039847261', type: 'Customer',
-    stage: 'Active', stageAr: 'نشط', subStage: 'Portfolio', subStageAr: 'المحفظة',
-    journeyResult: 'Passed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Wealth',
-    simah: true, masdr: true, joinedDate: 'June 03. 2025', joinedTime: '09:15 AM', orderCount: 12, label: 'Priority Follow-up',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
+    journeyResult: 'Passed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
+    simah: true, masdr: true, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 12,
+    labels: ['Priority Follow-up'], labelsAr: ['متابعة ذات أولوية'],
   },
   {
     id: '1031759482', initials: 'TM', name: 'Tariq Mohammed Al-Dossari', nameAr: 'طارق محمد الدوسري',
     phone: '+966567891234', country: 'Saudi Arabia', email: 'tariq.dossari@email.com', nationalId: '1031759482', type: 'Guest',
-    stage: 'Registration', stageAr: 'التسجيل', subStage: 'OTP pending', subStageAr: 'انتظار OTP',
-    journeyResult: 'Pending', assignedName: '', assignedNameAr: '', assignedRole: '',
-    simah: false, masdr: false, joinedDate: 'April 30. 2025', joinedTime: '03:22 PM', orderCount: 0, label: 'Priority Follow-up',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
+    journeyResult: 'Paused', assignedName: '', assignedNameAr: '', assignedRole: '',
+    simah: false, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 0,
+    labels: ['Priority Follow-up'], labelsAr: ['متابعة ذات أولوية'],
   },
   {
     id: '1027364819', initials: 'KZ', name: 'Khalid Saeed Al-Zahrani', nameAr: 'خالد سعيد الزهراني',
     phone: '+966556781234', country: 'Saudi Arabia', email: 'khalid.zahrani@email.com', nationalId: '1027364819', type: 'Customer',
-    stage: 'Suspended', stageAr: 'موقوف', subStage: 'Compliance', subStageAr: 'الامتثال',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
     journeyResult: 'Failed', assignedName: 'Nora Al-Harbi', assignedNameAr: 'نورة الحربي', assignedRole: 'Risk',
-    simah: false, masdr: true, joinedDate: 'May 18. 2025', joinedTime: '01:00 PM', orderCount: 5, label: 'High Risk',
+    simah: false, masdr: true, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 5,
+    labels: ['High Risk'], labelsAr: ['خطر عالٍ'],
   },
 ];
 

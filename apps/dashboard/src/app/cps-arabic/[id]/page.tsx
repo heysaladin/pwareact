@@ -1,4 +1,5 @@
 import CustomerDetailPage from '@/components/cps-official/CustomerDetailPage';
+import InternalSidebarAr from '@/components/cps-official/InternalSidebarAr';
 
 export default async function CpsArabicDetailRoute({
   params,
@@ -6,5 +7,12 @@ export default async function CpsArabicDetailRoute({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <CustomerDetailPage profileId={id} forceLang="ar" listPath="/cps-arabic" />;
+  return (
+    <div className="flex h-screen overflow-hidden">
+      <InternalSidebarAr />
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <CustomerDetailPage profileId={id} forceLang="ar" listPath="/cps-arabic" />
+      </div>
+    </div>
+  );
 }
