@@ -707,7 +707,7 @@ export function Screen({ mobile }: { mobile: boolean }) {
   const ar = params.get('lang') === 'ar';
 
   const containerStyle = {
-    width:  mobile ? '100%'  : '375px',
+    width:  '100%',
     height: mobile ? '100svh': '812px',
   };
 
