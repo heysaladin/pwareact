@@ -10,7 +10,7 @@ import { PROFILES, ACTIVITY_LOG, type Profile } from './cps-data';
 import {
   Users, UserCircle, Smile, Info,
   BarChart2,
-  Search, ChevronDown, ChevronLeft, X,
+  Search, ChevronDown, ChevronLeft, ChevronRight, X,
   MapPin, Mail, Briefcase, Phone, Flag,
   Check, Calendar, Pencil, MessageSquare, ArrowRight, ArrowLeft, Pause, XCircle,
   Banknote, Building2, Building, Landmark, ArrowRightCircle,
@@ -45,61 +45,61 @@ type Tab = 'all' | 'customers' | 'guests';
 
 const kpis = [
   {
-    label: { en: 'All profiles', ar: 'جميع الملفات' },
+    label: { en: 'All profiles', ar: 'جميع الملفات الشخصية' },
     value: '24,860',
-    sub: { en: '+6.2% this month', ar: '+٦.٢٪ هذا الشهر' },
+    sub: { en: '+6.2% this month', ar: '+6.2% هذا الشهر' },
     bg: 'bg-[#ffdd33]',
     border: 'border-[#d8b400]',
     iconBg: 'border border-[#d8b400]',
     icon: Users,
     iconColor: 'text-[#7a6400]',
-    labelColor: 'text-[#4b5565]',
-    valueColor: 'text-[#121a26]',
-    subColor: 'text-[#4b5565]',
+    labelColor: 'text-[#535862]',
+    valueColor: 'text-[#181d27]',
+    subColor: 'text-[#535862]',
   },
   {
     label: { en: 'Customers', ar: 'العملاء' },
     value: '18,420',
-    sub: { en: '74% of all profiles', ar: '٧٤٪ من جميع الملفات' },
+    sub: { en: '74% of all profiles', ar: '74% من جميع الملفات الشخصية' },
     bg: 'bg-[#0063f5]',
-    border: 'border-[#77a6ed]',
-    iconBg: 'border border-[#77a6ed]',
+    border: 'border-[#5597f8]',
+    iconBg: 'border border-[#5597f8]',
     icon: UserCircle,
     iconColor: 'text-white',
-    labelColor: 'text-[#bbd5fb]',
+    labelColor: 'text-[#aacbfc]',
     valueColor: 'text-white',
-    subColor: 'text-[#bbd5fb]',
+    subColor: 'text-[#aacbfc]',
   },
   {
     label: { en: 'Guests', ar: 'الضيوف' },
     value: '6,440',
-    sub: { en: '1,284 with interest', ar: '١٬٢٨٤ مع اهتمام' },
+    sub: { en: '1,284 with interest', ar: '١٬٢٨٤ مع الفائدة' },
     bg: 'bg-white dark:bg-slate-900',
     border: 'border-[#eef1f6] dark:border-slate-700',
-    iconBg: 'bg-[#f8fafc] dark:bg-slate-800',
+    iconBg: 'bg-[#fafafa] dark:bg-slate-800',
     icon: Smile,
-    iconColor: 'text-[#697586] dark:text-slate-400',
-    labelColor: 'text-[#697586] dark:text-slate-400',
-    valueColor: 'text-[#121a26] dark:text-slate-100',
-    subColor: 'text-[#697586] dark:text-slate-400',
+    iconColor: 'text-[#717680] dark:text-slate-400',
+    labelColor: 'text-[#717680] dark:text-slate-400',
+    valueColor: 'text-black dark:text-slate-100',
+    subColor: 'text-[#717680] dark:text-slate-400',
   },
   {
-    label: { en: 'Need attention', ar: 'تحتاج اهتماماً' },
+    label: { en: 'Need attention', ar: 'بحاجة إلى اهتمام' },
     value: '312',
-    sub: { en: '89 currently unassigned', ar: '٨٩ غير مخصصة حاليًا' },
+    sub: { en: '89 currently unassigned', ar: '89 غير مخصصة حاليًا' },
     bg: 'bg-white dark:bg-slate-900',
     border: 'border-[#eef1f6] dark:border-slate-700',
-    iconBg: 'bg-[#f8fafc] dark:bg-slate-800',
+    iconBg: 'bg-[#fafafa] dark:bg-slate-800',
     icon: Info,
-    iconColor: 'text-[#697586] dark:text-slate-400',
-    labelColor: 'text-[#697586] dark:text-slate-400',
-    valueColor: 'text-[#121a26] dark:text-slate-100',
-    subColor: 'text-[#697586] dark:text-slate-400',
+    iconColor: 'text-[#717680] dark:text-slate-400',
+    labelColor: 'text-[#717680] dark:text-slate-400',
+    valueColor: 'text-[#181d27] dark:text-slate-100',
+    subColor: 'text-[#717680] dark:text-slate-400',
   },
 ];
 
 const TABS: { key: Tab; label: { en: string; ar: string } }[] = [
-  { key: 'all',       label: { en: 'All profiles', ar: 'جميع الملفات' } },
+  { key: 'all',       label: { en: 'All profiles', ar: 'جميع الملفات الشخصية' } },
   { key: 'customers', label: { en: 'Customers',    ar: 'العملاء' } },
   { key: 'guests',    label: { en: 'Guests',        ar: 'الضيوف' } },
 ];
@@ -128,10 +128,9 @@ function StageBadge({ stage, subStage, isAr }: { stage: string; subStage: string
   return (
     <div className="flex flex-col gap-2">
       <span className="self-start px-[12px] py-[4px] rounded-2xl bg-white border border-[#d0d5dd] text-[#344054] text-sm font-medium">{stage}</span>
-      <div className="flex items-center gap-1 text-[#0063f5] text-sm">
-        {isAr && <ArrowLeft className="w-3 h-3 shrink-0" />}
+      <div className="flex items-center gap-1 text-[#0053cc] text-sm whitespace-nowrap">
         <span>{subStage}</span>
-        {!isAr && <ArrowRight className="w-3 h-3 shrink-0" />}
+        {isAr ? <ArrowLeft className="w-3 h-3 shrink-0" /> : <ArrowRight className="w-3 h-3 shrink-0" />}
       </div>
     </div>
   );
@@ -945,6 +944,45 @@ function GuestDetailPanel({ profile, onClose, isAr }: { profile: Profile; onClos
   );
 }
 
+const DP_MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DP_MONTH_NAMES_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const dpFmtDateAr = (d: Date) => `${d.getDate()} ${DP_MONTH_NAMES_AR[d.getMonth()]} ${d.getFullYear()}`;
+const DP_DOW = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+
+function getDpMonthDays(year: number, month: number): { date: Date; inMonth: boolean }[] {
+  const days: { date: Date; inMonth: boolean }[] = [];
+  const firstDay = new Date(year, month, 1);
+  let dow = firstDay.getDay();
+  dow = dow === 0 ? 6 : dow - 1;
+  for (let i = dow; i > 0; i--) days.push({ date: new Date(year, month, 1 - i), inMonth: false });
+  const last = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= last; d++) days.push({ date: new Date(year, month, d), inMonth: true });
+  let next = 1;
+  while (days.length < 42) days.push({ date: new Date(year, month + 1, next++), inMonth: false });
+  return days;
+}
+
+function getDpPresetRange(label: string): { start: Date | null; end: Date | null } {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const c = (d: Date) => new Date(d);
+  if (label === 'All') return { start: null, end: null };
+  if (label === 'Today') return { start: c(today), end: c(today) };
+  if (label === 'Yesterday') { const y = c(today); y.setDate(y.getDate() - 1); return { start: y, end: c(y) }; }
+  if (label === 'This week') {
+    const dow = today.getDay(); const mon = c(today); mon.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
+    const sun = c(mon); sun.setDate(mon.getDate() + 6); return { start: mon, end: sun };
+  }
+  if (label === 'Last week') {
+    const dow = today.getDay(); const mon = c(today); mon.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1) - 7);
+    const sun = c(mon); sun.setDate(mon.getDate() + 6); return { start: mon, end: sun };
+  }
+  if (label === 'This month') return { start: new Date(today.getFullYear(), today.getMonth(), 1), end: new Date(today.getFullYear(), today.getMonth() + 1, 0) };
+  if (label === 'Last month') return { start: new Date(today.getFullYear(), today.getMonth() - 1, 1), end: new Date(today.getFullYear(), today.getMonth(), 0) };
+  if (label === 'This year') return { start: new Date(today.getFullYear(), 0, 1), end: new Date(today.getFullYear(), 11, 31) };
+  if (label === 'Last year') return { start: new Date(today.getFullYear() - 1, 0, 1), end: new Date(today.getFullYear() - 1, 11, 31) };
+  return { start: null, end: null };
+}
+
 export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-official', isProvider }: { forceLang?: 'en' | 'ar'; detailBasePath?: string; isProvider?: boolean } = {}) {
   const { lang } = useLang();
   const isAr = (forceLang ?? lang) === 'ar';
@@ -954,6 +992,66 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [openLabelDropdown, setOpenLabelDropdown] = useState<string | null>(null);
   const [labelSearch, setLabelSearch] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dpPreset, setDpPreset] = useState<string | null>('Last week');
+  const [dpStart, setDpStart] = useState<Date | null>(new Date(2025, 0, 10));
+  const [dpEnd, setDpEnd] = useState<Date | null>(new Date(2025, 0, 16));
+  const [dpSelecting, setDpSelecting] = useState(false);
+  const [dpHover, setDpHover] = useState<Date | null>(null);
+  const [dpViewYear, setDpViewYear] = useState(2025);
+  const [dpViewMonth, setDpViewMonth] = useState(0);
+
+  const dpRightMonth = dpViewMonth === 11 ? 0 : dpViewMonth + 1;
+  const dpRightYear = dpViewMonth === 11 ? dpViewYear + 1 : dpViewYear;
+
+  const dpNavLeft = () => { if (dpViewMonth === 0) { setDpViewYear(y => y - 1); setDpViewMonth(11); } else setDpViewMonth(m => m - 1); };
+  const dpNavRight = () => { if (dpViewMonth === 11) { setDpViewYear(y => y + 1); setDpViewMonth(0); } else setDpViewMonth(m => m + 1); };
+
+  const dpFmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const dpButtonLabel = dpPreset === 'All' ? (isAr ? 'كل الأوقات' : 'All time')
+    : dpStart && dpEnd ? (isAr ? `${dpFmtDateAr(dpStart)} – ${dpFmtDateAr(dpEnd)}` : `${dpFmtDate(dpStart)} – ${dpFmtDate(dpEnd)}`)
+    : (isAr ? 'اختر التواريخ' : 'Select dates');
+
+  const dpIsStart = (d: Date) => !!(dpStart && d.toDateString() === dpStart.toDateString());
+  const dpIsEnd = (d: Date) => { const end = dpSelecting && dpHover ? dpHover : dpEnd; return !!(end && d.toDateString() === end.toDateString()); };
+  const dpIsInRange = (d: Date) => {
+    const end = dpSelecting && dpHover ? dpHover : dpEnd;
+    if (!dpStart || !end) return false;
+    const s = dpStart < end ? dpStart : end; const e = dpStart < end ? end : dpStart;
+    return d > s && d < e;
+  };
+
+  const dpHandleDay = (date: Date) => {
+    setDpPreset(null);
+    if (!dpSelecting || !dpStart) { setDpStart(date); setDpEnd(null); setDpSelecting(true); }
+    else { if (date < dpStart) { setDpEnd(dpStart); setDpStart(date); } else setDpEnd(date); setDpSelecting(false); setDpHover(null); }
+  };
+  const dpHandlePreset = (label: string) => {
+    setDpPreset(label); const { start, end } = getDpPresetRange(label);
+    setDpStart(start); setDpEnd(end); setDpSelecting(false);
+    if (start) { setDpViewYear(start.getFullYear()); setDpViewMonth(start.getMonth()); }
+  };
+
+  const renderDpCalendar = (year: number, month: number) => (
+    <div className="flex flex-col gap-1">
+      <div className="grid grid-cols-7">
+        {DP_DOW.map(d => <div key={d} className="w-9 h-9 flex items-center justify-center text-xs font-medium text-[#717680]">{d}</div>)}
+        {getDpMonthDays(year, month).map(({ date, inMonth }, i) => {
+          const start = dpIsStart(date); const end = dpIsEnd(date); const inRange = dpIsInRange(date);
+          return (
+            <button key={i} onClick={() => dpHandleDay(date)}
+              onMouseEnter={() => dpSelecting && setDpHover(date)} onMouseLeave={() => dpSelecting && setDpHover(null)}
+              className={cn('w-9 h-9 flex items-center justify-center text-sm transition-colors',
+                (start || end) ? 'bg-[#0063f5] text-white font-semibold rounded-full' :
+                inRange ? 'bg-[#eaf2ff] text-[#181d27]' :
+                inMonth ? 'text-[#181d27] hover:bg-[#f5f5f5] rounded-full' : 'text-[#c2c7d0] hover:bg-[#f5f5f5] rounded-full'
+              )}
+            >{date.getDate()}</button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   const LABEL_OPTIONS = [
     'Urgent Customer',
@@ -1017,13 +1115,67 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
               {isAr ? 'لوحة العمليات' : 'Customer profiling system'}
             </h1>
           </div>
-          <button className="relative flex items-center gap-1 px-[14px] py-[10px] border border-[#d5d7da] rounded-lg bg-white text-[#414651] text-sm font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200">
-            <Calendar className="w-5 h-5 shrink-0" />
-            <span className="px-0.5 whitespace-nowrap">
-              {isAr ? '١٠ يناير ٢٠٢٥ – ١٦ يناير ٢٠٢٥' : 'Jan 10, 2025 – Jan 16, 2025'}
-            </span>
-            <div className="absolute inset-0 rounded-lg pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-          </button>
+          <div className="relative z-50">
+            {showDatePicker && <div className="fixed inset-0 z-40" onClick={() => setShowDatePicker(false)} />}
+            <button
+              onClick={() => setShowDatePicker(v => !v)}
+              className="relative flex items-center gap-1 px-[14px] py-[10px] border border-[#d5d7da] rounded-lg bg-white text-[#414651] text-sm font-medium shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200 z-50"
+            >
+              <Calendar className="w-5 h-5 shrink-0" />
+              <span className="px-0.5 whitespace-nowrap">{dpButtonLabel}</span>
+              <div className="absolute inset-0 rounded-lg pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+            </button>
+
+            {showDatePicker && (
+              <div className={cn("absolute top-full mt-2 z-50 bg-white rounded-xl border border-[#e9eaeb] shadow-[0px_8px_24px_0px_rgba(16,24,40,0.12)] p-5 min-w-max", isAr ? "left-0" : "right-0")}>
+                {/* Presets row 1 */}
+                <div className="flex gap-2 mb-2">
+                  {['All','Today','Yesterday','This week','Last week','This month'].map(p => (
+                    <button key={p} onClick={() => dpHandlePreset(p)}
+                      className={cn('px-3 py-1.5 rounded-lg text-sm transition-colors',
+                        dpPreset === p ? 'border border-[#1570ef] text-[#1570ef] font-semibold' : 'text-[#414651] font-medium hover:bg-[#f5f5f5]'
+                      )}
+                    >{p}</button>
+                  ))}
+                </div>
+                {/* Presets row 2 */}
+                <div className="flex gap-2 mb-5">
+                  {['Last month','This year','Last year'].map(p => (
+                    <button key={p} onClick={() => dpHandlePreset(p)}
+                      className={cn('px-3 py-1.5 rounded-lg text-sm transition-colors',
+                        dpPreset === p ? 'border border-[#1570ef] text-[#1570ef] font-semibold' : 'text-[#414651] font-medium hover:bg-[#f5f5f5]'
+                      )}
+                    >{p}</button>
+                  ))}
+                </div>
+                <div className="h-px bg-[#e9eaeb] mb-5" />
+                {/* Dual calendars */}
+                <div className="flex gap-6">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <button onClick={dpNavLeft} className="w-7 h-7 flex items-center justify-center rounded hover:bg-[#f5f5f5]">
+                        <ChevronLeft className="w-4 h-4 text-[#414651]" />
+                      </button>
+                      <span className="text-sm font-semibold text-[#181d27]">{DP_MONTH_NAMES[dpViewMonth]} {dpViewYear}</span>
+                      <div className="w-7" />
+                    </div>
+                    {renderDpCalendar(dpViewYear, dpViewMonth)}
+                  </div>
+                  <div className="w-px bg-[#e9eaeb]" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="w-7" />
+                      <span className="text-sm font-semibold text-[#181d27]">{DP_MONTH_NAMES[dpRightMonth]} {dpRightYear}</span>
+                      <button onClick={dpNavRight} className="w-7 h-7 flex items-center justify-center rounded hover:bg-[#f5f5f5]">
+                        <ChevronRight className="w-4 h-4 text-[#414651]" />
+                      </button>
+                    </div>
+                    {renderDpCalendar(dpRightYear, dpRightMonth)}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* KPIs */}
@@ -1091,7 +1243,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="flex-1 min-w-0 bg-transparent text-sm text-[#121a26] placeholder:text-[#697586] focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500"
-                  placeholder={isAr ? 'البحث برقم العميل...' : 'Search by Customer ID, Customer Details, Product Details, Loan Amount...'}
+                  placeholder={isAr ? 'البحث باستخدام رقم تعريف العميل، أو بيانات العميل، أو تفاصيل المنتج، أو مبلغ القرض...' : 'Search by Customer ID, Customer Details, Product Details, Loan Amount...'}
                 />
                 {search && (
                   <button onClick={() => setSearch('')} className="flex items-center justify-center w-4 h-4 rounded-full bg-[#d92d20] hover:bg-[#b91c1c] shrink-0">
@@ -1117,7 +1269,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                 <tr className="bg-white dark:bg-slate-900 border-b border-[#f2f4f7] dark:border-slate-800">
                   {!isProvider && <th className="ps-6 pe-2 py-3 w-[48px]" />}
                   <th className="ps-2 pe-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[300px]">
-                    {isAr ? 'الملف الشخصي' : 'Profile'}
+                    {isAr ? 'الملف التعريفي' : 'Profile'}
                   </th>
                   {isProvider ? (
                     <>
@@ -1127,10 +1279,10 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                   ) : (
                     <>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[120px]">
-                        {isAr ? 'نوع السجل' : 'Record type'}
+                        {isAr ? 'نوع الملف' : 'Record type'}
                       </th>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[200px]">
-                        {isAr ? 'التصنيف' : 'Label(s)'}
+                        {isAr ? 'التصنيف(ات)' : 'Label(s)'}
                       </th>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[220px]">
                         {isAr ? 'المرحلة الحالية' : 'Current stage'}
@@ -1139,7 +1291,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                         {isAr ? 'نتيجة الرحلة' : 'Journey result'}
                       </th>
                       <th className="px-4 py-3 text-start text-sm font-medium text-[#697586] dark:text-slate-400 w-[180px]">
-                        {isAr ? 'المسؤول' : 'Assigned to'}
+                        {isAr ? 'مُسند إلى' : 'Assigned to'}
                       </th>
                       {activeTab === 'customers' && (
                         <>
@@ -1163,7 +1315,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                 {filtered.map((p, idx) => (
                   <tr
                     key={p.id}
-                    onClick={() => router.push(`${detailBasePath}/${p.id}`)}
+                    onClick={() => router.push(`${detailBasePath}/${p.id}?tab=${activeTab}`)}
                     className={cn(
                       'border-b border-[#f2f4f7] dark:border-slate-800 hover:bg-[#f9fafb] dark:hover:bg-slate-800/50 transition-colors cursor-pointer',
                       idx % 2 === 1 && 'bg-[#fcfcfd] dark:bg-slate-900/30',
@@ -1173,7 +1325,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     {!isProvider && (
                       <td className="ps-6 pe-2 py-3">
                         <button
-                          onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}`); }}
+                          onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}?tab=${activeTab}`); }}
                           className="bg-white border border-[#e3e8ef] rounded-full p-2 flex items-center justify-center hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 transition-colors"
                         >
                           <ChevronLeft className="w-4 h-4 text-[#697586] dark:text-slate-400" />
@@ -1240,7 +1392,17 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     ) : (
                       <>
                         {/* Record type */}
-                        <td className="px-4 py-3"><RecordBadge type={p.type} isAr={isAr} /></td>
+                        <td className="px-4 py-3">
+                          <div className="flex flex-col gap-2">
+                            <RecordBadge type={p.type} isAr={isAr} />
+                            {p.type === 'Customer' && (
+                              <div className="flex items-center gap-1 px-3 py-2 text-[#079455] text-sm font-medium">
+                                <Shield className="w-5 h-5 shrink-0" />
+                                <span>{isAr ? 'نشط' : 'active'}</span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
 
                         {/* Label(s) */}
                         <td className="px-4 py-3" style={{ overflow: 'visible' }}>
@@ -1320,7 +1482,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                               {p.assignedRole && (
                                 <div className="flex items-center gap-1 text-[#697586] dark:text-slate-400 text-xs">
                                   <Briefcase className="w-3 h-3 shrink-0" />
-                                  <span>at {p.assignedRole}</span>
+                                  <span>{p.assignedRole}</span>
                                 </div>
                               )}
                             </div>

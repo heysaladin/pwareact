@@ -945,7 +945,7 @@ function SummaryCard({ title, source, status }: { title: string; source: string;
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function CustomerDetailPage({ profileId, forceLang, listPath = '/cps-official', isProvider = false }: { profileId: string; forceLang?: 'en' | 'ar'; listPath?: string; isProvider?: boolean }) {
+export default function CustomerDetailPage({ profileId, forceLang, listPath = '/cps-official', isProvider = false, noTopbar = false }: { profileId: string; forceLang?: 'en' | 'ar'; listPath?: string; isProvider?: boolean; noTopbar?: boolean }) {
   const { lang } = useLang();
   const isAr = (forceLang ?? lang) === 'ar';
 
@@ -962,9 +962,9 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const isJourneyTab = activeMainTab === 0 && activeSubTabKey === 'journey';
 
   return (
-    <div className="h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950" dir={isAr ? 'rtl' : 'ltr'}>
-      <Topbar onProfileClick={() => setShowSwitcher(true)} />
-      {showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
+    <div className={noTopbar ? "flex-1 flex flex-col overflow-hidden bg-[#f8fafc] dark:bg-slate-950" : "h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950"} dir={isAr ? 'rtl' : 'ltr'}>
+      {!noTopbar && <Topbar onProfileClick={() => setShowSwitcher(true)} />}
+      {!noTopbar && showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
 
       <div className="flex-1 overflow-y-auto">
 

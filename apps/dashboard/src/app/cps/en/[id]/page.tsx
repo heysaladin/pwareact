@@ -1,18 +1,13 @@
-import CustomerDetailPage from '@/components/cps-official/CustomerDetailPage';
-import InternalSidebar from '@/components/cps-official/InternalSidebar';
+import CpsDetailLayout from '@/components/cps-official/CpsDetailLayout';
 
 export default async function CustomerDetailEnRoute({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const { id } = await params;
-  return (
-    <div className="flex h-screen overflow-hidden">
-      <InternalSidebar />
-      <div className="flex-1 min-w-0 overflow-hidden">
-        <CustomerDetailPage profileId={id} forceLang="en" listPath="/cps/en" />
-      </div>
-    </div>
-  );
+  const { tab } = await searchParams;
+  return <CpsDetailLayout profileId={id} basePath="/cps/en" forceLang="en" listPath="/cps/en" initialTab={tab} />;
 }

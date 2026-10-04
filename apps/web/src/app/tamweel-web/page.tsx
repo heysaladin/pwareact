@@ -1,97 +1,56 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const stats = [
-  { value: '+50K', label: 'Active Users' },
-  { value: '15+', label: 'Partner Banks' },
-  { value: '3 Min', label: 'Average Approval' },
-  { value: '98%', label: 'Satisfaction Rate' },
+const features = [
+  {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      </svg>
+    ),
+    title: 'Best Rates Guaranteed',
+    description: 'We compare offers from 15+ banks so you always get the most competitive rate available.',
+  },
+  {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M10 6v4l2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+    title: 'Apply in 3 Minutes',
+    description: 'Fill your profile once. Get real offers from multiple banks instantly — no branch visits.',
+  },
+  {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 9h14" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+    title: 'No Hidden Fees',
+    description: 'Full transparency on every offer. Know exactly what you pay before you commit.',
+  },
+  {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2C6.13 2 3 5.13 3 9c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="10" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+    title: 'Licensed by SAMA',
+    description: 'Fully regulated by the Saudi Central Bank. Your data is encrypted and always protected.',
+  },
 ];
 
 const products = [
-  {
-    icon: '/product-icon-car.svg',
-    name: 'Car Financing',
-    description: 'Get the car you want with competitive rates from top Saudi banks — new or used.',
-    tag: 'Most Popular',
-    tagColor: '#0063F5',
-  },
-  {
-    icon: '/product-icon-personal-mask.svg',
-    name: 'Personal Loans',
-    description: 'Fast personal financing tailored to your salary and needs. No hidden fees.',
-    tag: null,
-    tagColor: null,
-  },
-  {
-    icon: '/product-icon-realestate.svg',
-    name: 'Real Estate',
-    description: 'Home financing solutions with the best rates from Saudi mortgage lenders.',
-    tag: null,
-    tagColor: null,
-  },
-  {
-    icon: '/product-icon-creditcard.svg',
-    name: 'Credit Cards',
-    description: 'Compare and apply for credit cards that match your spending habits.',
-    tag: null,
-    tagColor: null,
-  },
+  { name: 'Car Financing', icon: '/product-icon-car.svg', href: '/tamweel-web/hub#products' },
+  { name: 'Personal Loans', icon: '/product-icon-personal-mask.svg', href: '/tamweel-web/hub#products' },
+  { name: 'Real Estate', icon: '/product-icon-realestate.svg', href: '/tamweel-web/hub#products' },
+  { name: 'Credit Cards', icon: '/product-icon-creditcard.svg', href: '/tamweel-web/hub#products' },
 ];
 
-const steps = [
-  {
-    number: '01',
-    title: 'Fill your profile',
-    description: 'Enter your basic info once. We use it to match you with the right offers.',
-  },
-  {
-    number: '02',
-    title: 'Compare offers',
-    description: 'See real offers from multiple banks side-by-side — rate, tenure, and monthly payment.',
-  },
-  {
-    number: '03',
-    title: 'Apply in one tap',
-    description: 'Choose the best offer and submit your application directly through the app.',
-  },
-  {
-    number: '04',
-    title: 'Get funded',
-    description: 'Receive your approval and funds faster than going to a bank directly.',
-  },
-];
-
-const partners = [
-  { name: 'Alinma', src: '/logos/alinma.png' },
-  { name: 'ANB', src: '/logos/anb.png' },
-  { name: 'Al Yusr', src: '/logos/alyusr.png' },
-  { name: 'Nayifat', src: '/logos/nayifat.png' },
-  { name: 'Taajeer', src: '/logos/taajeer.png' },
-  { name: 'Rasheed', src: '/logos/rasheed.png' },
-  { name: 'Badaya', src: '/logos/badaya.png' },
-  { name: 'Tamweel Aloula', src: '/logos/tamweel-aloula.png' },
-];
-
-const values = [
-  {
-    img: '/about-value-easy.png',
-    title: 'Easy to Use',
-    description: 'A simple, guided flow that gets you from sign-up to offer in under 3 minutes.',
-  },
-  {
-    img: '/about-value-integrated.png',
-    title: 'Fully Integrated',
-    description: 'Connected to top Saudi banks and lenders — one app, every option.',
-  },
-  {
-    img: '/about-value-reliable.png',
-    title: 'Trustworthy',
-    description: 'Licensed by SAMA. Your data is encrypted and never shared without consent.',
-  },
-];
-
-export default function TamweelWebPage() {
+export default function TamweelWebHome() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#080d14] font-sans">
 
@@ -107,260 +66,206 @@ export default function TamweelWebPage() {
             <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={28} />
           </div>
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#products" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">Products</a>
-            <a href="#how-it-works" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">How it Works</a>
-            <a href="#partners" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">Partners</a>
-            <a href="#about" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">About</a>
+            <Link href="/tamweel-web/hub#products" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">Products</Link>
+            <Link href="/tamweel-web/hub#how-it-works" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">How it Works</Link>
+            <Link href="/tamweel-web/hub#partners" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">Partners</Link>
+            <Link href="/tamweel-web/hub#about" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">About</Link>
           </nav>
           <div className="flex items-center gap-3">
             <a href="#" className="hidden md:block text-sm font-medium text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">
               Sign in
             </a>
-            <a
-              href="#"
+            <Link
+              href="/tamweel-web/hub"
               className="text-sm font-semibold text-white bg-[#0063F5] px-4 py-2 rounded-lg hover:bg-[#0052cc] transition-colors"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </header>
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-white dark:bg-[#080d14]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,99,245,0.08),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,99,245,0.12),transparent)]" />
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0063F5]/10 text-[#0063F5] text-xs font-semibold mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0063F5] animate-pulse" />
-              Licensed by SAMA · Saudi Arabia
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_80%_at_50%_-20%,rgba(0,99,245,0.1),transparent)] dark:bg-[radial-gradient(ellipse_100%_80%_at_50%_-20%,rgba(0,99,245,0.15),transparent)]" />
+        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-24 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0063F5]/10 text-[#0063F5] text-xs font-semibold mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0063F5] animate-pulse" />
+            Saudi Arabia&apos;s #1 Financing Platform
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[#101828] dark:text-white leading-[1.05] mb-8 max-w-4xl mx-auto">
+            Compare. Apply.<br />
+            <span className="text-[#0063F5]">Get Funded.</span>
+          </h1>
+          <p className="text-xl text-[#667085] dark:text-white/50 leading-relaxed mb-12 max-w-2xl mx-auto">
+            Tamawal connects you to 15+ Saudi banks in one place. Get real financing offers in minutes — no paperwork, no branch visits.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-14">
+            <Link
+              href="/tamweel-web/hub"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-[#0063F5] text-white text-base font-semibold rounded-xl hover:bg-[#0052cc] transition-colors shadow-lg shadow-[#0063F5]/25"
+            >
+              Check My Eligibility
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3.33 8h9.33M8.67 4 13 8l-4.33 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+            <a
+              href="#"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 border border-[#eef1f6] dark:border-white/[0.1] text-[#101828] dark:text-white text-base font-semibold rounded-xl hover:bg-[#f8fafc] dark:hover:bg-white/[0.04] transition-colors"
+            >
+              Download the App
+            </a>
+          </div>
+          <div className="flex items-center justify-center gap-8 flex-wrap">
+            <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-white/40">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Free to use
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold tracking-tight text-[#101828] dark:text-white leading-[1.1] mb-6">
-              The smarter way<br />
-              to get <span className="text-[#0063F5]">financed.</span>
-            </h1>
-            <p className="text-lg text-[#667085] dark:text-white/50 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
-              Compare loans and financing offers from top Saudi banks in one place. Apply once, get multiple offers, choose the best.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
-              <a
-                href="#"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 bg-[#0063F5] text-white text-sm font-semibold rounded-xl hover:bg-[#0052cc] transition-colors"
-              >
-                Check Your Eligibility
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3.33 8h9.33M8.67 4 13 8l-4.33 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
-              <a
-                href="#how-it-works"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 border border-[#eef1f6] dark:border-white/[0.1] text-[#101828] dark:text-white text-sm font-semibold rounded-xl hover:bg-[#f8fafc] dark:hover:bg-white/[0.04] transition-colors"
-              >
-                See How It Works
-              </a>
+            <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-white/40">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              No credit impact
             </div>
-            <div className="flex items-center gap-6 mt-10 justify-center lg:justify-start">
-              <Image src="/appstore.svg" alt="App Store" width={120} height={36} />
-              <Image src="/playstore.svg" alt="Google Play" width={120} height={36} />
+            <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-white/40">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              SAMA licensed
+            </div>
+            <div className="flex items-center gap-2 text-sm text-[#667085] dark:text-white/40">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Results in 3 minutes
             </div>
           </div>
-          <div className="flex-1 flex justify-center lg:justify-end">
-            <div className="relative">
-              <div className="absolute -inset-8 bg-[#0063F5]/5 rounded-full blur-3xl" />
+        </div>
+      </section>
+
+      {/* ── App Preview ─────────────────────────────────────────────────── */}
+      <section className="relative py-16 overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6 flex justify-center">
+          <div className="relative">
+            <div className="absolute -inset-10 bg-[#0063F5]/5 rounded-full blur-3xl" />
+            <Image
+              src="/hero-phones.png"
+              alt="Tamawal App"
+              width={560}
+              height={400}
+              className="relative drop-shadow-2xl"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Products ────────────────────────────────────────────────────── */}
+      <section className="py-20 border-t border-[#eef1f6] dark:border-white/[0.06]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-2">Products</p>
+              <h2 className="text-2xl font-bold text-[#101828] dark:text-white">Everything you need to get financed</h2>
+            </div>
+            <Link href="/tamweel-web/hub#products" className="hidden md:flex items-center gap-1.5 text-sm font-medium text-[#0063F5] hover:text-[#0052cc] transition-colors">
+              View all
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3.5 11 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {products.map((p) => (
+              <Link
+                key={p.name}
+                href={p.href}
+                className="group flex flex-col items-center gap-4 p-6 bg-[#f8fafc] dark:bg-white/[0.03] border border-[#eef1f6] dark:border-white/[0.06] rounded-2xl hover:border-[#0063F5]/30 hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-md transition-all"
+              >
+                <div className="w-12 h-12 rounded-xl bg-white dark:bg-[#0063F5]/10 flex items-center justify-center shadow-sm">
+                  <Image src={p.icon} alt={p.name} width={24} height={24} />
+                </div>
+                <span className="text-sm font-semibold text-[#101828] dark:text-white group-hover:text-[#0063F5] transition-colors text-center">{p.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Features ────────────────────────────────────────────────────── */}
+      <section className="py-20 bg-[#f8fafc] dark:bg-white/[0.02] border-y border-[#eef1f6] dark:border-white/[0.06]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-3">Why Tamawal</p>
+            <h2 className="text-3xl font-bold text-[#101828] dark:text-white mb-4">Built differently. Built for you.</h2>
+            <p className="text-base text-[#667085] dark:text-white/50 max-w-md mx-auto">
+              We built Tamawal to remove every barrier between you and the financing you deserve.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((f) => (
+              <div key={f.title} className="bg-white dark:bg-[#0d1520] border border-[#eef1f6] dark:border-white/[0.06] rounded-2xl p-6">
+                <div className="w-10 h-10 rounded-xl bg-[#f0f5ff] dark:bg-[#0063F5]/10 text-[#0063F5] flex items-center justify-center mb-5">
+                  {f.icon}
+                </div>
+                <h3 className="text-sm font-semibold text-[#101828] dark:text-white mb-2">{f.title}</h3>
+                <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">{f.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── App Download ────────────────────────────────────────────────── */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="bg-[#0063F5] rounded-3xl px-10 py-16 flex flex-col lg:flex-row items-center justify-between gap-10 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_80%_50%,rgba(255,255,255,0.07),transparent)]" />
+            <div className="relative text-center lg:text-left">
+              <h2 className="text-3xl font-bold text-white mb-3">
+                Get the app. Get funded.
+              </h2>
+              <p className="text-base text-white/70 max-w-md mb-8">
+                Available on iOS and Android. Join 50,000+ Saudis who found their best financing deal through Tamawal.
+              </p>
+              <div className="flex items-center gap-4 justify-center lg:justify-start">
+                <Image src="/appstore.svg" alt="App Store" width={130} height={40} />
+                <Image src="/playstore.svg" alt="Google Play" width={130} height={40} />
+              </div>
+            </div>
+            <div className="relative flex-shrink-0">
               <Image
                 src="/hero-phones.png"
                 alt="Tamawal App"
-                width={420}
-                height={520}
-                className="relative drop-shadow-2xl"
+                width={280}
+                height={200}
+                className="drop-shadow-2xl"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Stats ───────────────────────────────────────────────────────── */}
-      <section className="border-y border-[#eef1f6] dark:border-white/[0.06] bg-[#f8fafc] dark:bg-white/[0.02]">
-        <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-3xl font-bold text-[#101828] dark:text-white mb-1">{s.value}</p>
-              <p className="text-sm text-[#667085] dark:text-white/40">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Products ────────────────────────────────────────────────────── */}
-      <section id="products" className="py-24 max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-3">Products</p>
-          <h2 className="text-3xl font-bold text-[#101828] dark:text-white mb-4">
-            Every type of financing, one app.
-          </h2>
-          <p className="text-base text-[#667085] dark:text-white/50 max-w-md mx-auto">
-            From cars to homes to personal needs — compare real offers from Saudi banks in minutes.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {products.map((p) => (
-            <div
-              key={p.name}
-              className="group relative bg-white dark:bg-[#0d1520] border border-[#eef1f6] dark:border-white/[0.06] rounded-2xl p-6 hover:border-[#0063F5]/30 hover:shadow-lg hover:shadow-[#0063F5]/5 transition-all"
-            >
-              {p.tag && (
-                <span
-                  className="absolute top-4 right-4 text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full text-white"
-                  style={{ backgroundColor: p.tagColor ?? '#0063F5' }}
-                >
-                  {p.tag}
-                </span>
-              )}
-              <div className="w-12 h-12 rounded-xl bg-[#f0f5ff] dark:bg-[#0063F5]/10 flex items-center justify-center mb-5">
-                <Image src={p.icon} alt={p.name} width={24} height={24} />
-              </div>
-              <h3 className="text-sm font-semibold text-[#101828] dark:text-white mb-2 group-hover:text-[#0063F5] transition-colors">
-                {p.name}
-              </h3>
-              <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">{p.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── How it Works ────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 bg-[#f8fafc] dark:bg-white/[0.02] border-y border-[#eef1f6] dark:border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-3">How It Works</p>
-            <h2 className="text-3xl font-bold text-[#101828] dark:text-white mb-4">
-              From sign-up to funded in minutes.
-            </h2>
-            <p className="text-base text-[#667085] dark:text-white/50 max-w-md mx-auto">
-              No paperwork. No branch visits. Just a simple digital flow.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {steps.map((step, i) => (
-              <div key={step.number} className="relative">
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-5 left-full w-full h-px bg-[#eef1f6] dark:bg-white/[0.06] -translate-x-1/2 z-0" />
-                )}
-                <div className="relative z-10">
-                  <div className="w-10 h-10 rounded-full bg-[#0063F5] text-white text-xs font-bold flex items-center justify-center mb-5">
-                    {step.number}
-                  </div>
-                  <h3 className="text-sm font-semibold text-[#101828] dark:text-white mb-2">{step.title}</h3>
-                  <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Why Tamawal ─────────────────────────────────────────────────── */}
-      <section id="about" className="py-24 max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-3">Why Tamawal</p>
-          <h2 className="text-3xl font-bold text-[#101828] dark:text-white mb-4">
-            Built for Saudi borrowers.
-          </h2>
-          <p className="text-base text-[#667085] dark:text-white/50 max-w-md mx-auto">
-            We built Tamawal to make financing transparent, fast, and fair for everyone in the Kingdom.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {values.map((v) => (
-            <div key={v.title} className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden bg-[#f0f5ff] dark:bg-[#0063F5]/10 flex items-center justify-center">
-                <Image src={v.img} alt={v.title} width={56} height={56} className="object-contain" />
-              </div>
-              <h3 className="text-sm font-semibold text-[#101828] dark:text-white mb-2">{v.title}</h3>
-              <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed max-w-xs mx-auto">{v.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Partners ────────────────────────────────────────────────────── */}
-      <section id="partners" className="py-24 border-t border-[#eef1f6] dark:border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-3">Partners</p>
-            <h2 className="text-3xl font-bold text-[#101828] dark:text-white mb-4">
-              Trusted by top Saudi lenders.
-            </h2>
-            <p className="text-base text-[#667085] dark:text-white/50 max-w-md mx-auto">
-              We work with leading banks and financial institutions to bring you the best financing options.
-            </p>
-          </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-6 items-center">
-            {partners.map((p) => (
-              <div key={p.name} className="flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all">
-                <Image src={p.src} alt={p.name} width={80} height={32} className="object-contain max-h-8" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ─────────────────────────────────────────────────────────── */}
-      <section className="py-24 mx-6 mb-12">
-        <div className="max-w-6xl mx-auto bg-[#0063F5] rounded-3xl px-10 py-16 flex flex-col lg:flex-row items-center justify-between gap-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_80%_50%,rgba(255,255,255,0.06),transparent)]" />
-          <div className="relative text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-white mb-3">Ready to find your best offer?</h2>
-            <p className="text-base text-white/70 max-w-md">
-              Join thousands of Saudis who found better financing through Tamawal. Free to use, no commitment.
-            </p>
-          </div>
-          <div className="relative flex flex-col sm:flex-row gap-3">
-            <a
-              href="#"
-              className="flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-[#0063F5] text-sm font-semibold rounded-xl hover:bg-white/90 transition-colors"
-            >
-              Check Eligibility Free
-            </a>
-            <a
-              href="#"
-              className="flex items-center justify-center gap-2 px-6 py-3.5 border border-white/30 text-white text-sm font-semibold rounded-xl hover:bg-white/10 transition-colors"
-            >
-              Download the App
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* ── Footer ──────────────────────────────────────────────────────── */}
       <footer className="border-t border-[#eef1f6] dark:border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="md:col-span-2">
+        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-start justify-between gap-8">
+          <div>
             <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={28} className="mb-4" />
             <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed max-w-xs">
-              Tamawal is a licensed financial aggregator regulated by the Saudi Central Bank (SAMA). We connect borrowers with the best financing options in the Kingdom.
+              Licensed financial aggregator regulated by the Saudi Central Bank (SAMA).
             </p>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">Products</p>
-            <ul className="space-y-2.5">
-              {['Car Financing', 'Personal Loans', 'Real Estate', 'Credit Cards'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">{item}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">Company</p>
-            <ul className="space-y-2.5">
-              {['About Us', 'Partners', 'Brand', 'Materials'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">{item}</a>
-                </li>
-              ))}
-            </ul>
-            <a href="/platform-hub" className="inline-block mt-6 text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors font-semibold">Platform Hub →</a>
+          <div className="flex gap-16">
+            <div>
+              <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">Platform</p>
+              <ul className="space-y-2.5">
+                <li><Link href="/tamweel-web/hub" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">Hub</Link></li>
+                <li><Link href="/tamweel-web/hub#products" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">Products</Link></li>
+                <li><Link href="/tamweel-web/hub#partners" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">Partners</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">Company</p>
+              <ul className="space-y-2.5">
+                {['About Us', 'Brand', 'Materials'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">{item}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
         <div className="border-t border-[#eef1f6] dark:border-white/[0.06]">
