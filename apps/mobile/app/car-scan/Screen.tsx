@@ -271,82 +271,80 @@ function ResultsScreen({ photo }: { photo: string }) {
   const [applied, setApplied] = useState<number | null>(null);
 
   return (
-    <div className="flex flex-col h-full bg-[#f8fafc] font-sans">
+    <div className="flex flex-col h-full font-sans" style={{ background: '#EEF1F6' }}>
       <style>{css}</style>
 
-      {/* Status bar */}
-      <div className="h-[44px] shrink-0 bg-white flex items-end justify-between px-6 pb-2">
-        <span className="text-[15px] font-semibold text-[#101828]">9:41</span>
-        <span className="text-[13px] font-semibold text-[#0063F5]">Tamweel</span>
-        <div className="flex items-center gap-1.5">
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="#101828"><rect x="0" y="3" width="3" height="9" rx="0.5"/><rect x="4.5" y="2" width="3" height="10" rx="0.5"/><rect x="9" y="0.5" width="3" height="11.5" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5" opacity="0.3"/></svg>
-          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" stroke="#101828" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="2.5" fill="#101828"/><path d="M23.5 4.5v3a1.5 1.5 0 000-3z" fill="#101828" fillOpacity="0.4"/></svg>
+      {/* Dark navy header */}
+      <div className="shrink-0" style={{ background: '#121A26' }}>
+        {/* Status bar */}
+        <div className="h-[44px] flex items-end justify-between px-6 pb-2">
+          <span className="text-[15px] font-semibold text-white">9:41</span>
+          <div className="flex items-center gap-1.5">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="0.5"/><rect x="4.5" y="2" width="3" height="10" rx="0.5"/><rect x="9" y="0.5" width="3" height="11.5" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5" opacity="0.3"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" stroke="white" strokeOpacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="2.5" fill="white"/><path d="M23.5 4.5v3a1.5 1.5 0 000-3z" fill="white" fillOpacity="0.4"/></svg>
+          </div>
+        </div>
+
+        {/* Nav row */}
+        <div className="flex items-center justify-between px-5 py-2">
+          <button className="w-8 h-8 flex items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.08)' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          <img src="/home/Logo.svg" alt="Tamawal" style={{ height: '20px', width: 'auto' }} />
+          <div className="w-8" />
+        </div>
+
+        {/* Car identity */}
+        <div className="px-5 pt-3 pb-7" style={{ animation: 'fade-up 0.35s ease both' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] font-bold tracking-widest uppercase" style={{ color: '#FFDD33' }}>Detected</span>
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#4ade80' }} />
+              <span className="text-[10px] font-semibold" style={{ color: '#4ade80' }}>Verified</span>
+            </div>
+          </div>
+          <p className="text-[22px] font-bold text-white leading-tight">
+            {car.year} {car.make} {car.model}
+          </p>
+          <p className="text-[13px] mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            {car.trim} · {car.color}
+          </p>
         </div>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
 
-        {/* Captured photo hero */}
+        {/* Photo (if captured) */}
         {photo && (
-          <div className="relative w-full bg-black" style={{ aspectRatio: '4/3', animation: 'fade-up 0.35s ease both' }}>
-            <img src={photo} alt="Captured car" className="w-full h-full object-cover" />
-            {/* Detected badge */}
-            <div className="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+          <div className="relative w-full bg-black" style={{ aspectRatio: '4/3' }}>
+            <img src={photo} alt="Captured car" className="w-full h-full object-cover opacity-90" />
+            <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full px-3 py-1.5" style={{ background: 'rgba(18,26,38,0.75)', backdropFilter: 'blur(6px)' }}>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#4ade80' }} />
               <span className="text-white text-[11px] font-semibold">Vehicle Detected</span>
             </div>
           </div>
         )}
 
-        {/* Car details card */}
-        <div
-          className="bg-white px-5 pt-5 pb-6"
-          style={{ animation: 'fade-up 0.4s ease 0.05s both', boxShadow: '0 4px 16px rgba(0,99,245,0.08)' }}
-        >
-          {!photo && (
-            <div className="w-full h-[180px] bg-[#f8fafc] rounded-xl mb-5 flex items-center justify-center">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                <path d="M3 17h18M5 17V9l2-4h10l2 4v8" stroke="#d1d5db" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="7.5" cy="17.5" r="1.5" fill="#d1d5db"/>
-                <circle cx="16.5" cy="17.5" r="1.5" fill="#d1d5db"/>
-              </svg>
-            </div>
-          )}
-
-          <div className="flex items-start gap-3">
-            <div>
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-[11px] font-semibold tracking-widest uppercase text-[#0063F5]">Detected</span>
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                  <span className="text-[10px] font-medium text-green-600">Verified</span>
-                </div>
-              </div>
-              <p className="text-[20px] font-bold text-[#101828] leading-tight">
-                {car.year} {car.make} {car.model}
-              </p>
-              <p className="text-[13px] text-[#667085] mt-0.5">{car.trim} · {car.color}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 mt-5">
+        {/* Stats row */}
+        <div className="px-4 pt-4 pb-2" style={{ animation: 'fade-up 0.4s ease 0.05s both' }}>
+          <div className="grid grid-cols-3 gap-2">
             {[
               { label: 'Market Price', value: `SAR ${car.price.toLocaleString()}` },
-              { label: 'Year', value: car.year },
-              { label: 'Condition', value: 'New' },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-[#f8fafc] rounded-xl p-3">
-                <p className="text-[10px] font-medium text-[#9aa4b2] uppercase tracking-wide mb-1">{stat.label}</p>
-                <p className="text-[13px] font-semibold text-[#101828]">{stat.value}</p>
+              { label: 'Year',         value: car.year },
+              { label: 'Condition',    value: 'New' },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl p-3" style={{ background: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <p className="text-[9px] font-semibold tracking-widest uppercase mb-1.5" style={{ color: '#9AA4B2' }}>{s.label}</p>
+                <p className="text-[12px] font-bold" style={{ color: '#121A26' }}>{s.value}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Financing offers */}
-        <div className="px-4 pt-5 pb-4">
-          <p className="text-[12px] font-semibold tracking-widest uppercase text-[#667085] mb-4">
+        {/* Offers */}
+        <div className="px-4 pt-4 pb-4">
+          <p className="text-[11px] font-bold tracking-widest uppercase mb-4" style={{ color: '#697586' }}>
             Financing Offers · {offers.length} banks
           </p>
 
@@ -354,58 +352,61 @@ function ResultsScreen({ photo }: { photo: string }) {
             {offers.map((offer, i) => (
               <div
                 key={offer.id}
-                className="bg-white rounded-2xl overflow-hidden border border-[#eef1f6]"
-                style={{ animation: `fade-up 0.4s ease ${0.12 + i * 0.08}s both`, boxShadow: '0 2px 12px rgba(0,99,245,0.07)' }}
+                className="rounded-2xl overflow-hidden"
+                style={{ background: 'white', boxShadow: '0 2px 12px rgba(0,99,245,0.07)', animation: `fade-up 0.4s ease ${0.1 + i * 0.07}s both` }}
               >
+                {/* Bank row */}
                 <div className="flex items-center gap-3 px-4 pt-4 pb-3">
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0"
                     style={{ backgroundColor: offer.bgColor }}
                   >
                     {offer.initials}
                   </div>
-                  <div className="flex-1">
-                    <p className="text-[13px] font-semibold text-[#101828]">{offer.bank}</p>
-                    <p className="text-[11px] text-[#9aa4b2]">{offer.rate}% annual rate</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] font-semibold" style={{ color: '#121A26' }}>{offer.bank}</p>
+                    <p className="text-[11px]" style={{ color: '#9AA4B2' }}>{offer.rate}% annual rate</p>
                   </div>
                   {offer.tagEn && (
                     <span
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                      style={{ color: offer.tagColor!, backgroundColor: offer.tagColor! + '18' }}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0"
+                      style={{ color: offer.tagColor!, background: offer.tagColor! + '18' }}
                     >
                       {offer.tagEn}
                     </span>
                   )}
                 </div>
 
-                <div className="h-px bg-[#eef1f6] mx-4" />
+                <div className="h-px mx-4" style={{ background: '#EEF1F6' }} />
 
-                <div className="grid grid-cols-3 px-4 py-3">
-                  <div className="flex flex-col gap-0.5">
-                    <p className="text-[10px] text-[#9aa4b2] font-medium">Monthly</p>
-                    <p className="text-[16px] font-bold text-[#101828]">{offer.monthly.toLocaleString()}</p>
-                    <p className="text-[10px] text-[#9aa4b2]">SAR / mo</p>
+                {/* Numbers */}
+                <div className="grid grid-cols-3 px-4 py-3 gap-2">
+                  <div>
+                    <p className="text-[9px] font-semibold tracking-wide uppercase mb-1" style={{ color: '#9AA4B2' }}>Monthly</p>
+                    <p className="text-[17px] font-bold leading-none" style={{ color: '#121A26' }}>{offer.monthly.toLocaleString()}</p>
+                    <p className="text-[9px] mt-0.5" style={{ color: '#9AA4B2' }}>SAR / mo</p>
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <p className="text-[10px] text-[#9aa4b2] font-medium">Down Payment</p>
-                    <p className="text-[14px] font-semibold text-[#101828]">{offer.down.toLocaleString()}</p>
-                    <p className="text-[10px] text-[#9aa4b2]">SAR</p>
+                  <div>
+                    <p className="text-[9px] font-semibold tracking-wide uppercase mb-1" style={{ color: '#9AA4B2' }}>Down Payment</p>
+                    <p className="text-[15px] font-bold leading-none" style={{ color: '#121A26' }}>{offer.down.toLocaleString()}</p>
+                    <p className="text-[9px] mt-0.5" style={{ color: '#9AA4B2' }}>SAR</p>
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <p className="text-[10px] text-[#9aa4b2] font-medium">Tenor</p>
-                    <p className="text-[14px] font-semibold text-[#101828]">{offer.tenor}</p>
-                    <p className="text-[10px] text-[#9aa4b2]">months</p>
+                  <div>
+                    <p className="text-[9px] font-semibold tracking-wide uppercase mb-1" style={{ color: '#9AA4B2' }}>Tenor</p>
+                    <p className="text-[15px] font-bold leading-none" style={{ color: '#121A26' }}>{offer.tenor}</p>
+                    <p className="text-[9px] mt-0.5" style={{ color: '#9AA4B2' }}>months</p>
                   </div>
                 </div>
 
+                {/* Apply button */}
                 <div className="px-4 pb-4">
                   <button
-                    onClick={() => setApplied(offer.id)}
-                    className="w-full h-[42px] rounded-xl text-[13px] font-semibold transition-colors flex items-center justify-center gap-2"
+                    onClick={() => { (window.top || window).location.href = '/app/result'; }}
+                    className="w-full h-[42px] rounded-xl text-[13px] font-semibold transition-all flex items-center justify-center gap-2"
                     style={
                       applied === offer.id
-                        ? { backgroundColor: '#ecfdf5', color: '#059669' }
-                        : { backgroundColor: offer.bgColor + '12', color: offer.bgColor }
+                        ? { background: '#ecfdf5', color: '#059669' }
+                        : { background: '#0063F5', color: '#fff' }
                     }
                   >
                     {applied === offer.id ? (
@@ -425,8 +426,8 @@ function ResultsScreen({ photo }: { photo: string }) {
       </div>
 
       {/* Home indicator */}
-      <div className="h-[34px] bg-white flex items-center justify-center shrink-0 border-t border-[#eef1f6]">
-        <div className="w-[134px] h-[5px] bg-[#101828]/20 rounded-full" />
+      <div className="h-[34px] shrink-0 flex items-center justify-center" style={{ background: 'white', borderTop: '1px solid #EEF1F6' }}>
+        <div className="w-[134px] h-[5px] rounded-full" style={{ background: 'rgba(18,26,38,0.15)' }} />
       </div>
     </div>
   );

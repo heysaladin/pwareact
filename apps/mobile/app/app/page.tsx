@@ -1,9 +1,37 @@
-export default function AppPage() {
+import { headers } from 'next/headers';
+
+export default async function AppPage() {
+  const ua = (await headers()).get('user-agent') ?? '';
+  const mobile = /android|iphone|ipad|ipod/i.test(ua);
+
+  if (mobile) {
+    return (
+      <iframe
+        src="/tamawal-home.html"
+        className="w-full border-0"
+        style={{ height: '100svh' }}
+        title="Tamawal Home"
+      />
+    );
+  }
+
   return (
-    <iframe
-      src="/tamawal-home.html"
-      className="w-full h-screen border-0"
-      title="Tamawal Home"
-    />
+    <div className="min-h-screen bg-[#eef1f6] flex items-center justify-center">
+      <div
+        className="relative bg-white overflow-hidden"
+        style={{
+          width: 375,
+          height: 812,
+          borderRadius: 40,
+          boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.08)',
+        }}
+      >
+        <iframe
+          src="/tamawal-home.html"
+          className="w-full h-full border-0"
+          title="Tamawal Home"
+        />
+      </div>
+    </div>
   );
 }

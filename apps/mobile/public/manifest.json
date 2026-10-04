@@ -1,0 +1,26 @@
+{
+  "name": "Tamawal",
+  "short_name": "Tamawal",
+  "description": "تموّل — منصة التمويل الذكي",
+  "start_url": "/tamweel-mobile",
+  "display": "standalone",
+  "background_color": "#121A26",
+  "theme_color": "#0063F5",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

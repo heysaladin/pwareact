@@ -214,41 +214,53 @@
     }
 
     /* ── Loan cards carousel ── */
-    function CardCarousel() {
-      /* Figma specs:
-         small card: outer pt=24, inner rounded=12, BG=130×178, icon=154×129, px=12, pt=12
-         large card: no outer pt, inner rounded=16, BG=158×216 at top-0, icon=184×154, px=16, pt=16
-         group: gap=16, pt=16, total=604px centered
-      */
+    function CardCarousel({ activeIndex, setActiveIndex, animated, setAnimated }) {
+      const touchStartX = React.useRef(null);
+
       const cards = [
-        {
-          label: isAr ? 'تمويل عقاري' : T.realEstate,
-          icon: '/home/type=Real Estate loan.svg',
-          active: false,
-        },
-        {
-          label: isAr ? 'تمويل شخصي' : T.personalLoan,
-          icon: '/home/type=Personal Loan.svg',
-          active: true,
-        },
-        {
-          label: isAr ? 'تمويل سيارات' : T.carLoan,
-          icon: '/home/type=Car Loan.svg',
-          active: false,
-        },
+        { label: isAr ? 'تمويل عقاري' : T.realEstate,   icon: '/home/type=Real Estate loan.svg' },
+        { label: isAr ? 'تمويل شخصي' : T.personalLoan,  icon: '/home/type=Personal Loan.svg' },
+        { label: isAr ? 'تمويل سيارات' : T.carLoan,      icon: '/home/type=Car Loan.svg' },
+        { label: isAr ? 'تمويل بطاقات' : T.cardsLoan,    icon: '/home/type=Cards Loan.svg' },
       ];
 
+      /* 4 cards, total strip = 4×178 + 3×16 + (216-178) when active = 798px
+         active=0: large(216)+g+s+g+s+g+s → center₀=108        → ml=187.5-108  =  79.5
+         active=1: s+g+large+g+s+g+s      → center₁=302        → ml=187.5-302  = -114.5
+         active=2: s+g+s+g+large+g+s      → center₂=496        → ml=187.5-496  = -308.5
+         active=3: s+g+s+g+s+g+large      → center₃=690        → ml=187.5-690  = -502.5 */
+      const marginLeftMap = [79.5, -114.5, -308.5, -502.5];
+
+      const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+      const handleTouchEnd   = (e) => {
+        if (touchStartX.current === null) return;
+        const dx = touchStartX.current - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 40) {
+          const n    = cards.length;
+          const next = dx > 0 ? (activeIndex + 1) % n : (activeIndex - 1 + n) % n;
+          const wrap = (dx > 0 && activeIndex === n - 1) || (dx < 0 && activeIndex === 0);
+          if (wrap) setAnimated(false);
+          setActiveIndex(next);
+          if (wrap) requestAnimationFrame(() => requestAnimationFrame(() => setAnimated(true)));
+        }
+        touchStartX.current = null;
+      };
+
       return (
-        <div style={{position:'relative', direction:'ltr'}}>
-          {/* 604px group centered in 375px → offset = (375-604)/2 = -114.5 */}
+        <div
+          style={{position:'relative', direction:'ltr', overflow:'hidden'}}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div style={{
             display:'flex', gap:16, alignItems:'flex-start',
             paddingTop:16,
             width:604,
-            marginLeft:-114.5,
+            marginLeft:marginLeftMap[activeIndex],
+            transition: animated ? 'margin-left 0.35s cubic-bezier(0.32,0.72,0,1)' : 'none',
           }}>
             {cards.map((card, i) => {
-              const s = !card.active; /* small */
+              const s = i !== activeIndex; /* small */
               const iconW = s ? 154 : 184;
               const iconH = s ? 129 : 154;
               const bgH   = s ? 130 : 158;
@@ -257,12 +269,14 @@
               const pt    = s ? 12  : 16;
 
               return (
-                <div key={i} style={{
+                <div key={i} onClick={() => setActiveIndex(i)} style={{
                   display:'flex', flexDirection:'column', alignItems:'center',
                   flexShrink:0,
                   width: bgW,
                   paddingTop: s ? 24 : 0,
                   filter: s ? 'drop-shadow(0px 6.679px 5.009px rgba(177,189,209,0.1))' : 'none',
+                  cursor: s ? 'pointer' : 'default',
+                  transition:'width 0.35s cubic-bezier(0.32,0.72,0,1), padding-top 0.35s cubic-bezier(0.32,0.72,0,1)',
                 }}>
                   {/* Container */}
                   <div style={{
@@ -356,11 +370,11 @@
               }}>{T.offerTitle}</p>
               <div style={{display:'flex', alignItems:'center', gap:6, flexDirection:flip}}>
                 <div style={{display:'flex', alignItems:'center', gap:5}}>
-                  <img
-                    src="https://www.figma.com/api/mcp/asset/895633ef-9057-4666-89e9-aba4b999bdb7.png"
-                    alt="Bank Albilad"
-                    style={{height:22, width:'auto', objectFit:'contain'}}
-                  />
+                  <svg height="22" width="110" viewBox="0 0 110 22" fill="none" xmlns="http://www.w3.org/2000/svg" style={{direction:'ltr',overflow:'visible'}}>
+                    <rect x="0" y="1" width="20" height="20" rx="4" fill="#2DB84B"/>
+                    <path d="M5 6h6.5c1.4 0 2.5.9 2.5 2.2S12.9 10.4 11.5 10.4H5V6zm0 4.4h7c1.5 0 2.5 1 2.5 2.3S13.5 15 12 15H5v-4.6z" fill="white"/>
+                    <text x="25" y="15.5" fontSize="12" fontWeight="600" fill="#121A26" fontFamily="-apple-system,system-ui,sans-serif" direction="ltr" textAnchor="start">Bank AlBilad</text>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -381,7 +395,11 @@
             <div>
               <p style={{margin:'0 0 3px', fontSize:11.5, color:C.gray500}}>{T.installLabel}</p>
               <div style={{display:'flex', alignItems:'center', gap:4, flexDirection:flip}}>
-                <img src="https://www.figma.com/api/mcp/asset/efa26e29-8a47-45d5-aa25-85e67503eb33.svg" alt="﷼" style={{width:16, height:16}}/>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{direction:'ltr'}}>
+                  <path d="M4.5 3 L4.5 10.5 Q4.5 13 8 13 Q11.5 13 11.5 10.5 L11.5 9.5" stroke={C.gray900} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <line x1="3" y1="6.5" x2="12" y2="6.5" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="3" y1="9" x2="12" y2="9" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
                 <span style={{fontSize:16, fontWeight:700, color:C.gray900}}>99,999.99</span>
               </div>
             </div>
@@ -416,12 +434,16 @@
           {/* Footer */}
           <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', flexDirection:flip}}>
             <div style={{display:'flex', alignItems:'center', gap:5, flexDirection:flip}}>
-              <img src="https://www.figma.com/api/mcp/asset/8f62e70d-dc6a-433d-9db2-28055152770b.svg" alt="★" style={{width:18, height:18}}/>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1.5l2.06 4.18 4.61.67-3.34 3.25.79 4.59L9 11.93l-4.12 2.16.79-4.59L2.33 6.35l4.61-.67L9 1.5z" fill="#FFDD33" stroke="#E8C700" strokeWidth="0.6" strokeLinejoin="round"/>
+              </svg>
               <span style={{fontWeight:600, fontSize:14, color:C.gray900}}>5.0</span>
             </div>
             <div style={{display:'flex', alignItems:'center', gap:12, flexDirection:flip}}>
               <button style={{background:'none', border:'none', padding:4}}>
-                <img src="https://www.figma.com/api/mcp/asset/f946ab80-143f-42e0-a668-09d714a850d5.svg" alt="♥" style={{width:22, height:22}}/>
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 18.5C11 18.5 3 13.5 3 7.5C3 5.01 5.01 3 7.5 3C9.04 3 10.41 3.8 11 5C11.59 3.8 12.96 3 14.5 3C16.99 3 19 5.01 19 7.5C19 13.5 11 18.5 11 18.5Z" stroke={C.brand600} strokeWidth="1.5" strokeLinejoin="round"/>
+                </svg>
               </button>
               <button style={{
                 background:C.brand600, color:C.white, border:'none', borderRadius:12,
@@ -429,11 +451,9 @@
                 display:'flex', alignItems:'center', gap:7, flexDirection:flip,
               }}>
                 {T.details}
-                <img
-                  src="https://www.figma.com/api/mcp/asset/0a32f4b4-48af-40d8-ac65-65b98c0268f5.svg"
-                  alt=""
-                  style={{width:16, height:16, transform: isAr ? 'rotate(180deg)' : 'none'}}
-                />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{transform: isAr ? 'rotate(180deg)' : 'none'}} xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </div>
           </div>
@@ -532,10 +552,60 @@
       );
     }
 
+    /* ── Car scan banner ── */
+    function CarScanBanner() {
+      const flip = isAr ? 'row-reverse' : 'row';
+      return (
+        <button
+          onClick={() => { (window.top || window).location.href = '/car-scan'; }}
+          style={{
+            width:'100%', border:'none', borderRadius:16, cursor:'pointer',
+            background:'linear-gradient(135deg, #121A26 0%, #1e2d45 100%)',
+            padding:16, marginTop:12,
+            display:'flex', alignItems:'center', justifyContent:'space-between',
+            flexDirection:flip, gap:12,
+            boxShadow:'0 4px 16px rgba(18,26,38,0.18)',
+            fontFamily:'inherit',
+          }}
+        >
+          <div style={{display:'flex', flexDirection:'column', alignItems: isAr ? 'flex-end' : 'flex-start', gap:4}}>
+            <span style={{
+              fontSize:10, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase',
+              color:'#FFDD33',
+            }}>{isAr ? 'ميزة جديدة' : 'New Feature'}</span>
+            <span style={{fontSize:14, fontWeight:700, color:'#fff', lineHeight:1.4, textAlign: isAr ? 'right' : 'left'}}>
+              {isAr ? 'امسح سيارتك للحصول على تمويل فوري' : 'Scan your car for instant financing'}
+            </span>
+            <div style={{display:'flex', alignItems:'center', gap:5, marginTop:2, flexDirection:flip}}>
+              <span style={{fontSize:12, color:'rgba(255,255,255,0.55)'}}>
+                {isAr ? 'اعرف القيمة والتأهل في ثوانٍ' : 'Get valuation & eligibility in seconds'}
+              </span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{transform: isAr ? 'rotate(180deg)' : 'none'}}>
+                <path d="M2 6h8M6 2.5 9.5 6 6 9.5" stroke="rgba(255,255,255,0.55)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div style={{
+            width:52, height:52, borderRadius:12, flexShrink:0,
+            background:'rgba(255,221,51,0.12)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+          }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3" stroke="#FFDD33" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <rect x="9" y="11" width="14" height="10" rx="2" stroke="#FFDD33" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M13 15h6M13 18h4" stroke="#FFDD33" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </button>
+      );
+    }
+
     /* ── Root ── */
     function TamawalHome() {
       const [activeTab, setActiveTab] = useState('now');
       const [activeNav, setActiveNav] = useState('home');
+      const [carouselIndex,   setCarouselIndex]   = React.useState(1);
+      const [carouselAnimated, setCarouselAnimated] = React.useState(true);
 
       const tabs = isAr
         ? [
@@ -567,7 +637,12 @@
             <Header/>
             {/* Cards: absolute at bottom-(-62) → offset = -(cardGroupHeight-62) from content bottom */}
             <div style={{position:'absolute', bottom:-62, left:0, right:0, zIndex:3}}>
-              <CardCarousel/>
+              <CardCarousel
+                activeIndex={carouselIndex}
+                setActiveIndex={setCarouselIndex}
+                animated={carouselAnimated}
+                setAnimated={setCarouselAnimated}
+              />
             </div>
           </div>
 
@@ -598,6 +673,7 @@
             {/* Content */}
             <div className="content-scroll" style={{flex:1, overflowY:'auto', padding:'14px 16px 130px'}}>
               <OfferCard/>
+              {carouselIndex === 2 && <CarScanBanner/>}
             </div>
           </div>
 
