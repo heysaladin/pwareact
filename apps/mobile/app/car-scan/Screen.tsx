@@ -5,11 +5,12 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 type Stage = 'scan' | 'loading' | 'results';
 
 const car = {
-  make: 'Toyota',
-  model: 'Camry',
+  make: 'GMC',
+  model: 'Terrain',
   year: '2024',
-  trim: '2.5L GLE',
-  price: 109_000,
+  trim: 'Price in Riyadh',
+  priceMin: 120_000,
+  priceMax: 164_500,
   color: 'Pearl White',
 };
 
@@ -330,7 +331,7 @@ function ResultsScreen({ photo }: { photo: string }) {
         <div className="px-4 pt-4 pb-2" style={{ animation: 'fade-up 0.4s ease 0.05s both' }}>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { label: 'Market Price', value: `SAR ${car.price.toLocaleString()}` },
+              { label: 'Market Price', value: `SAR ${car.priceMin.toLocaleString()} – ${car.priceMax.toLocaleString()}` },
               { label: 'Year',         value: car.year },
               { label: 'Condition',    value: 'New' },
             ].map((s) => (
