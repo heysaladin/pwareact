@@ -238,7 +238,6 @@ export default function RequestDetailsPage() {
                     <div className="text-left flex flex-col items-end gap-1">
                       <span className="text-[11px] text-[#6B7280]">جهة التمويل</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-semibold text-[#111827]">الأهلي NCB</span>
                         <div className="w-32 h-16 rounded-lg border flex items-center justify-center overflow-hidden" style={{ background: 'white', borderColor: '#F0F7F2' }}>
                           <img src="/logo-ncb.png" alt="NCB" className="w-full h-full object-contain px-3 py-1"
                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -257,7 +256,7 @@ export default function RequestDetailsPage() {
                 </div>
                 <div>
                   <span className="text-[11px] text-[#6B7280] block mb-0.5">تاريخ الطلب</span>
-                  <span className="text-[13px] font-medium text-[#111827]">21 يوليو 2026</span>
+                  <span className="text-[13px] font-medium text-[#111827]">07 أكتوبر 2026</span>
                 </div>
               </div>
             </div>
