@@ -238,9 +238,9 @@ export default function RequestDetailsPage() {
                     <div className="text-left flex flex-col items-end gap-1">
                       <span className="text-[11px] text-[#6B7280]">جهة التمويل</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-semibold text-[#111827]">البنك الأهلي</span>
-                        <div className="w-32 h-16 rounded-lg flex items-center justify-center overflow-hidden" style={{ background: '#EFF6FF' }}>
-                          <img src="/logo-alahli.png" alt="SNB" className="w-full h-full object-contain p-1"
+                        <span className="text-[13px] font-semibold text-[#111827]">الأهلي NCB</span>
+                        <div className="w-32 h-16 rounded-lg border flex items-center justify-center overflow-hidden" style={{ background: 'white', borderColor: '#F0F7F2' }}>
+                          <img src="/logo-ncb.png" alt="NCB" className="w-full h-full object-contain px-3 py-1"
                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         </div>
                       </div>
