@@ -60,10 +60,10 @@ function fmt(n: number) { return n.toLocaleString('en-SA'); }
 
 export default function EligibleOffersPage() {
   const [selectedBank, setSelectedBank] = useState('snb');
-  const [compareList, setCompareList] = useState<string[]>(['snb', 'alinma']);
+  const [compareList, setCompareList] = useState<string[]>(['snb', 'alinma', 'riyad', 'tamweel']);
 
   function toggleCompare(id: string) {
-    setCompareList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id].slice(-2));
+    setCompareList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   }
 
   return (

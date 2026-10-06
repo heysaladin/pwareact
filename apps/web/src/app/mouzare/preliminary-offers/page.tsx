@@ -231,7 +231,7 @@ export default function PreliminaryOffersPage() {
               <a href="/mouzare/verify-identity"
                 className="flex items-center gap-2 px-8 py-2.5 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity flex-shrink-0 self-end"
                 style={{ background: '#1B3A24' }}>
-                عرض العروض
+                بدأ التأهيل
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>
             </div>

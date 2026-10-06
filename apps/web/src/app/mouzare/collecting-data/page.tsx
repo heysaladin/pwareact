@@ -2,6 +2,7 @@
 
 import CartSidebar from '../components/CartSidebar';
 import StepperBar from '../components/StepperBar';
+import { useState, useEffect } from 'react';
 
 const PRODUCT = {
   name: 'خزان رش مبيدات بسعة 2000 لتر',
@@ -33,42 +34,66 @@ const DATA_SOURCES = [
     name: 'نفاذ Nafath',
     title: 'التحقق من الهوية الوطنية',
     desc: 'التحقق من بياناتك عبر منصة نفاذ.',
-    status: 'done',
   },
   {
     logo: '/logo-gosi.png', bg: '#EFF6FF',
     name: 'GOSI',
     title: 'التحقق من بيانات العمل والدخل',
     desc: 'التحقق من بياناتك في التأمينات الاجتماعية.',
-    status: 'loading',
   },
   {
     logo: '/logo-simah.png', bg: '#F5F3FF',
     name: 'سمة SIMAH',
     title: 'التحقق من السجل الائتماني والالتزامات',
     desc: 'التحقق من سجلك الائتماني والالتزامات المالية.',
-    status: 'pending',
   },
   {
     logo: '/logo-masdr.png', bg: '#FFFBEB',
     name: 'مصدر MASDR',
     title: 'التحقق من بيانات الدخل والبيانات الحكومية',
     desc: 'مراجعة بياناتك من الجهات الحكومية.',
-    status: 'pending',
   },
   {
     logo: '/logo-zatca.png', bg: '#FEF3C7',
     name: 'هيئة الزكاة والضريبة والجمارك',
     title: 'التحقق من البيانات الضريبية',
     desc: 'التحقق من سجلاتك في هيئة الزكاة والضريبة والجمارك.',
-    status: 'pending',
   },
 ];
+
+// Each item: 1.2s loading, then done. Next starts when previous goes done.
+const LOADING_DURATION = 1200;
+const START_DELAY = 800;
+
+type Status = 'pending' | 'loading' | 'done';
 
 function fmt(n: number) { return n.toLocaleString('en-SA'); }
 
 
 export default function CollectingDataPage() {
+  const [statuses, setStatuses] = useState<Status[]>(DATA_SOURCES.map(() => 'pending'));
+
+  const allDone = statuses.every(s => s === 'done');
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    DATA_SOURCES.forEach((_, i) => {
+      const loadingAt = START_DELAY + i * (LOADING_DURATION + 200);
+      const doneAt = loadingAt + LOADING_DURATION;
+
+      timers.push(setTimeout(() => {
+        setStatuses(prev => prev.map((s, idx) => idx === i ? 'loading' : s));
+      }, loadingAt));
+
+      timers.push(setTimeout(() => {
+        setStatuses(prev => prev.map((s, idx) => idx === i ? 'done' : s));
+      }, doneAt));
+    });
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <div
       dir="rtl"
@@ -192,42 +217,46 @@ export default function CollectingDataPage() {
               <div className="flex-1 bg-white rounded-2xl border border-[#E5E7EB] p-5">
                 <h2 className="text-[13px] font-bold text-[#111827] mb-4">مصادر البيانات</h2>
                 <div className="space-y-3">
-                  {DATA_SOURCES.map(src => (
-                    <div key={src.name} className="flex items-start gap-3 p-3 rounded-xl border border-[#E5E7EB]">
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: src.bg }}><img src={src.logo} alt={src.name} className="w-full h-full object-contain p-1.5" /></div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-bold text-[#111827]">{src.name}</p>
-                        <p className="text-[10px] font-medium text-[#374151] mt-0.5">{src.title}</p>
-                        <p className="text-[10px] text-[#6B7280] mt-0.5">{src.desc}</p>
+                  {DATA_SOURCES.map((src, i) => {
+                    const status = statuses[i];
+                    return (
+                      <div key={src.name} className="flex items-start gap-3 p-3 rounded-xl border border-[#E5E7EB] transition-colors"
+                        style={{ background: status === 'loading' ? '#FFFBEB' : status === 'done' ? '#F0FDF4' : 'white' }}>
+                        <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: src.bg }}><img src={src.logo} alt={src.name} className="w-full h-full object-contain p-1.5" /></div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[11px] font-bold text-[#111827]">{src.name}</p>
+                          <p className="text-[10px] font-medium text-[#374151] mt-0.5">{src.title}</p>
+                          <p className="text-[10px] text-[#6B7280] mt-0.5">{src.desc}</p>
+                        </div>
+                        <div className="flex-shrink-0 flex items-center gap-1.5">
+                          {status === 'done' && (
+                            <>
+                              <div className="w-5 h-5 rounded-full bg-[#DCFCE7] flex items-center justify-center">
+                                <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                              </div>
+                              <span className="text-[10px] font-medium text-[#16A34A]">مكتمل</span>
+                            </>
+                          )}
+                          {status === 'loading' && (
+                            <>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" className="spinner">
+                                <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                              </svg>
+                              <span className="text-[10px] font-medium text-[#F59E0B]">جاري التحقق</span>
+                            </>
+                          )}
+                          {status === 'pending' && (
+                            <>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                              </svg>
+                              <span className="text-[10px] text-[#9CA3AF]">في الانتظار</span>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-shrink-0 flex items-center gap-1.5">
-                        {src.status === 'done' && (
-                          <>
-                            <div className="w-5 h-5 rounded-full bg-[#DCFCE7] flex items-center justify-center">
-                              <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                            </div>
-                            <span className="text-[10px] font-medium text-[#16A34A]">مكتمل</span>
-                          </>
-                        )}
-                        {src.status === 'loading' && (
-                          <>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" className="spinner">
-                              <path d="M21 12a9 9 0 11-6.219-8.56"/>
-                            </svg>
-                            <span className="text-[10px] font-medium text-[#F59E0B]">جاري التحقق</span>
-                          </>
-                        )}
-                        {src.status === 'pending' && (
-                          <>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5">
-                              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            <span className="text-[10px] text-[#9CA3AF]">في الانتظار</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -244,10 +273,17 @@ export default function CollectingDataPage() {
                 </svg>
                 <span className="text-[11px] text-[#6B7280]">تظل معلوماتك آمنة ومشفرة طوال العملية.</span>
               </div>
-              <a href="/mouzare/eligible-offers" className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity" style={{ background: '#1B3A24' }}>
-                متابعة
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </a>
+              {allDone ? (
+                <a href="/mouzare/eligible-offers" className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity" style={{ background: '#1B3A24' }}>
+                  متابعة
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </a>
+              ) : (
+                <span className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white cursor-not-allowed select-none" style={{ background: '#9CA3AF' }}>
+                  متابعة
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </span>
+              )}
             </div>
 
           </div>

@@ -201,8 +201,8 @@ export default function FinancingPage() {
                 </div>
               </div>
               <input type="range" min={0} max={50} step={1} value={downPct} onChange={e => setDownPct(Number(e.target.value))}
-                className="w-full" dir="ltr"
-                style={{ background: `linear-gradient(to right, #1B3A24 ${downPct * 2}%, #E5E7EB ${downPct * 2}%)` }} />
+                className="w-full" dir="rtl"
+                style={{ background: `linear-gradient(to left, #1B3A24 ${downPct * 2}%, #E5E7EB ${downPct * 2}%)` }} />
               <div className="flex items-center justify-between mt-1.5">
                 {[0, 10, 20, 30, 40, 50].map(v => (
                   <span key={v} className="text-[10px] text-[#9CA3AF]">{v}%</span>

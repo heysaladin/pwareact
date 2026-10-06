@@ -133,7 +133,7 @@ export default function VerifyIdentityPage() {
                           <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
                         </svg>
                         <span className="text-[11px] text-[#6B7280]">رقم الهوية / الإقامة:</span>
-                        <span className="text-[11px] font-medium text-[#374151]">1234 567 890</span>
+                        <span className="text-[11px] font-medium text-[#374151]" dir="ltr">1111 223 345</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" className="flex-shrink-0">
@@ -174,7 +174,7 @@ export default function VerifyIdentityPage() {
                 className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity"
                 style={{ background: '#1B3A24' }}
               >
-                تم فتح تطبيق نفاذ
+                تم التحقق عبر نفاذ
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>
             </div>
