@@ -143,7 +143,7 @@ export default function SuccessPage() {
 
                 {/* CTA button */}
                 <a
-                  href="#"
+                  href="/tractor/track-requests"
                   className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-[15px] font-semibold text-white hover:opacity-90 transition-opacity mb-8"
                   style={{ background: '#1B3A24' }}
                 >
