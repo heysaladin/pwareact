@@ -207,7 +207,7 @@ export default function TrackRequestsPage() {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-20 h-9 rounded-lg overflow-hidden flex items-center justify-center" style={{ background: req.bankBg }}>
+                          <div className="w-20 h-9 rounded-lg border overflow-hidden flex items-center justify-center" style={{ background: 'white', borderColor: req.bankBg }}>
                             <img src={req.bankLogo} alt={req.bankName} className="w-full h-full object-contain p-1"
                               onError={(e) => {
                                 const parent = (e.target as HTMLImageElement).parentElement;
