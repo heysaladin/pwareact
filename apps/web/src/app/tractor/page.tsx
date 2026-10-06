@@ -103,7 +103,7 @@ export default function TractorPage() {
     <div
       dir="rtl"
       className="h-screen flex flex-col overflow-hidden"
-      style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Arabic', 'SF Pro Arabic', 'IBM Plex Sans Arabic', 'Cairo', 'Tajawal', Arial, sans-serif" }}
+      style={{ fontFamily: "'SF Arabic', 'SF Pro Arabic', -apple-system, BlinkMacSystemFont, 'IBM Plex Sans Arabic', 'Cairo', 'Tajawal', Arial, sans-serif" }}
     >
       {/* Arabic font */}
       <style>{`
