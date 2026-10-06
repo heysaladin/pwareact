@@ -96,10 +96,10 @@ const general = [
     ),
   },
   {
-    id: 'tractor',
+    id: 'mouzare',
     name: 'Mouzare',
     description: 'Agricultural equipment e-commerce experience — cart, financing, and checkout for farming machinery.',
-    href: '/tractor',
+    href: '/mouzare',
     tag: 'AGRI',
     badge: null,
     accentColor: '#FFFFFF',

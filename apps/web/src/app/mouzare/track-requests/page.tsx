@@ -114,7 +114,7 @@ export default function TrackRequestsPage() {
                 </svg>
                 سجل الطلبات
               </a>
-              <a href="/tractor/track-requests" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-colors" style={{ background: '#F0F7F2', color: '#1B3A24' }}>
+              <a href="/mouzare/track-requests" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-colors" style={{ background: '#F0F7F2', color: '#1B3A24' }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
                   <circle cx="12" cy="10" r="3"/>
@@ -227,7 +227,7 @@ export default function TrackRequestsPage() {
                       </td>
                       <td className="px-5 py-4">
                         <a
-                          href="/tractor/track-requests/details"
+                          href="/mouzare/track-requests/details"
                           className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[12px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors w-fit"
                         >
                           عرض التتبع

@@ -97,7 +97,7 @@ export default function SuccessPage() {
 
             {/* Top bar */}
             <div className="flex items-center justify-between mb-6">
-              <a href="/tractor/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
+              <a href="/mouzare/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 رجوع
               </a>
@@ -143,7 +143,7 @@ export default function SuccessPage() {
 
                 {/* CTA button */}
                 <a
-                  href="/tractor/track-requests"
+                  href="/mouzare/track-requests"
                   className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-[15px] font-semibold text-white hover:opacity-90 transition-opacity mb-8"
                   style={{ background: '#1B3A24' }}
                 >

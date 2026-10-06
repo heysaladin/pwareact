@@ -126,7 +126,7 @@ export default function CollectingDataPage() {
             {/* Top bar */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <a href="/tractor/personal-data" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
+                <a href="/mouzare/personal-data" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   رجوع
                 </a>
@@ -235,7 +235,7 @@ export default function CollectingDataPage() {
 
             {/* Bottom bar */}
             <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB] mt-4 pb-4">
-              <a href="/tractor/personal-data" className="px-6 py-3 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
+              <a href="/mouzare/personal-data" className="px-6 py-3 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
                 عودة
               </a>
               <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export default function CollectingDataPage() {
                 </svg>
                 <span className="text-[11px] text-[#6B7280]">تظل معلوماتك آمنة ومشفرة طوال العملية.</span>
               </div>
-              <a href="/tractor/eligible-offers" className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity" style={{ background: '#1B3A24' }}>
+              <a href="/mouzare/eligible-offers" className="flex items-center gap-2 px-6 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity" style={{ background: '#1B3A24' }}>
                 متابعة
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>

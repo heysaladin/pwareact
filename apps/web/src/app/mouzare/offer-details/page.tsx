@@ -200,7 +200,7 @@ export default function OfferDetailsPage() {
 
                 {/* Back button */}
                 <div>
-                  <a href="/tractor/eligible-offers" className="inline-flex items-center gap-1.5 text-[12px] text-[#374151] border border-[#D1D5DB] bg-white rounded-xl px-4 py-2 hover:bg-[#F9FAFB] transition-colors">
+                  <a href="/mouzare/eligible-offers" className="inline-flex items-center gap-1.5 text-[12px] text-[#374151] border border-[#D1D5DB] bg-white rounded-xl px-4 py-2 hover:bg-[#F9FAFB] transition-colors">
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     العودة إلى العروض
                   </a>
@@ -361,7 +361,7 @@ export default function OfferDetailsPage() {
 
           {/* BOTTOM BAR — pinned outside scroll area */}
           <div className="flex-shrink-0 flex items-center justify-between px-8 py-4 border-t border-[#E5E7EB] bg-white">
-            <a href="/tractor/eligible-offers" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
+            <a href="/mouzare/eligible-offers" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               العودة إلى العروض
             </a>
@@ -376,7 +376,7 @@ export default function OfferDetailsPage() {
                 حفظ العرض
               </button>
               <a
-                href="/tractor/compare-offers"
+                href="/mouzare/compare-offers"
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity"
                 style={{ background: '#1B3A24' }}
               >

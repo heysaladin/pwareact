@@ -148,7 +148,7 @@ export default function CompareOffersPage() {
             {/* Top bar */}
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-4">
-                <a href="/tractor/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
+                <a href="/mouzare/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   رجوع
                 </a>
@@ -165,7 +165,7 @@ export default function CompareOffersPage() {
             <h1 className="text-[20px] font-bold text-[#111827] mb-1">قارن واختر أفضل عرض تمويلي</h1>
             <div className="flex items-center justify-between mb-4">
               <p className="text-[12px] text-[#6B7280]">قارن بين عروض التمويل من الجهات المشاركة واختر العرض الأنسب لاحتياجاتك.</p>
-              <a href="/tractor/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#6B7280] hover:text-[#374151] transition-colors shrink-0 ml-4">
+              <a href="/mouzare/eligible-offers" className="flex items-center gap-1.5 text-[12px] text-[#6B7280] hover:text-[#374151] transition-colors shrink-0 ml-4">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                 إلغاء المقارنة
               </a>
@@ -302,7 +302,7 @@ export default function CompareOffersPage() {
             <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB] mt-4 pb-4">
               <div className="flex items-center gap-3">
                 <a
-                  href="/tractor/success"
+                  href="/mouzare/success"
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity"
                   style={{ background: '#1B3A24' }}
                 >
@@ -318,7 +318,7 @@ export default function CompareOffersPage() {
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 تظل معلوماتك آمنة ومشفرة طوال العملية
               </span>
-              <a href="/tractor/eligible-offers" className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
+              <a href="/mouzare/eligible-offers" className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
                 العودة إلى العروض
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </a>

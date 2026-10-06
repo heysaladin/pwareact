@@ -81,7 +81,7 @@ function fmt(n: number) {
   return n.toLocaleString('en-SA');
 }
 
-export default function TractorPage() {
+export default function MouzarePage() {
   const [qtys, setQtys] = useState([1, 1, 1]);
   const [items, setItems] = useState(CART_ITEMS);
   const [discountOpen, setDiscountOpen] = useState(false);
@@ -319,7 +319,7 @@ export default function TractorPage() {
             {/* Action buttons */}
             <div className="grid grid-cols-2 gap-3 pt-1">
               <Link
-                href="/tractor/financing"
+                href="/mouzare/financing"
                 className="py-3.5 px-5 rounded-xl text-[13px] font-semibold text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                 style={{ background: '#1B3A24' }}
               >

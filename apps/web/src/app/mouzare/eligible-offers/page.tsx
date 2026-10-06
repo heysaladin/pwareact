@@ -121,7 +121,7 @@ export default function EligibleOffersPage() {
             {/* Top bar */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <a href="/tractor/collecting-data" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
+                <a href="/mouzare/collecting-data" className="flex items-center gap-1.5 text-[12px] text-[#374151] hover:text-[#1B3A24] transition-colors">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   رجوع
                 </a>
@@ -138,7 +138,7 @@ export default function EligibleOffersPage() {
             {/* Heading */}
             <div className="flex items-center justify-between mb-1">
               <h1 className="text-[20px] font-bold text-[#111827]">العروض المـؤهلة لك</h1>
-              <a href="/tractor/compare-offers" className="flex items-center gap-1.5 text-[12px] font-medium text-[#374151] border border-[#D1D5DB] rounded-lg px-3 py-2 hover:bg-[#F9FAFB] transition-colors">
+              <a href="/mouzare/compare-offers" className="flex items-center gap-1.5 text-[12px] font-medium text-[#374151] border border-[#D1D5DB] rounded-lg px-3 py-2 hover:bg-[#F9FAFB] transition-colors">
                 ⇄ مقارنة المنتجات المختارة ({compareList.length})
               </a>
             </div>
@@ -220,7 +220,7 @@ export default function EligibleOffersPage() {
                     ))}
                   </div>
                   <div className="text-center">
-                    <a href="/tractor/offer-details" className="text-[10px] font-medium text-[#1B3A24] hover:underline">عرض التفاصيل ←</a>
+                    <a href="/mouzare/offer-details" className="text-[10px] font-medium text-[#1B3A24] hover:underline">عرض التفاصيل ←</a>
                   </div>
                 </div>
               ))}
@@ -228,15 +228,15 @@ export default function EligibleOffersPage() {
 
             {/* Bottom bar */}
             <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB] mt-4 pb-4">
-              <a href="/tractor/collecting-data" className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
+              <a href="/mouzare/collecting-data" className="px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
                 عودة
               </a>
               <div className="flex items-center gap-3">
-                <a href="/tractor/compare-offers" className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
+                <a href="/mouzare/compare-offers" className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-[13px] font-medium text-[#374151] border border-[#D1D5DB] hover:bg-[#F9FAFB] transition-colors">
                   ⇄ مقارنة المنتجات المختارة ({compareList.length})
                 </a>
                 <a
-                  href="/tractor/offer-details"
+                  href="/mouzare/offer-details"
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity"
                   style={{ background: '#1B3A24' }}
                 >

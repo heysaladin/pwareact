@@ -264,7 +264,7 @@ export default function FinancingPage() {
                   <p className="text-[11px] text-[#6B7280]">التحقق عبر نفاذ وخدمات الجهات المعتمدة</p>
                 </div>
               </div>
-              <a href="/tractor/preliminary-offers"
+              <a href="/mouzare/preliminary-offers"
                 className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13px] font-semibold text-white hover:opacity-90 transition-opacity"
                 style={{ background: '#1B3A24' }}>
                 عرض العروض المبدئية

@@ -171,7 +171,7 @@ export default function RequestDetailsPage() {
                 </svg>
                 سجل الطلبات
               </a>
-              <a href="/tractor/track-requests" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-colors" style={{ background: '#F0F7F2', color: '#1B3A24' }}>
+              <a href="/mouzare/track-requests" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-colors" style={{ background: '#F0F7F2', color: '#1B3A24' }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
                   <circle cx="12" cy="10" r="3"/>
@@ -209,7 +209,7 @@ export default function RequestDetailsPage() {
             <div className="mb-5">
               <h1 className="text-[26px] font-bold text-[#111827] mb-1">تفاصيل الطلب</h1>
               <p className="text-[13px] text-[#6B7280] mb-4">تابع حالة طلب التمويل الخاص بك ومعرفة الخطوات القادمة.</p>
-              <a href="/tractor/track-requests" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#D1D5DB] bg-white text-[13px] text-[#374151] hover:bg-[#F9FAFB] transition-colors">
+              <a href="/mouzare/track-requests" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#D1D5DB] bg-white text-[13px] text-[#374151] hover:bg-[#F9FAFB] transition-colors">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 العودة إلى تتبع الطلبات
               </a>
