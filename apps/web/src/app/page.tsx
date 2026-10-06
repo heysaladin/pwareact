@@ -96,6 +96,18 @@ const general = [
     ),
   },
   {
+    id: 'tractor',
+    name: 'Mouzare',
+    description: 'Agricultural equipment e-commerce experience — cart, financing, and checkout for farming machinery.',
+    href: '/tractor',
+    tag: 'AGRI',
+    badge: null,
+    accentColor: '#FFFFFF',
+    icon: (
+      <img src="/mouzare-logo.png" alt="Mouzare" className="w-full h-full object-contain p-1" />
+    ),
+  },
+  {
     id: 'ceer',
     name: 'Ceer (Alternative)',
     description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
