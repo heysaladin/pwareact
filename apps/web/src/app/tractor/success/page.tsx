@@ -35,7 +35,7 @@ export default function SuccessPage() {
     <div
       dir="rtl"
       className="h-screen flex flex-col overflow-hidden"
-      style={{ fontFamily: "'SF Arabic', 'SF Pro Arabic', -apple-system, 'IBM Plex Sans Arabic', 'Cairo', 'Tajawal', Arial, sans-serif" }}
+      style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Arabic', 'SF Pro Arabic', 'IBM Plex Sans Arabic', 'Cairo', 'Tajawal', Arial, sans-serif" }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
