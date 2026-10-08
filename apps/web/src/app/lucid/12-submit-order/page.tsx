@@ -1,51 +1,47 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
-const TABS = ['Product details', 'Fees & charges', 'Insurance', 'Terms & conditions'];
-
-const financingRows = [
-  ['Financing type', 'Conventional Car Finance'],
-  ['APR', '4.89%'],
-  ['Monthly payment', 'SAR 3,648'],
-  ['Tenure', '60 months'],
-  ['Amount financed', 'SAR 183,000'],
-  ['Down payment (20%)', 'SAR 45,750'],
-  ['Total payable', 'SAR 218,880'],
-  ['First payment', '30 days after disbursement'],
-];
-
-const breakdownRows = [
-  ['Vehicle price (incl. VAT)', 'SAR 228,750'],
-  ['Down payment (20%)', 'SAR 45,750'],
-  ['Amount to finance', 'SAR 183,000'],
-  ['Total profit', 'SAR 35,880'],
-  ['Total payable', 'SAR 218,880'],
-];
-
-const keyFeatures = [
-  ['Sharia-compliant financing', 'Yes'],
-  ['Fixed profit rate', 'Yes'],
-  ['Early settlement allowed', 'Yes'],
-  ['Comprehensive insurance', 'Included'],
-  ['No processing fees', 'SAR 0'],
-  ['Transfer of ownership', 'At end of term'],
-];
-
-const ratingBars: [string, number][] = [
-  ['Customer satisfaction', 4.9],
-  ['Digital experience', 4.8],
-  ['Approval speed', 4.7],
-  ['Transparency', 4.8],
-];
+const OTP_LENGTH = 6;
+const RESEND_SECONDS = 45;
+const PREFILL = ['2', '7', '4', '9', '1', '6'];
 
 export default function SubmitOrderPage() {
   const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [otp, setOtp] = useState<string[]>(PREFILL);
+  const [focusIdx, setFocusIdx] = useState(5);
+  const [countdown, setCountdown] = useState(RESEND_SECONDS);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    if (countdown === 0) return;
+    const t = setTimeout(() => setCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown]);
+
+  const handleKey = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace') {
+      const next = [...otp];
+      next[i] = '';
+      setOtp(next);
+      if (i > 0) { inputRefs.current[i - 1]?.focus(); setFocusIdx(i - 1); }
+    }
+  };
+
+  const handleChange = (i: number, val: string) => {
+    const digit = val.replace(/\D/g, '').slice(-1);
+    const next = [...otp];
+    next[i] = digit;
+    setOtp(next);
+    if (digit && i < OTP_LENGTH - 1) { inputRefs.current[i + 1]?.focus(); setFocusIdx(i + 1); }
+  };
+
+  const mm = String(Math.floor(countdown / 60)).padStart(2, '0');
+  const ss = String(countdown % 60).padStart(2, '0');
 
   return (
     <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
@@ -57,7 +53,7 @@ export default function SubmitOrderPage() {
 
       <div className="fixed inset-0 overflow-auto flex items-start justify-center pt-4" style={{ background: dark ? '#000' : '#d1d5db' }}>
         <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebar backHref="/lucid/09-eligibility-offers" />
+          <CeerSidebar backHref="/lucid/11-offer-details" />
           <div className="flex-1 min-w-0 flex flex-col">
             <div className="flex-1 flex flex-col p-6 overflow-y-auto">
 
@@ -78,223 +74,150 @@ export default function SubmitOrderPage() {
 
               <LucidStepper activeStep={6} />
 
-              {/* Header */}
+              {/* Header — full width */}
               <div className="mb-4">
-                <h1 className="text-[44px] font-normal leading-tight mb-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Review &amp; Submit Order</h1>
-                <p className="text-[16px]" style={{ color: 'var(--muted)' }}>Please review the details of your financing order before submitting. Once submitted, the bank will begin processing your application.</p>
+                <h1 className="text-[44px] font-normal leading-tight mb-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Confirm your order</h1>
+                <p className="text-[16px]" style={{ color: 'var(--muted)' }}>You are almost done! Please confirm your order by entering the one-time password (OTP) sent to your registered mobile number.</p>
               </div>
 
-              {/* Two-col */}
-              <div className="flex gap-5 flex-1 min-h-0">
+              {/* Two-col layout */}
+              <div className="flex gap-6 flex-1 min-h-0">
 
                 {/* Left */}
                 <div className="flex-1 min-w-0 flex flex-col gap-4">
 
-                  {/* Bank card */}
-                  <div className="rounded-[14px] px-5 py-4" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="flex items-center gap-3 mb-3">
-                      <img src="/logo-alahli.png" alt="SNB" style={{ height: 36, width: 'auto', maxWidth: 110, objectFit: 'contain' }} />
-                      <span className="px-3 py-1 rounded-full text-[11px] font-extrabold tracking-wide text-white" style={{ background: 'var(--blue)' }}>RECOMMENDED</span>
-                      <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--muted)', border: '1px solid var(--border)' }}>English</span>
+                  {/* Info bar */}
+                  <div className="flex items-start gap-3 rounded-[12px] px-4 py-3.5" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: 'var(--blue)' }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     </div>
-                    <div className="text-[15px] font-bold mb-3" style={{ color: 'var(--text)' }}>Saudi National Bank</div>
-
-                    {/* Metrics */}
-                    <div className="rounded-[10px] px-4 py-3 flex items-center gap-8 mb-3" style={{ border: '1px solid var(--border)' }}>
-                      {[
-                        { label: 'APR', value: '4.89%', blue: true },
-                        { label: 'Monthly payment', value: 'SAR 3,648' },
-                        { label: 'Tenure', value: '60 months' },
-                        { label: 'Total payable', value: 'SAR 218,880' },
-                        { label: 'Down payment', value: 'SAR 45,750' },
-                      ].map(({ label, value, blue }) => (
-                        <div key={label} className="shrink-0">
-                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{label}</div>
-                          <div className="text-[15px] font-bold mt-0.5" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{value}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Feature chips */}
-                    <div className="flex items-center gap-5 flex-wrap">
-                      {['No processing fees', 'Early settlement flexibility', 'Free comprehensive insurance', 'Advanced digital services'].map(f => (
-                        <div key={f} className="flex items-center gap-1.5 text-[12px]" style={{ color: 'var(--text)' }}>
-                          <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
-                            <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          </div>
-                          {f}
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[13px]" style={{ color: 'var(--text)' }}>For your security, we have sent a one-time password (OTP) to your mobile number registered with Absher.</p>
                   </div>
 
-                  {/* Tabs */}
-                  <div className="rounded-[14px] overflow-hidden" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="flex" style={{ borderBottom: '1px solid var(--border)' }}>
-                      {TABS.map((tab, i) => (
-                        <button key={tab} onClick={() => setActiveTab(i)}
-                          className="px-5 py-3 text-[13px] font-semibold shrink-0"
+                  {/* OTP */}
+                  <div>
+                    <div className="text-[13px] font-semibold mb-3" style={{ color: 'var(--text)' }}>Enter OTP</div>
+                    <div className="flex gap-3">
+                      {Array.from({ length: OTP_LENGTH }).map((_, i) => (
+                        <input
+                          key={i}
+                          ref={el => { inputRefs.current[i] = el; }}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={1}
+                          value={otp[i] || ''}
+                          onChange={e => handleChange(i, e.target.value)}
+                          onKeyDown={e => handleKey(i, e)}
+                          onFocus={() => setFocusIdx(i)}
+                          className="w-[64px] h-[64px] text-center text-[24px] font-bold rounded-[12px] outline-none"
                           style={{
-                            color: activeTab === i ? 'var(--blue)' : 'var(--muted)',
-                            borderBottom: activeTab === i ? '2px solid var(--blue)' : '2px solid transparent',
-                            background: 'transparent',
-                            marginBottom: -1,
-                          }}>
-                          {tab}
-                        </button>
+                            border: `2px solid ${focusIdx === i ? 'var(--blue)' : 'var(--border)'}`,
+                            background: 'var(--card)',
+                            color: 'var(--text)',
+                          }}
+                        />
                       ))}
                     </div>
-
-                    <div className="p-5">
-                      {activeTab === 0 ? (
-                        <div className="flex gap-5">
-                          {/* Financing details */}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Financing details</div>
-                            {financingRows.map(([k, v]) => (
-                              <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
-                                <span style={{ color: 'var(--muted)' }}>{k}</span>
-                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Payment breakdown */}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Payment breakdown</div>
-                            {breakdownRows.map(([k, v]) => (
-                              <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
-                                <span style={{ color: 'var(--muted)' }}>{k}</span>
-                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
-                              </div>
-                            ))}
-                            <div className="mt-3 rounded-[10px] px-4 py-3 flex items-center justify-between" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
-                              <span className="text-[12px]" style={{ color: 'var(--muted)' }}>Indicative monthly payment</span>
-                              <span className="text-[12px]">From <b style={{ color: 'var(--blue)', fontSize: 15 }}>SAR 3,648</b> <span style={{ color: 'var(--muted)' }}>/ month</span></span>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-[13px] py-8 text-center" style={{ color: 'var(--muted)' }}>Content for this tab coming soon.</div>
-                      )}
+                    <div className="mt-3 text-[13px]" style={{ color: 'var(--muted)' }}>
+                      Didn&apos;t receive the code? Resend OTP in{' '}
+                      <span className="font-bold" style={{ color: 'var(--blue)' }}>{mm}:{ss}</span>
                     </div>
                   </div>
 
-                  {/* Key features + Offer rating */}
-                  <div className="flex gap-4">
-                    {/* Key features */}
-                    <div className="flex-1 rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                      <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Key features</div>
-                      {keyFeatures.map(([k, v]) => (
-                        <div key={k} className="flex items-center justify-between py-1.5 text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
-                              <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                            </div>
-                            <span style={{ color: 'var(--text)' }}>{k}</span>
-                          </div>
-                          <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
-                        </div>
-                      ))}
+                  {/* Order summary */}
+                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <div className="text-[15px] font-bold" style={{ color: 'var(--text)' }}>Order summary</div>
+                        <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>Review your selected offer and vehicle details before confirming.</div>
+                      </div>
+                      <button className="flex items-center gap-1.5 text-[12px] font-semibold" style={{ color: 'var(--blue)' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Edit
+                      </button>
                     </div>
 
-                    {/* Offer rating */}
-                    <div className="flex-1 rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                      <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Offer rating</div>
-                      <div className="flex items-end gap-3 mb-3">
-                        <span className="text-[36px] font-extrabold leading-none" style={{ color: 'var(--text)' }}>4.8</span>
-                        <div>
-                          <div className="flex gap-0.5">
-                            {[1,2,3,4,5].map(s => (
-                              <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            ))}
+                    <div className="flex gap-5">
+                      {/* Bank + financing */}
+                      <div className="flex-1 min-w-0">
+                        <img src="/logo-alahli.png" alt="SNB" style={{ height: 32, maxWidth: 100, objectFit: 'contain', marginBottom: 6 }} />
+                        <div className="text-[12px] font-bold mb-3" style={{ color: 'var(--text)' }}>Saudi National Bank</div>
+                        {[
+                          ['Annual Profit Rate (APR)', '4.89%'],
+                          ['Monthly Payment', 'SAR 3,648'],
+                          ['Tenure', '60 months'],
+                          ['Amount Financed', 'SAR 183,000'],
+                          ['Down Payment (20%)', 'SAR 45,750'],
+                          ['Total Payable', 'SAR 218,880'],
+                        ].map(([k, v]) => (
+                          <div key={k} className="flex justify-between py-1.5 text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
+                            <span style={{ color: 'var(--muted)' }}>{k}</span>
+                            <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
                           </div>
-                          <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>+728 reviews</div>
-                        </div>
+                        ))}
                       </div>
-                      {ratingBars.map(([label, score]) => (
-                        <div key={label} className="flex items-center gap-3 mb-2 text-[12px]">
-                          <span className="shrink-0" style={{ width: 140, color: 'var(--muted)' }}>{label}</span>
-                          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
-                            <div className="h-full rounded-full" style={{ width: `${(score / 5) * 100}%`, background: 'var(--blue)' }} />
-                          </div>
-                          <span className="shrink-0 font-semibold" style={{ width: 24, textAlign: 'right', color: 'var(--text)' }}>{score}</span>
+
+                      {/* Divider */}
+                      <div className="w-px self-stretch" style={{ background: 'var(--border)' }} />
+
+                      {/* Vehicle */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-4">
+                          <img src="/lucid-car.webp" alt="Lucid Air" style={{ height: 44, width: 'auto', objectFit: 'contain' }} />
+                          <span className="text-[13px] font-bold" style={{ color: 'var(--text)' }}>Lucid Air Touring 2026</span>
                         </div>
-                      ))}
+                        {[
+                          ['Vehicle Price (incl. VAT)', null, 'SAR 228,750'],
+                          ['Exterior Color', '#1a3a5c', 'Fathom Blue Metallic'],
+                          ['Interior Theme', '#8B6914', 'Tahoe'],
+                          ['Wheels', '#111', '20" Aero Lite'],
+                        ].map(([label, color, value]) => (
+                          <div key={label} className="flex items-center justify-between py-1.5 text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
+                            <span style={{ color: 'var(--muted)' }}>{label}</span>
+                            <div className="flex items-center gap-2">
+                              {color && <div className="w-4 h-4 rounded-full shrink-0" style={{ background: color }} />}
+                              <span className="font-semibold" style={{ color: 'var(--text)' }}>{value}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
                 </div>
 
                 {/* Right */}
-                <div className="flex flex-col gap-4 shrink-0" style={{ width: 260 }}>
-
-                  {/* Why recommended */}
+                <div className="flex flex-col gap-4 shrink-0" style={{ width: 280 }}>
                   <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Why this offer is recommended</div>
-                    {['Lowest total payable', 'Competitive profit rate', 'No processing fees', 'Free comprehensive insurance', 'Advanced digital services'].map(r => (
-                      <div key={r} className="flex items-center gap-2 mb-2 text-[12px]" style={{ color: 'var(--text)' }}>
-                        <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
-                          <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                        </div>
-                        {r}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Key documents */}
-                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Key documents</div>
-                    {['Key Facts Sheet', 'Terms & Conditions', 'Product Disclosure', 'Schedule of Charges'].map((doc, i, arr) => (
-                      <div key={doc} className="flex items-center justify-between py-2 text-[12px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0" style={{ background: 'var(--highlight)' }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                          </div>
-                          <span style={{ color: 'var(--text)' }}>{doc}</span>
-                        </div>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Next steps */}
-                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Next steps</div>
+                    <div className="text-[14px] font-bold mb-4" style={{ color: 'var(--text)' }}>What happens next?</div>
                     {[
-                      'Review the key facts and terms',
-                      'Accept the offer to proceed',
-                      'Complete final verification',
-                      'The bank will contact you for final approval',
+                      { label: 'Order creation', desc: 'We will confirm your order and reserve the vehicle.' },
+                      { label: 'Bank verification', desc: 'The bank will conduct final verification.' },
+                      { label: 'Order confirmation', desc: 'You will receive a confirmation once your order is approved.' },
+                      { label: 'Order tracking', desc: 'You can track your order status in your account.' },
                     ].map((step, i) => (
-                      <div key={i} className="flex items-start gap-3 mb-2.5 text-[12px]">
-                        <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5"
-                          style={{ background: i === 0 ? 'var(--blue)' : 'transparent', border: i === 0 ? 'none' : '1.5px solid var(--border)', color: i === 0 ? '#fff' : 'var(--muted)' }}>
-                          {i + 1}
+                      <div key={i} className="flex gap-3 mb-4 last:mb-0">
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5 text-white shrink-0" style={{ background: 'var(--blue)' }}>{i + 1}</div>
+                        <div>
+                          <div className="text-[13px] font-bold" style={{ color: 'var(--text)' }}>{step.label}</div>
+                          <div className="text-[12px] mt-0.5 leading-relaxed" style={{ color: 'var(--muted)' }}>{step.desc}</div>
                         </div>
-                        <span style={{ color: 'var(--text)' }}>{step}</span>
                       </div>
                     ))}
                   </div>
-
                 </div>
+
               </div>
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <Link href="/lucid/09-eligibility-offers" className="flex items-center gap-2 px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--border)', color: 'var(--text)', background: 'transparent' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                Back to Offers
+            <div className="shrink-0 px-6 py-4 flex flex-col items-center gap-2" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <Link href="/lucid/13-submit-success" className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>
+                Confirm &amp; Create Order <span>→</span>
               </Link>
-              <div className="flex items-center gap-3">
-                <button className="flex items-center gap-2 px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)', background: 'transparent' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                  Save This Offer
-                </button>
-                <Link href="/lucid/13-submit-success" className="flex items-center gap-2 px-8 py-3 rounded-xl text-[14px] font-bold text-white" style={{ background: 'var(--blue)' }}>
-                  Create Order <span>→</span>
-                </Link>
+              <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--muted)' }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                Your information remains secure and encrypted throughout the process.
               </div>
             </div>
           </div>

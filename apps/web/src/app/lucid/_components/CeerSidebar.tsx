@@ -108,8 +108,8 @@ export default function CeerSidebar({ backHref, backLabel = 'Back to Lucid' }: C
       `}</style>
 
       {/* Header */}
-      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border)' }}>
-        <img src="/lucid-motors-logo.svg" alt="Lucid Motors" className="lucid-sidebar-logo" style={{ height: 10, width: 'auto' }} />
+      <div style={{ padding: '28px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border)' }}>
+        <img src="/lucid-motors-logo.svg" alt="Lucid Motors" className="lucid-sidebar-logo" style={{ height: 8, width: 'auto' }} />
         {backHref && (
           <Link href={backHref} style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', textDecoration: 'none' }}>
             ← {backLabel}
