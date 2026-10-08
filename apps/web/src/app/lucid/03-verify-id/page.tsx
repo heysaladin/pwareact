@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
+import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function VerifyIdPage() {
@@ -46,80 +47,73 @@ export default function VerifyIdPage() {
                 </div>
               </div>
 
-              {/* Step bar */}
-              <div className="flex items-center gap-0 mb-6 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                {[
-                  { label: 'Verify Identity', active: true },
-                  { label: 'Nafath Approval', active: false },
-                  { label: 'Mobile Verification', active: false },
-                  { label: 'Consents', active: false },
-                  { label: 'Personal Details', active: false },
-                ].map((step, i) => (
-                  <div
-                    key={step.label}
-                    className="flex-1 flex items-center gap-2 px-4 py-3 text-[12px] font-semibold"
-                    style={{
-                      background: step.active ? 'var(--highlight)' : 'transparent',
-                      color: step.active ? 'var(--blue)' : 'var(--muted)',
-                      borderRight: i < 4 ? '1px solid var(--border)' : 'none',
-                    }}
-                  >
+              <LucidStepper activeStep={3} />
+
+              {/* Content */}
+              <div className="flex-1 flex flex-col">
+                <h1 className="text-[48px] font-normal leading-tight" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Enter your verified ID</h1>
+                <p className="mt-3 text-[16px]" style={{ color: 'var(--muted)' }}>To continue, please enter your National ID or Iqama number to verify your identity with Tamawal.</p>
+
+                <div className="mt-10 flex gap-8">
+                  {/* Left: input */}
+                  <div style={{ flex: 1, maxWidth: 560 }}>
+                    <label className="block text-[15px] font-bold mb-3" style={{ color: 'var(--text)' }}>National ID / Iqama number</label>
                     <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
-                      style={{ background: step.active ? 'var(--blue)' : 'var(--border)', color: step.active ? '#fff' : 'var(--muted)' }}
+                      className="flex items-center gap-3 rounded-[10px] px-[17px] py-[17px]"
+                      style={{ border: `2px solid ${nid ? 'var(--blue)' : 'var(--border)'}`, background: 'var(--card)' }}
                     >
-                      {i + 1}
+                      <svg width="24" height="18" viewBox="0 0 32 22" fill="none" style={{ flexShrink: 0, opacity: 0.5 }}>
+                        <rect x="1" y="1" width="30" height="20" rx="3" fill="#1a3a5c" stroke="#1a3a5c"/>
+                        <rect x="4" y="5" width="10" height="7" rx="1" fill="#2a5a8c"/>
+                        <line x1="17" y1="7" x2="27" y2="7" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                        <line x1="17" y1="10" x2="24" y2="10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                        <line x1="4" y1="15" x2="27" y2="15" stroke="white" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.5"/>
+                      </svg>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="1234 567 890"
+                        value={nid}
+                        onChange={e => setNid(e.target.value)}
+                        autoFocus
+                        className="flex-1 min-w-0 bg-transparent border-none outline-none text-[18px]"
+                        style={{ color: 'var(--text)' }}
+                      />
                     </div>
-                    {step.label}
+                    <div className="mt-3 flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ border: '1.5px solid var(--muted)' }}>
+                        <span style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 700 }}>i</span>
+                      </div>
+                      <p className="text-[13px]" style={{ color: 'var(--muted)' }}>We will verify your identity securely with government systems.</p>
+                    </div>
                   </div>
-                ))}
-              </div>
 
-              {/* Content card */}
-              <div className="rounded-[18px] px-[52px] py-[44px] flex flex-col flex-1" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <h1 className="text-[30px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Enter your verified ID</h1>
-                <p className="mt-2 text-[15px]" style={{ color: 'var(--muted)' }}>Please enter your National ID or Iqama number to verify your identity.</p>
-
-                <div className="mt-10" style={{ maxWidth: 560 }}>
-                  <label className="block text-[14px] font-semibold mb-2.5" style={{ color: 'var(--text)' }}>National ID / Iqama number</label>
-                  <div
-                    className="flex items-center gap-3 rounded-[10px] px-[17px] py-[15px]"
-                    style={{ border: `2px solid ${nid ? 'var(--blue)' : 'var(--border)'}`, background: 'var(--bg)', boxShadow: nid ? '0 0 0 4px rgba(79,149,255,0.12)' : 'none' }}
-                  >
-                    <span className="text-xl shrink-0" style={{ color: 'var(--blue)' }}>🪪</span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="1 234 567 890"
-                      value={nid}
-                      onChange={e => setNid(e.target.value)}
-                      autoFocus
-                      className="flex-1 min-w-0 bg-transparent border-none outline-none text-[16px] font-semibold"
-                      style={{ color: 'var(--text)' }}
-                    />
+                  {/* Right: secure card */}
+                  <div className="rounded-[16px] px-8 py-8 flex flex-col items-start" style={{ width: 340, background: 'var(--highlight)', flexShrink: 0 }}>
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5" style={{ background: 'rgba(37,99,235,0.12)' }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-[17px] font-bold mb-2" style={{ color: 'var(--text)' }}>Secure Verification</h3>
+                    <p className="text-[14px] leading-relaxed" style={{ color: 'var(--muted)' }}>Your information is encrypted and shared only with authorized government services to verify your identity.</p>
                   </div>
-                  <p className="mt-2.5 text-[12.5px]" style={{ color: 'var(--muted)' }}>Enter your 10-digit National ID or Iqama number.</p>
-                </div>
-
-                <div className="mt-10 rounded-[12px] px-5 py-4 flex items-center gap-3" style={{ background: 'var(--bg)', border: '1px solid var(--border)', maxWidth: 560 }}>
-                  <span className="text-lg shrink-0">🔒</span>
-                  <p className="text-[13px]" style={{ color: 'var(--muted)' }}>Your identity is verified via Nafath&apos;s official digital identity service. Your information is encrypted and secure.</p>
                 </div>
               </div>
 
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <Link href="/lucid/02-what-happens-next" className="px-6 py-3 rounded-xl text-[14px] font-bold" style={{ color: 'var(--blue)', border: '1.5px solid var(--blue)', background: 'transparent' }}>
+            <div className="shrink-0 px-6 py-4 flex items-center justify-end gap-4" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <Link href="/lucid/02-what-happens-next" className="px-6 py-3 text-[15px] font-semibold" style={{ color: 'var(--blue)' }}>
                 Cancel
               </Link>
               <Link
                 href="/lucid/04-nafath-approve"
-                className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                style={{ background: 'var(--blue)' }}
+                className="px-8 py-3 rounded-xl text-[15px] font-bold text-white flex items-center gap-3"
+                style={{ background: '#111111' }}
               >
-                Continue →
+                Continue <span>→</span>
               </Link>
             </div>
           </div>

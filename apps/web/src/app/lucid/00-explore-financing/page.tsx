@@ -79,7 +79,7 @@ export default function ExploreFinancingPage() {
 
               {/* Form card */}
               <div className="flex-1 rounded-[18px] px-[39px] py-[35px] flex flex-col" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <h1 className="text-[30px] font-extrabold leading-normal" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Explore Your Financing Options</h1>
+                <h1 className="text-[40px] font-normal leading-tight" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Explore Your Financing Options</h1>
                 <p className="mt-2 text-[15px]" style={{ color: 'var(--muted)' }}>Provide a few details to get an indicative estimate tailored to you.</p>
 
                 {/* Input grid */}
@@ -87,7 +87,6 @@ export default function ExploreFinancingPage() {
                   <div>
                     <div className="text-[14px] font-semibold mb-2.5" style={{ color: 'var(--text)' }}>Monthly salary</div>
                     <div className="rounded-[10px] px-[17px] py-[15px] flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                      <span className="text-base" style={{ color: 'var(--blue)' }}>💳</span>
                       <input type="text" placeholder="Enter amount" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[15px]" style={{ color: 'var(--text)' }} />
                       <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}>SAR</span>
                     </div>
@@ -98,7 +97,6 @@ export default function ExploreFinancingPage() {
                       <span className="w-[15px] h-[15px] rounded-full text-[10px] font-semibold flex items-center justify-center shrink-0" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
                     </div>
                     <div className="rounded-[10px] px-[17px] py-[15px] flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                      <span className="text-base" style={{ color: 'var(--blue)' }}>💳</span>
                       <input type="text" placeholder="Enter amount" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[15px]" style={{ color: 'var(--text)' }} />
                       <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}>SAR</span>
                     </div>
@@ -169,11 +167,11 @@ export default function ExploreFinancingPage() {
                 </div>
 
                 {/* CTA */}
-                <div className="flex-1 flex items-end justify-center pt-[26px]">
+                <div className="flex-1 flex items-end pt-[26px]">
                   <Link
                     href="/lucid/01-preliminary-offers"
-                    className="w-[640px] text-white text-[18px] font-bold py-[18px] rounded-xl text-center relative flex items-center justify-center"
-                    style={{ background: 'var(--blue)' }}
+                    className="w-full text-white text-[18px] font-bold py-[18px] rounded-xl text-center relative flex items-center justify-center"
+                    style={{ background: dark ? '#1a1a1a' : '#111111' }}
                   >
                     View Indicative Offers
                     <span className="absolute right-7">→</span>

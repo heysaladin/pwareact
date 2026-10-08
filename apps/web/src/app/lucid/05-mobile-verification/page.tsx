@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
+import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
 
 export default function MobileVerificationPage() {
@@ -27,92 +28,106 @@ export default function MobileVerificationPage() {
 
               {/* Logo row */}
               <div className="flex items-center justify-between mb-5">
-                                <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
-                <div className="flex items-center gap-4">
-  <Link href="/lucid/04-nafath-approve" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>← Back</Link>
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" aria-label="Toggle theme" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full transition-colors" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute flex items-center justify-center w-[18px] h-[18px] rounded-full shadow transition-all" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }}>
-                      {dark ? (
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                      ) : (
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                      )}
-                    </span>
-                  </button>
-                </div>
+                <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
+                <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" aria-label="Toggle theme" style={{ width: 44, height: 24 }}>
+                  <span className="absolute inset-0 rounded-full transition-colors" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
+                  <span className="absolute flex items-center justify-center w-[18px] h-[18px] rounded-full shadow transition-all" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }}>
+                    {dark ? (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    ) : (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    )}
+                  </span>
+                </button>
               </div>
 
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Verifying mobile ownership</h1>
-              <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>Your identity has been verified successfully. We are now confirming ownership of your mobile number.</p>
+              <LucidStepper activeStep={3} />
 
-              {/* Status bar */}
-              <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <div className="flex items-center gap-2 flex-1">
-                  <span className="text-[13px]" style={{ color: 'var(--muted)' }}>Verified National ID / Iqama</span>
-                  <span className="font-bold text-[13px]">1 •••• •••• 34</span>
-                </div>
-                <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'rgba(29,185,84,0.12)', color: 'var(--green)' }}>✓ Nafath identity verified</span>
-              </div>
+              <h1 className="text-[46px] font-normal leading-tight mb-3" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Verifying mobile ownership</h1>
+              <p className="text-[16px] mb-5" style={{ color: 'var(--muted)' }}>Your identity has been verified successfully. We are now confirming ownership of your mobile number through a secure government channel.</p>
 
               <div className="flex gap-6">
                 {/* Left panel */}
-                <div className="flex-[1.4] min-w-0">
-                  <div className="rounded-[16px] p-8 flex items-center gap-8" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                <div style={{ flex: '0 0 520px', display: 'flex', flexDirection: 'column' }}>
+
+                  {/* Verified ID bar */}
+                  <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-4" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <span className="text-[13px] font-medium" style={{ color: 'var(--text)' }}>Verified National ID / Iqama</span>
+                    <span className="font-bold text-[13px]" style={{ color: 'var(--text)' }}>1 •••• •••• 34</span>
+                    <span className="ml-auto px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'rgba(22,163,74,0.1)', color: '#16a34a', border: '1px solid rgba(22,163,74,0.3)' }}>Verified</span>
+                  </div>
+                  <div className="rounded-[16px] p-7 flex items-center gap-8 flex-1" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                     {/* Spinning circle */}
-                    <div className="relative shrink-0" style={{ width: 130, height: 130 }}>
+                    <div className="relative shrink-0" style={{ width: 120, height: 120 }}>
                       <div className="spin-ring absolute inset-0 rounded-full" />
                       <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 1 }}>
-                        <div className="w-12 h-12 rounded-[12px] flex items-center justify-center text-[24px]" style={{ background: 'var(--highlight)' }}>📱</div>
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--highlight)' }}>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+                          </svg>
+                        </div>
                       </div>
                     </div>
 
                     <div className="flex-1">
-                      <div className="text-[14px]" style={{ color: 'var(--muted)' }}>Verifying mobile number</div>
-                      <div className="text-[24px] font-extrabold mt-2" style={{ letterSpacing: 2 }}>+966 *** *** 1634</div>
+                      <div className="text-[13px]" style={{ color: 'var(--muted)' }}>Verifying mobile number</div>
+                      <div className="text-[22px] font-bold mt-1.5" style={{ letterSpacing: 1 }}>+966 5•• •••• 1634</div>
                       <div className="flex items-center gap-3 mt-3">
                         <span className="text-[14px] font-semibold" style={{ color: 'var(--blue)' }}>Verifying mobile ownership...</span>
-                        <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>In progress</span>
+                        <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--blue)', border: '1px solid var(--blue)' }}>In progress</span>
                       </div>
                       <div className="text-[12.5px] mt-2" style={{ color: 'var(--muted)' }}>This may take a few moments.</div>
                     </div>
                   </div>
 
-                  <div className="mt-3 flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                    <span>🔒</span>
-                    We use secure channels to validate your mobile number.
+                  <div className="mt-3 rounded-[12px] px-4 py-3 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <span className="text-[13px]" style={{ color: 'var(--muted)' }}>We use secure channels to validate your mobile number through government systems.</span>
                   </div>
                 </div>
 
                 {/* Right panel */}
                 <div className="flex-1 min-w-0 flex flex-col gap-4">
-                  {/* About this screen */}
+                  {/* About this step */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                      About this screen
+                    <h3 className="text-[15px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--text)' }}>
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: 'var(--blue)' }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      </div>
+                      About this step
                     </h3>
-                    <p className="text-[13px] leading-[1.6]" style={{ color: 'var(--muted)' }}>{brandName} is verifying that this mobile number belongs to you. This keeps your account secure.</p>
+                    <p className="text-[13px] leading-relaxed mb-2" style={{ color: 'var(--muted)' }}>Tamawal is verifying that this mobile number belongs to you through official government services.</p>
+                    <p className="text-[13px] leading-relaxed" style={{ color: 'var(--muted)' }}>This helps keep your information secure and protects your account.</p>
                   </div>
 
                   {/* What happens next */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>What happens next</h3>
+                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--text)' }}>What happens next?</h3>
                     {[
                       { done: true, label: 'Identity verified with Nafath', sub: 'Completed' },
                       { active: true, label: 'Mobile ownership confirmation', sub: 'In progress' },
                       { pending: true, label: 'Continue to financial assessment', sub: 'Pending' },
                     ].map((item, i) => (
                       <div key={i} className="flex items-start gap-3 py-2 text-[13px]">
-                        {item.done
-                          ? <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5" style={{ background: 'var(--green)', color: '#fff' }}>✓</span>
-                          : item.active
-                          ? <span className="spinning-dot shrink-0 mt-0.5" />
-                          : <span className="w-4 h-4 rounded-full shrink-0 mt-0.5" style={{ border: '2px solid var(--border)' }} />
-                        }
+                        {item.done ? (
+                          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: '#16a34a' }}>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          </div>
+                        ) : item.active ? (
+                          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: 'var(--blue)' }}>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                          </div>
+                        ) : (
+                          <div className="w-5 h-5 rounded-full shrink-0 mt-0.5" style={{ border: '2px solid var(--border)' }} />
+                        )}
                         <div>
-                          <div className="font-semibold">{item.label}</div>
-                          <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.sub}</div>
+                          <div className="font-semibold" style={{ color: 'var(--text)' }}>{item.label}</div>
+                          <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.sub}</div>
                         </div>
                       </div>
                     ))}
@@ -123,19 +138,19 @@ export default function MobileVerificationPage() {
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="text-[12.5px] flex items-center gap-2" style={{ color: 'var(--muted)' }}>
-                <span>🔔</span>
-                You can safely leave this page, and we&apos;ll notify you when verification is complete.
-              </div>
-              <Link href="/lucid/06-consents-contracts" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>
-                Continue →
+            <div className="shrink-0 px-6 py-4 flex items-center justify-end gap-4" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <Link href="/lucid/04-nafath-approve" className="px-6 py-3 text-[15px] font-semibold" style={{ color: 'var(--blue)' }}>
+                Cancel
+              </Link>
+              <Link href="/lucid/06-consents-contracts" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white flex items-center gap-3" style={{ background: '#111111' }}>
+                Continue <span>→</span>
               </Link>
             </div>
           </div>
 
         </div>
       </div>
+
 
       <style>{`
         [data-theme="dark"]{--bg:#0b1420;--card:#121e2e;--border:#2a3a4f;--text:#e6edf5;--muted:#93a4b8;--blue:#4f95ff;--heading:#dbe7f5;--highlight:#16283f;--green:#1db954;--red:#e5484d;}
