@@ -2,396 +2,310 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
+import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+
+const TABS = ['Product details', 'Fees & charges', 'Insurance', 'Terms & conditions'];
+
+const financingRows = [
+  ['Financing type', 'Conventional Car Finance'],
+  ['APR', '4.89%'],
+  ['Monthly payment', 'SAR 3,648'],
+  ['Tenure', '60 months'],
+  ['Amount financed', 'SAR 183,000'],
+  ['Down payment (20%)', 'SAR 45,750'],
+  ['Total payable', 'SAR 218,880'],
+  ['First payment', '30 days after disbursement'],
+];
+
+const breakdownRows = [
+  ['Vehicle price (incl. VAT)', 'SAR 228,750'],
+  ['Down payment (20%)', 'SAR 45,750'],
+  ['Amount to finance', 'SAR 183,000'],
+  ['Total profit', 'SAR 35,880'],
+  ['Total payable', 'SAR 218,880'],
+];
+
+const keyFeatures = [
+  ['Sharia-compliant financing', 'Yes'],
+  ['Fixed profit rate', 'Yes'],
+  ['Early settlement allowed', 'Yes'],
+  ['Comprehensive insurance', 'Included'],
+  ['No processing fees', 'SAR 0'],
+  ['Transfer of ownership', 'At end of term'],
+];
+
+const ratingBars: [string, number][] = [
+  ['Customer satisfaction', 4.9],
+  ['Digital experience', 4.8],
+  ['Approval speed', 4.7],
+  ['Transparency', 4.8],
+];
 
 export default function SubmitOrderPage() {
   const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(false);
-  const [agreed, setAgreed] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  function handleSubmit() {
-    if (!agreed) return;
-    setSubmitting(true);
-    setTimeout(() => {
-      window.location.href = '/lucid/13-submit-success';
-    }, 1200);
-  }
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
-
-      {/* Viewport warning */}
       <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
         <div className="text-4xl mb-4">🖥️</div>
         <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens. Please open it on a laptop or desktop for the best experience.</p>
+        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens.</p>
       </div>
 
       <div className="fixed inset-0 overflow-auto flex items-start justify-center pt-4" style={{ background: dark ? '#000' : '#d1d5db' }}>
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex flex-col items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
+        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
+          <CeerSidebar backHref="/lucid/09-eligibility-offers" />
+          <div className="flex-1 min-w-0 flex flex-col">
+            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
 
-          {/* Header */}
-          <header style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }} className="flex items-center justify-between px-8 py-[14px] shrink-0">
-            <div className="flex items-center gap-[10px]">
-              <img
-                src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'}
-                alt={brandName}
-                className="h-8 w-auto"
-              />
-              <span className="w-px h-6" style={{ background: 'var(--border)' }} />
-              <svg width="141" height="auto" viewBox="0 0 100 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--text)', height: 14 }}>
-                <g clipPath="url(#ceer-hdr-12)">
-                  <path d="M48.4003 14H25.6232L28.4698 11.1994H45.5529L48.4003 14Z" fill="currentColor"/>
-                  <path d="M99.6471 5.5997L96.7994 8.4003H26.8022L21.1079 14H2.84656L0 11.1994V6.98782L2.84656 9.78729V11.1994H19.9293L25.6232 5.5997H99.6471Z" fill="currentColor"/>
-                  <path d="M22.7759 0L19.9293 2.79948H2.84656V6.99756L0 4.19809V2.79948L2.84656 0H22.7759Z" fill="currentColor"/>
-                  <path d="M48.4003 0L45.5529 2.79948H25.6232V0H48.4003Z" fill="currentColor"/>
-                  <path d="M74.0235 0L71.1761 2.79948H54.0941V5.5997H51.2468V0H74.0235Z" fill="currentColor"/>
-                  <path d="M79.7173 8.4003H76.87V14H79.7173V8.4003Z" fill="currentColor"/>
-                  <path d="M74.0235 14H51.2468V8.4003H54.0941V11.1994H71.1761L74.0235 14Z" fill="currentColor"/>
-                  <path d="M99.6471 2.79948V5.5997H96.7994V2.79948H79.7177V5.5997H76.87V0H96.7994L99.6471 2.79948Z" fill="currentColor"/>
-                  <path d="M99.6471 14H95.6208L89.9269 8.4003H93.9539L99.6471 14Z" fill="currentColor"/>
-                </g>
-                <defs><clipPath id="ceer-hdr-12"><rect width="99.6471" height="14" fill="white"/></clipPath></defs>
-              </svg>
-            </div>
-            <div className="flex items-center gap-6">
-              <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'right', lineHeight: 1.4 }}>
-                Assessment ID<br/>
-                <b style={{ color: 'var(--text)' }}>AELG-2026-05-18-1123</b>
+              {/* Logo row */}
+              <div className="flex items-center justify-between mb-5">
+                <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
+                <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" aria-label="Toggle theme" style={{ width: 44, height: 24 }}>
+                  <span className="absolute inset-0 rounded-full transition-colors" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
+                  <span className="absolute flex items-center justify-center w-[18px] h-[18px] rounded-full shadow transition-all" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }}>
+                    {dark ? (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    ) : (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    )}
+                  </span>
+                </button>
               </div>
-              <button
-                onClick={() => setDark(d => !d)}
-                className="relative flex items-center shrink-0"
-                aria-label="Toggle theme"
-                style={{ width: 44, height: 24 }}
-              >
-                <span className="absolute inset-0 rounded-full transition-colors" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                <span
-                  className="absolute flex items-center justify-center w-[18px] h-[18px] rounded-full shadow transition-all"
-                  style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }}
-                >
-                  {dark ? (
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-                      <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
-                    </svg>
-                  ) : (
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                  )}
-                </span>
-              </button>
-            </div>
-          </header>
 
-          {/* Stepper */}
-          <div className="flex items-center shrink-0 px-8 py-[18px]" style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }}>
-            {[
-              { label: 'Vehicle Selected', done: true },
-              { label: 'Identity Verified', done: true },
-              { label: 'Reports Collected', done: true },
-              { label: 'Offers Generated', done: true },
-              { label: 'Offer Selected', done: true },
-              { label: 'Submit Order', active: true },
-            ].map((step, i, arr) => (
-              <div key={step.label} className="flex items-center flex-1">
-                <div className="flex items-center gap-2.5">
-                  <div
-                    className="w-[26px] h-[26px] rounded-full border-2 flex items-center justify-center text-[12px] font-bold shrink-0"
-                    style={
-                      step.done
-                        ? { background: 'var(--green)', borderColor: 'var(--green)', color: '#fff' }
-                        : step.active
-                        ? { borderColor: 'var(--blue)', color: 'var(--blue)', background: 'var(--card)' }
-                        : { borderColor: 'var(--border)', color: 'var(--muted)', background: 'var(--card)' }
-                    }
-                  >
-                    {step.done ? '✓' : i + 1}
-                  </div>
-                  <div style={{ lineHeight: 1.3 }}>
-                    <b style={{ display: 'block', fontSize: 12, color: step.active ? 'var(--blue)' : 'var(--text)' }}>{step.label}</b>
-                  </div>
-                </div>
-                {i < arr.length - 1 && (
-                  <div className="flex-1 h-[2px] mx-2.5" style={{ background: step.done ? 'var(--green)' : 'var(--border)' }} />
-                )}
+              <LucidStepper activeStep={6} />
+
+              {/* Header */}
+              <div className="mb-4">
+                <h1 className="text-[44px] font-normal leading-tight mb-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Review &amp; Submit Order</h1>
+                <p className="text-[16px]" style={{ color: 'var(--muted)' }}>Please review the details of your financing order before submitting. Once submitted, the bank will begin processing your application.</p>
               </div>
-            ))}
-          </div>
 
-          {/* Body */}
-          <div className="flex flex-1 min-h-0">
-            <CeerSidebar backHref="/lucid/11-offer-details" backLabel="Back to Offer Details" />
+              {/* Two-col */}
+              <div className="flex gap-5 flex-1 min-h-0">
 
-            {/* Main */}
-            <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
-              <div className="flex-1 p-8">
+                {/* Left */}
+                <div className="flex-1 min-w-0 flex flex-col gap-4">
 
-                <Link href="/lucid/11-offer-details" className="inline-flex items-center gap-1.5 text-[14px] font-semibold" style={{ color: 'var(--blue)' }}>
-                  ‹ Back to Offer Details
-                </Link>
-
-                <h1 className="mt-4 text-[28px] font-extrabold" style={{ color: 'var(--navy)' }}>Review &amp; Submit Order</h1>
-                <p className="mt-2.5 text-[15px] leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  Please review the details of your financing order before submitting. Once submitted, the bank will begin processing your application.
-                </p>
-
-                <div className="mt-6 flex gap-6 items-start">
-
-                  {/* Left column */}
-                  <div className="flex-1 min-w-0 flex flex-col gap-5">
-
-                    {/* Bank & Offer Summary */}
-                    <div className="rounded-[14px] p-6" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <div className="flex items-center gap-4">
-                        <div
-                          className="w-[62px] h-[62px] shrink-0 rounded-[12px] flex items-center justify-center text-center font-extrabold text-[15px] leading-[1.2]"
-                          style={{ border: '1px solid var(--border)', color: '#1a6b3c' }}
-                        >
-                          SNB<br/>الأهلي
-                        </div>
-                        <div>
-                          <div className="text-[21px] font-extrabold" style={{ color: 'var(--navy)' }}>Saudi National Bank</div>
-                          <span
-                            className="mt-1.5 inline-flex items-center rounded-full px-3 py-[5px] text-[12px] font-semibold"
-                            style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}
-                          >
-                            ✓ Selected Offer
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="mt-5 grid grid-cols-4 gap-3">
-                        {[
-                          { label: 'Annual Profit Rate (APR)', value: '4.69%', blue: true },
-                          { label: 'Monthly Payment', value: 'SAR 3,648', blue: false },
-                          { label: 'Total Payable', value: 'SAR 218,880', blue: false },
-                          { label: 'Down Payment', value: 'SAR 45,750', blue: false },
-                        ].map(stat => (
-                          <div key={stat.label} className="rounded-[12px] p-4" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
-                            <div className="text-[12px]" style={{ color: 'var(--muted)' }}>{stat.label}</div>
-                            <div className="mt-[5px] text-[19px] font-extrabold" style={{ color: stat.blue ? 'var(--blue)' : 'var(--text)' }}>{stat.value}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-4 flex flex-wrap gap-2.5">
-                        {['✓ No Processing Fees', '✓ Early Settlement Benefit', '✓ Free Comprehensive Insurance', '✓ Advanced Digital Services'].map(chip => (
-                          <span
-                            key={chip}
-                            className="inline-flex items-center gap-1.5 rounded-full px-[14px] py-[7px] text-[12.5px] font-semibold"
-                            style={{ background: 'var(--bg)', color: 'var(--blue)' }}
-                          >
-                            {chip}
-                          </span>
-                        ))}
-                      </div>
+                  {/* Bank card */}
+                  <div className="rounded-[14px] px-5 py-4" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <img src="/logo-alahli.png" alt="SNB" style={{ height: 36, width: 'auto', maxWidth: 110, objectFit: 'contain' }} />
+                      <span className="px-3 py-1 rounded-full text-[11px] font-extrabold tracking-wide text-white" style={{ background: 'var(--blue)' }}>RECOMMENDED</span>
+                      <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--muted)', border: '1px solid var(--border)' }}>English</span>
                     </div>
+                    <div className="text-[15px] font-bold mb-3" style={{ color: 'var(--text)' }}>Saudi National Bank</div>
 
-                    {/* Order Details */}
-                    <div className="rounded-[14px] p-6" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>Order Details</h3>
+                    {/* Metrics */}
+                    <div className="rounded-[10px] px-4 py-3 flex items-center gap-8 mb-3" style={{ border: '1px solid var(--border)' }}>
                       {[
-                        ['Customer Name', 'محمد عبدالله الغامدي'],
-                        ['National ID', '1082XXXXXXX'],
-                        ['Mobile', '+966 5X XXX XXXX'],
-                        ['Vehicle', 'CEER EXOBOT SUV – Premium AWD 2026'],
-                        ['Colour', 'Quantum Grey'],
-                        ['Dealer', 'CEER Showroom, Riyadh'],
-                      ].map(([k, v]) => (
-                        <div key={k} className="flex justify-between py-[9px] text-[13.5px]" style={{ borderBottom: '1px solid var(--border)' }}>
-                          <span style={{ color: 'var(--muted)' }}>{k}</span>
-                          <span className="font-bold">{v}</span>
+                        { label: 'APR', value: '4.89%', blue: true },
+                        { label: 'Monthly payment', value: 'SAR 3,648' },
+                        { label: 'Tenure', value: '60 months' },
+                        { label: 'Total payable', value: 'SAR 218,880' },
+                        { label: 'Down payment', value: 'SAR 45,750' },
+                      ].map(({ label, value, blue }) => (
+                        <div key={label} className="shrink-0">
+                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{label}</div>
+                          <div className="text-[15px] font-bold mt-0.5" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{value}</div>
                         </div>
                       ))}
-                      <div className="flex justify-between py-[9px] text-[13.5px]">
-                        <span style={{ color: 'var(--muted)' }}>Order Reference</span>
-                        <span className="font-bold">AELG-2026-05-18-1123</span>
-                      </div>
                     </div>
 
-                    {/* Payment Schedule Preview */}
-                    <div className="rounded-[14px] p-6" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>Payment Schedule</h3>
-                      <div className="grid grid-cols-3 gap-4">
-                        {[
-                          { label: 'Financed Amount', value: 'SAR 183,000' },
-                          { label: 'Tenure', value: '60 Months' },
-                          { label: 'First Payment', value: '30 days after disbursement' },
-                          { label: 'Total Profit', value: 'SAR 35,880' },
-                          { label: 'Total Payable', value: 'SAR 218,880' },
-                          { label: 'Profit Rate (APR)', value: '4.69%' },
-                        ].map(item => (
-                          <div key={item.label} className="rounded-[10px] p-4" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
-                            <div className="text-[12px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                            <div className="mt-1 text-[14px] font-bold">{item.value}</div>
+                    {/* Feature chips */}
+                    <div className="flex items-center gap-5 flex-wrap">
+                      {['No processing fees', 'Early settlement flexibility', 'Free comprehensive insurance', 'Advanced digital services'].map(f => (
+                        <div key={f} className="flex items-center gap-1.5 text-[12px]" style={{ color: 'var(--text)' }}>
+                          <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
+                            <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           </div>
-                        ))}
-                      </div>
-                      <div className="mt-4 rounded-[10px] px-4 py-3 flex items-center justify-between" style={{ background: 'var(--bg-light)' }}>
-                        <span className="text-[13px]">Indicative Monthly Payment</span>
-                        <span>
-                          From <b style={{ color: 'var(--blue)', fontSize: 16 }}>SAR 3,648</b>{' '}
-                          <small style={{ color: 'var(--muted)' }}>/ month</small>
-                        </span>
-                      </div>
+                          {f}
+                        </div>
+                      ))}
                     </div>
-
-                    {/* Declaration */}
-                    <div className="rounded-[14px] p-6" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>Declaration &amp; Consent</h3>
-                      <p className="text-[13.5px] leading-[1.6]" style={{ color: 'var(--muted)' }}>
-                        By submitting this order, I confirm that all information provided is accurate and complete. I consent to Saudi National Bank processing my application in accordance with their terms, conditions, and applicable Saudi Arabian regulations. I acknowledge this is a binding financing request subject to final credit approval.
-                      </p>
-                      <label className="mt-5 flex items-start gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={agreed}
-                          onChange={e => setAgreed(e.target.checked)}
-                          className="mt-0.5 w-4 h-4 shrink-0 accent-[#4f95ff] cursor-pointer"
-                        />
-                        <span className="text-[13.5px] font-semibold" style={{ color: 'var(--text)' }}>
-                          I have read, understood and agree to the{' '}
-                          <a href="#" style={{ color: 'var(--blue)' }}>Terms &amp; Conditions</a>
-                          {', '}
-                          <a href="#" style={{ color: 'var(--blue)' }}>Product Disclosure</a>
-                          {' and '}
-                          <a href="#" style={{ color: 'var(--blue)' }}>Schedule of Charges</a>.
-                        </span>
-                      </label>
-                    </div>
-
                   </div>
 
-                  {/* Right rail */}
-                  <div className="w-[280px] shrink-0 flex flex-col gap-4">
-
-                    {/* Key Documents */}
-                    <div className="rounded-[14px] p-5" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>Key Documents</h3>
-                      {[
-                        'App Facts Sheet',
-                        'Terms & Conditions',
-                        'Product Disclosure',
-                        'Schedule of Charges',
-                      ].map((doc, i, arr) => (
-                        <a
-                          key={doc}
-                          href="#"
-                          className="flex items-center gap-2.5 py-[10px] text-[13.5px] font-semibold"
+                  {/* Tabs */}
+                  <div className="rounded-[14px] overflow-hidden" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="flex" style={{ borderBottom: '1px solid var(--border)' }}>
+                      {TABS.map((tab, i) => (
+                        <button key={tab} onClick={() => setActiveTab(i)}
+                          className="px-5 py-3 text-[13px] font-semibold shrink-0"
                           style={{
-                            color: 'var(--text)',
-                            borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
-                          }}
-                        >
-                          <span className="w-8 h-8 shrink-0 rounded-[8px] flex items-center justify-center text-[15px]" style={{ background: 'var(--bg)' }}>📄</span>
-                          {doc}
-                        </a>
+                            color: activeTab === i ? 'var(--blue)' : 'var(--muted)',
+                            borderBottom: activeTab === i ? '2px solid var(--blue)' : '2px solid transparent',
+                            background: 'transparent',
+                            marginBottom: -1,
+                          }}>
+                          {tab}
+                        </button>
                       ))}
                     </div>
 
-                    {/* What Happens Next */}
-                    <div className="rounded-[14px] p-5" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>What Happens Next</h3>
-                      {[
-                        'Your application is sent to Saudi National Bank',
-                        'The bank reviews your order within 1–2 business days',
-                        'You receive an SMS &amp; email with the outcome',
-                        'Upon approval, vehicle delivery is arranged with the dealer',
-                      ].map((item, i) => (
-                        <div key={i} className="flex gap-3 mt-3.5 text-[13px] leading-[1.4]">
-                          <span
-                            className="w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[12px] font-bold"
-                            style={{ background: 'var(--bg)', color: 'var(--blue)' }}
-                          >
-                            {i + 1}
-                          </span>
-                          <span dangerouslySetInnerHTML={{ __html: item }} />
+                    <div className="p-5">
+                      {activeTab === 0 ? (
+                        <div className="flex gap-5">
+                          {/* Financing details */}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Financing details</div>
+                            {financingRows.map(([k, v]) => (
+                              <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
+                                <span style={{ color: 'var(--muted)' }}>{k}</span>
+                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Payment breakdown */}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Payment breakdown</div>
+                            {breakdownRows.map(([k, v]) => (
+                              <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
+                                <span style={{ color: 'var(--muted)' }}>{k}</span>
+                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                              </div>
+                            ))}
+                            <div className="mt-3 rounded-[10px] px-4 py-3 flex items-center justify-between" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
+                              <span className="text-[12px]" style={{ color: 'var(--muted)' }}>Indicative monthly payment</span>
+                              <span className="text-[12px]">From <b style={{ color: 'var(--blue)', fontSize: 15 }}>SAR 3,648</b> <span style={{ color: 'var(--muted)' }}>/ month</span></span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-[13px] py-8 text-center" style={{ color: 'var(--muted)' }}>Content for this tab coming soon.</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Key features + Offer rating */}
+                  <div className="flex gap-4">
+                    {/* Key features */}
+                    <div className="flex-1 rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                      <div className="text-[13px] font-bold mb-2" style={{ color: 'var(--text)' }}>Key features</div>
+                      {keyFeatures.map(([k, v]) => (
+                        <div key={k} className="flex items-center justify-between py-1.5 text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
+                              <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                            </div>
+                            <span style={{ color: 'var(--text)' }}>{k}</span>
+                          </div>
+                          <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
                         </div>
                       ))}
                     </div>
 
-                    {/* Security */}
-                    <div className="rounded-[14px] p-4 flex items-center gap-3" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-[15px]" style={{ background: 'var(--bg)' }}>🛡️</div>
-                      <div>
-                        <p className="text-[13px] font-bold">Your data is secure</p>
-                        <p className="text-[12.5px] mt-0.5" style={{ color: 'var(--muted)' }}>Bank-level encryption protects your information.</p>
+                    {/* Offer rating */}
+                    <div className="flex-1 rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                      <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Offer rating</div>
+                      <div className="flex items-end gap-3 mb-3">
+                        <span className="text-[36px] font-extrabold leading-none" style={{ color: 'var(--text)' }}>4.8</span>
+                        <div>
+                          <div className="flex gap-0.5">
+                            {[1,2,3,4,5].map(s => (
+                              <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            ))}
+                          </div>
+                          <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>+728 reviews</div>
+                        </div>
                       </div>
+                      {ratingBars.map(([label, score]) => (
+                        <div key={label} className="flex items-center gap-3 mb-2 text-[12px]">
+                          <span className="shrink-0" style={{ width: 140, color: 'var(--muted)' }}>{label}</span>
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                            <div className="h-full rounded-full" style={{ width: `${(score / 5) * 100}%`, background: 'var(--blue)' }} />
+                          </div>
+                          <span className="shrink-0 font-semibold" style={{ width: 24, textAlign: 'right', color: 'var(--text)' }}>{score}</span>
+                        </div>
+                      ))}
                     </div>
-
                   </div>
+
+                </div>
+
+                {/* Right */}
+                <div className="flex flex-col gap-4 shrink-0" style={{ width: 260 }}>
+
+                  {/* Why recommended */}
+                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Why this offer is recommended</div>
+                    {['Lowest total payable', 'Competitive profit rate', 'No processing fees', 'Free comprehensive insurance', 'Advanced digital services'].map(r => (
+                      <div key={r} className="flex items-center gap-2 mb-2 text-[12px]" style={{ color: 'var(--text)' }}>
+                        <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ background: '#16a34a' }}>
+                          <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                        {r}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Key documents */}
+                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Key documents</div>
+                    {['Key Facts Sheet', 'Terms & Conditions', 'Product Disclosure', 'Schedule of Charges'].map((doc, i, arr) => (
+                      <div key={doc} className="flex items-center justify-between py-2 text-[12px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-[6px] flex items-center justify-center shrink-0" style={{ background: 'var(--highlight)' }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                          </div>
+                          <span style={{ color: 'var(--text)' }}>{doc}</span>
+                        </div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Next steps */}
+                  <div className="rounded-[14px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="text-[13px] font-bold mb-3" style={{ color: 'var(--text)' }}>Next steps</div>
+                    {[
+                      'Review the key facts and terms',
+                      'Accept the offer to proceed',
+                      'Complete final verification',
+                      'The bank will contact you for final approval',
+                    ].map((step, i) => (
+                      <div key={i} className="flex items-start gap-3 mb-2.5 text-[12px]">
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5"
+                          style={{ background: i === 0 ? 'var(--blue)' : 'transparent', border: i === 0 ? 'none' : '1.5px solid var(--border)', color: i === 0 ? '#fff' : 'var(--muted)' }}>
+                          {i + 1}
+                        </div>
+                        <span style={{ color: 'var(--text)' }}>{step}</span>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
               </div>
+            </div>
 
-              {/* Footer */}
-              <div className="shrink-0 px-8 py-[18px] flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-                <Link
-                  href="/lucid/11-offer-details"
-                  className="rounded-[10px] px-8 py-3.5 text-[15px] font-bold"
-                  style={{ background: 'var(--card)', border: '1.5px solid var(--blue)', color: 'var(--blue)' }}
-                >
-                  ← Back to Offer Details
+            {/* Footer */}
+            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
+              <Link href="/lucid/09-eligibility-offers" className="flex items-center gap-2 px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--border)', color: 'var(--text)', background: 'transparent' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Back to Offers
+              </Link>
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-2 px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)', background: 'transparent' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                  Save This Offer
+                </button>
+                <Link href="/lucid/13-submit-success" className="flex items-center gap-2 px-8 py-3 rounded-xl text-[14px] font-bold text-white" style={{ background: 'var(--blue)' }}>
+                  Create Order <span>→</span>
                 </Link>
-                <div className="flex items-center gap-4">
-                  <button
-                    className="rounded-[10px] px-8 py-3.5 text-[15px] font-bold"
-                    style={{ background: 'var(--card)', border: '1.5px solid var(--blue)', color: 'var(--blue)' }}
-                  >
-                    Save Draft
-                  </button>
-                  <button
-                    onClick={handleSubmit}
-                    disabled={!agreed || submitting}
-                    className="rounded-[10px] px-8 py-3.5 text-[15px] font-bold text-white transition-opacity"
-                    style={{
-                      background: agreed && !submitting ? '#f08a1d' : 'var(--border)',
-                      cursor: agreed && !submitting ? 'pointer' : 'not-allowed',
-                      color: agreed && !submitting ? '#fff' : 'var(--muted)',
-                    }}
-                  >
-                    {submitting ? 'Submitting…' : 'Submit Order →'}
-                  </button>
-                </div>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
 
       <style>{`
-        [data-theme="dark"] {
-          --bg: #0b1420;
-          --card: #121e2e;
-          --border: #2a3a4f;
-          --text: #e6edf5;
-          --muted: #93a4b8;
-          --blue: #4f95ff;
-          --navy: #dbe7f5;
-          --highlight: #16283f;
-          --bg-light: #16283f;
-          --green: #1db954;
-        }
-        [data-theme="light"] {
-          --bg: #f7f9fc;
-          --card: #ffffff;
-          --border: #e3e8ef;
-          --text: #1c2b3a;
-          --muted: #5b6b7c;
-          --blue: #1a73f5;
-          --navy: #14233c;
-          --highlight: #eff6ff;
-          --bg-light: #eaf2fe;
-          --green: #1db954;
-        }
-        .viewport-warning { background: var(--bg); }
-        @media (max-width: 1454px), (max-height: 1014px) {
-          .frame { display: none; }
-          .viewport-warning { display: flex !important; }
-        }
+        [data-theme="dark"]{--bg:#0b1420;--card:#121e2e;--border:#2a3a4f;--text:#e6edf5;--muted:#93a4b8;--blue:#4f95ff;--heading:#dbe7f5;--highlight:#16283f;--green:#1db954;}
+        [data-theme="light"]{--bg:#f4f6f9;--card:#ffffff;--border:#dde3ec;--text:#1a2636;--muted:#64748b;--blue:#2563eb;--heading:#0f172a;--highlight:#eff6ff;--green:#16a34a;}
+        .viewport-warning{background:var(--bg);}
+        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
       `}</style>
     </div>
   );
