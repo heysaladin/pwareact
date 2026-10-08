@@ -30,7 +30,7 @@ export default function WhatHappensNextArPage() {
 
       {/* Title section */}
       <div style={{ textAlign: 'center', padding: '32px 32px 0', maxWidth: 1280, margin: '0 auto' }}>
-        <h1 style={{ fontSize: 32, fontWeight: 800, color: 'var(--navy)', fontFamily: 'Georgia, "Times New Roman", serif' }}>ماذا يحدث بعد ذلك؟</h1>
+        <h1 style={{ fontSize: 32, fontWeight: 800, color: 'var(--navy)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>ماذا يحدث بعد ذلك؟</h1>
         <p style={{ color: 'var(--muted)', fontSize: 15, marginTop: 10 }}>إليك كيف نبدأ بعد اختيارك للعرض الأولي.</p>
       </div>
 

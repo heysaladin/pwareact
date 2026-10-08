@@ -125,7 +125,7 @@ export default function CeerSidebar({ backHref, backLabel = 'Back to Lucid' }: C
       {/* Model info */}
       <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
         <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 2 }}>2026</p>
-        <h2 style={{ fontSize: 26, fontWeight: 400, color: 'var(--text)', fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: 1.2 }}>Air Touring</h2>
+        <h2 style={{ fontSize: 26, fontWeight: 400, color: 'var(--text)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif", lineHeight: 1.2 }}>Air Touring</h2>
       </div>
 
       {/* Specs — no separators between items */}

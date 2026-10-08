@@ -89,7 +89,7 @@ export default function PreliminaryOffersArPage() {
 
               {/* Title */}
               <div>
-                <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>عرض العروض الأولية</h1>
+                <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>عرض العروض الأولية</h1>
                 <p className="mt-1 text-[14px]" style={{ color: 'var(--muted)' }}>راجع العروض الأولية بناءً على التفاصيل التي أدخلتها.</p>
               </div>
 

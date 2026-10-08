@@ -43,7 +43,7 @@ export default function SubmitSuccessArPage() {
                   </svg>
                 </div>
 
-                <h1 className="text-[32px] font-extrabold mb-3" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>تم تقديم الطلب</h1>
+                <h1 className="text-[32px] font-extrabold mb-3" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>تم تقديم الطلب</h1>
                 <p className="text-[16px] leading-relaxed mb-6 max-w-[560px]" style={{ color: 'var(--muted)' }}>تهانينا! تم تقديم طلب التمويل الخاص بك بنجاح.</p>
 
                 {/* Order details card */}
@@ -62,7 +62,7 @@ export default function SubmitSuccessArPage() {
 
                 {/* What happens next */}
                 <div className="rounded-[16px] p-6 mb-6 w-full max-w-[560px] text-right" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                  <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>ماذا يحدث بعد ذلك؟</h3>
+                  <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>ماذا يحدث بعد ذلك؟</h3>
                   {[
                     { done: true, text: 'تم تقديم طلبك إلى البنك الأهلي السعودي' },
                     { done: false, text: 'يراجع البنك طلبك خلال 1-2 يوم عمل' },

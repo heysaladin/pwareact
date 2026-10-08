@@ -43,7 +43,7 @@ export default function MobileVerificationPage() {
                 </div>
               </div>
 
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Verifying mobile ownership</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Verifying mobile ownership</h1>
               <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>Your identity has been verified successfully. We are now confirming ownership of your mobile number.</p>
 
               {/* Status bar */}
@@ -88,7 +88,7 @@ export default function MobileVerificationPage() {
                 <div className="flex-1 min-w-0 flex flex-col gap-4">
                   {/* About this screen */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>
+                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>
                       <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
                       About this screen
                     </h3>
@@ -97,7 +97,7 @@ export default function MobileVerificationPage() {
 
                   {/* What happens next */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>What happens next</h3>
+                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>What happens next</h3>
                     {[
                       { done: true, label: 'Identity verified with Nafath', sub: 'Completed' },
                       { active: true, label: 'Mobile ownership confirmation', sub: 'In progress' },

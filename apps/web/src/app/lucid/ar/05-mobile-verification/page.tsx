@@ -41,7 +41,7 @@ export default function MobileVerificationArPage() {
                 </div>
               </div>
 
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>التحقق من ملكية الجوال</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>التحقق من ملكية الجوال</h1>
               <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>تم التحقق من هويتك بنجاح. نقوم الآن بتأكيد ملكية رقم جوالك.</p>
 
               {/* Status bar */}
@@ -86,7 +86,7 @@ export default function MobileVerificationArPage() {
                 <div className="flex-1 min-w-0 flex flex-col gap-4">
                   {/* About this screen */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>
+                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>
                       <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
                       عن هذه الشاشة
                     </h3>
@@ -95,7 +95,7 @@ export default function MobileVerificationArPage() {
 
                   {/* What happens next */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>ماذا يحدث بعد ذلك</h3>
+                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>ماذا يحدث بعد ذلك</h3>
                     {[
                       { done: true, label: 'تم التحقق من الهوية عبر نفاذ', sub: 'مكتمل' },
                       { active: true, label: 'تأكيد ملكية الجوال', sub: 'قيد التنفيذ' },

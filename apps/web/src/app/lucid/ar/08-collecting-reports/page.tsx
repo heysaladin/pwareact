@@ -48,7 +48,7 @@ export default function CollectingReportsArPage() {
               <div className="flex gap-6">
                 {/* Left panel */}
                 <div className="flex-[1.4] min-w-0">
-                  <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>جمع تقاريرك</h1>
+                  <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>جمع تقاريرك</h1>
                   <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>نتواصل بشكل آمن مع مزودي البيانات الحكومية والمالية الموثوقة لاسترداد معلوماتك.</p>
 
                   <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
@@ -91,7 +91,7 @@ export default function CollectingReportsArPage() {
                 {/* Right panel */}
                 <div className="flex-1 min-w-0 flex flex-col gap-4">
                   <div className="rounded-[16px] p-5" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>ماذا يحدث بعد ذلك؟</h3>
+                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>ماذا يحدث بعد ذلك؟</h3>
                     {[
                       { n: '1', label: 'نجمع معلوماتك', desc: 'نسترد بياناتك بأمان من مزودين معتمدين.' },
                       { n: '2', label: 'نتحقق من أهليتك', desc: 'تُحلَّل معلوماتك لتحديد عروض التمويل المناسبة لك.' },

@@ -75,7 +75,7 @@ export default function OfferDetailsPage() {
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-14 rounded-[12px] flex items-center justify-center text-[14px] font-extrabold text-center" style={{ border: '1px solid var(--border)', color: '#1a6b3c', lineHeight: 1.2 }}>SNB<br/>الأهلي</div>
                       <div>
-                        <div className="text-[20px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Saudi National Bank</div>
+                        <div className="text-[20px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Saudi National Bank</div>
                         <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>SNB الأهلي</div>
                       </div>
                     </div>
@@ -138,7 +138,7 @@ export default function OfferDetailsPage() {
                   {/* Offer Rating */}
                   <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-[28px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>4.8</span>
+                      <span className="text-[28px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>4.8</span>
                       <div>
                         <div style={{ color: '#f5a623' }}>★★★★★</div>
                         <div className="text-[11px]" style={{ color: 'var(--muted)' }}>+728 reviews</div>
@@ -162,7 +162,7 @@ export default function OfferDetailsPage() {
                 <div className="flex flex-col gap-4" style={{ width: 280, flexShrink: 0 }}>
                   {/* Why recommended */}
                   <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--blue)', background: 'var(--highlight)' }}>
-                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Why this offer is recommended</h3>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Why this offer is recommended</h3>
                     {['Lowest total payable', 'Competitive profit rate', 'No processing fees', 'Free comprehensive insurance', 'Advanced digital services'].map(reason => (
                       <div key={reason} className="flex items-center gap-2 mb-2 text-[12.5px]">
                         <span style={{ color: 'var(--green)' }}>✓</span>
@@ -173,7 +173,7 @@ export default function OfferDetailsPage() {
 
                   {/* Key Documents */}
                   <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Key Documents</h3>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Key Documents</h3>
                     {['App Facts Sheet', 'Terms & Conditions', 'Product Disclosure', 'Schedule of Charges'].map((doc, i, arr) => (
                       <a key={doc} href="#" className="flex items-center gap-2.5 py-2 text-[12.5px] font-semibold" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none', color: 'var(--text)' }}>
                         <span className="w-7 h-7 rounded-[6px] flex items-center justify-center text-[13px]" style={{ background: 'var(--bg)' }}>📄</span>
@@ -184,7 +184,7 @@ export default function OfferDetailsPage() {
 
                   {/* Next Steps */}
                   <div className="rounded-[16px] p-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Next Steps</h3>
+                    <h3 className="text-[13px] font-bold mb-3" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Next Steps</h3>
                     {['Review the key facts and terms', 'Accept the offer to proceed', 'Complete final verification', 'The bank will contact you for final approval'].map((step, i) => (
                       <div key={i} className="flex gap-2.5 mb-2.5 text-[12px]">
                         <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>{i + 1}</div>

@@ -46,7 +46,7 @@ export default function SubmitOrderArPage() {
                 </div>
               </div>
 
-              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>تأكيد طلبك</h1>
+              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>تأكيد طلبك</h1>
               <p className="text-[13px] mb-6" style={{ color: 'var(--muted)' }}>أدخل رمز التحقق المرسل إلى جوالك لإتمام الطلب.</p>
 
               <div className="flex gap-6 items-start">

@@ -51,7 +51,7 @@ export default function NafathApproveArPage() {
               </div>
               </div>
 
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>وافق على هويتك في نفاذ</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>وافق على هويتك في نفاذ</h1>
               <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>تم إرسال طلب تحقق آمن إلى تطبيق نفاذ الخاص بك.</p>
 
               {/* Verified ID bar */}
@@ -87,7 +87,7 @@ export default function NafathApproveArPage() {
 
                   {/* Instructions */}
                   <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>كيفية الموافقة</h3>
+                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>كيفية الموافقة</h3>
                     <ol className="flex flex-col gap-3">
                       {[
                         'افتح تطبيق نفاذ',

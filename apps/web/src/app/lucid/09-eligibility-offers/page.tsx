@@ -97,7 +97,7 @@ export default function EligibilityOffersPage() {
                 </div>
               </div>
 
-              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Your eligibility offers</h1>
+              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Your eligibility offers</h1>
               <p className="text-[14px] mb-4" style={{ color: 'var(--muted)' }}>Here are the financing offers generated for you based on your credit assessment.</p>
 
               <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-4" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>

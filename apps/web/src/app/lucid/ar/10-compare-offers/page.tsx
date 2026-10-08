@@ -45,7 +45,7 @@ export default function CompareOffersArPage() {
 
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>قارن واختر أفضل عرض لك</h1>
+                  <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>قارن واختر أفضل عرض لك</h1>
                   <p className="text-[13px] mt-0.5" style={{ color: 'var(--muted)' }}>قارن عروض التمويل من شركائنا الموثوقين واختر الأنسب لك.</p>
                 </div>
                 <button className="text-[12px] font-semibold" style={{ color: 'var(--blue)', background: 'none', border: 'none', cursor: 'pointer' }}>مسح الاختيار</button>

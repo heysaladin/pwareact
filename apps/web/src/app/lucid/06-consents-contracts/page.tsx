@@ -48,7 +48,7 @@ export default function ConsentsContractsPage() {
                   </button>
                 </div>
               </div>
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Consents & Contracts</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Consents & Contracts</h1>
               <p className="text-[15px] mb-4" style={{ color: 'var(--muted)' }}>Please review and accept the required consents and agreements to continue.</p>
               <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-5" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
                 <span>🔒</span>
@@ -57,7 +57,7 @@ export default function ConsentsContractsPage() {
 
               <div className="rounded-[16px] overflow-hidden mb-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Required consents</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Required consents</h2>
                 </div>
                 {consents.map((item, i) => (
                   <div key={item.id} className="flex items-center gap-4 px-5 py-4 cursor-pointer" style={{ borderBottom: i < consents.length - 1 ? '1px solid var(--border)' : 'none' }} onClick={() => toggle(item.id)}>
@@ -76,7 +76,7 @@ export default function ConsentsContractsPage() {
 
               <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Agreements & Disclosures</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Agreements & Disclosures</h2>
                 </div>
                 {agreements.map((item, i) => (
                   <div key={item.id} className="flex items-center gap-4 px-5 py-4 cursor-pointer" style={{ borderBottom: i < agreements.length - 1 ? '1px solid var(--border)' : 'none' }} onClick={() => toggle(item.id)}>

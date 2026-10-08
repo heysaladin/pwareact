@@ -69,7 +69,7 @@ export default function ExploreFinancingArPage() {
 
               {/* Form card */}
               <div className="flex-1 rounded-[18px] px-[39px] py-[35px] flex flex-col" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <h1 className="text-[30px] font-extrabold leading-normal" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>استكشف خيارات التمويل</h1>
+                <h1 className="text-[30px] font-extrabold leading-normal" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>استكشف خيارات التمويل</h1>
                 <p className="mt-2 text-[15px]" style={{ color: 'var(--muted)' }}>أدخل بعض التفاصيل للحصول على تقدير أولي مخصص لك.</p>
 
                 {/* Input grid */}
@@ -148,7 +148,7 @@ export default function ExploreFinancingArPage() {
                 {/* Estimate panel */}
                 <div className="mt-7 rounded-[14px] overflow-hidden flex h-[195px]" style={{ border: '1px solid var(--border)' }}>
                   <div className="flex-[1.2] p-7 flex flex-col">
-                    <h3 className="text-[17px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>التقدير الأولي</h3>
+                    <h3 className="text-[17px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>التقدير الأولي</h3>
                     <div className="flex justify-between py-3 border-b border-dashed text-[14px]" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
                       <span>سعر المركبة (شامل ض.ق.م)</span><span className="font-bold">SAR 399,000</span>
                     </div>

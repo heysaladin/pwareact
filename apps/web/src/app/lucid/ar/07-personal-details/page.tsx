@@ -57,7 +57,7 @@ export default function PersonalDetailsArPage() {
                 </div>
               </div>
 
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>الإفصاحات والبيانات الشخصية</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>الإفصاحات والبيانات الشخصية</h1>
               <p className="text-[15px] mb-4" style={{ color: 'var(--muted)' }}>يرجى تقديم معلوماتك الشخصية بدقة لإجراء تقييم ائتماني شامل.</p>
 
               <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-5" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
@@ -68,7 +68,7 @@ export default function PersonalDetailsArPage() {
               {/* Personal Details */}
               <div className="rounded-[16px] overflow-hidden mb-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>البيانات الشخصية</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>البيانات الشخصية</h2>
                 </div>
                 <div className="p-5 grid grid-cols-3 gap-4">
                   {fields.map((f, i) => (
@@ -100,7 +100,7 @@ export default function PersonalDetailsArPage() {
               {/* Additional Disclosures */}
               <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>إفصاحات إضافية</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>إفصاحات إضافية</h2>
                   <p className="text-[12.5px] mt-0.5" style={{ color: 'var(--muted)' }}>يرجى الإجابة على الأسئلة التالية بأمانة.</p>
                 </div>
                 {accordions.map((acc, i) => (

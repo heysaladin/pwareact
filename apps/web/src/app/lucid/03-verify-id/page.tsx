@@ -77,7 +77,7 @@ export default function VerifyIdPage() {
 
               {/* Content card */}
               <div className="rounded-[18px] px-[52px] py-[44px] flex flex-col flex-1" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <h1 className="text-[30px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Enter your verified ID</h1>
+                <h1 className="text-[30px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Enter your verified ID</h1>
                 <p className="mt-2 text-[15px]" style={{ color: 'var(--muted)' }}>Please enter your National ID or Iqama number to verify your identity.</p>
 
                 <div className="mt-10" style={{ maxWidth: 560 }}>

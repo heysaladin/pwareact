@@ -101,7 +101,7 @@ export default function EligibilityOffersArPage() {
                 </div>
               </div>
 
-              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>عروض الأهلية الخاصة بك</h1>
+              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>عروض الأهلية الخاصة بك</h1>
               <p className="text-[14px] mb-4" style={{ color: 'var(--muted)' }}>إليك عروض التمويل المُولَّدة لك بناءً على تقييمك الائتماني.</p>
 
               <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-4" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>

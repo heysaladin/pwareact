@@ -74,7 +74,7 @@ export default function VerifyIdArPage() {
 
               {/* Content card */}
               <div className="rounded-[18px] px-[52px] py-[44px] flex flex-col flex-1" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <h1 className="text-[30px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>أدخل رقم هويتك المُتحقق منها</h1>
+                <h1 className="text-[30px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>أدخل رقم هويتك المُتحقق منها</h1>
                 <p className="mt-2 text-[15px]" style={{ color: 'var(--muted)' }}>يرجى إدخال رقم الهوية الوطنية أو الإقامة للتحقق من هويتك.</p>
 
                 <div className="mt-10" style={{ maxWidth: 560 }}>

@@ -55,7 +55,7 @@ export default function PersonalDetailsPage() {
                   </button>
                 </div>
               </div>
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Disclosures & Personal Details</h1>
+              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Disclosures & Personal Details</h1>
               <p className="text-[15px] mb-4" style={{ color: 'var(--muted)' }}>Please provide your personal information accurately to enable a complete credit assessment.</p>
               <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-5" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
                 <span>🔒</span>
@@ -64,7 +64,7 @@ export default function PersonalDetailsPage() {
 
               <div className="rounded-[16px] overflow-hidden mb-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Personal Details</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Personal Details</h2>
                 </div>
                 <div className="p-5 grid grid-cols-3 gap-4">
                   {fields.map((f, i) => (
@@ -85,7 +85,7 @@ export default function PersonalDetailsPage() {
 
               <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
                 <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: 'Georgia, "Times New Roman", serif' }}>Additional Disclosures</h2>
+                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Additional Disclosures</h2>
                   <p className="text-[12.5px] mt-0.5" style={{ color: 'var(--muted)' }}>Please answer the following questions to the best of your knowledge.</p>
                 </div>
                 {accordions.map((acc, i) => (
