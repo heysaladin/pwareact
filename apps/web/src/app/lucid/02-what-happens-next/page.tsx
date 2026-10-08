@@ -10,7 +10,7 @@ export default function WhatHappensNextPage() {
   const [dark, setDark] = useState(false);
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ minHeight: '100vh', background: 'var(--bg-page)', color: 'var(--text)', fontFamily: ''IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif' }}>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ minHeight: '100vh', background: 'var(--bg-page)', color: 'var(--text)', fontFamily: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
       <div className="vp-warn" style={{ display: 'none', position: 'fixed', inset: 0, zIndex: 50, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, textAlign: 'center', background: 'var(--surface)' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🖥️</div>
         <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--navy)' }}>Screen too small</h2>
