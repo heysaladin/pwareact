@@ -65,6 +65,22 @@ const general = [
     ),
   },
   {
+    id: 'car-loan',
+    name: 'Car Loan',
+    description: 'Car financing experience — apply, compare offers, and track your auto loan.',
+    href: '/car-loan',
+    tag: 'LOAN',
+    accentColor: '#EF4444',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 17H5a2 2 0 01-2-2v-3l2.5-5h11L19 12v3a2 2 0 01-2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="7.5" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <circle cx="16.5" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M3 12h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
     id: 'car-scan',
     name: 'Car Scan',
     description: 'Scan a vehicle to instantly retrieve specs, valuation, and financing eligibility.',
@@ -85,6 +101,7 @@ function ProjectCard({ project }: { project: typeof featured[number] }) {
   return (
     <Link
       href={project.href}
+      prefetch={false}
       className="group bg-white dark:bg-[#080d14] p-7 flex flex-col gap-6 hover:bg-[#f8fafc] dark:hover:bg-white/[0.02] transition-colors"
     >
       <div className="flex items-center justify-between">

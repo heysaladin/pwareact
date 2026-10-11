@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Products for You</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <style>
+    html,body,#root{margin:0;padding:0;height:100%;overflow:hidden;background:#fff;}
+    *{box-sizing:border-box;}
+    button{cursor:pointer;font-family:inherit;}
+    .scroll{scrollbar-width:none;overflow-y:auto;}
+    .scroll::-webkit-scrollbar{display:none;}
+    .hscroll{scrollbar-width:none;overflow-x:auto;}
+    .hscroll::-webkit-scrollbar{display:none;}
+  </style>
+</head>
+<body>
+<div id="root" style="height:100%"></div>
+<script type="text/babel">
+  const { useState } = React;
+  const C = { brand600:'#0063F5', yellow:'#FFDD33', gray900:'#121A26', gray500:'#697586', gray100:'#EEF1F6', white:'#FFFFFF' };
+  const nav = (p) => (window.top||window).location.href = p;
+
+  const SAR = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill="currentColor" style={{width:11,height:11,flexShrink:0,display:'inline-block'}}>
+      <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+      <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+    </svg>
+  );
+
+  const cars = [
+    { id:1, make:'Toyota', model:'Camry', year:2024, trim:'SE', price:108500, rateFrom:1.75, rateTo:3.50, monthly:1895, stars:4.2 },
+    { id:2, make:'Nissan', model:'Altima', year:2024, trim:'SV', price:88000, rateFrom:2.10, rateTo:4.00, monthly:1540, stars:4.0 },
+    { id:3, make:'Hyundai', model:'Sonata', year:2024, trim:'GL', price:95000, rateFrom:1.99, rateTo:3.75, monthly:1668, stars:3.8 },
+    { id:4, make:'Kia', model:'Cerato', year:2024, trim:'EX', price:74500, rateFrom:2.25, rateTo:4.25, monthly:1312, stars:4.1 },
+    { id:5, make:'Mitsubishi', model:'Spacestar', year:2024, trim:'Standard', price:62000, rateFrom:2.50, rateTo:4.50, monthly:1092, stars:3.6 },
+  ];
+
+  const CAR_TYPES = ['All','Sedan','Hatchback','SUV','Pickup'];
+  const MOTOR_TYPES = ['All','Gasoline','Diesel','EV','Hybrid'];
+
+  function StatusBar() {
+    return (
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px 6px',background:C.white}}>
+        <span style={{fontSize:15,fontWeight:700,color:C.gray900}}>9:41</span>
+        <div style={{display:'flex',gap:6,alignItems:'center'}}>
+          <svg width="17" height="11" viewBox="0 0 17 11" fill={C.gray900}><rect x="0" y="5" width="3" height="6" rx="0.5" opacity="0.4"/><rect x="4.5" y="3" width="3" height="8" rx="0.5" opacity="0.6"/><rect x="9" y="1.5" width="3" height="9.5" rx="0.5" opacity="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.5"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill={C.gray900} opacity="0.7"><path d="M8 8c.9 0 1.6.7 1.6 1.6S8.9 11.2 8 11.2 6.4 10.5 6.4 9.6 7.1 8 8 8z"/><path d="M4.6 5.4C5.6 4.3 6.7 3.7 8 3.7s2.4.6 3.4 1.7l1.3-1.3C11.2 2.6 9.7 2 8 2S4.8 2.6 3.3 4.1l1.3 1.3z" opacity="0.75"/><path d="M1.6 2.5C3.1 1 5.4 0 8 0s4.9 1 6.4 2.5L16 1C14 .4 11.2 0 8 0S2 .4 0 1l1.6 1.5z" opacity="0.5"/></svg>
+          <div style={{display:'flex',alignItems:'center',gap:2}}><div style={{width:22,height:11,border:'1.5px solid rgba(0,0,0,0.35)',borderRadius:3,padding:1.5}}><div style={{background:C.gray900,borderRadius:1.5,height:'100%',width:'72%'}}/></div></div>
+        </div>
+      </div>
+    );
+  }
+
+  function Stars({ val }) {
+    return (
+      <div style={{display:'flex',alignItems:'center',gap:3}}>
+        {[1,2,3,4,5].map(i => (
+          <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill={i<=Math.round(val)?C.yellow:'#E2E8F0'}>
+            <path d="M6 1l1.24 2.51 2.76.4-2 1.95.47 2.74L6 7.25 3.53 8.6 4 5.86 2 3.91l2.76-.4z"/>
+          </svg>
+        ))}
+        <span style={{fontSize:11.5,color:C.gray500,marginLeft:2}}>{val.toFixed(1)}</span>
+      </div>
+    );
+  }
+
+  function CarCard({ car, onTap }) {
+    const [compared, setCompared] = useState(false);
+    const [liked, setLiked] = useState(false);
+    return (
+      <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,marginBottom:12,overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.05)'}}>
+        {/* Car image */}
+        <div style={{background:'#F0F2F5',height:140,display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
+          <img src="/post-car.png" alt={car.model} style={{width:'100%',height:'100%',objectFit:'cover'}} onError={e=>{e.target.style.display='none';}}/>
+          <div style={{position:'absolute',top:10,right:10,background:C.white,borderRadius:8,padding:'3px 8px',fontSize:11,fontWeight:600,color:C.gray500,boxShadow:'0 1px 4px rgba(0,0,0,0.1)'}}>
+            {car.year}
+          </div>
+        </div>
+
+        {/* Details */}
+        <div style={{padding:'14px 16px 10px'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+            <div>
+              <p style={{margin:'0 0 2px',fontSize:15,fontWeight:700,color:C.gray900}}>{car.make} {car.model}</p>
+              <p style={{margin:0,fontSize:12.5,color:C.gray500}}>{car.trim} · {car.year}</p>
+            </div>
+            <div style={{textAlign:'right'}}>
+              <div style={{display:'flex',alignItems:'center',gap:4,justifyContent:'flex-end',marginBottom:2}}>
+                <span style={{fontSize:11,color:C.gray500}}>Vehicle Price</span>
+              </div>
+              <div style={{display:'flex',alignItems:'center',gap:3,color:C.gray900}}>
+                <SAR/>
+                <span style={{fontSize:15,fontWeight:700}}>{car.price.toLocaleString('en-US')}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Rate + monthly */}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderTop:`1px solid ${C.gray100}`,borderBottom:`1px solid ${C.gray100}`,marginBottom:10}}>
+            <div>
+              <p style={{margin:'0 0 2px',fontSize:11,color:C.gray500}}>Rate from</p>
+              <span style={{fontSize:14,fontWeight:600,color:C.gray900}}>{car.rateFrom}% — {car.rateTo}%</span>
+            </div>
+            <div style={{textAlign:'right'}}>
+              <p style={{margin:'0 0 2px',fontSize:11,color:C.gray500}}>Monthly from</p>
+              <div style={{display:'flex',alignItems:'center',gap:3,color:C.brand600,justifyContent:'flex-end'}}>
+                <SAR/>
+                <span style={{fontSize:14,fontWeight:600}}>{car.monthly.toLocaleString('en-US')}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Stars + actions */}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <Stars val={car.stars}/>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <button onClick={() => setLiked(!liked)} style={{background:'none',border:'none',padding:4}}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill={liked?'#EF4444':'none'} stroke={liked?'#EF4444':C.gray500} strokeWidth="1.5">
+                  <path d="M10 16.5C10 16.5 3 11.5 3 6.5C3 4.3 4.8 2.5 7 2.5C8.4 2.5 9.6 3.2 10 4.2C10.4 3.2 11.6 2.5 13 2.5C15.2 2.5 17 4.3 17 6.5C17 11.5 10 16.5 10 16.5Z" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <button onClick={() => nav('/car-loan/product-details')} style={{background:C.brand600,border:'none',borderRadius:10,padding:'9px 18px',fontSize:13.5,fontWeight:600,color:C.white}}>
+                Tamawal
+              </button>
+            </div>
+          </div>
+
+          {/* Add to compare */}
+          <button onClick={() => setCompared(!compared)} style={{background:'none',border:'none',padding:'6px 0 0',display:'flex',alignItems:'center',gap:6,color: compared?C.brand600:C.gray500,fontSize:12}}>
+            <div style={{width:14,height:14,border:`1.5px solid ${compared?C.brand600:C.gray500}`,borderRadius:3,background: compared?C.brand600:'transparent',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              {compared && <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2 4-4" stroke={C.white} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+            </div>
+            Add to compare
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* Filter sheet */
+  function FilterSheet({ onClose, onApply }) {
+    const [carType, setCarType] = useState('All');
+    const [motorType, setMotorType] = useState('All');
+    const [isNew, setIsNew] = useState(true);
+
+    const Chip = ({ label, active, onTap }) => (
+      <button onClick={onTap} style={{padding:'7px 14px',borderRadius:999,border:`1.5px solid ${active?C.brand600:'#E2E8F0'}`,background:active?'#EBF3FF':C.white,color:active?C.brand600:C.gray500,fontSize:13,fontWeight:active?600:400,flexShrink:0}}>
+        {label}
+      </button>
+    );
+
+    return (
+      <div style={{position:'fixed',inset:0,zIndex:100,display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+        <div onClick={onClose} style={{flex:1,background:'rgba(0,0,0,0.4)'}}/>
+        <div style={{background:C.white,borderRadius:'20px 20px 0 0',padding:'20px 20px 36px'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
+            <span style={{fontSize:16,fontWeight:700,color:C.gray900}}>Car filter</span>
+            <button onClick={onClose} style={{background:'none',border:'none',fontSize:22,color:C.gray500,padding:'0 4px',lineHeight:1}}>×</button>
+          </div>
+
+          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Car Type</p>
+          <div className="hscroll" style={{display:'flex',gap:8,marginBottom:20,paddingBottom:4}}>
+            {CAR_TYPES.map(t => <Chip key={t} label={t} active={carType===t} onTap={()=>setCarType(t)}/>)}
+          </div>
+
+          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Motor Type</p>
+          <div className="hscroll" style={{display:'flex',gap:8,marginBottom:20,paddingBottom:4}}>
+            {MOTOR_TYPES.map(t => <Chip key={t} label={t} active={motorType===t} onTap={()=>setMotorType(t)}/>)}
+          </div>
+
+          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Preferences</p>
+          <p style={{margin:'0 0 8px',fontSize:13.5,color:C.gray900}}>Is this a new car?</p>
+          <div style={{display:'flex',gap:8,marginBottom:24}}>
+            {[{l:'Yes, New Car',v:true},{l:'No, Used Car',v:false}].map(o=>(
+              <button key={o.l} onClick={()=>setIsNew(o.v)} style={{flex:1,padding:'10px',borderRadius:10,border:`1.5px solid ${isNew===o.v?C.brand600:'#E2E8F0'}`,background:isNew===o.v?'#EBF3FF':C.white,color:isNew===o.v?C.brand600:C.gray500,fontSize:13,fontWeight:isNew===o.v?600:400}}>
+                {o.l}
+              </button>
+            ))}
+          </div>
+
+          <div style={{display:'flex',gap:10}}>
+            <button onClick={onClose} style={{flex:1,padding:'14px',borderRadius:12,border:`1.5px solid #E2E8F0`,background:C.white,color:C.gray900,fontSize:14,fontWeight:600}}>Reset</button>
+            <button onClick={()=>{onApply({carType,motorType,isNew});onClose();}} style={{flex:2,padding:'14px',borderRadius:12,border:'none',background:C.brand600,color:C.white,fontSize:14,fontWeight:600}}>Apply</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function App() {
+    const [showFilter, setShowFilter] = useState(false);
+    const [activeTab, setActiveTab] = useState('Car');
+
+    return (
+      <div style={{height:'100%',display:'flex',flexDirection:'column',background:'#F8FAFC',fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif',position:'relative'}}>
+        <div style={{background:C.white,flexShrink:0}}>
+          <StatusBar/>
+          {/* Header */}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 16px 12px'}}>
+            <button onClick={()=>nav('/car-loan')} style={{background:'none',border:'none',padding:'8px 4px'}}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 16.5L6 10l6.5-6.5" stroke={C.gray900} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <div style={{textAlign:'center'}}>
+              <img src="/home/Logo.svg" alt="Tamawal" style={{height:20,width:'auto',display:'block',margin:'0 auto 2px'}}/>
+              <span style={{fontSize:11,color:C.gray500}}>Products for you</span>
+            </div>
+            <button onClick={()=>setShowFilter(true)} style={{background:'none',border:'none',padding:'8px 4px'}}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 5h14M6 10h8M9 15h2" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Tabs */}
+          <div style={{display:'flex',borderTop:`1px solid ${C.gray100}`,padding:'0 16px'}}>
+            {['All Products','Car'].map(tab => {
+              const on = activeTab===tab;
+              return (
+                <button key={tab} onClick={()=>setActiveTab(tab)} style={{padding:'12px 14px',fontSize:13.5,fontWeight:on?700:400,color:on?C.brand600:C.gray500,border:'none',borderBottom:on?`2.5px solid ${C.yellow}`:'2.5px solid transparent',background:'none',flexShrink:0}}>
+                  {tab}
+                </button>
+              );
+            })}
+            <div style={{flex:1}}/>
+            <span style={{fontSize:11.5,color:C.gray500,alignSelf:'center',paddingRight:4}}>{cars.length} results</span>
+          </div>
+        </div>
+
+        {/* Car list */}
+        <div className="scroll" style={{flex:1,padding:'12px 16px 24px'}}>
+          {cars.map(car => <CarCard key={car.id} car={car} onTap={()=>nav('/car-loan/product-details')}/>)}
+        </div>
+
+        {showFilter && <FilterSheet onClose={()=>setShowFilter(false)} onApply={()=>{}}/>}
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

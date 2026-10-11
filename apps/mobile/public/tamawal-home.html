@@ -25,6 +25,7 @@
 
     const isEn = new URLSearchParams(location.search).get('lang') === 'en';
     const isAr = !isEn;
+    const hideBanner = new URLSearchParams(location.search).get('hideBanner') === '1';
 
     const C = {
       brand900: '#00317A',
@@ -673,7 +674,7 @@
             {/* Content */}
             <div className="content-scroll" style={{flex:1, overflowY:'auto', padding:'14px 16px 130px'}}>
               <OfferCard/>
-              {carouselIndex === 2 && <CarScanBanner/>}
+              {carouselIndex === 2 && !hideBanner && <CarScanBanner/>}
             </div>
           </div>
 

@@ -1,16 +1,16 @@
 import { headers } from 'next/headers';
 
-export default async function AppPage() {
+export default async function CarLoanPage() {
   const ua = (await headers()).get('user-agent') ?? '';
   const mobile = /android|iphone|ipad|ipod/i.test(ua);
 
   if (mobile) {
     return (
       <iframe
-        src="/tamawal-home.html?hideBanner=1"
+        src="/car-loan.html"
         className="w-full border-0"
         style={{ height: '100svh' }}
-        title="Tamawal Home"
+        title="Car Loan"
       />
     );
   }
@@ -27,9 +27,9 @@ export default async function AppPage() {
         }}
       >
         <iframe
-          src="/tamawal-home.html?hideBanner=1"
+          src="/car-loan.html"
           className="w-full h-full border-0"
-          title="Tamawal Home"
+          title="Car Loan"
         />
       </div>
     </div>
