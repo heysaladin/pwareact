@@ -161,7 +161,7 @@ export default function EligibilityOffersPage() {
                         </div>
 
                         {/* Compare + View details */}
-                        <div className="flex flex-col items-end gap-2 shrink-0 ml-2">
+                        <div className="flex flex-col items-start justify-between shrink-0 ml-2 self-stretch">
                           <label className="flex items-center gap-1.5 text-[13px] font-semibold cursor-pointer" style={{ color: 'var(--text)' }}
                             onClick={e => { e.stopPropagation(); toggleCompare(offer.id); }}>
                             <div className="w-4 h-4 rounded flex items-center justify-center" style={{ border: `2px solid ${compare.has(offer.id) ? 'var(--blue)' : 'var(--border)'}`, background: compare.has(offer.id) ? 'var(--blue)' : 'transparent' }}>
