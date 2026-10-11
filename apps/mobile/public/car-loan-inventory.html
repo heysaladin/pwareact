@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Products for You</title>
+  <title>Car Offers</title>
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
@@ -13,38 +13,34 @@
     button{cursor:pointer;font-family:inherit;}
     .scroll{scrollbar-width:none;overflow-y:auto;}
     .scroll::-webkit-scrollbar{display:none;}
-    .hscroll{scrollbar-width:none;overflow-x:auto;}
-    .hscroll::-webkit-scrollbar{display:none;}
+    input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;outline:none;margin:0;padding:0;}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#0063F5;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);cursor:pointer;}
+    input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#0063F5;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);cursor:pointer;}
   </style>
 </head>
 <body>
 <div id="root" style="height:100%"></div>
 <script type="text/babel">
-  const { useState } = React;
-  const C = { brand600:'#0063F5', yellow:'#FFDD33', gray900:'#121A26', gray500:'#697586', gray100:'#EEF1F6', white:'#FFFFFF' };
+  const { useState, useEffect, useRef } = React;
+  const C = { brand600:'#0063F5', brand700:'#004FC6', brand300:'#BBD5FB', yellow:'#FFDD33', gray900:'#121A26', gray700:'#364152', gray600:'#4B5565', gray500:'#697586', gray400:'#9AA4B2', gray200:'#E3E8EF', gray100:'#EEF1F6', gray50:'#F8FAFC', white:'#FFFFFF', black:'#000' };
   const nav = (p) => (window.top||window).location.href = p;
 
-  const SAR = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill="currentColor" style={{width:11,height:11,flexShrink:0,display:'inline-block'}}>
+  const SAR = ({ size=14, color='currentColor' }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} style={{width:size,height:size,flexShrink:0,display:'inline-block'}}>
       <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
       <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
     </svg>
   );
 
   const cars = [
-    { id:1, make:'Toyota', model:'Camry', year:2024, trim:'SE', price:108500, rateFrom:1.75, rateTo:3.50, monthly:1895, stars:4.2 },
-    { id:2, make:'Nissan', model:'Altima', year:2024, trim:'SV', price:88000, rateFrom:2.10, rateTo:4.00, monthly:1540, stars:4.0 },
-    { id:3, make:'Hyundai', model:'Sonata', year:2024, trim:'GL', price:95000, rateFrom:1.99, rateTo:3.75, monthly:1668, stars:3.8 },
-    { id:4, make:'Kia', model:'Cerato', year:2024, trim:'EX', price:74500, rateFrom:2.25, rateTo:4.25, monthly:1312, stars:4.1 },
-    { id:5, make:'Mitsubishi', model:'Spacestar', year:2024, trim:'Standard', price:62000, rateFrom:2.50, rateTo:4.50, monthly:1092, stars:3.6 },
+    { id:1, make:'Mitsubishi', model:'Spacestar MT', year:2024, trim:'XLE 2.5L', isNew:true, price:122000, monthly:1850, img:'/car-image.png' },
+    { id:2, make:'Toyota',     model:'Camry',        year:2024, trim:'XLE 2.5L', isNew:true, price:122000, monthly:1850, img:'/car-mg-zs.png' },
+    { id:3, make:'Toyota',     model:'Camry',        year:2024, trim:'XLE 2.5L', isNew:true, price:122000, monthly:1850, img:'/car-image.png' },
   ];
-
-  const CAR_TYPES = ['All','Sedan','Hatchback','SUV','Pickup'];
-  const MOTOR_TYPES = ['All','Gasoline','Diesel','EV','Hybrid'];
 
   function StatusBar() {
     return (
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px 6px',background:C.white}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px 6px'}}>
         <span style={{fontSize:15,fontWeight:700,color:C.gray900}}>9:41</span>
         <div style={{display:'flex',gap:6,alignItems:'center'}}>
           <svg width="17" height="11" viewBox="0 0 17 11" fill={C.gray900}><rect x="0" y="5" width="3" height="6" rx="0.5" opacity="0.4"/><rect x="4.5" y="3" width="3" height="8" rx="0.5" opacity="0.6"/><rect x="9" y="1.5" width="3" height="9.5" rx="0.5" opacity="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.5"/></svg>
@@ -55,187 +51,415 @@
     );
   }
 
-  function Stars({ val }) {
-    return (
-      <div style={{display:'flex',alignItems:'center',gap:3}}>
-        {[1,2,3,4,5].map(i => (
-          <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill={i<=Math.round(val)?C.yellow:'#E2E8F0'}>
-            <path d="M6 1l1.24 2.51 2.76.4-2 1.95.47 2.74L6 7.25 3.53 8.6 4 5.86 2 3.91l2.76-.4z"/>
-          </svg>
-        ))}
-        <span style={{fontSize:11.5,color:C.gray500,marginLeft:2}}>{val.toFixed(1)}</span>
-      </div>
-    );
-  }
-
-  function CarCard({ car, onTap }) {
-    const [compared, setCompared] = useState(false);
+  function CarCard({ car }) {
     const [liked, setLiked] = useState(false);
     return (
-      <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,marginBottom:12,overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.05)'}}>
-        {/* Car image */}
-        <div style={{background:'#F0F2F5',height:140,display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
-          <img src="/post-car.png" alt={car.model} style={{width:'100%',height:'100%',objectFit:'cover'}} onError={e=>{e.target.style.display='none';}}/>
-          <div style={{position:'absolute',top:10,right:10,background:C.white,borderRadius:8,padding:'3px 8px',fontSize:11,fontWeight:600,color:C.gray500,boxShadow:'0 1px 4px rgba(0,0,0,0.1)'}}>
-            {car.year}
-          </div>
+      <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',width:'100%'}}>
+        <div style={{height:200,background:C.white,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
+          <img src={car.img} alt={car.model} style={{width:'100%',height:'100%',objectFit:'contain',objectPosition:'center'}}/>
         </div>
-
-        {/* Details */}
-        <div style={{padding:'14px 16px 10px'}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
-            <div>
-              <p style={{margin:'0 0 2px',fontSize:15,fontWeight:700,color:C.gray900}}>{car.make} {car.model}</p>
-              <p style={{margin:0,fontSize:12.5,color:C.gray500}}>{car.trim} · {car.year}</p>
-            </div>
-            <div style={{textAlign:'right'}}>
-              <div style={{display:'flex',alignItems:'center',gap:4,justifyContent:'flex-end',marginBottom:2}}>
-                <span style={{fontSize:11,color:C.gray500}}>Vehicle Price</span>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:3,color:C.gray900}}>
-                <SAR/>
-                <span style={{fontSize:15,fontWeight:700}}>{car.price.toLocaleString('en-US')}</span>
-              </div>
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',borderBottom:`1px solid ${C.gray200}`,minHeight:60}}>
+          <div style={{flex:1,paddingLeft:6,minWidth:0}}>
+            <p style={{margin:'0 0 2px',fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
+              {car.make} {car.model} {car.year}
+            </p>
+            <div style={{display:'flex',alignItems:'center',gap:4,color:C.gray600}}>
+              <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>{car.trim}</span>
+              <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>·</span>
+              <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>{car.isNew?'NEW':'USED'}</span>
+              <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>·</span>
+              <SAR size={12}/><span style={{fontSize:13.5,fontWeight:500,letterSpacing:0}}>{car.price.toLocaleString('en-US')}</span>
             </div>
           </div>
-
-          {/* Rate + monthly */}
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderTop:`1px solid ${C.gray100}`,borderBottom:`1px solid ${C.gray100}`,marginBottom:10}}>
-            <div>
-              <p style={{margin:'0 0 2px',fontSize:11,color:C.gray500}}>Rate from</p>
-              <span style={{fontSize:14,fontWeight:600,color:C.gray900}}>{car.rateFrom}% — {car.rateTo}%</span>
-            </div>
-            <div style={{textAlign:'right'}}>
-              <p style={{margin:'0 0 2px',fontSize:11,color:C.gray500}}>Monthly from</p>
-              <div style={{display:'flex',alignItems:'center',gap:3,color:C.brand600,justifyContent:'flex-end'}}>
-                <SAR/>
-                <span style={{fontSize:14,fontWeight:600}}>{car.monthly.toLocaleString('en-US')}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Stars + actions */}
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <Stars val={car.stars}/>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <button onClick={() => setLiked(!liked)} style={{background:'none',border:'none',padding:4}}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill={liked?'#EF4444':'none'} stroke={liked?'#EF4444':C.gray500} strokeWidth="1.5">
-                  <path d="M10 16.5C10 16.5 3 11.5 3 6.5C3 4.3 4.8 2.5 7 2.5C8.4 2.5 9.6 3.2 10 4.2C10.4 3.2 11.6 2.5 13 2.5C15.2 2.5 17 4.3 17 6.5C17 11.5 10 16.5 10 16.5Z" strokeLinejoin="round"/>
-                </svg>
-              </button>
-              <button onClick={() => nav('/car-loan/product-details')} style={{background:C.brand600,border:'none',borderRadius:10,padding:'9px 18px',fontSize:13.5,fontWeight:600,color:C.white}}>
-                Tamawal
-              </button>
+          <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',margin:'-8px -4px -8px 0',display:'flex',alignItems:'center',flexShrink:0}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',minHeight:68}}>
+          <div style={{flex:1,minWidth:0}}>
+            <p style={{margin:'0 0 2px',fontSize:0,color:C.gray600}}>
+              <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>Installment </span>
+              <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>from</span>
+            </p>
+            <div style={{display:'flex',alignItems:'center',gap:2}}>
+              <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,whiteSpace:'nowrap'}}>{car.monthly.toLocaleString('en-US')}.00</span>
+              <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5,marginLeft:2}}>/month</span>
             </div>
           </div>
-
-          {/* Add to compare */}
-          <button onClick={() => setCompared(!compared)} style={{background:'none',border:'none',padding:'6px 0 0',display:'flex',alignItems:'center',gap:6,color: compared?C.brand600:C.gray500,fontSize:12}}>
-            <div style={{width:14,height:14,border:`1.5px solid ${compared?C.brand600:C.gray500}`,borderRadius:3,background: compared?C.brand600:'transparent',display:'flex',alignItems:'center',justifyContent:'center'}}>
-              {compared && <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2 4-4" stroke={C.white} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-            </div>
-            Add to compare
+          <button onClick={()=>setLiked(!liked)} style={{background:'none',border:'none',padding:4,display:'flex',flexShrink:0}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill={liked?'#EF4444':'none'} xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.1111 3C19.6333 3 22 6.3525 22 9.48C22 15.8138 12.1778 21 12 21C11.8222 21 2 15.8138 2 9.48C2 6.3525 4.36667 3 7.88889 3C9.91111 3 11.2333 4.02375 12 4.92375C12.7667 4.02375 14.0889 3 16.1111 3Z" stroke={liked?'#EF4444':'#4B5565'} strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button onClick={()=>nav('/car-loan/offers')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'8px 12px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:36,minWidth:90,flexShrink:0}}>
+            See offers
           </button>
         </div>
       </div>
     );
   }
 
-  /* Filter sheet */
-  function FilterSheet({ onClose, onApply }) {
-    const [carType, setCarType] = useState('All');
-    const [motorType, setMotorType] = useState('All');
-    const [isNew, setIsNew] = useState(true);
+  function FindLoanExpanded({ onClose }) {
+    const [salary, setSalary] = useState('12,000');
+    const [hasLoans, setHasLoans] = useState(false);
+    return (
+      <div style={{background:C.white,padding:'12px 24px 20px',borderTop:`1px solid ${C.gray100}`}}>
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:6}}>Salary <span style={{color:'#E53935'}}>*</span></label>
+          <div style={{background:'#F8FAFC',border:'1.5px solid #E2E8F0',borderRadius:12,padding:'12px 14px',display:'flex',alignItems:'center',gap:8}}>
+            <SAR size={16}/>
+            <input type="text" placeholder="0" value={salary} onChange={e=>{const raw=e.target.value.replace(/[^0-9]/g,'');const n=parseInt(raw||'0',10);setSalary(n?n.toLocaleString('en-US'):'');}} style={{flex:1,border:'none',background:'transparent',fontSize:16,fontWeight:600,color:C.gray900,fontFamily:'inherit',outline:'none'}}/>
+            <span style={{fontSize:13,color:C.gray600,flexShrink:0}}>Monthly</span>
+          </div>
+        </div>
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:10}}>Do you have active loans? <span style={{color:'#E53935'}}>*</span></label>
+          <div style={{display:'flex',gap:10}}>
+            {[{l:'Yes',v:true},{l:'No',v:false}].map(o=>(
+              <button key={o.l} onClick={()=>setHasLoans(o.v)} style={{flex:1,padding:11,fontSize:14,fontWeight:hasLoans===o.v?600:400,border:`1.5px solid ${hasLoans===o.v?C.brand600:'#E2E8F0'}`,borderRadius:10,background:hasLoans===o.v?'#EBF3FF':C.white,color:hasLoans===o.v?C.brand600:C.gray600,fontFamily:'inherit'}}>{o.l}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{backgroundImage:'url(/bg-yellow.png)',backgroundSize:'cover',backgroundPosition:'left center',borderRadius:16,padding:'16px 18px 16px 140px',marginBottom:16,minHeight:88,display:'flex',flexDirection:'column',justifyContent:'center'}}>
+          <p style={{margin:'0 0 4px',fontSize:12,color:'#5C4200',fontWeight:500}}>You may be eligible to take a loan up to</p>
+          <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:4}}><SAR size={20}/><span style={{fontSize:26,fontWeight:700,color:C.gray900}}>183,552</span></div>
+          <p style={{margin:0,fontSize:12,color:'#5C4200'}}>for <strong>60 Months</strong></p>
+        </div>
+        <button onClick={onClose} style={{width:'100%',background:C.brand600,border:'none',borderRadius:14,padding:16,fontSize:16,fontWeight:600,color:C.white,fontFamily:'inherit'}}>Update</button>
+      </div>
+    );
+  }
 
-    const Chip = ({ label, active, onTap }) => (
-      <button onClick={onTap} style={{padding:'7px 14px',borderRadius:999,border:`1.5px solid ${active?C.brand600:'#E2E8F0'}`,background:active?'#EBF3FF':C.white,color:active?C.brand600:C.gray500,fontSize:13,fontWeight:active?600:400,flexShrink:0}}>
+  function Tag({ label, selected, onToggle }) {
+    return (
+      <button onClick={onToggle} style={{
+        background: selected ? '#EBF3FF' : C.white,
+        border: `1px solid ${selected ? C.brand600 : C.gray200}`,
+        borderRadius: 32, padding: '4px 12px', minHeight: 32,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 13.5, fontWeight: 600, color: selected ? C.brand600 : C.gray700,
+        whiteSpace: 'nowrap', flexShrink: 0,
+      }}>
         {label}
       </button>
     );
+  }
 
+  function toggleTag(arr, setArr, val) {
+    if (arr.includes(val)) setArr(arr.filter(v => v !== val));
+    else setArr([...arr, val]);
+  }
+
+  function DualRangeSlider({ min, max, step, valueMin, valueMax, onChangeMin, onChangeMax }) {
+    const pct1 = ((valueMin - min) / (max - min)) * 100;
+    const pct2 = ((valueMax - min) / (max - min)) * 100;
     return (
-      <div style={{position:'fixed',inset:0,zIndex:100,display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-        <div onClick={onClose} style={{flex:1,background:'rgba(0,0,0,0.4)'}}/>
-        <div style={{background:C.white,borderRadius:'20px 20px 0 0',padding:'20px 20px 36px'}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
-            <span style={{fontSize:16,fontWeight:700,color:C.gray900}}>Car filter</span>
-            <button onClick={onClose} style={{background:'none',border:'none',fontSize:22,color:C.gray500,padding:'0 4px',lineHeight:1}}>×</button>
+      <div style={{ position: 'relative', paddingBottom: 24 }}>
+        <div style={{ position: 'relative', height: 6, borderRadius: 999, background: C.gray200, margin: '12px 0 8px' }}>
+          <div style={{ position: 'absolute', left: `${pct1}%`, width: `${pct2 - pct1}%`, height: '100%', background: C.brand600, borderRadius: 999 }} />
+        </div>
+        <input type="range" min={min} max={max} step={step} value={valueMin}
+          onChange={e => { const v = +e.target.value; if (v < valueMax - step) onChangeMin(v); }}
+          style={{ position: 'absolute', top: 5, left: 0, width: '100%', height: 28, opacity: 0, cursor: 'pointer', zIndex: valueMin > max * 0.9 ? 5 : 3 }} />
+        <input type="range" min={min} max={max} step={step} value={valueMax}
+          onChange={e => { const v = +e.target.value; if (v > valueMin + step) onChangeMax(v); }}
+          style={{ position: 'absolute', top: 5, left: 0, width: '100%', height: 28, opacity: 0, cursor: 'pointer', zIndex: 4 }} />
+        <div style={{ position: 'relative', height: 20 }}>
+          <div style={{ position: 'absolute', left: `${pct1}%`, transform: 'translateX(-50%)', display: 'flex', alignItems: 'baseline', gap: 1, color: C.brand700, fontSize: 13.5, fontWeight: 500, whiteSpace: 'nowrap' }}>
+            <SAR size={10} color={C.brand700} /><span>{valueMin.toLocaleString('en-US')}</span>
           </div>
-
-          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Car Type</p>
-          <div className="hscroll" style={{display:'flex',gap:8,marginBottom:20,paddingBottom:4}}>
-            {CAR_TYPES.map(t => <Chip key={t} label={t} active={carType===t} onTap={()=>setCarType(t)}/>)}
-          </div>
-
-          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Motor Type</p>
-          <div className="hscroll" style={{display:'flex',gap:8,marginBottom:20,paddingBottom:4}}>
-            {MOTOR_TYPES.map(t => <Chip key={t} label={t} active={motorType===t} onTap={()=>setMotorType(t)}/>)}
-          </div>
-
-          <p style={{margin:'0 0 10px',fontSize:12.5,fontWeight:600,color:C.gray500,textTransform:'uppercase',letterSpacing:0.5}}>Preferences</p>
-          <p style={{margin:'0 0 8px',fontSize:13.5,color:C.gray900}}>Is this a new car?</p>
-          <div style={{display:'flex',gap:8,marginBottom:24}}>
-            {[{l:'Yes, New Car',v:true},{l:'No, Used Car',v:false}].map(o=>(
-              <button key={o.l} onClick={()=>setIsNew(o.v)} style={{flex:1,padding:'10px',borderRadius:10,border:`1.5px solid ${isNew===o.v?C.brand600:'#E2E8F0'}`,background:isNew===o.v?'#EBF3FF':C.white,color:isNew===o.v?C.brand600:C.gray500,fontSize:13,fontWeight:isNew===o.v?600:400}}>
-                {o.l}
-              </button>
-            ))}
-          </div>
-
-          <div style={{display:'flex',gap:10}}>
-            <button onClick={onClose} style={{flex:1,padding:'14px',borderRadius:12,border:`1.5px solid #E2E8F0`,background:C.white,color:C.gray900,fontSize:14,fontWeight:600}}>Reset</button>
-            <button onClick={()=>{onApply({carType,motorType,isNew});onClose();}} style={{flex:2,padding:'14px',borderRadius:12,border:'none',background:C.brand600,color:C.white,fontSize:14,fontWeight:600}}>Apply</button>
+          <div style={{ position: 'absolute', left: `${pct2}%`, transform: 'translateX(-50%)', display: 'flex', alignItems: 'baseline', gap: 1, color: C.brand700, fontSize: 13.5, fontWeight: 500, whiteSpace: 'nowrap' }}>
+            <SAR size={10} color={C.brand700} /><span>{valueMax.toLocaleString('en-US')}</span>
           </div>
         </div>
       </div>
     );
   }
 
-  function App() {
-    const [showFilter, setShowFilter] = useState(false);
-    const [activeTab, setActiveTab] = useState('Car');
+  function SheetOverlay({ children, onDismiss }) {
+    const [visible, setVisible] = useState(false);
+    useEffect(() => { requestAnimationFrame(() => setVisible(true)); }, []);
+    const dismiss = () => { setVisible(false); setTimeout(onDismiss, 280); };
+    return (
+      <div onClick={dismiss} style={{ position: 'fixed', inset: 0, background: 'rgba(13,19,28,0.5)', zIndex: 200, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+        <div onClick={e => e.stopPropagation()} style={{
+          background: C.white, borderRadius: '32px 32px 0 0', display: 'flex', flexDirection: 'column',
+          transform: visible ? 'translateY(0)' : 'translateY(100%)',
+          transition: 'transform 0.28s cubic-bezier(0.4,0,0.2,1)',
+        }}>
+          {children(dismiss)}
+        </div>
+      </div>
+    );
+  }
+
+  const DragHandle = () => (
+    <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 12px 24px', flexShrink: 0 }}>
+      <div style={{ width: 48, height: 4, background: C.gray400, borderRadius: 999 }} />
+    </div>
+  );
+
+  const HomeBar = () => (
+    <div style={{ background: C.white, height: 34, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8, flexShrink: 0 }}>
+      <div style={{ width: 135, height: 5, background: C.black, borderRadius: 999 }} />
+    </div>
+  );
+
+  function FilterSheet({ onClose, onApply }) {
+    const [carStatus, setCarStatus] = useState([]);
+    const [carType, setCarType] = useState([]);
+    const [motorType, setMotorType] = useState([]);
+    const [brand, setBrand] = useState([]);
+    const [priceMin, setPriceMin] = useState(20000);
+    const [priceMax, setPriceMax] = useState(120000);
+    const [likeStatus, setLikeStatus] = useState([]);
+
+    const reset = () => { setCarStatus([]); setCarType([]); setMotorType([]); setBrand([]); setPriceMin(20000); setPriceMax(120000); setLikeStatus([]); };
+    const Divider = () => <div style={{ height: 1, background: C.gray200, width: '100%', flexShrink: 0 }} />;
 
     return (
-      <div style={{height:'100%',display:'flex',flexDirection:'column',background:'#F8FAFC',fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif',position:'relative'}}>
+      <SheetOverlay onDismiss={onClose}>
+        {(dismiss) => (
+          <>
+            <DragHandle />
+            <div className="scroll" style={{ padding: '0 24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 20, maxHeight: '60vh' }}>
+              <p style={{ margin: 0, fontSize: 17.5, fontWeight: 700, color: C.gray900, textAlign: 'center', letterSpacing: 0.1 }}>Car filter</p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Car Status</p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {['New Car', 'Used Car'].map(v => <Tag key={v} label={v} selected={carStatus.includes(v)} onToggle={() => toggleTag(carStatus, setCarStatus, v)} />)}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Car Type</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {['Sedan', 'Hatchback', 'SUV', 'Pickup', 'Crossover', 'MPV', 'Coupe & Convertible'].map(v => <Tag key={v} label={v} selected={carType.includes(v)} onToggle={() => toggleTag(carType, setCarType, v)} />)}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Motor Type</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {['Gasoline', 'Diesel', 'EV', 'Hybrid', 'Hydrogen'].map(v => <Tag key={v} label={v} selected={motorType.includes(v)} onToggle={() => toggleTag(motorType, setMotorType, v)} />)}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Brand</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {['Toyota', 'Ford', 'CEER', 'Lucid', 'Tesla'].map(v => <Tag key={v} label={v} selected={brand.includes(v)} onToggle={() => toggleTag(brand, setBrand, v)} />)}
+                </div>
+              </div>
+
+              <Divider />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Car Price</p>
+                <DualRangeSlider min={0} max={200000} step={1000} valueMin={priceMin} valueMax={priceMax} onChangeMin={setPriceMin} onChangeMax={setPriceMax} />
+              </div>
+
+              <Divider />
+
+              <p style={{ margin: 0, fontSize: 15.5, fontWeight: 600, color: C.gray500, letterSpacing: 0.25 }}>PREFERENCES</p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 8 }}>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.4 }}>Like Status</p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {['Liked', 'Unliked'].map(v => <Tag key={v} label={v} selected={likeStatus.includes(v)} onToggle={() => toggleTag(likeStatus, setLikeStatus, v)} />)}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ padding: '12px 24px 8px' }}>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button onClick={reset} style={{ flex: 1, background: C.white, border: `1px solid ${C.gray200}`, borderRadius: 8, padding: '12px 16px', fontSize: 13.5, fontWeight: 600, color: C.gray600, letterSpacing: 0.5, minHeight: 46 }}>Reset</button>
+                <button onClick={() => { dismiss(); onApply({ carStatus, carType, motorType, brand, priceMin, priceMax, likeStatus }); }} style={{ flex: 1, background: C.brand600, border: '2px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '12px 16px', fontSize: 13.5, fontWeight: 600, color: C.white, letterSpacing: 0.5, minHeight: 46 }}>Apply</button>
+              </div>
+            </div>
+            <HomeBar />
+          </>
+        )}
+      </SheetOverlay>
+    );
+  }
+
+  function SortSheet({ onClose, onApply, initialSel }) {
+    const [sel, setSel] = useState(initialSel || { newest: 'asc', price: null, year: null, popularity: null });
+    const pick = (key, dir) => setSel(s => ({ ...s, [key]: s[key] === dir ? null : dir }));
+    const iconBtn = (active) => ({ border: `1px solid ${active ? C.brand300 : C.gray100}`, borderRadius: 8, padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', background: C.white, flexShrink: 0 });
+    const rows = [
+      { key: 'newest',     label: 'Newest listing', minSrc: '/sort-icon-newest-desc.svg',  maxSrc: '/sort-icon-newest-asc.svg',  maxRot: true },
+      { key: 'price',      label: 'Price',           minSrc: '/sort-icon-price-desc.svg',   maxSrc: '/sort-icon-price-asc.svg',   maxRot: false },
+      { key: 'year',       label: 'Year',            minSrc: '/sort-icon-year-desc.svg',    maxSrc: '/sort-icon-year-asc.svg',    maxRot: false },
+      { key: 'popularity', label: 'Popularity',      minSrc: '/sort-icon-pop-desc.svg',     maxSrc: '/sort-icon-pop-asc.svg',     maxRot: false },
+    ];
+    return (
+      <SheetOverlay onDismiss={onClose}>
+        {(dismiss) => (
+          <>
+            <DragHandle />
+            <div style={{ padding: '0 24px 6px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <p style={{ margin: 0, fontSize: 23.5, fontWeight: 600, color: C.gray900 }}>Sort</p>
+                <button onClick={dismiss} style={{ border: `1px solid ${C.gray100}`, borderRadius: 24, padding: 6, background: C.white, display: 'flex' }}>
+                  <img src="/sort-close-icon.svg" width={18} height={18} style={{ transform: 'rotate(45deg)' }} alt="close" />
+                </button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', gap: 16, justifyContent: 'flex-end', marginBottom: 0 }}>
+                  <div style={{ width: 40, textAlign: 'center' }}><span style={{ fontSize: 12.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.5 }}>Min.</span></div>
+                  <div style={{ width: 40, textAlign: 'center' }}><span style={{ fontSize: 12.5, fontWeight: 500, color: C.gray500, letterSpacing: 0.5 }}>Max.</span></div>
+                </div>
+                {rows.map(r => (
+                  <div key={r.key} style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '8px 0' }}>
+                    <p style={{ flex: 1, margin: 0, fontSize: 15.5, fontWeight: 500, color: C.gray600, letterSpacing: 0.1 }}>{r.label}</p>
+                    <button onClick={() => pick(r.key, 'asc')} style={iconBtn(sel[r.key] === 'asc')}><img src={r.minSrc} width={24} height={24} alt="" /></button>
+                    <button onClick={() => pick(r.key, 'desc')} style={iconBtn(sel[r.key] === 'desc')}><img src={r.maxSrc} width={24} height={24} style={r.maxRot ? { transform: 'rotate(180deg)' } : {}} alt="" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ padding: '12px 24px 8px' }}>
+              <button onClick={() => { dismiss(); onApply(sel); }} style={{ width: '100%', background: C.brand600, border: '2px solid rgba(255,255,255,0.12)', borderRadius: 10, padding: '16px 20px', fontSize: 17.5, fontWeight: 700, color: C.white, letterSpacing: 0.1, minHeight: 58 }}>Apply</button>
+            </div>
+            <HomeBar />
+          </>
+        )}
+      </SheetOverlay>
+    );
+  }
+
+  const DEALERS = [
+    { id: 'almajdouie', name: 'Almajdouie Dealer', logo: '/dealer-almajdouie.png' },
+    { id: 'wallan',     name: 'Wallan Dealer',     logo: '/dealer-wallan.png' },
+  ];
+
+  function DealerSheet({ onClose, onSelect }) {
+    return (
+      <SheetOverlay onDismiss={onClose}>
+        {(dismiss) => (
+          <>
+            <DragHandle />
+            <div style={{ padding: '0 24px 8px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <p style={{ margin: '0 0 8px', fontSize: 17.5, fontWeight: 700, color: C.gray900, textAlign: 'center' }}>Select Dealer</p>
+              {DEALERS.map(d => (
+                <button key={d.id} onClick={() => { dismiss(); onSelect(d); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', border: `1px solid ${C.gray100}`, borderRadius: 12, background: C.white }}>
+                  <span style={{ fontSize: 15.5, fontWeight: 600, color: C.gray900 }}>{d.name}</span>
+                  <img src={d.logo} alt={d.name} style={{ height: 36, objectFit: 'contain' }} />
+                </button>
+              ))}
+            </div>
+            <HomeBar />
+          </>
+        )}
+      </SheetOverlay>
+    );
+  }
+
+  function App() {
+    const [expanded, setExpanded] = useState(false);
+    const [filterOpen, setFilterOpen] = useState(false);
+    const [sortOpen, setSortOpen] = useState(false);
+    const [selectedDealer, setSelectedDealer] = useState(null);
+    const [activeFilters, setActiveFilters] = useState(null);
+    const [sortSel, setSortSel] = useState({ newest: 'asc', price: null, year: null, popularity: null });
+
+    useEffect(() => {
+      const ctx = sessionStorage.getItem('dealerCtx');
+      if (ctx) { setSelectedDealer(JSON.parse(ctx)); sessionStorage.removeItem('dealerCtx'); }
+    }, []);
+
+    const activeFilterCount = activeFilters
+      ? activeFilters.carStatus.length + activeFilters.carType.length + activeFilters.motorType.length + activeFilters.brand.length + activeFilters.likeStatus.length + (activeFilters.priceMin !== 20000 || activeFilters.priceMax !== 120000 ? 1 : 0)
+      : 0;
+    const activeSortCount = Object.values(sortSel).filter(Boolean).length;
+
+    return (
+      <div style={{height:'100%',display:'flex',flexDirection:'column',background:C.gray50,fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif',position:'relative'}}>
+
         <div style={{background:C.white,flexShrink:0}}>
           <StatusBar/>
-          {/* Header */}
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 16px 12px'}}>
-            <button onClick={()=>nav('/car-loan')} style={{background:'none',border:'none',padding:'8px 4px'}}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 16.5L6 10l6.5-6.5" stroke={C.gray900} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 16px 10px'}}>
+            <button onClick={()=>nav('/car-loan')} style={{background:'none',border:'none',padding:'8px 4px',minWidth:48,display:'flex',alignItems:'center'}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 19L8 12l7-7" stroke={C.gray900} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-            <div style={{textAlign:'center'}}>
-              <img src="/home/Logo.svg" alt="Tamawal" style={{height:20,width:'auto',display:'block',margin:'0 auto 2px'}}/>
-              <span style={{fontSize:11,color:C.gray500}}>Products for you</span>
+            <span style={{fontSize:15.5,fontWeight:600,color:'#202A39',letterSpacing:0.25}}>Car offers</span>
+            <div style={{minWidth:48}}/>
+          </div>
+        </div>
+
+        {selectedDealer && (
+          <div style={{ background: C.white, padding: '8px 24px', borderBottom: `1px solid ${C.gray100}`, flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 2px', fontSize: 13.5, fontWeight: 500, color: C.gray600, letterSpacing: 0.4 }}>Car in dealer</p>
+                <p style={{ margin: 0, fontSize: 15.5, fontWeight: 700, color: C.gray900, letterSpacing: 0.1 }}>{selectedDealer.name}</p>
+              </div>
+              <img src={selectedDealer.logo} alt={selectedDealer.name} style={{ height: 48, objectFit: 'contain', flexShrink: 0 }} />
+              <button onClick={() => setSelectedDealer(null)} style={{ background: 'none', border: 'none', padding: 4, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
             </div>
-            <button onClick={()=>setShowFilter(true)} style={{background:'none',border:'none',padding:'8px 4px'}}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M3 5h14M6 10h8M9 15h2" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </button>
+          </div>
+        )}
+
+        <div style={{background:C.white,flexShrink:0}}>
+          <div style={{padding:'8px 24px'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{fontSize:15.5,fontWeight:700,color:C.gray900,letterSpacing:0.1}}>Find your car</span>
+              <button onClick={()=>setExpanded(e=>!e)} style={{display:'flex',alignItems:'center',gap:10,background:'none',border:'none',padding:0}}>
+                <span style={{fontSize:12.5,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>Change</span>
+                <div style={{border:`1px solid ${C.gray200}`,borderRadius:34,padding:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{transform:expanded?'rotate(180deg)':'rotate(0deg)',transition:'transform 0.2s'}}>
+                    <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </div>
+          {expanded && <FindLoanExpanded onClose={()=>setExpanded(false)}/>}
+        </div>
+
+        <div className="scroll" style={{flex:1,padding:'24px'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+            <p style={{margin:0,fontSize:13.5,fontWeight:500,color:'#98A2B3',letterSpacing:0.4}}>
+              You may be eligible for{' '}
+              <span style={{color:'#1D2939',fontWeight:500}}>{cars.length} Cars</span>
+            </p>
+            <div style={{display:'flex',gap:24,alignItems:'center'}}>
+              <button onClick={() => setFilterOpen(true)} style={{ background: 'none', border: 'none', padding: 0, position: 'relative', display: 'flex' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.5 15.75L17.25 19.5L21 15.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M17.25 10.5V19.5" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4.5 12H11.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4.5 6H17.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4.5 18H9.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {activeFilterCount > 0 && <div style={{ position: 'absolute', top: -4, right: -4, width: 14, height: 14, background: C.brand600, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: 9, fontWeight: 700, color: C.white, lineHeight: 1 }}>{activeFilterCount}</span></div>}
+              </button>
+              <button onClick={() => setSortOpen(true)} style={{ background: 'none', border: 'none', padding: 0, position: 'relative', display: 'flex' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.94507 4.5H20.0513C20.1968 4.50005 20.3391 4.5424 20.461 4.62191C20.5828 4.70141 20.6789 4.81463 20.7375 4.94777C20.7961 5.08092 20.8148 5.22824 20.7911 5.37179C20.7675 5.51533 20.7026 5.64891 20.6045 5.75625L14.4451 12.5344C14.3169 12.6716 14.2464 12.8529 14.2482 13.0406V18.3469C14.2493 18.4715 14.219 18.5944 14.16 18.7042C14.101 18.814 14.0153 18.9072 13.9107 18.975L10.9107 20.9719C10.7982 21.046 10.6677 21.0884 10.5331 21.0947C10.3985 21.101 10.2647 21.0709 10.1458 21.0076C10.0268 20.9443 9.92713 20.8501 9.85717 20.7349C9.78721 20.6198 9.74956 20.4879 9.7482 20.3531V13.0406C9.75001 12.8529 9.67952 12.6716 9.55132 12.5344L3.39195 5.75625C3.29375 5.64891 3.22889 5.51533 3.20527 5.37179C3.18164 5.22824 3.20028 5.08092 3.2589 4.94777C3.31753 4.81463 3.41361 4.70141 3.53544 4.62191C3.65727 4.5424 3.7996 4.50005 3.94507 4.5Z" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {activeSortCount > 0 && <div style={{ position: 'absolute', top: -4, right: -4, width: 14, height: 14, background: C.brand600, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: 9, fontWeight: 700, color: C.white, lineHeight: 1 }}>{activeSortCount}</span></div>}
+              </button>
+            </div>
           </div>
 
-          {/* Tabs */}
-          <div style={{display:'flex',borderTop:`1px solid ${C.gray100}`,padding:'0 16px'}}>
-            {['All Products','Car'].map(tab => {
-              const on = activeTab===tab;
-              return (
-                <button key={tab} onClick={()=>setActiveTab(tab)} style={{padding:'12px 14px',fontSize:13.5,fontWeight:on?700:400,color:on?C.brand600:C.gray500,border:'none',borderBottom:on?`2.5px solid ${C.yellow}`:'2.5px solid transparent',background:'none',flexShrink:0}}>
-                  {tab}
-                </button>
-              );
-            })}
-            <div style={{flex:1}}/>
-            <span style={{fontSize:11.5,color:C.gray500,alignSelf:'center',paddingRight:4}}>{cars.length} results</span>
+          <div style={{display:'flex',flexDirection:'column',gap:16}}>
+            {cars.map(car => <CarCard key={car.id} car={car}/>)}
           </div>
         </div>
 
-        {/* Car list */}
-        <div className="scroll" style={{flex:1,padding:'12px 16px 24px'}}>
-          {cars.map(car => <CarCard key={car.id} car={car} onTap={()=>nav('/car-loan/product-details')}/>)}
+        <div style={{background:C.white,height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0}}>
+          <div style={{width:135,height:5,background:'#000',borderRadius:999}}/>
         </div>
 
-        {showFilter && <FilterSheet onClose={()=>setShowFilter(false)} onApply={()=>{}}/>}
+        {filterOpen && <FilterSheet onClose={() => setFilterOpen(false)} onApply={(f) => setActiveFilters(f)} />}
+        {sortOpen && <SortSheet initialSel={sortSel} onClose={() => setSortOpen(false)} onApply={(s) => setSortSel(s)} />}
+
       </div>
     );
   }
