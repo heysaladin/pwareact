@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CeerSidebarAr from '../_components/CeerSidebarAr';
+import { SarAmount } from '@/components/SarSymbol';
 
 export default function SubmitOrderArPage() {
   const router = useRouter();
@@ -92,17 +93,17 @@ export default function SubmitOrderArPage() {
                     <div className="px-5 py-4 text-[14px] font-bold" style={{ borderBottom: '1px solid var(--border)', color: 'var(--heading)' }}>ملخص الطلب</div>
                     {[
                       ['البنك', 'البنك الأهلي السعودي'],
-                      ['الدفعة الشهرية', 'SAR 3,648'],
+                      ['الدفعة الشهرية', 'SAR 3,648' as string],
                       ['مدة التمويل', '60 شهراً'],
-                      ['مبلغ التمويل', 'SAR 183,000'],
-                      ['الدفعة المقدمة', 'SAR 45,750'],
-                      ['الإجمالي', 'SAR 218,880'],
+                      ['مبلغ التمويل', 'SAR 183,000' as string],
+                      ['الدفعة المقدمة', 'SAR 45,750' as string],
+                      ['الإجمالي', 'SAR 218,880' as string],
                       ['المركبة', 'CEER EXOBOT SUV'],
                       ['رقم الطلب', 'AELG-2026-05-18-1123'],
                     ].map(([k, v], i, arr) => (
                       <div key={k} className="flex justify-between px-5 py-3 text-[13px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
                         <span style={{ color: 'var(--muted)' }}>{k}</span>
-                        <span className="font-semibold">{v}</span>
+                        <span className="font-semibold"><SarAmount v={v} /></span>
                       </div>
                     ))}
                   </div>

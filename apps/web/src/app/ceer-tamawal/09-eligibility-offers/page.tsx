@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const offers = [
   {
@@ -117,7 +118,7 @@ export default function EligibilityOffersPage() {
                           {[['APR', offer.apr], ['Monthly', offer.monthly], ['Tenure', offer.tenure], ['Financed', offer.financed], ['Total', offer.total]].map(([k, v]) => (
                             <div key={k}>
                               <div className="text-[10px]" style={{ color: 'var(--muted)' }}>{k}</div>
-                              <div className="text-[13px] font-bold mt-0.5" style={{ color: k === 'APR' ? 'var(--blue)' : 'var(--text)' }}>{v}</div>
+                              <div className="text-[13px] font-bold mt-0.5" style={{ color: k === 'APR' ? 'var(--blue)' : 'var(--text)' }}><SarAmount v={v} /></div>
                             </div>
                           ))}
                         </div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const banks = [
   { id: 'snb',     logo: '/logo-alahli.png',        en: 'Saudi National Bank', apr: '4.89%', monthly: 'SAR 3,648', total: 'SAR 218,880', dp: 'SAR 45,750', amount: 'SAR 183,000', tenure: '60 Months', fee: 'SAR 0',   settlement: true,  insurance: true,  digital: 'Advanced', rating: 4.8, recommended: true },
@@ -213,7 +214,7 @@ export default function CompareOffersPage() {
                                   </span>
                                 )
                               ) : (
-                                <span style={{ color: (row.blue && isSelected) ? 'var(--blue)' : 'var(--text)', fontWeight: (row.blue && isSelected) ? 700 : 600 }}>{String(val)}</span>
+                                <span style={{ color: (row.blue && isSelected) ? 'var(--blue)' : 'var(--text)', fontWeight: (row.blue && isSelected) ? 700 : 600 }}><SarAmount v={String(val)} /></span>
                               )}
                             </td>
                           );

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 const offerSummary = [
   ['Financed Amount', 'SAR 183,000'],
@@ -77,7 +78,7 @@ export default function OfferDetailsPage() {
                       {[['APR', '4.69%', true], ['Monthly Payment', 'SAR 3,648', false], ['Total Payable', 'SAR 218,880', false], ['Down Payment', 'SAR 45,750', false]].map(([k, v, blue]) => (
                         <div key={k as string} className="rounded-[10px] p-3" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{k}</div>
-                          <div className="text-[16px] font-extrabold mt-1" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{v}</div>
+                          <div className="text-[16px] font-extrabold mt-1" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}><SarAmount v={v as string} /></div>
                         </div>
                       ))}
                     </div>
@@ -95,7 +96,7 @@ export default function OfferDetailsPage() {
                       {offerSummary.map(([k, v], i) => (
                         <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: i < offerSummary.length - 1 ? '1px solid var(--border)' : 'none' }}>
                           <span style={{ color: 'var(--muted)' }}>{k}</span>
-                          <span className="font-semibold">{v}</span>
+                          <span className="font-semibold"><SarAmount v={v} /></span>
                         </div>
                       ))}
                     </div>
@@ -106,12 +107,12 @@ export default function OfferDetailsPage() {
                       {paymentBreakdown.map(([k, v], i) => (
                         <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: i < paymentBreakdown.length - 1 ? '1px solid var(--border)' : 'none' }}>
                           <span style={{ color: 'var(--muted)' }}>{k}</span>
-                          <span className="font-semibold">{v}</span>
+                          <span className="font-semibold"><SarAmount v={v} /></span>
                         </div>
                       ))}
                       <div className="px-4 py-3 flex items-center justify-between rounded-b-[16px]" style={{ background: 'var(--highlight)' }}>
                         <span className="text-[12px]">Indicative Monthly Payment</span>
-                        <span className="font-extrabold" style={{ color: 'var(--blue)' }}>SAR 3,648<span className="text-[11px] font-normal" style={{ color: 'var(--muted)' }}> / month</span></span>
+                        <span className="font-extrabold" style={{ color: 'var(--blue)' }}><SarSymbol /> 3,648<span className="text-[11px] font-normal" style={{ color: 'var(--muted)' }}> / month</span></span>
                       </div>
                     </div>
                   </div>
@@ -123,7 +124,7 @@ export default function OfferDetailsPage() {
                       {keyFacts.map(([k, v], i) => (
                         <div key={k} className="flex justify-between px-4 py-2.5 text-[12.5px]" style={{ borderBottom: '1px solid var(--border)', borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none' }}>
                           <span style={{ color: 'var(--muted)' }}>✓ {k}</span>
-                          <span className="font-semibold">{v}</span>
+                          <span className="font-semibold"><SarAmount v={v} /></span>
                         </div>
                       ))}
                     </div>

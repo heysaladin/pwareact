@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const TERMS = [24, 36, 48, 60];
 
@@ -86,12 +87,12 @@ export default function PreliminaryOffersPage() {
               <div className="rounded-[14px] px-5 py-4 flex items-center gap-4 flex-wrap" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                 <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
                   <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold">SAR 25,000</span>
+                  <span className="font-semibold"><SarAmount v="SAR 25,000" /></span>
                 </div>
                 <div className="w-px h-5" style={{ background: 'var(--border)' }} />
                 <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
                   <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold">SAR 3,500</span>
+                  <span className="font-semibold"><SarAmount v="SAR 3,500" /></span>
                   <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
                 </div>
                 <div className="w-px h-5" style={{ background: 'var(--border)' }} />
@@ -129,15 +130,15 @@ export default function PreliminaryOffersPage() {
               {/* Summary bar */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { icon: '🏷️', label: 'Down payment', value: 'SAR 79,800 (20%)' },
+                  { icon: '🏷️', label: 'Down payment', value: 'SAR 79,800 (20%)' as string },
                   { icon: '📅', label: 'Financing term', value: `${term} Months` },
-                  { icon: '📄', label: 'Amount to finance', value: 'SAR 319,200' },
+                  { icon: '📄', label: 'Amount to finance', value: 'SAR 319,200' as string },
                 ].map(item => (
                   <div key={item.label} className="rounded-[12px] px-4 py-3.5 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                     <span className="text-lg">{item.icon}</span>
                     <div>
                       <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                      <div className="text-[14px] font-bold mt-0.5">{item.value}</div>
+                      <div className="text-[14px] font-bold mt-0.5"><SarAmount v={item.value} /></div>
                     </div>
                   </div>
                 ))}
@@ -165,7 +166,7 @@ export default function PreliminaryOffersPage() {
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Monthly payment from</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.monthly}</div>
+                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}><SarAmount v={offer.monthly} /></div>
                         </div>
                         <div className="text-right">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>APR from</div>
@@ -188,7 +189,7 @@ export default function PreliminaryOffersPage() {
                         {[['Tenure', offer.tenure], ['Amount to finance', offer.financed], ['Down payment', offer.dp]].map(([k, v]) => (
                           <div key={k}>
                             <div style={{ color: 'var(--muted)' }}>{k}</div>
-                            <div className="font-semibold mt-0.5">{v}</div>
+                            <div className="font-semibold mt-0.5"><SarAmount v={v} /></div>
                           </div>
                         ))}
                       </div>

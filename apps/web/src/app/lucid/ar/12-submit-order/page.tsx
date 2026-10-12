@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CeerSidebarAr from '../_components/CeerSidebarAr';
+import { SarAmount } from '@/components/SarSymbol';
 
 export default function SubmitOrderArPage() {
   const router = useRouter();
@@ -108,7 +109,7 @@ export default function SubmitOrderArPage() {
                     ].map(([k, v], i, arr) => (
                       <div key={k} className="flex justify-between px-5 py-3 text-[13px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
                         <span style={{ color: 'var(--muted)' }}>{k}</span>
-                        <span className="font-semibold">{v}</span>
+                        <span className="font-semibold"><SarAmount v={v as string} /></span>
                       </div>
                     ))}
                   </div>

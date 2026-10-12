@@ -115,10 +115,10 @@
           <div style={{padding:'24px 24px 8px',display:'flex',flexDirection:'column',gap:16,alignItems:'center'}}>
             <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4,whiteSpace:'nowrap'}}>Dealer available</p>
             <div style={{display:'flex',gap:16,alignItems:'center'}}>
-              <button onClick={()=>{sessionStorage.setItem('dealerCtx',JSON.stringify({id:'wallan',name:'Al Wallan Dealer',logo:'/dealer-wallan.png'}));nav('/car-loan/inventory');}} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <button onClick={()=>nav('/car-loan/inventory/wallan')} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <img src="/dealer-wallan.png" alt="Al Wallan Trading Company" style={{width:94,height:63,objectFit:'contain'}}/>
               </button>
-              <button onClick={()=>{sessionStorage.setItem('dealerCtx',JSON.stringify({id:'almajdouie',name:'Almajdouie Dealer',logo:'/dealer-almajdouie.png'}));nav('/car-loan/inventory');}} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <button onClick={()=>nav('/car-loan/inventory/almajdouie')} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <img src="/dealer-almajdouie.png" alt="Almajdouie" style={{width:135,height:49,objectFit:'contain'}}/>
               </button>
             </div>

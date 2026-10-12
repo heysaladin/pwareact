@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 const PRICE = 399000;
 const APR = 0.0529;
@@ -88,7 +89,7 @@ export default function ExploreFinancingPage() {
                     <div className="text-[14px] font-semibold mb-2.5" style={{ color: 'var(--text)' }}>Monthly salary</div>
                     <div className="rounded-[10px] px-[17px] py-[15px] flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                       <input type="text" placeholder="Enter amount" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[15px]" style={{ color: 'var(--text)' }} />
-                      <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}>SAR</span>
+                      <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}><SarSymbol /></span>
                     </div>
                   </div>
                   <div>
@@ -98,7 +99,7 @@ export default function ExploreFinancingPage() {
                     </div>
                     <div className="rounded-[10px] px-[17px] py-[15px] flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                       <input type="text" placeholder="Enter amount" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[15px]" style={{ color: 'var(--text)' }} />
-                      <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}>SAR</span>
+                      <span className="text-[14px] font-semibold" style={{ color: 'var(--muted)' }}><SarSymbol /></span>
                     </div>
                   </div>
                 </div>
@@ -108,7 +109,7 @@ export default function ExploreFinancingPage() {
                   <span className="text-[14px] font-semibold" style={{ color: 'var(--text)' }}>Down payment</span>
                   <div className="flex gap-2.5">
                     <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}>{dp}%</div>
-                    <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}>{fmt(dpAmt)}</div>
+                    <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}><SarAmount v={fmt(dpAmt)} /></div>
                   </div>
                 </div>
                 <div className="mt-4">
@@ -148,19 +149,19 @@ export default function ExploreFinancingPage() {
                   <div className="flex-[1.2] p-7 flex flex-col">
                     <h3 className="text-[17px] font-extrabold" style={{ color: 'var(--heading)', fontFamily: "'Newsreader', Georgia, 'Times New Roman', serif" }}>Indicative Estimate</h3>
                     <div className="flex justify-between py-3 border-b border-dashed text-[14px]" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-                      <span>Vehicle Price (incl. VAT)</span><span className="font-bold">SAR 399,000</span>
+                      <span>Vehicle Price (incl. VAT)</span><span className="font-bold"><SarSymbol /> 399,000</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-dashed text-[14px]" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-                      <span>Down Payment ({dp}%)</span><span className="font-bold">- {fmt(dpAmt)}</span>
+                      <span>Down Payment ({dp}%)</span><span className="font-bold">- <SarAmount v={fmt(dpAmt)} /></span>
                     </div>
                     <div className="flex justify-between py-3 text-[14px]" style={{ color: 'var(--text)' }}>
-                      <span>Amount to Finance</span><span className="font-bold">{fmt(fin)}</span>
+                      <span>Amount to Finance</span><span className="font-bold"><SarAmount v={fmt(fin)} /></span>
                     </div>
                   </div>
                   <div className="flex-1 px-7 flex flex-col justify-center" style={{ borderLeft: '1px solid var(--border)' }}>
                     <p className="text-[15px]" style={{ color: 'var(--text)' }}>Estimated Monthly Payment From</p>
                     <p className="mt-2 text-[42px] font-extrabold leading-none" style={{ color: 'var(--blue)' }}>
-                      {fmt(monthly)} <span className="text-[16px] font-medium" style={{ color: 'var(--text)' }}>/ month</span>
+                      <SarAmount v={fmt(monthly)} /> <span className="text-[16px] font-medium" style={{ color: 'var(--text)' }}>/ month</span>
                     </p>
                     <p className="mt-2 text-[13px]" style={{ color: 'var(--muted)' }}>This is an indicative estimate only.</p>
                   </div>

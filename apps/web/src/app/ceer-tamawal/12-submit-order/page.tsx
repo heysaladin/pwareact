@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 export default function SubmitOrderPage() {
   const { brandName } = useGlobalSettings();
@@ -165,13 +166,13 @@ export default function SubmitOrderPage() {
                       <div className="mt-5 grid grid-cols-4 gap-3">
                         {[
                           { label: 'Annual Profit Rate (APR)', value: '4.69%', blue: true },
-                          { label: 'Monthly Payment', value: 'SAR 3,648', blue: false },
-                          { label: 'Total Payable', value: 'SAR 218,880', blue: false },
-                          { label: 'Down Payment', value: 'SAR 45,750', blue: false },
+                          { label: 'Monthly Payment', value: 'SAR 3,648' as string, blue: false },
+                          { label: 'Total Payable', value: 'SAR 218,880' as string, blue: false },
+                          { label: 'Down Payment', value: 'SAR 45,750' as string, blue: false },
                         ].map(stat => (
                           <div key={stat.label} className="rounded-[12px] p-4" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
                             <div className="text-[12px]" style={{ color: 'var(--muted)' }}>{stat.label}</div>
-                            <div className="mt-[5px] text-[19px] font-extrabold" style={{ color: stat.blue ? 'var(--blue)' : 'var(--text)' }}>{stat.value}</div>
+                            <div className="mt-[5px] text-[19px] font-extrabold" style={{ color: stat.blue ? 'var(--blue)' : 'var(--text)' }}><SarAmount v={stat.value} /></div>
                           </div>
                         ))}
                       </div>
@@ -216,23 +217,23 @@ export default function SubmitOrderPage() {
                       <h3 className="text-[16px] font-extrabold mb-3" style={{ color: 'var(--navy)' }}>Payment Schedule</h3>
                       <div className="grid grid-cols-3 gap-4">
                         {[
-                          { label: 'Financed Amount', value: 'SAR 183,000' },
+                          { label: 'Financed Amount', value: 'SAR 183,000' as string },
                           { label: 'Tenure', value: '60 Months' },
                           { label: 'First Payment', value: '30 days after disbursement' },
-                          { label: 'Total Profit', value: 'SAR 35,880' },
-                          { label: 'Total Payable', value: 'SAR 218,880' },
+                          { label: 'Total Profit', value: 'SAR 35,880' as string },
+                          { label: 'Total Payable', value: 'SAR 218,880' as string },
                           { label: 'Profit Rate (APR)', value: '4.69%' },
                         ].map(item => (
                           <div key={item.label} className="rounded-[10px] p-4" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
                             <div className="text-[12px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                            <div className="mt-1 text-[14px] font-bold">{item.value}</div>
+                            <div className="mt-1 text-[14px] font-bold"><SarAmount v={item.value} /></div>
                           </div>
                         ))}
                       </div>
                       <div className="mt-4 rounded-[10px] px-4 py-3 flex items-center justify-between" style={{ background: 'var(--bg-light)' }}>
                         <span className="text-[13px]">Indicative Monthly Payment</span>
                         <span>
-                          From <b style={{ color: 'var(--blue)', fontSize: 16 }}>SAR 3,648</b>{' '}
+                          From <b style={{ color: 'var(--blue)', fontSize: 16 }}><SarSymbol /> 3,648</b>{' '}
                           <small style={{ color: 'var(--muted)' }}>/ month</small>
                         </span>
                       </div>

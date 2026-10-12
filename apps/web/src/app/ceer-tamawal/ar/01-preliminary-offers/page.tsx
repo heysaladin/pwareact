@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebarAr from '../_components/CeerSidebarAr';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const TERMS = [24, 36, 48, 60];
 
@@ -134,15 +135,15 @@ export default function PreliminaryOffersArPage() {
               {/* Summary bar */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { icon: '🏷️', label: 'الدفعة المقدمة', value: 'SAR 79,800 (20%)' },
+                  { icon: '🏷️', label: 'الدفعة المقدمة', value: 'SAR 79,800 (20%)' as string },
                   { icon: '📅', label: 'مدة التمويل', value: `${term} شهراً` },
-                  { icon: '📄', label: 'مبلغ التمويل', value: 'SAR 319,200' },
+                  { icon: '📄', label: 'مبلغ التمويل', value: 'SAR 319,200' as string },
                 ].map(item => (
                   <div key={item.label} className="rounded-[12px] px-4 py-3.5 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                     <span className="text-lg">{item.icon}</span>
                     <div>
                       <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                      <div className="text-[14px] font-bold mt-0.5">{item.value}</div>
+                      <div className="text-[14px] font-bold mt-0.5"><SarAmount v={item.value} /></div>
                     </div>
                   </div>
                 ))}
@@ -170,7 +171,7 @@ export default function PreliminaryOffersArPage() {
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>الدفعة الشهرية من</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.monthly}</div>
+                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}><SarAmount v={offer.monthly} /></div>
                         </div>
                         <div className="text-right">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>نسبة الفائدة</div>
@@ -193,7 +194,7 @@ export default function PreliminaryOffersArPage() {
                         {[['المدة', offer.tenure], ['مبلغ التمويل', offer.financed], ['الدفعة المقدمة', offer.dp]].map(([k, v]) => (
                           <div key={k}>
                             <div style={{ color: 'var(--muted)' }}>{k}</div>
-                            <div className="font-semibold mt-0.5">{v}</div>
+                            <div className="font-semibold mt-0.5"><SarAmount v={v} /></div>
                           </div>
                         ))}
                       </div>

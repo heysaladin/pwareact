@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 const TABS = ['Product details', 'Fees & charges', 'Insurance', 'Terms & conditions'];
 
@@ -110,7 +111,7 @@ export default function SubmitOrderPage() {
                       ].map(({ label, value, blue }) => (
                         <div key={label} className="shrink-0">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{label}</div>
-                          <div className="text-[15px] font-bold mt-0.5" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{value}</div>
+                          <div className="text-[15px] font-bold mt-0.5" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}><SarAmount v={value} /></div>
                         </div>
                       ))}
                     </div>
@@ -154,7 +155,7 @@ export default function SubmitOrderPage() {
                             {financingRows.map(([k, v]) => (
                               <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
                                 <span style={{ color: 'var(--muted)' }}>{k}</span>
-                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                                <span className="font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={v} /></span>
                               </div>
                             ))}
                           </div>
@@ -165,12 +166,12 @@ export default function SubmitOrderPage() {
                             {breakdownRows.map(([k, v]) => (
                               <div key={k} className="flex justify-between py-[7px] text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
                                 <span style={{ color: 'var(--muted)' }}>{k}</span>
-                                <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                                <span className="font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={v} /></span>
                               </div>
                             ))}
                             <div className="mt-3 rounded-[10px] px-4 py-3 flex items-center justify-between" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
                               <span className="text-[12px]" style={{ color: 'var(--muted)' }}>Indicative monthly payment</span>
-                              <span className="text-[12px]">From <b style={{ color: 'var(--blue)', fontSize: 15 }}>SAR 3,648</b> <span style={{ color: 'var(--muted)' }}>/ month</span></span>
+                              <span className="text-[12px]">From <b style={{ color: 'var(--blue)', fontSize: 15 }}><SarSymbol /> 3,648</b> <span style={{ color: 'var(--muted)' }}>/ month</span></span>
                             </div>
                           </div>
                         </div>
@@ -193,7 +194,7 @@ export default function SubmitOrderPage() {
                             </div>
                             <span style={{ color: 'var(--text)' }}>{k}</span>
                           </div>
-                          <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                          <span className="font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={v} /></span>
                         </div>
                       ))}
                     </div>

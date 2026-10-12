@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const banks = [
   { id: 'snb', ar: 'SNB الأهلي', en: 'Saudi National Bank', apr: '4.69%', monthly: 'SAR 3,648', total: 'SAR 218,880', dp: 'SAR 45,750', tenure: '60 Months', fee: 'SAR 0', settlement: true, insurance: true, digital: 'Advanced', rating: '4.8' },
@@ -96,7 +97,7 @@ export default function CompareOffersPage() {
                             ? <span style={{ color: val ? 'var(--green)' : 'var(--muted)' }}>{val ? '✓ Yes' : '✕ No'}</span>
                             : row.star
                             ? <span>★ {val}</span>
-                            : <span>{String(val)}</span>
+                            : <span><SarAmount v={String(val)} /></span>
                           }
                         </div>
                       );

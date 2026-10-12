@@ -362,14 +362,15 @@
     const [expanded, setExpanded] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
     const [sortOpen, setSortOpen] = useState(false);
-    const [selectedDealer, setSelectedDealer] = useState(null);
     const [activeFilters, setActiveFilters] = useState(null);
     const [sortSel, setSortSel] = useState({ newest: 'asc', price: null, year: null, popularity: null });
 
-    useEffect(() => {
-      const ctx = sessionStorage.getItem('dealerCtx');
-      if (ctx) { setSelectedDealer(JSON.parse(ctx)); sessionStorage.removeItem('dealerCtx'); }
-    }, []);
+    const dealers = {
+      wallan:     { id:'wallan',     name:'Al Wallan Dealer',  logo:'/dealer-wallan.png' },
+      almajdouie: { id:'almajdouie', name:'Almajdouie Dealer', logo:'/dealer-almajdouie.png' },
+    };
+    const dealerId = (window.top||window).location.pathname.split('/').filter(Boolean).pop();
+    const selectedDealer = dealers[dealerId] || null;
 
     const activeFilterCount = activeFilters
       ? activeFilters.carStatus.length + activeFilters.carType.length + activeFilters.motorType.length + activeFilters.brand.length + activeFilters.likeStatus.length + (activeFilters.priceMin !== 20000 || activeFilters.priceMax !== 120000 ? 1 : 0)
@@ -390,21 +391,6 @@
           </div>
         </div>
 
-        {selectedDealer && (
-          <div style={{ background: C.white, padding: '8px 24px', borderBottom: `1px solid ${C.gray100}`, flexShrink: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 2px', fontSize: 13.5, fontWeight: 500, color: C.gray600, letterSpacing: 0.4 }}>Car in dealer</p>
-                <p style={{ margin: 0, fontSize: 15.5, fontWeight: 700, color: C.gray900, letterSpacing: 0.1 }}>{selectedDealer.name}</p>
-              </div>
-              <img src={selectedDealer.logo} alt={selectedDealer.name} style={{ height: 48, objectFit: 'contain', flexShrink: 0 }} />
-              <button onClick={() => setSelectedDealer(null)} style={{ background: 'none', border: 'none', padding: 4, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round"/></svg>
-              </button>
-            </div>
-          </div>
-        )}
-
         <div style={{background:C.white,flexShrink:0}}>
           <div style={{padding:'8px 24px'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
@@ -422,7 +408,21 @@
           {expanded && <FindLoanExpanded onClose={()=>setExpanded(false)}/>}
         </div>
 
+        {selectedDealer && (
+          <div style={{background:C.white,padding:'10px 24px',borderBottom:`1px solid ${C.gray100}`,flexShrink:0,display:'flex',alignItems:'center',gap:16}}>
+            <div style={{flex:1}}>
+              <p style={{margin:'0 0 2px',fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>Car in dealer</p>
+              <p style={{margin:0,fontSize:15.5,fontWeight:700,color:C.gray900,letterSpacing:0.1}}>{selectedDealer.name}</p>
+            </div>
+            <img src={selectedDealer.logo} alt={selectedDealer.name} style={{height:48,objectFit:'contain',flexShrink:0}}/>
+            <button onClick={()=>setSelectedDealer(null)} style={{background:'none',border:'none',padding:4,display:'flex',alignItems:'center',flexShrink:0}}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round"/></svg>
+            </button>
+          </div>
+        )}
+
         <div className="scroll" style={{flex:1,padding:'24px'}}>
+
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
             <p style={{margin:0,fontSize:13.5,fontWeight:500,color:'#98A2B3',letterSpacing:0.4}}>
               You may be eligible for{' '}

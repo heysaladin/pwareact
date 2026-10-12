@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CeerSidebarAr from '../_components/CeerSidebarAr';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 const PRICE = 399000;
 const APR = 0.0529;
@@ -109,7 +110,7 @@ export default function ExploreFinancingArPage() {
                   <span className="text-[14px] font-semibold" style={{ color: 'var(--text)' }}>الدفعة المقدمة</span>
                   <div className="flex gap-2.5">
                     <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}>{dp}%</div>
-                    <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}>{fmt(dpAmt)}</div>
+                    <div className="rounded-lg px-[15px] py-[9px] text-[13px] font-bold" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}><SarAmount v={fmt(dpAmt)} /></div>
                   </div>
                 </div>
                 <div className="mt-4">
@@ -149,19 +150,19 @@ export default function ExploreFinancingArPage() {
                   <div className="flex-[1.2] p-7 flex flex-col">
                     <h3 className="text-[17px] font-extrabold" style={{ color: 'var(--heading)' }}>التقدير الأولي</h3>
                     <div className="flex justify-between py-3 border-b border-dashed text-[14px]" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-                      <span>سعر المركبة (شامل ض.ق.م)</span><span className="font-bold">SAR 399,000</span>
+                      <span>سعر المركبة (شامل ض.ق.م)</span><span className="font-bold"><SarSymbol /> 399,000</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-dashed text-[14px]" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-                      <span>الدفعة المقدمة ({dp}%)</span><span className="font-bold">- {fmt(dpAmt)}</span>
+                      <span>الدفعة المقدمة ({dp}%)</span><span className="font-bold">- <SarAmount v={fmt(dpAmt)} /></span>
                     </div>
                     <div className="flex justify-between py-3 text-[14px]" style={{ color: 'var(--text)' }}>
-                      <span>مبلغ التمويل</span><span className="font-bold">{fmt(fin)}</span>
+                      <span>مبلغ التمويل</span><span className="font-bold"><SarAmount v={fmt(fin)} /></span>
                     </div>
                   </div>
                   <div className="flex-1 px-7 flex flex-col justify-center" style={{ borderRight: '1px solid var(--border)' }}>
                     <p className="text-[15px]" style={{ color: 'var(--text)' }}>الدفعة الشهرية التقديرية من</p>
                     <p className="mt-2 text-[42px] font-extrabold leading-none" style={{ color: 'var(--blue)' }}>
-                      {fmt(monthly)} <span className="text-[16px] font-medium" style={{ color: 'var(--text)' }}>/ شهر</span>
+                      <SarAmount v={fmt(monthly)} /> <span className="text-[16px] font-medium" style={{ color: 'var(--text)' }}>/ شهر</span>
                     </p>
                     <p className="mt-2 text-[13px]" style={{ color: 'var(--muted)' }}>هذا تقدير أولي فقط.</p>
                   </div>

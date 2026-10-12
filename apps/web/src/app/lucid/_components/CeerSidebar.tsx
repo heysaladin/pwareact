@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SarAmount } from '@/components/SarSymbol';
 
 interface CeerSidebarProps {
   backHref?: string;
@@ -157,7 +158,7 @@ export default function CeerSidebar({ backHref, backLabel = 'Back to Lucid' }: C
         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '11px 20px', color: 'var(--muted)' }}>
           <div style={{ flexShrink: 0, width: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{f.icon}</div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>{f.name}</p>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}><SarAmount v={f.name} /></p>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>{f.label}</p>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarSymbol, SarAmount } from '@/components/SarSymbol';
 
 const TERMS = [24, 36, 48, 60];
 
@@ -52,7 +53,7 @@ function SelectField({ label, icon, value }: { label: string; icon: React.ReactN
       <div className="text-[13px] font-semibold mb-1.5" style={{ color: 'var(--text)' }}>{label}</div>
       <div className="flex items-center gap-2 px-3 py-2.5 rounded-[10px] cursor-pointer" style={{ border: '1.5px solid var(--border)', background: 'var(--card)' }}>
         <span style={{ color: 'var(--muted)' }}>{icon}</span>
-        <span className="flex-1 text-[13px] font-semibold" style={{ color: 'var(--text)' }}>{value}</span>
+        <span className="flex-1 text-[13px] font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={value} /></span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--muted)', flexShrink: 0 }}><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
@@ -157,7 +158,7 @@ export default function PreliminaryOffersPage() {
                       <div className="flex items-start gap-5 flex-1 min-w-0">
                         <div className="shrink-0">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Monthly payment</div>
-                          <div className="text-[17px] font-bold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.monthly}</div>
+                          <div className="text-[17px] font-bold mt-0.5" style={{ color: 'var(--blue)' }}><SarAmount v={offer.monthly} /></div>
                         </div>
                         <div className="shrink-0">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>APR (fixed)</div>
@@ -169,11 +170,11 @@ export default function PreliminaryOffersPage() {
                         </div>
                         <div className="shrink-0">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Total amount<br />to be paid</div>
-                          <div className="text-[14px] font-bold mt-0.5" style={{ color: 'var(--text)' }}>SAR<br />{offer.total.replace('SAR ', '')}</div>
+                          <div className="text-[14px] font-bold mt-0.5" style={{ color: 'var(--text)' }}><SarSymbol /><br />{offer.total.replace('SAR ', '')}</div>
                         </div>
                         <div className="shrink-0">
                           <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Total profit</div>
-                          <div className="text-[14px] font-bold mt-0.5" style={{ color: 'var(--text)' }}>SAR<br />{offer.profit.replace('SAR ', '')}</div>
+                          <div className="text-[14px] font-bold mt-0.5" style={{ color: 'var(--text)' }}><SarSymbol /><br />{offer.profit.replace('SAR ', '')}</div>
                         </div>
                       </div>
 

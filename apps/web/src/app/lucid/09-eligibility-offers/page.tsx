@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const offers = [
   {
@@ -143,7 +144,7 @@ export default function EligibilityOffersPage() {
                           ].map(({ label, value, blue }) => (
                             <div key={label} className="shrink-0">
                               <div className="text-[10px] leading-tight whitespace-pre-line" style={{ color: 'var(--muted)' }}>{label}</div>
-                              <div className="text-[15px] font-bold mt-0.5 leading-tight whitespace-pre-line" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}>{value}</div>
+                              <div className="text-[15px] font-bold mt-0.5 leading-tight whitespace-pre-line" style={{ color: blue ? 'var(--blue)' : 'var(--text)' }}><SarAmount v={value} /></div>
                             </div>
                           ))}
                         </div>

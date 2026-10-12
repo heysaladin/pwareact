@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 export default function SubmitSuccessPage() {
   const { brandName } = useGlobalSettings();
@@ -155,12 +156,12 @@ export default function SubmitSuccessPage() {
                   {[
                     ['Vehicle', 'CEER EXOBOT SUV – Premium AWD 2026'],
                     ['Bank', 'Saudi National Bank (SNB)'],
-                    ['Financed Amount', 'SAR 183,000'],
-                    ['Down Payment (20%)', 'SAR 45,750'],
-                    ['Monthly Payment', 'SAR 3,648'],
+                    ['Financed Amount', 'SAR 183,000' as string],
+                    ['Down Payment (20%)', 'SAR 45,750' as string],
+                    ['Monthly Payment', 'SAR 3,648' as string],
                     ['Tenure', '60 Months'],
                     ['Annual Profit Rate', '4.69%'],
-                    ['Total Payable', 'SAR 218,880'],
+                    ['Total Payable', 'SAR 218,880' as string],
                   ].map(([k, v], i, arr) => (
                     <div
                       key={k}
@@ -168,7 +169,7 @@ export default function SubmitSuccessPage() {
                       style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}
                     >
                       <span style={{ color: 'var(--muted)' }}>{k}</span>
-                      <span className="font-bold">{v}</span>
+                      <span className="font-bold"><SarAmount v={v} /></span>
                     </div>
                   ))}
                 </div>

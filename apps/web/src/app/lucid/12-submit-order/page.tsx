@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CeerSidebar from '../_components/CeerSidebar';
 import LucidStepper from '../_components/LucidStepper';
 import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import { SarAmount } from '@/components/SarSymbol';
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 45;
@@ -152,7 +153,7 @@ export default function SubmitOrderPage() {
                         ].map(([k, v]) => (
                           <div key={k} className="flex justify-between py-1.5 text-[12px]" style={{ borderBottom: '1px solid var(--border)' }}>
                             <span style={{ color: 'var(--muted)' }}>{k}</span>
-                            <span className="font-semibold" style={{ color: 'var(--text)' }}>{v}</span>
+                            <span className="font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={v as string} /></span>
                           </div>
                         ))}
                       </div>
@@ -176,7 +177,7 @@ export default function SubmitOrderPage() {
                             <span style={{ color: 'var(--muted)' }}>{label}</span>
                             <div className="flex items-center gap-2">
                               {color && <div className="w-4 h-4 rounded-full shrink-0" style={{ background: color }} />}
-                              <span className="font-semibold" style={{ color: 'var(--text)' }}>{value}</span>
+                              <span className="font-semibold" style={{ color: 'var(--text)' }}><SarAmount v={value as string} /></span>
                             </div>
                           </div>
                         ))}

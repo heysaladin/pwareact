@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SarSymbol } from '@/components/SarSymbol';
 
 interface CeerSidebarProps {
   backHref?: string;
@@ -62,17 +63,17 @@ export default function CeerSidebar({ backHref, backLabel = 'Back to CEER' }: Ce
         <div className="mt-2 border-t border-[#2a3a4f] pt-3.5 flex flex-col">
           <div className="flex justify-between py-1.5 text-[13px]">
             <span className="text-[#93a4b8]">Vehicle price (incl. VAT)</span>
-            <span className="text-[#e6edf5] font-semibold">SAR 228,750</span>
+            <span className="text-[#e6edf5] font-semibold"><SarSymbol /> 228,750</span>
           </div>
           <div className="flex justify-between py-1.5 text-[13px]">
             <span className="text-[#93a4b8]">Down payment (20%)</span>
-            <span className="text-[#e6edf5] font-semibold">SAR 45,750</span>
+            <span className="text-[#e6edf5] font-semibold"><SarSymbol /> 45,750</span>
           </div>
         </div>
 
         <div className="mt-3.5 bg-[#16283f] rounded-[10px] px-4 py-3 flex items-center justify-between">
           <span className="text-[13px] text-[#e6edf5]">Amount to finance</span>
-          <span className="text-[15px] font-bold text-[#e6edf5]">SAR 183,000</span>
+          <span className="text-[15px] font-bold text-[#e6edf5]"><SarSymbol /> 183,000</span>
         </div>
 
         <div className="flex justify-between pt-4 pb-1.5 text-[13px]">
@@ -82,7 +83,7 @@ export default function CeerSidebar({ backHref, backLabel = 'Back to CEER' }: Ce
 
         <div className="mt-2.5 bg-[#00265f] border border-[#0041a3] rounded-[10px] px-[17px] py-[13px] flex items-center justify-between">
           <span className="text-[12px] text-white">Total payable (SNB)</span>
-          <span className="text-[15px] font-bold text-white">SAR 218,880</span>
+          <span className="text-[15px] font-bold text-white"><SarSymbol /> 218,880</span>
         </div>
       </div>
 
