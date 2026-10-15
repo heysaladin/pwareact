@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Payment Success</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: #fff; font-family: -apple-system, 'SF Pro Text', sans-serif; overflow-x: hidden; }
+  :root {
+    --brand-600: #0063f5;
+    --gray-50: #f8fafc;
+    --gray-100: #eef1f6;
+    --gray-200: #e3e8ef;
+    --gray-300: #cdd4df;
+    --gray-400: #9aa4b2;
+    --gray-500: #697586;
+    --gray-600: #4b5565;
+    --gray-800: #202a39;
+    --gray-900: #121a26;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+function StatusBar() {
+  return (
+    <div style={{height:38,position:'relative',overflow:'hidden',width:'100%'}}>
+      <div style={{position:'absolute',right:14.67,top:'50%',transform:'translateY(-50%)',display:'flex',alignItems:'center',gap:6}}>
+        <img src="/car-loan-assets/status-signal.svg" style={{width:17,height:10.67}} alt=""/>
+        <img src="/car-loan-assets/status-wifi.svg" style={{width:15.27,height:10.97}} alt=""/>
+        <div style={{position:'relative',width:22,height:11.33}}>
+          <img src="/car-loan-assets/status-battery.svg" style={{width:'100%',height:'100%'}} alt=""/>
+        </div>
+      </div>
+      <div style={{position:'absolute',left:33,top:'50%',transform:'translateY(-50%)'}}>
+        <img src="/car-loan-assets/status-time.svg" style={{width:28.4,height:11.1}} alt=""/>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div style={{width:'100%',height:'100vh',background:'white',display:'flex',flexDirection:'column'}}>
+      <StatusBar/>
+      {/* Centered content */}
+      <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'24px',gap:20,textAlign:'center'}}>
+        <img src="/car-loan-assets/payment-success-icon.svg" style={{width:128,height:128}} alt="Payment successful"/>
+        <p style={{fontSize:23.5,fontWeight:600,color:'#121a26',lineHeight:'30px'}}>Payment successful</p>
+        <p style={{fontSize:13.5,color:'var(--gray-500)',lineHeight:'20px',maxWidth:280}}>
+          You have to complete registration and login to be eligible to this offer.
+        </p>
+      </div>
+      {/* Home indicator */}
+      <div style={{height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0}}>
+        <div style={{width:134,height:5,background:'black',borderRadius:999}}/>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Car Offers</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: #fff; font-family: -apple-system, 'SF Pro Text', sans-serif; overflow-x: hidden; }
+  :root {
+    --brand-600: #0063f5;
+    --gray-50: #f8fafc;
+    --gray-100: #eef1f6;
+    --gray-200: #e3e8ef;
+    --gray-300: #cdd4df;
+    --gray-400: #9aa4b2;
+    --gray-500: #697586;
+    --gray-600: #4b5565;
+    --gray-800: #202a39;
+    --gray-900: #121a26;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+function StatusBar() {
+  return (
+    <div style={{height:38,position:'relative',overflow:'hidden',width:'100%'}}>
+      <div style={{position:'absolute',right:14.67,top:'50%',transform:'translateY(-50%)',display:'flex',alignItems:'center',gap:6}}>
+        <img src="/car-loan-assets/status-signal.svg" style={{width:17,height:10.67}} alt=""/>
+        <img src="/car-loan-assets/status-wifi.svg" style={{width:15.27,height:10.97}} alt=""/>
+        <div style={{position:'relative',width:22,height:11.33}}>
+          <img src="/car-loan-assets/status-battery.svg" style={{width:'100%',height:'100%'}} alt=""/>
+        </div>
+      </div>
+      <div style={{position:'absolute',left:33,top:'50%',transform:'translateY(-50%)'}}>
+        <img src="/car-loan-assets/status-time.svg" style={{width:28.4,height:11.1}} alt=""/>
+      </div>
+    </div>
+  );
+}
+
+const cars = [
+  { name:'Foxtron Model B', image:'/car-loan-assets/model-b.png', mirror:true, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
+  { name:'MeRC C-Class 2026', image:'/car-loan-assets/car-merc-cclass.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
+  { name:'CEER Exobot Sedan 2026', image:'/car-loan-assets/car-ceer-sedan.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
+  { name:'Toyota Camry 2024', image:'/car-loan-assets/model-b.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
+];
+
+function CarCard({car}) {
+  const [hearted, setHearted] = React.useState(false);
+  return (
+    <div style={{background:'white',border:'1px solid var(--gray-200)',borderRadius:8,overflow:'hidden'}}>
+      {/* Car image */}
+      <div style={{height:160,background:'var(--gray-100)',overflow:'hidden',position:'relative'}}>
+        <img src={car.image} alt={car.name} style={{width:'100%',height:'100%',objectFit:'cover',transform: car.mirror ? 'scaleX(-1)' : 'none'}}/>
+      </div>
+      {/* Content */}
+      <div style={{padding:'12px 12px 12px'}}>
+        {/* Name + chevron row */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
+          <span style={{fontSize:16,fontWeight:700,color:'var(--gray-900)',lineHeight:'22px'}}>{car.name}</span>
+          <img src="/car-loan-assets/chevron-right.svg" style={{width:16,height:16,flexShrink:0}} alt=""/>
+        </div>
+        {/* Specs */}
+        <p style={{fontSize:12.5,color:'var(--gray-600)',lineHeight:'18px',marginBottom:12}}>{car.specs}</p>
+        {/* Bottom action row */}
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <div style={{flex:1}}>
+            <p style={{fontSize:11,color:'var(--gray-500)',lineHeight:'16px'}}>Installment from</p>
+            <p style={{fontSize:14,fontWeight:700,color:'var(--gray-900)',lineHeight:'20px',fontFamily:'SF Arabic, -apple-system'}}>{car.installment}<span style={{fontSize:11,fontWeight:500,color:'var(--gray-500)'}}>/month</span></p>
+          </div>
+          <button onClick={()=>setHearted(!hearted)} style={{width:36,height:36,background:'var(--gray-100)',border:'none',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',flexShrink:0}}>
+            <img src="/car-loan-assets/icon-heart-new.svg" style={{width:20,height:20,opacity: hearted ? 1 : 0.5}} alt=""/>
+          </button>
+          <button style={{minHeight:36,background:'var(--brand-600)',border:'none',borderRadius:8,padding:'0 16px',fontSize:13,fontWeight:600,color:'white',cursor:'pointer',flexShrink:0}}>
+            See offers
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div style={{width:'100%',height:'100vh',background:'white',display:'flex',flexDirection:'column'}}>
+      <StatusBar/>
+      {/* Header */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingLeft:16,paddingRight:16,paddingTop:4,paddingBottom:6}}>
+        <div style={{minWidth:48,display:'flex',alignItems:'center'}}>
+          <img src="/car-loan-assets/chevron-left.svg" style={{width:24,height:24}} alt="back"/>
+        </div>
+        <p style={{flex:1,textAlign:'center',fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Car offers</p>
+        <div style={{minWidth:48}}/>
+      </div>
+
+      {/* Find your car bar */}
+      <div style={{margin:'0 16px',background:'white',border:'1px solid var(--gray-200)',borderRadius:8,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <span style={{fontSize:15.5,fontWeight:700,color:'#121a26',lineHeight:'22px'}}>Find your car</span>
+        <div style={{display:'flex',alignItems:'center',gap:6,border:'1px solid var(--gray-300)',borderRadius:8,padding:'4px 8px'}}>
+          <span style={{fontSize:12.5,color:'var(--gray-500)'}}>Change</span>
+          <img src="/car-loan-assets/icon-change.svg" style={{width:16,height:16}} alt=""/>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div style={{height:1,background:'var(--gray-100)',margin:'12px 0'}}/>
+
+      {/* Scrollable list */}
+      <div style={{flex:1,overflowY:'auto',padding:'0 24px 40px',display:'flex',flexDirection:'column',gap:16}}>
+        {/* Count row */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <p style={{fontSize:13.5,color:'var(--gray-500)',lineHeight:'20px'}}>
+            You may be eligible for <span style={{fontWeight:700,color:'var(--gray-900)'}}>6 Cars</span>
+          </p>
+          <div style={{display:'flex',gap:8}}>
+            <img src="/car-loan-assets/icon-filter.svg" style={{width:24,height:24,cursor:'pointer'}} alt="filter"/>
+            <img src="/car-loan-assets/icon-sort.svg" style={{width:24,height:24,cursor:'pointer'}} alt="sort"/>
+          </div>
+        </div>
+        {/* Cards */}
+        {cars.map((car,i) => <CarCard key={i} car={car}/>)}
+      </div>
+
+      {/* Home indicator */}
+      <div style={{height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0}}>
+        <div style={{width:134,height:5,background:'black',borderRadius:999}}/>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Product Details</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: #fff; font-family: -apple-system, 'SF Pro Text', sans-serif; overflow-x: hidden; }
+  :root {
+    --brand-600: #0063f5;
+    --brand-800: #0041a3;
+    --gray-50: #f8fafc;
+    --gray-100: #eef1f6;
+    --gray-200: #e3e8ef;
+    --gray-300: #cdd4df;
+    --gray-400: #9aa4b2;
+    --gray-500: #697586;
+    --gray-600: #4b5565;
+    --gray-800: #202a39;
+    --gray-900: #101828;
+    --success-600: #079455;
+    --warning-400: #fa9715;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const SarIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{display:'inline',verticalAlign:'baseline'}}>
+    <text x="0" y="10" fontSize="11" fill="currentColor" fontFamily="-apple-system">﷼</text>
+  </svg>
+);
+
+const SarIconLg = ({size=14}) => (
+  <span style={{fontSize:size,fontFamily:'SF Arabic, -apple-system',color:'inherit'}}>﷼</span>
+);
+
+function StatusBar() {
+  return (
+    <div style={{height:38,position:'relative',overflow:'hidden',width:'100%'}}>
+      <div style={{position:'absolute',right:14.67,top:'50%',transform:'translateY(-50%)',display:'flex',alignItems:'center',gap:6}}>
+        <img src="/car-loan-assets/status-signal.svg" style={{width:17,height:10.67}} alt=""/>
+        <img src="/car-loan-assets/status-wifi.svg" style={{width:15.27,height:10.97}} alt=""/>
+        <div style={{position:'relative',width:22,height:11.33}}>
+          <img src="/car-loan-assets/status-battery.svg" style={{width:'100%',height:'100%'}} alt=""/>
+        </div>
+      </div>
+      <div style={{position:'absolute',left:33,top:'50%',transform:'translateY(-50%)'}}>
+        <img src="/car-loan-assets/status-time.svg" style={{width:28.4,height:11.1}} alt=""/>
+      </div>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingLeft:16,paddingRight:16,paddingTop:4,paddingBottom:6}}>
+      <div style={{minWidth:48,display:'flex',alignItems:'center'}}>
+        <img src="/car-loan-assets/back-icon.svg" style={{width:24,height:24}} alt="back"/>
+      </div>
+      <p style={{flex:1,textAlign:'center',fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Product Details</p>
+      <div style={{minWidth:48,display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
+        <div style={{position:'relative',width:30,height:30}}>
+          <div style={{position:'absolute',top:0,left:0,width:24,height:24}}>
+            <img src="/car-loan-assets/icon-comparing.svg" style={{width:24,height:24}} alt="compare"/>
+          </div>
+          <div style={{position:'absolute',top:0,left:16,width:14,height:14,background:'var(--warning-400)',borderRadius:999,border:'1.5px solid white',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <span style={{fontSize:10,fontWeight:500,color:'white',lineHeight:'14px'}}>1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CarCollapsed() {
+  return (
+    <div style={{padding:'8px 24px'}}>
+      <div style={{background:'white',border:'1px solid var(--gray-200)',borderRadius:8,display:'flex',alignItems:'center',gap:12,padding:'8px 0',overflow:'hidden'}}>
+        <div style={{flex:1,minWidth:0,position:'relative',height:80,overflow:'hidden'}}>
+          <div style={{position:'absolute',inset:'4.89%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <img src="/car-loan-assets/model-b.png" style={{width:'114.5%',height:'156.85%',position:'absolute',top:'-24.66%',left:'-8.92%',transform:'scaleX(-1)',objectFit:'cover',pointerEvents:'none'}} alt="Foxtron Model B"/>
+          </div>
+        </div>
+        <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:4,paddingRight:12}}>
+          <div style={{display:'flex',flexDirection:'column'}}>
+            <div style={{display:'flex',gap:2,fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>
+              <span>CEER</span><span>.</span><span>2026</span>
+            </div>
+            <p style={{fontSize:15.5,fontWeight:500,lineHeight:'22px',color:'var(--gray-900)',letterSpacing:0.1}}>Foxtron Model B</p>
+          </div>
+          <div style={{display:'flex',gap:4,alignItems:'baseline'}}>
+            <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>Price</span>
+            <span style={{fontSize:15.5,fontWeight:600,color:'var(--brand-800)',lineHeight:'26px',fontFamily:'SF Arabic, -apple-system'}}>﷼150,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BankSection() {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center',justifyContent:'center',paddingBottom:12,paddingTop:8,paddingLeft:16,paddingRight:16}}>
+      <div style={{height:70,width:175,overflow:'hidden',position:'relative'}}>
+        <img src="/car-loan-assets/bank-albilad-logo.png" style={{position:'absolute',inset:'12% 2.98% 13% 2.62%',width:'94.4%',height:'75%',objectFit:'contain'}} alt="Bank AlBilad"/>
+      </div>
+      <p style={{fontSize:23.5,fontWeight:600,lineHeight:'30px',color:'var(--brand-800)',textAlign:'center',width:'100%'}}>CEER Foxtron Model B - Car/EV Financing</p>
+    </div>
+  );
+}
+
+function SegmentedControl({activeTab, onTabChange}) {
+  return (
+    <div style={{padding:'8px 16px',width:'100%'}}>
+      <div style={{background:'var(--gray-50)',borderRadius:11,padding:3,display:'flex',gap:10}}>
+        <button onClick={()=>onTabChange('max')} style={{flex:1,padding:16,borderRadius:8,border: activeTab==='max' ? '1px solid var(--gray-100)' : 'none',background: activeTab==='max' ? 'white' : 'transparent',cursor:'pointer',fontSize:13.5,fontWeight:600,color: activeTab==='max' ? 'var(--brand-600)' : 'var(--gray-500)',lineHeight:'18px',letterSpacing:0.5}}>Max loan</button>
+        <button onClick={()=>onTabChange('calc')} style={{flex:1,padding:16,borderRadius:8,border:'none',background: activeTab==='calc' ? 'white' : 'transparent',cursor:'pointer',fontSize:13.5,fontWeight:600,color: activeTab==='calc' ? 'var(--brand-600)' : 'var(--gray-500)',lineHeight:'18px',letterSpacing:0.5}}>Calculate</button>
+      </div>
+    </div>
+  );
+}
+
+const LOAN_PERIODS = [12,18,24,30,36,42,54,60,72];
+
+function LoanPeriodSelector({selected, onSelect}) {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:16,alignItems:'center',width:'100%'}}>
+      <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1,width:'100%'}}>Select Loan Period (Months)</p>
+      <div style={{display:'flex',gap:8,alignItems:'flex-start',flexWrap:'wrap',justifyContent:'flex-end',borderRadius:8,width:'100%'}}>
+        {LOAN_PERIODS.map(p => {
+          const isActive = p === selected;
+          const isDisabled = p === 72;
+          return (
+            <button key={p} onClick={()=>!isDisabled && onSelect(p)}
+              style={{
+                padding:12,borderRadius:12,cursor:isDisabled?'default':'pointer',
+                background: isActive ? 'var(--brand-600)' : isDisabled ? 'var(--gray-50)' : 'var(--gray-100)',
+                border: isActive ? '1px solid var(--gray-100)' : isDisabled ? 'none' : '1px solid var(--brand-600)',
+                minWidth:0,
+              }}>
+              <span style={{fontSize:13.5,fontWeight:600,lineHeight:'20px',color: isActive ? 'white' : isDisabled ? 'var(--gray-400)' : 'var(--gray-600)',letterSpacing:0.5,display:'block',width:19,textAlign:'center'}}>{p}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function LoanAmount({months}) {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:4,alignItems:'center',padding:'8px 0',width:'100%'}}>
+      <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1}}>Loan amount</p>
+      <div style={{display:'flex',flexWrap:'wrap',gap:0,alignItems:'baseline',justifyContent:'center',textAlign:'center',width:'100%'}}>
+        <span style={{fontSize:12.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'18px',letterSpacing:0.5}}>up to</span>
+        <span style={{fontSize:33.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'45px',fontFamily:'SF Arabic, -apple-system'}}>﷼99,999,999.99</span>
+        <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>for {months} months</span>
+      </div>
+    </div>
+  );
+}
+
+function LoanDetailsTable() {
+  const rows = [
+    {label:'Loan amount', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼99,999,999.99</span>, prefix:'from ', gray:false},
+    {label:'Monthly installment', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼50</span>, prefix:'Up to ', gray:true},
+    {label:'Down payment', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼99,999,999.99</span>, prefix:null, gray:false},
+    {label:'APR', value:<span style={{fontSize:16,fontWeight:600,fontFamily:'Inter,sans-serif'}}>2%</span>, prefix:'Start from ', gray:true},
+    {label:'You saved', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:700}}>﷼50</span>, prefix:null, gray:false, badge:'-86%'},
+  ];
+  return (
+    <div style={{border:'1px solid white',borderRadius:8,overflow:'hidden',width:'100%'}}>
+      {rows.map((row,i) => (
+        <div key={i} style={{display:'flex',gap:6,alignItems:'center',padding:'4px 12px',background: row.gray ? 'var(--gray-50)' : 'white',minHeight:36}}>
+          <span style={{fontSize:13.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.4,whiteSpace:'nowrap'}}>{row.label}</span>
+          {row.label==='You saved' && <img src="/car-loan-assets/info-circle.svg" style={{width:20,height:20,flexShrink:0}} alt=""/>}
+          <div style={{flex:1,display:'flex',gap:4,alignItems:'baseline',justifyContent:'flex-end',color:'var(--brand-800)',whiteSpace:'nowrap'}}>
+            {row.prefix && <span style={{fontSize:12.5,fontWeight:500,lineHeight:'18px',letterSpacing:0.5,textAlign:'right'}}>{row.prefix}</span>}
+            {row.value}
+          </div>
+          {row.badge && (
+            <div style={{background:'var(--success-600)',borderRadius:4,padding:'0 3px'}}>
+              <span style={{fontSize:12.5,fontWeight:500,color:'white',lineHeight:'18px',letterSpacing:0.5}}>{row.badge}</span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FeesContainer() {
+  const rows = [
+    {label:'Management fees', gray:false},
+    {label:'Brokerage fees', gray:true},
+    {label:'Payout execution', gray:false},
+  ];
+  return (
+    <div style={{border:'1px solid white',borderRadius:8,padding:'2px 0',width:'100%'}}>
+      {rows.map((row,i) => (
+        <div key={i} style={{display:'flex',gap:6,alignItems:'center',padding:'4px 12px',background: row.gray ? 'var(--gray-50)' : 'white',width:327}}>
+          <span style={{fontSize:13.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.4,whiteSpace:'nowrap'}}>{row.label}</span>
+          <img src="/car-loan-assets/info-circle.svg" style={{width:20,height:20,flexShrink:0}} alt=""/>
+          <div style={{flex:1,display:'flex',gap:4,alignItems:'baseline',justifyContent:'flex-end',color:'var(--brand-800)',whiteSpace:'nowrap'}}>
+            <span style={{fontSize:12.5,fontWeight:500,lineHeight:'18px',letterSpacing:0.5}}>Start from</span>
+            <span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:700,lineHeight:'26px'}}>﷼50</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ExecutionCard() {
+  return (
+    <div style={{background:'white',border:'1px solid var(--gray-100)',borderRadius:8,display:'flex',gap:20,alignItems:'center',padding:16,width:327}}>
+      <div style={{position:'relative',width:56,height:56,flexShrink:0}}>
+        <img src="/car-loan-assets/icon-instant.svg" style={{position:'absolute',width:'100%',height:'100%'}} alt=""/>
+      </div>
+      <p style={{flex:1,fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Finalization &amp; Disbursement immediately</p>
+    </div>
+  );
+}
+
+function AccordionCard({title, icon, items, defaultOpen=true}) {
+  const [open, setOpen] = React.useState(defaultOpen);
+  return (
+    <div style={{background:'white',border:'1px solid var(--gray-100)',borderRadius:8,display:'flex',flexDirection:'column',gap:10,padding:'12px 16px 18px',width:327}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}} onClick={()=>setOpen(!open)}>
+        <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-800)',lineHeight:'18px',letterSpacing:0.5}}>{title}</span>
+        <div style={{padding:'8px 4px',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+          <img src="/car-loan-assets/arrow-small.svg" style={{width:12,height:12,transform: open ? 'rotate(180deg)' : 'none',transition:'transform 0.2s'}} alt=""/>
+        </div>
+      </div>
+      {open && (
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          {items.map((item,i) => (
+            <div key={i} style={{display:'flex',gap:12,alignItems:'flex-start',width:'100%'}}>
+              <div style={{display:'flex',alignItems:'flex-start',paddingTop:2.5,flexShrink:0}}>
+                <img src={icon} style={{width:16,height:16}} alt=""/>
+              </div>
+              <p style={{flex:1,fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>{item}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MediaCard() {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center',overflow:'hidden',width:327}}>
+      <div style={{position:'relative',width:'100%'}}>
+        <div style={{
+          position:'relative',
+          width:'100%',
+          height:183.94,
+          overflow:'hidden',
+          borderRadius:8,
+          WebkitMaskImage:`url('/car-loan-assets/media-card-mask.svg')`,
+          maskImage:`url('/car-loan-assets/media-card-mask.svg')`,
+          WebkitMaskSize:'100% 100%',
+          maskSize:'100% 100%',
+        }}>
+          <img src="/car-loan-assets/product-main-image.png" style={{width:'100%',height:'100%',objectFit:'cover'}} alt=""/>
+        </div>
+        <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:57,height:57}}>
+          <img src="/car-loan-assets/icon-play.svg" style={{width:'100%',height:'100%'}} alt="play"/>
+        </div>
+      </div>
+      <div style={{display:'flex',gap:4,alignItems:'center',height:12}}>
+        <div style={{width:6,height:6,background:'var(--brand-600)',borderRadius:4}}/>
+        <div style={{width:4,height:4,background:'var(--gray-300)',borderRadius:4}}/>
+        <div style={{width:4,height:4,background:'var(--gray-300)',borderRadius:4}}/>
+        <div style={{width:4,height:4,background:'var(--gray-300)',borderRadius:4}}/>
+      </div>
+    </div>
+  );
+}
+
+function ProductRating() {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center',padding:'8px 24px',width:'100%'}}>
+      <p style={{fontSize:13.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.4}}>Product Rating</p>
+      <div style={{display:'flex',gap:4,alignItems:'center'}}>
+        <img src="/car-loan-assets/icon-star-full.svg" style={{width:40,height:40}} alt="star"/>
+        <img src="/car-loan-assets/icon-star-full.svg" style={{width:40,height:40}} alt="star"/>
+        <img src="/car-loan-assets/icon-star-full.svg" style={{width:40,height:40}} alt="star"/>
+        <img src="/car-loan-assets/icon-star-full.svg" style={{width:40,height:40}} alt="star"/>
+        <img src="/car-loan-assets/icon-star-half.svg" style={{width:40,height:40}} alt="star"/>
+      </div>
+      <p style={{fontSize:23.5,fontWeight:600,lineHeight:'30px',color:'var(--brand-600)',textAlign:'center'}}>4.0</p>
+    </div>
+  );
+}
+
+function BottomNav() {
+  return (
+    <div style={{position:'fixed',bottom:0,left:0,right:0,background:'white'}}>
+      <div style={{position:'absolute',top:0,left:0,right:0,height:1}}>
+        <img src="/car-loan-assets/nav-separator.svg" style={{width:'100%',height:1,display:'block'}} alt=""/>
+      </div>
+      <div style={{display:'flex',gap:8,padding:'12px 24px 8px',alignItems:'center'}}>
+        <button style={{flex:1,minHeight:46,background:'white',border:'1px solid var(--gray-300)',borderRadius:8,display:'flex',gap:6,alignItems:'center',justifyContent:'center',cursor:'pointer',padding:'12px 16px'}}>
+          <img src="/car-loan-assets/icon-compare-nav.svg" style={{width:20,height:20}} alt=""/>
+          <span style={{fontSize:13.5,fontWeight:600,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>Compare</span>
+        </button>
+        <button style={{flex:1,minHeight:46,background:'var(--brand-600)',border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',padding:'12px 16px'}}>
+          <span style={{fontSize:13.5,fontWeight:600,color:'white',lineHeight:'18px',letterSpacing:0.5}}>Tamawal</span>
+        </button>
+      </div>
+      <div style={{height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8}}>
+        <div style={{width:134,height:5,background:'black',borderRadius:999}}/>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [activeTab, setActiveTab] = React.useState('max');
+  const [selectedPeriod, setSelectedPeriod] = React.useState(60);
+
+  return (
+    <div style={{width:'100%',minHeight:'100vh',background:'white',position:'relative'}}>
+      <StatusBar/>
+      <Header/>
+      <CarCollapsed/>
+      <BankSection/>
+      <SegmentedControl activeTab={activeTab} onTabChange={setActiveTab}/>
+
+      <div style={{display:'flex',flexDirection:'column',gap:24,padding:'24px 24px 160px',alignItems:'center'}}>
+        <LoanPeriodSelector selected={selectedPeriod} onSelect={setSelectedPeriod}/>
+        <LoanAmount months={selectedPeriod}/>
+        <LoanDetailsTable/>
+        <FeesContainer/>
+        <ExecutionCard/>
+        <p style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5,width:327}}>Profit rates starting from 2.25%, Payment holiday for first installment (up to 120 days), High financing amounts of up to SAR 4 Million for KSA Nationals, Quick and easy approval process</p>
+        <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'flex-start',width:'100%'}}>
+          <AccordionCard
+            title="Great for"
+            icon="/car-loan-assets/frame-1.svg"
+            items={['Low profit fees starting from 2.25% for KSA Nationals ','Deferred payment of the first installment for up to 120 days ']}
+          />
+          <AccordionCard
+            title="Beware"
+            icon="/car-loan-assets/frame-2.svg"
+            items={['Applicable only for KSA Nationals ']}
+          />
+          <AccordionCard
+            title="Required documents"
+            icon="/car-loan-assets/frame-3.svg"
+            items={['Passport (pdf or jpg)','Salary Evidance Document (pdf or jpg)']}
+          />
+          <AccordionCard
+            title="Conditions"
+            icon="/car-loan-assets/frame-4.svg"
+            items={['The borrower is of legal age','The borrower has his permanent residence in Saudi Arabia']}
+          />
+        </div>
+        <MediaCard/>
+        <div style={{width:40,height:1,borderTop:'1px solid var(--gray-200)'}}/>
+        <ProductRating/>
+      </div>
+
+      <BottomNav/>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

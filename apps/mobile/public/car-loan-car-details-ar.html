@@ -1,0 +1,432 @@
+<!doctype html>
+<html dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>تفاصيل السيارة</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <style>
+    html,body,#root{margin:0;padding:0;height:100%;overflow:hidden;background:#fff;}
+    *{box-sizing:border-box;}
+    button{cursor:pointer;font-family:inherit;}
+    .scroll{scrollbar-width:none;overflow-y:auto;}
+    .scroll::-webkit-scrollbar{display:none;}
+    .hscroll{scrollbar-width:none;overflow-x:auto;}
+    .hscroll::-webkit-scrollbar{display:none;}
+  </style>
+</head>
+<body>
+<div id="root" style="height:100%"></div>
+<script type="text/babel">
+  const { useState } = React;
+  const C = {
+    brand900:'#00317A', brand800:'#0041A3', brand600:'#0063F5', brand100:'#EBF3FF', brand50:'#F5F9FF',
+    yellow:'#FFDD33',
+    gray900:'#101828', gray800:'#202A39', gray700:'#43524E', gray600:'#4B5565', gray500:'#697586',
+    gray400:'#9AA4B2', gray300:'#CDD4DF', gray200:'#E3E8EF', gray100:'#EEF1F6', gray50:'#F8FAFC',
+    white:'#FFFFFF',
+  };
+  const nav = (p) => (window.top||window).location.href = p;
+
+  function SarIcon({ size = 14, color = 'currentColor' }) {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} aria-label="SAR" style={{ width:size, height:size, flexShrink:0, display:'inline-block', verticalAlign:'middle' }}>
+        <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+        <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+      </svg>
+    );
+  }
+
+  function StatusBar() {
+    return (
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px 6px'}}>
+        <div style={{display:'flex',gap:6,alignItems:'center'}}>
+          <svg width="17" height="11" viewBox="0 0 17 11" fill={C.gray900}><rect x="0" y="5" width="3" height="6" rx="0.5" opacity="0.4"/><rect x="4.5" y="3" width="3" height="8" rx="0.5" opacity="0.6"/><rect x="9" y="1.5" width="3" height="9.5" rx="0.5" opacity="0.8"/><rect x="13.5" y="0" width="3" height="11" rx="0.5"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill={C.gray900} opacity="0.7"><path d="M8 8c.9 0 1.6.7 1.6 1.6S8.9 11.2 8 11.2 6.4 10.5 6.4 9.6 7.1 8 8 8z"/><path d="M4.6 5.4C5.6 4.3 6.7 3.7 8 3.7s2.4.6 3.4 1.7l1.3-1.3C11.2 2.6 9.7 2 8 2S4.8 2.6 3.3 4.1l1.3 1.3z" opacity="0.75"/><path d="M1.6 2.5C3.1 1 5.4 0 8 0s4.9 1 6.4 2.5L16 1C14 .4 11.2 0 8 0S2 .4 0 1l1.6 1.5z" opacity="0.5"/></svg>
+          <div style={{display:'flex',alignItems:'center',gap:2}}><div style={{width:22,height:11,border:'1.5px solid rgba(0,0,0,0.35)',borderRadius:3,padding:1.5}}><div style={{background:C.gray900,borderRadius:1.5,height:'100%',width:'72%'}}/></div></div>
+        </div>
+        <span style={{fontSize:15,fontWeight:700,color:C.gray900}}>9:41</span>
+      </div>
+    );
+  }
+
+  const banks = [
+    { name:'Bank AlBilad',  logo:'/car-loan-assets/bank-albilad.png',  product:'CEER Foxtron Model B - Car/EV Financing' },
+    { name:'SNB الأهلي',    logo:'/car-loan-assets/bank-2.png',         product:'CEER Foxtron Model B - Car/EV Financing' },
+    { name:'',              logo:'/car-loan-assets/bank-3.png',          product:'CEER Foxtron Model B - Car/EV Financing' },
+    { name:'Riyad Bank',   logo:'/car-loan-assets/bank-riyad.png',      product:'CEER Foxtron Model B - Car/EV Financing' },
+    { name:'SAB',           logo:'/car-loan-assets/bank-sab.png',        product:'CEER Foxtron Model B - Car/EV Financing' },
+  ];
+
+  const specs = [
+    { icon:'/car-loan-assets/icon-seats.svg',        label:'5 مقاعد'     },
+    { icon:'/car-loan-assets/icon-transmission.svg', label:'تلقائي'      },
+    { icon:'/car-loan-assets/icon-fuel.svg',         label:'كهربائي'     },
+    { icon:'/car-loan-assets/icon-cartype.svg',      label:'سيارة سيدان' },
+  ];
+
+  const detailSpecs = [
+    { label:'محرك',                    value:'1.2L 4-Cylinder Diesel'  },
+    { label:'الانتقال',               value:'يدوي 5-Speed',             alt:true },
+    { label:'كفاءة استهلاك الوقود',   value:'18.5 km/L'                },
+    { label:'المقاعد',                value:'5 الركاب',                 alt:true },
+    { label:'ضمان',                   value:'5 Years / 100,000 km'     },
+  ];
+
+  const features = [
+    'عجلات من السبائك الخفيفة مقاس 45.7 سم (18 بوصة) بتصميم خماسي الأذرع المزدوجة',
+    'دعم قطني رباعي الاتجاهات',
+    '7G-DCT',
+    'نظام المساعدة النشط في الكبح',
+    'نظام المساعدة النشط في الركن مع خاصية PARKTRONIC',
+  ];
+
+  function BankOfferCard({ bank }) {
+    return (
+      <div style={{ border:`1px solid ${C.gray100}`, borderRadius:16, marginBottom:1, background:C.white }}>
+        <div style={{ height:1, background:C.gray100 }}/>
+        <div style={{ display:'flex', alignItems:'center', gap:12, minHeight:60, borderBottom:`1px solid ${C.gray200}`, padding:'4px 12px 0' }}>
+          <div style={{ flex:1, display:'flex', alignItems:'center', gap:8 }}>
+            <div style={{ flex:1 }}>
+              <p style={{ margin:0, fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1 }}>{bank.product}</p>
+            </div>
+          </div>
+          <img src={'/car-loan-assets/chevron-right.svg'} alt="" style={{ width:24, height:24, flexShrink:0, transform:'scaleX(-1)' }}/>
+        </div>
+        <div style={{ display:'flex', alignItems:'flex-start', gap:12, padding:'8px 12px 8px' }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', alignSelf:'stretch' }}>
+            <div style={{ display:'flex', gap:12, alignItems:'center', maxHeight:68, paddingBottom:6 }}>
+              <div style={{ flex:1, opacity:0.9 }}>
+                <div style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
+                  <span>معدل سنوي(APR) </span><span style={{ fontSize:10, letterSpacing:0.5 }}>من</span>
+                </div>
+                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                  <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, letterSpacing:0.1, lineHeight:'26px' }}>99.99%</span>
+                </div>
+              </div>
+            </div>
+            <div style={{ display:'flex', gap:24, alignItems:'center', paddingTop:4, paddingBottom:0 }}>
+              <button onClick={() => nav('/car-loan-ar')} style={{ flex:1, background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'8px 12px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:36, minWidth:90 }}>
+                تموّل
+              </button>
+            </div>
+          </div>
+          <div style={{ width:176, display:'flex', alignItems:'center', justifyContent:'center', paddingRight:16, paddingTop:8 }}>
+            <img src={bank.logo} alt={bank.name} style={{ maxWidth:120, maxHeight:56, objectFit:'contain' }}/>
+          </div>
+        </div>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 12px 12px' }}>
+          <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+              <img src="/car-loan-assets/icon-star-no.svg" alt="" style={{ width:18, height:18 }}/>
+              <span style={{ fontSize:15.5, fontWeight:500, color:C.gray700, lineHeight:'22px' }}>0.0</span>
+            </div>
+            <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', position:'relative', width:24, height:24 }}>
+                <img src="/car-loan-assets/icon-instant.svg" alt="" style={{ width:24, height:24 }}/>
+              </div>
+              <button style={{ background:'none', border:'none', padding:0 }}>
+                <img src="/car-loan-assets/icon-heart.svg" alt="" style={{ width:24, height:24 }}/>
+              </button>
+            </div>
+          </div>
+          <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+            <div>
+              <div style={{ fontSize:10, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>مدة التمويل <span style={{ fontSize:10 }}>إلى</span></div>
+              <span style={{ fontSize:13.5, fontWeight:700, color:C.gray900 }}>999 شهر</span>
+            </div>
+            <div>
+              <div style={{ fontSize:10, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>مبلغ التمويل <span style={{ fontSize:10 }}>يصل إلى</span></div>
+              <div style={{ display:'flex', alignItems:'center', gap:2 }}>
+                <SarIcon size={10} color={C.gray900}/>
+                <span style={{ fontSize:13.5, fontWeight:700, color:C.gray900 }}>99,999,999.99</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop:`1px solid ${C.gray100}`, padding:'8px 12px 12px', display:'flex', alignItems:'center', gap:24 }}>
+          <button style={{ display:'flex', alignItems:'center', gap:4, border:`1px solid ${C.gray300}`, borderRadius:8, padding:'8px 12px', background:C.white, minHeight:36, minWidth:90 }}>
+            <img src="/car-loan-assets/icon-compare.svg" alt="" style={{ width:20, height:20 }}/>
+            <span style={{ fontSize:13.5, fontWeight:600, color:'#4B5565', letterSpacing:0.5 }}>قارن</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  function OffersTab() {
+    return (
+      <div>
+        <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <button style={{ fontSize:13.5, fontWeight:600, color:C.brand600, background:'none', border:'none', padding:0 }}>يتغير</button>
+          <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>عروض أولية</span>
+        </div>
+        <div style={{ padding:'0 24px 12px' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
+            قد تكون مؤهلاً للحصول على <span style={{ color:C.gray900 }}>6</span>
+            {' '}<span style={{ color:C.gray400 }}>من أصل</span>{' '}
+            <span style={{ color:C.gray900 }}>6 منتجات</span>{' '}
+            <span style={{ color:C.gray400 }}>لـ</span>{' '}
+            <span style={{ color:C.gray900 }}>قروض السيارات/المركبات الكهربائية</span>
+          </p>
+        </div>
+        <div style={{ padding:'0 24px' }}>
+          {banks.map((bank, i) => <BankOfferCard key={i} bank={bank}/>)}
+        </div>
+        <div style={{ height:24 }}/>
+      </div>
+    );
+  }
+
+  function DetailsTab({ openFeatures, setOpenFeatures }) {
+    return (
+      <div>
+        <div style={{ padding:'16px 24px 0' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, lineHeight:'20px', letterSpacing:0, textAlign:'right' }}>
+            تُعد "فوكسترون موديل بي" (Foxtron Model B) سيارة سيدان مدمجة كهربائية بالكامل، صممتها شركة "بينينفارينا" (Pininfarina) وبُنيت على منصة "إم آي إتش" (MIH) الخاصة بشركة "فوكسترون". وتعتمد السيارة على بطارية ليثيوم فوسفات الحديد (LFP) بسعة 57.7 كيلوواط/ساعة، تمنح طراز المحرك الواحد مدى يصل إلى 516 كيلومتراً، بينما يولد طراز المحركين المزود بنظام الدفع الكلي (AWD) قوة تصل إلى 400 حصان، ويتمكن من التسارع من 0 إلى 100 كم/ساعة في غضون 3.9 ثانية.
+          </p>
+        </div>
+
+        <div style={{ padding:'24px 24px 0' }}>
+          <p style={{ margin:'0 0 12px', fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'right' }}>تحديد</p>
+          <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
+            {detailSpecs.map((s, i) => (
+              <div key={s.label} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 12px', background:s.alt?C.gray50:C.white }}>
+                <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'left' }}>{s.value}</span>
+                <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'right' }}>{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ padding:'16px 24px 0' }}>
+          <button
+            onClick={() => setOpenFeatures(!openFeatures)}
+            style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0 }}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: openFeatures ? 'rotate(180deg)' : 'none', transition:'transform 0.2s' }}>
+              <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>سمات</span>
+          </button>
+          {openFeatures && (
+            <div style={{ marginTop:12 }}>
+              <p style={{ margin:'0 0 8px', fontSize:13.5, fontWeight:500, color:C.gray600, lineHeight:'20px', textAlign:'right' }}>
+                هذه هي المواصفات المعتمدة من الشركة المصنعة لهذا الطراز؛ يرجى التحقق من التفاصيل عند معاينة المركبة. لا تتضمن القائمة أدناه أي خيارات إضافية تمت إضافتها إلى المركبة أو أي تعديلات أُجريت عليها.
+              </p>
+              <p style={{ margin:'8px 0', fontSize:12.5, fontWeight:500, color:C.gray800, textAlign:'right' }}>آخر</p>
+              {features.map((f, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8, marginBottom:6 }}>
+                  <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, lineHeight:'20px', flex:1, textAlign:'right' }}>{f}</p>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink:0, marginTop:3 }}>
+                    <circle cx="8" cy="8" r="7" stroke={C.brand600} strokeWidth="1.5"/>
+                    <path d="M5 8l2 2 4-4" stroke={C.brand600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {['ضمان', 'مواصفة'].map(section => (
+          <div key={section} style={{ padding:'0 24px', borderTop:`1px solid ${C.gray100}`, marginTop:16 }}>
+            <button style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:'16px 0', minHeight:52 }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>{section}</span>
+            </button>
+          </div>
+        ))}
+
+        <div style={{ padding:'0 24px', borderTop:`1px solid ${C.gray100}`, marginTop:0 }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 0 8px' }}>
+            <div/>
+            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>مُكَمِّلات</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', paddingBottom:8 }}>
+            <button style={{ display:'flex', alignItems:'center', gap:4, background:'none', border:'none', padding:0 }}>
+              <img src="/car-loan-assets/icon-plus.svg" alt="" style={{ width:20, height:20 }}/>
+            </button>
+            <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, textAlign:'right' }}>لم يتم اختيار أي شيء</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:4, paddingBottom:16, justifyContent:'flex-end' }}>
+            <span style={{ fontSize:13.5, fontWeight:700, color:C.brand800 }}>#4413 - #3,178.94</span>
+            <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600 }}>·</span>
+            <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600 }}>يتوفر 20</span>
+          </div>
+        </div>
+
+        <div style={{ padding:'0 24px' }}>
+          <img src="/car-loan-assets/car-detail-1.png" alt="" style={{ width:'100%', height:180, objectFit:'cover', borderRadius:12, marginBottom:8 }}/>
+          <img src="/car-loan-assets/car-detail-2.png" alt="" style={{ width:'100%', height:120, objectFit:'cover', borderRadius:12 }}/>
+        </div>
+
+        <div style={{ padding:'24px 24px 0', display:'flex', flexDirection:'column', gap:12, alignItems:'center' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>متوفر لدى الوكلاء</p>
+          <div style={{ display:'flex', gap:12, alignItems:'center', justifyContent:'center' }}>
+            <button onClick={()=>nav('/car-loan-ar')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
+              <img src="/dealer-wallan.png" alt="" style={{ width:80, height:54, objectFit:'contain' }}/>
+            </button>
+            <button onClick={()=>nav('/car-loan-ar')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
+              <img src="/dealer-almajdouie.png" alt="" style={{ width:110, height:40, objectFit:'contain' }}/>
+            </button>
+          </div>
+        </div>
+
+        <div style={{ padding:'24px 24px 120px' }}>
+          <button onClick={()=>nav('/car-loan-ar')} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}>
+            عرض العروض (5)
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  function App() {
+    const [activeThumb, setActiveThumb] = useState(0);
+    const [activeTab, setActiveTab] = useState('offers');
+    const [openFeatures, setOpenFeatures] = useState(true);
+
+    const thumbs = [
+      '/car-loan-assets/car-dark.png',
+      '/car-loan-assets/car-back.png',
+      '/car-loan-assets/car-side.png',
+      '/car-loan-assets/car-back.png',
+    ];
+
+    return (
+      <div style={{ height:'100%', display:'flex', flexDirection:'column', background:C.white, fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif', position:'relative' }}>
+
+        <div style={{ background:C.white, flexShrink:0 }}>
+          <StatusBar/>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'4px 16px 6px' }}>
+            <div style={{ minWidth:48 }}/>
+            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0, flex:1, textAlign:'center' }}>تفاصيل السيارة</span>
+            <button onClick={()=>nav('/car-loan-ar')} style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
+              <img src="/car-loan-assets/back-icon.svg" alt="" style={{ width:24, height:24, transform:'scaleX(-1)' }}/>
+            </button>
+          </div>
+        </div>
+
+        <div className="scroll" style={{ flex:1, paddingBottom:activeTab === 'offers' ? 90 : 0 }}>
+
+          <div style={{ paddingTop:24 }}>
+            <div style={{ height:183, overflow:'hidden', position:'relative', transform:'scaleX(-1)' }}>
+              <img src="/car-loan-assets/model-b.png" alt="Foxtron Model B" style={{ width:'114.5%', position:'absolute', left:'-8.92%', top:'-24.66%', height:'156.85%', objectFit:'cover' }}/>
+            </div>
+          </div>
+
+          <div className="hscroll" style={{ display:'flex', gap:8, padding:'0 0', width:'100%' }}>
+            {thumbs.map((src, i) => (
+              <button key={i} onClick={()=>setActiveThumb(i)} style={{ width:100, height:64, flexShrink:0, border:'none', padding:0, background:'transparent', opacity:activeThumb===i?1:0.45, overflow:'hidden' }}>
+                <img src={src} alt="" style={{ width:'100%', height:'100%', objectFit:'contain', objectPosition:'center' }}/>
+              </button>
+            ))}
+          </div>
+
+          <div style={{ textAlign:'center', padding:'16px 4px 16px', display:'flex', flexDirection:'column', gap:8, alignItems:'center' }}>
+            <div style={{ display:'flex', gap:2, alignItems:'center' }}>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>CEER</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>.</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>2026</span>
+            </div>
+            <p style={{ margin:0, fontSize:23.5, fontWeight:600, color:C.gray900, lineHeight:'30px' }}>Foxtron Model B</p>
+            <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>سعر السيارة</span>
+              <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, lineHeight:'26px' }}>
+                <SarIcon size={13} color={C.brand800}/> 69,900
+              </span>
+            </div>
+          </div>
+
+          <div style={{ display:'flex', gap:2, padding:'0 24px 12px' }}>
+            {specs.map((spec, i) => (
+              <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', gap:6, alignItems:'center', background:C.gray50, borderRadius:12, padding:'12px 4px 8px' }}>
+                <img src={spec.icon} alt="" style={{ width:20, height:20 }}/>
+                <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center', whiteSpace:'nowrap' }}>{spec.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ padding:'8px 24px', opacity:0.8 }}>
+            <div style={{ background:C.white, border:`1px solid ${C.gray200}`, borderRadius:8, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div style={{ padding:'8px 4px' }}>
+                <img src="/car-loan-assets/arrow-small.svg" alt="" style={{ width:12, height:12, transform:'scaleX(-1)' }}/>
+              </div>
+              <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                <div style={{ display:'flex', gap:4, alignItems:'center' }}>
+                  <span style={{ fontSize:13, color:'#98A2B3' }}>(275)</span>
+                  <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700, letterSpacing:0.4 }}>رمادي</span>
+                </div>
+                <img src="/car-loan-assets/icon-color.svg" alt="" style={{ width:20, height:20 }}/>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ padding:'0 24px 0' }}>
+            <div style={{ background:C.brand50, border:`1px solid ${C.brand100}`, borderRadius:12, overflow:'hidden' }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:60, borderBottom:`1px solid ${C.brand100}`, padding:'4px 12px' }}>
+                <div style={{ width:100, display:'flex', flexDirection:'column', alignItems:'flex-start', paddingLeft:4 }}>
+                  <div style={{ display:'flex', gap:2, alignItems:'center' }}>
+                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>معدل سنوي(APR) من</span>
+                    <button style={{ background:'none', border:'none', padding:2, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                      <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14 }}/>
+                    </button>
+                  </div>
+                  <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99.99%</span>
+                </div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'right' }}>
+                    <span>مبلغ القرض </span><span style={{ fontSize:10, letterSpacing:0.5 }}>يصل إلى</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:4, justifyContent:'flex-end' }}>
+                    <SarIcon size={14} color={C.gray900}/>
+                    <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99,999,999.99</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px', justifyContent:'flex-end' }}>
+                <span style={{ fontSize:11, fontWeight:500, color:C.gray600 }}>مرتكز على دفعة أولى بنسبة 10% و60 شهراً</span>
+                <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14, opacity:0.6 }}/>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ padding:'16px 24px 0', display:'flex', gap:0, borderBottom:`1px solid ${C.gray100}` }}>
+            {[['offers','عروض (5)'],['details','تفاصيل السيارة']].map(([tab, label]) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{ flex:1, padding:'10px 0', fontSize:13.5, fontWeight:activeTab===tab?600:500, color:activeTab===tab?C.brand600:C.gray500, background:'none', border:'none', borderBottom:`2px solid ${activeTab===tab?C.brand600:'transparent'}`, letterSpacing:0.5 }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === 'offers' ? <OffersTab/> : <DetailsTab openFeatures={openFeatures} setOpenFeatures={setOpenFeatures}/>}
+        </div>
+
+        {activeTab === 'offers' && (
+          <div style={{ position:'absolute', bottom:0, left:0, right:0, background:C.white }}>
+            <div style={{ padding:'12px 24px 8px' }}>
+              <button onClick={()=>nav('/car-loan-ar')} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}>
+                عرض العروض (5)
+              </button>
+            </div>
+            <div style={{ background:C.white, height:34, display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8 }}>
+              <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
