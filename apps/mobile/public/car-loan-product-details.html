@@ -57,9 +57,9 @@ function StatusBar() {
 function Header() {
   return (
     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingLeft:16,paddingRight:16,paddingTop:4,paddingBottom:6}}>
-      <div style={{minWidth:48,display:'flex',alignItems:'center'}}>
+      <button onClick={()=>{ (window.top||window).location.href = '/car-loan/car-details'; }} style={{minWidth:56,display:'flex',alignItems:'center',background:'none',border:'none',padding:'8px 4px',margin:'-8px -4px',cursor:'pointer'}}>
         <img src="/car-loan-assets/back-icon.svg" style={{width:24,height:24}} alt="back"/>
-      </div>
+      </button>
       <p style={{flex:1,textAlign:'center',fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Product Details</p>
       <div style={{minWidth:48,display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
         <div style={{position:'relative',width:30,height:30}}>
