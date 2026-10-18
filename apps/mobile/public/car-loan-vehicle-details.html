@@ -65,7 +65,9 @@
   }
 
   /* Custom picker sheet */
-  function PickerSheet({ title, options, value, onSelect, onClose }) {
+  function PickerSheet({ title, options, value, onSelect, onClose, freeInput }) {
+    const [text, setText] = useState(value && !options.includes(value) ? value : '');
+    const submitText = () => { const v = text.trim(); if (v) { onSelect(v); onClose(); } };
     return (
       <div style={{position:'fixed',inset:0,zIndex:100,display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
         <div onClick={onClose} style={{flex:1,background:'rgba(0,0,0,0.4)'}}/>
@@ -74,6 +76,14 @@
             <span style={{fontSize:15,fontWeight:600,color:C.gray900}}>{title}</span>
             <button onClick={onClose} style={{background:'none',border:'none',fontSize:20,color:C.gray500,padding:'0 4px',lineHeight:1}}>×</button>
           </div>
+          {freeInput && (
+            <div style={{padding:'12px 20px',borderBottom:`1px solid ${C.gray100}`,flexShrink:0}}>
+              <input type="text" value={text} onChange={e => setText(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') submitText(); }}
+                enterKeyHint="done" placeholder={freeInput}
+                style={{width:'100%',padding:'13px 14px',background:'#F8FAFC',border:'1.5px solid #D0D5DD',borderRadius:12,fontSize:15,fontWeight:500,color:C.gray900,outline:'none'}}/>
+            </div>
+          )}
           <div className="scroll" style={{flex:1}}>
             {options.map(opt => (
               <button key={opt} onClick={() => { onSelect(opt); onClose(); }} style={{
@@ -187,7 +197,12 @@
 
         {/* Continue */}
         <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'16px 20px 36px',background:C.white,borderTop:`1px solid ${C.gray100}`}}>
-          <button onClick={() => canContinue && nav('/car-loan/offers')} style={{
+          <button onClick={() => {
+            if (!canContinue) return;
+            const q = new URLSearchParams({ already:'yes', isNew: isNew ? '1' : '0', carType, make, model, year, price: price.replace(/,/g,'') });
+            if (trim) q.set('trim', trim);
+            nav('/car-loan/car-details?' + q.toString());
+          }} style={{
             width:'100%',background: canContinue ? C.brand600 : '#D0D5DD',border:'none',
             borderRadius:14,padding:'16px',fontSize:16,fontWeight:600,color:C.white,
           }}>Continue</button>
@@ -196,7 +211,7 @@
         {/* Picker sheets */}
         {sheet==='carType' && <PickerSheet title="Type of car" options={CAR_TYPES} value={carType} onSelect={setCarType} onClose={closeSheet}/>}
         {sheet==='make' && <PickerSheet title="Select Brand" options={MAKES} value={make} onSelect={v=>{setMake(v);setModel('');setTrim('');}} onClose={closeSheet}/>}
-        {sheet==='model' && <PickerSheet title="Select Model" options={MODELS[make]||[]} value={model} onSelect={setModel} onClose={closeSheet}/>}
+        {sheet==='model' && <PickerSheet title="Select Model" options={MODELS[make]||[]} value={model} onSelect={setModel} onClose={closeSheet} freeInput="Type model name"/>}
         {sheet==='year' && <PickerSheet title="Select Year" options={YEARS} value={year} onSelect={setYear} onClose={closeSheet}/>}
         {sheet==='trim' && <PickerSheet title="Trim (Optional)" options={TYPES} value={trim} onSelect={setTrim} onClose={closeSheet}/>}
       </div>
