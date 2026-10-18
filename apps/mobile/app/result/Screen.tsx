@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 
 const content = {
   en: {
-    title: 'You're pre-approved!',
+    title: "You're pre-approved!",
     subtitle: 'Your financing application has been reviewed and you qualify for the offer.',
     cta: 'View Offer',
     dir: 'ltr' as const,
