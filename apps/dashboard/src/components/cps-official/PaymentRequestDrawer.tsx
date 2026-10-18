@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
@@ -57,10 +57,6 @@ export default function PaymentRequestDrawer({ onClose, customerName, customerId
   const [channels, setChannels] = useState<string[]>(['email']);
   const [title,    setTitle]    = useState(isAr ? 'تذكير بالدفع' : 'Payment reminder');
   const [message,  setMessage]  = useState(() => buildMessage('reminder', firstName, '200', isAr));
-
-  useEffect(() => {
-    setMessage(buildMessage(template, firstName, amount, isAr));
-  }, [template, amount, firstName, isAr]);
 
   const MAX_CHARS = 255;
   const remaining = MAX_CHARS - message.length;
@@ -139,7 +135,7 @@ export default function PaymentRequestDrawer({ onClose, customerName, customerId
               <input
                 type="number"
                 value={amount}
-                onChange={e => setAmount(e.target.value)}
+                onChange={e => { setAmount(e.target.value); setMessage(buildMessage(template, firstName, e.target.value, isAr)); }}
                 className="flex-1 h-[48px] px-[14px] text-[18px] font-mono text-[#16201b] outline-none bg-white min-w-0"
               />
             </div>
@@ -147,7 +143,7 @@ export default function PaymentRequestDrawer({ onClose, customerName, customerId
               {QUICK_AMOUNTS.map(a => (
                 <button
                   key={a}
-                  onClick={() => setAmount(String(a))}
+                  onClick={() => { setAmount(String(a)); setMessage(buildMessage(template, firstName, String(a), isAr)); }}
                   className={`h-[36px] px-[14px] rounded-full border text-[13px] font-medium flex items-center gap-[3px] transition-colors ${
                     amount === String(a)
                       ? 'bg-[#ebf3ff] border-[#0063f5] text-[#0063f5]'
@@ -171,7 +167,7 @@ export default function PaymentRequestDrawer({ onClose, customerName, customerId
               {templates.map(tmpl => (
                 <button
                   key={tmpl.key}
-                  onClick={() => { setTemplate(tmpl.key); setTitle(tmpl.label); }}
+                  onClick={() => { setTemplate(tmpl.key); setTitle(tmpl.label); setMessage(buildMessage(tmpl.key, firstName, amount, isAr)); }}
                   className={`flex gap-[10px] items-start px-[14px] py-[12px] rounded-[10px] border w-full text-start transition-colors ${
                     template === tmpl.key
                       ? 'bg-[#ebf3ff] border-[#0063f5]'
