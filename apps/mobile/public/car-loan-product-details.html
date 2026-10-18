@@ -30,14 +30,11 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const SarIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{display:'inline',verticalAlign:'baseline'}}>
-    <text x="0" y="10" fontSize="11" fill="currentColor" fontFamily="-apple-system">﷼</text>
+const SarIcon = ({size=14, color='currentColor'}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} style={{width:size,height:size,flexShrink:0}}>
+    <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+    <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
   </svg>
-);
-
-const SarIconLg = ({size=14}) => (
-  <span style={{fontSize:size,fontFamily:'SF Arabic, -apple-system',color:'inherit'}}>﷼</span>
 );
 
 function StatusBar() {
@@ -84,7 +81,7 @@ function CarCollapsed() {
       <div style={{background:'white',border:'1px solid var(--gray-200)',borderRadius:8,display:'flex',alignItems:'center',gap:12,padding:'8px 0',overflow:'hidden'}}>
         <div style={{flex:1,minWidth:0,position:'relative',height:80,overflow:'hidden'}}>
           <div style={{position:'absolute',inset:'4.89%',display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <img src="/car-loan-assets/model-b.png" style={{width:'114.5%',height:'156.85%',position:'absolute',top:'-24.66%',left:'-8.92%',transform:'scaleX(-1)',objectFit:'cover',pointerEvents:'none'}} alt="Foxtron Model B"/>
+            <img src="/car-loan-assets/car-foxconn-model-b.png" style={{width:'114.5%',height:'156.85%',position:'absolute',top:'-24.66%',left:'-8.92%',transform:'scaleX(-1)',objectFit:'cover',pointerEvents:'none'}} alt="Foxtron Model B"/>
           </div>
         </div>
         <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:4,paddingRight:12}}>
@@ -96,7 +93,7 @@ function CarCollapsed() {
           </div>
           <div style={{display:'flex',gap:4,alignItems:'baseline'}}>
             <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>Price</span>
-            <span style={{fontSize:15.5,fontWeight:600,color:'var(--brand-800)',lineHeight:'26px',fontFamily:'SF Arabic, -apple-system'}}>﷼150,000</span>
+            <span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:600,color:'var(--brand-800)',lineHeight:'26px'}}><SarIcon size={13} color="var(--brand-800)"/>150,000</span>
           </div>
         </div>
       </div>
@@ -159,7 +156,7 @@ function LoanAmount({months}) {
       <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1}}>Loan amount</p>
       <div style={{display:'flex',flexWrap:'wrap',gap:0,alignItems:'baseline',justifyContent:'center',textAlign:'center',width:'100%'}}>
         <span style={{fontSize:12.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'18px',letterSpacing:0.5}}>up to</span>
-        <span style={{fontSize:33.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'45px',fontFamily:'SF Arabic, -apple-system'}}>﷼99,999,999.99</span>
+        <span style={{display:'flex',alignItems:'baseline',gap:4,fontSize:33.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'45px'}}><SarIcon size={22} color="var(--brand-800)"/>99,999,999.99</span>
         <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>for {months} months</span>
       </div>
     </div>
@@ -168,11 +165,11 @@ function LoanAmount({months}) {
 
 function LoanDetailsTable() {
   const rows = [
-    {label:'Loan amount', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼99,999,999.99</span>, prefix:'from ', gray:false},
-    {label:'Monthly installment', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼50</span>, prefix:'Up to ', gray:true},
-    {label:'Down payment', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:600}}>﷼99,999,999.99</span>, prefix:null, gray:false},
+    {label:'Loan amount', value:<span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:600}}><SarIcon size={12} color="var(--brand-800)"/>99,999,999.99</span>, prefix:'from ', gray:false},
+    {label:'Monthly installment', value:<span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:600}}><SarIcon size={12} color="var(--brand-800)"/>50</span>, prefix:'Up to ', gray:true},
+    {label:'Down payment', value:<span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:600}}><SarIcon size={12} color="var(--brand-800)"/>99,999,999.99</span>, prefix:null, gray:false},
     {label:'APR', value:<span style={{fontSize:16,fontWeight:600,fontFamily:'Inter,sans-serif'}}>2%</span>, prefix:'Start from ', gray:true},
-    {label:'You saved', value:<span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:700}}>﷼50</span>, prefix:null, gray:false, badge:'-86%'},
+    {label:'You saved', value:<span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:700}}><SarIcon size={12} color="var(--brand-800)"/>50</span>, prefix:null, gray:false, badge:'-86%'},
   ];
   return (
     <div style={{border:'1px solid white',borderRadius:8,overflow:'hidden',width:'100%'}}>
@@ -209,7 +206,7 @@ function FeesContainer() {
           <img src="/car-loan-assets/info-circle.svg" style={{width:20,height:20,flexShrink:0}} alt=""/>
           <div style={{flex:1,display:'flex',gap:4,alignItems:'baseline',justifyContent:'flex-end',color:'var(--brand-800)',whiteSpace:'nowrap'}}>
             <span style={{fontSize:12.5,fontWeight:500,lineHeight:'18px',letterSpacing:0.5}}>Start from</span>
-            <span style={{fontFamily:'SF Arabic, -apple-system',fontSize:15.5,fontWeight:700,lineHeight:'26px'}}>﷼50</span>
+            <span style={{display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:700,lineHeight:'26px'}}><SarIcon size={12} color="var(--brand-800)"/>50</span>
           </div>
         </div>
       ))}

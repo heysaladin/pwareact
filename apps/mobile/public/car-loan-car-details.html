@@ -11,26 +11,33 @@
     html,body,#root{margin:0;padding:0;height:100%;overflow:hidden;background:#fff;}
     *{box-sizing:border-box;}
     button{cursor:pointer;font-family:inherit;}
-    .scroll{scrollbar-width:none;overflow-y:auto;}
+    .scroll{scrollbar-width:none;overflow-y:auto;touch-action:pan-y;}
     .scroll::-webkit-scrollbar{display:none;}
+    .hscroll{scrollbar-width:none;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;}
+    .hscroll::-webkit-scrollbar{display:none;}
   </style>
 </head>
 <body>
 <div id="root" style="height:100%"></div>
 <script type="text/babel">
   const { useState } = React;
-  const C = { brand600:'#0063F5', brand800:'#0041A3', yellow:'#FFDD33', gray900:'#101828', gray600:'#4B5565', gray200:'#EAECF0', gray50:'#F8FAFC', white:'#FFFFFF' };
+  const C = {
+    brand900:'#00317A', brand800:'#0041A3', brand600:'#0063F5', brand100:'#EBF3FF', brand50:'#F5F9FF',
+    yellow:'#FFDD33',
+    gray900:'#101828', gray800:'#202A39', gray700:'#43524E', gray600:'#4B5565', gray500:'#697586',
+    gray400:'#9AA4B2', gray300:'#CDD4DF', gray200:'#E3E8EF', gray100:'#EEF1F6', gray50:'#F8FAFC',
+    white:'#FFFFFF',
+  };
   const nav = (p) => (window.top||window).location.href = p;
 
-  const specs = [
-    { label:'Engine',        value:'1.5L Turbo 4-Cylinder' },
-    { label:'Transmission',  value:'7-Speed Automatic',    alt:true },
-    { label:'Fuel Economy',  value:'14.5 km/L' },
-    { label:'Seating',       value:'5 Passengers',         alt:true },
-    { label:'Warranty',      value:'5 Years / 150,000 km' },
-  ];
-
-  const thumbs = ['/car-image.png', '/car-mg-zs.png', '/car-image.png', '/car-mg-zs.png'];
+  function SarIcon({ size = 14, color = 'currentColor' }) {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} style={{ width:size, height:size, flexShrink:0 }}>
+        <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+        <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+      </svg>
+    );
+  }
 
   function StatusBar() {
     return (
@@ -45,99 +52,554 @@
     );
   }
 
+  const banks = [
+    { name:'Bank AlBilad',  logo:'/car-loan-assets/bank-albilad.png',  product:'CEER Foxtron Model B - Car/\nEV Financing' },
+    { name:'SNB الأهلي',    logo:'/car-loan-assets/bank-2.png',         product:'CEER Foxtron Model B - Car/\nEV Financing' },
+    { name:'',              logo:'/car-loan-assets/bank-3.png',          product:'CEER Foxtron Model B - Car/\nEV Financing' },
+    { name:'Riyad Bank',   logo:'/car-loan-assets/bank-riyad.png',      product:'CEER Foxtron Model B - Car/\nEV Financing' },
+    { name:'SAB',           logo:'/car-loan-assets/bank-sab.png',        product:'CEER Foxtron Model B - Car/\nEV Financing' },
+  ];
+
+  const specs = [
+    { icon:'/car-loan-assets/icon-seats.svg',        label:'5 Seats'   },
+    { icon:'/car-loan-assets/icon-transmission.svg', label:'Automatic' },
+    { icon:'/car-loan-assets/icon-fuel.svg',         label:'Electric'  },
+    { icon:'/car-loan-assets/icon-cartype.svg',      label:'Sedan'     },
+  ];
+
+  const detailSpecs = [
+    { label:'Engine',       value:'1.2L 4-Cylinder Diesel' },
+    { label:'Transmission', value:'5-Speed Manual',        alt:true },
+    { label:'Fuel Economy', value:'18.5 km/L' },
+    { label:'Seating',      value:'5 Passengers',          alt:true },
+    { label:'Warranty',     value:'5 Years / 100,000 km' },
+  ];
+
+  const features = [
+    '45.7 cm (18-inch) 5-twin-spoke light-alloy wheels',
+    '4-way lumbar support',
+    '7G-DCT',
+    'Active Brake Assist',
+    'Active Parking Assist with PARKTRONIC',
+  ];
+
+  function BankOfferCard({ bank }) {
+    return (
+      <div style={{ border:`1px solid ${C.gray100}`, borderRadius:16, background:C.white, overflow:'hidden', boxShadow:'0px 1px 2px 0px rgba(10,13,18,0.05)' }}>
+        {/* Row 1: title + chevron */}
+        <div style={{ display:'flex', alignItems:'center', gap:12, minHeight:60, borderBottom:`1px solid ${C.gray200}`, padding:'4px 12px 4px' }}>
+          <div style={{ flex:1, paddingLeft:6, overflow:'hidden' }}>
+            <p style={{ margin:0, fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1, whiteSpace:'pre-line' }}>{bank.product}</p>
+          </div>
+          <div style={{ width:24, height:24, flexShrink:0 }}>
+            <img src="/car-loan-assets/chevron-right.svg" alt="" style={{ width:24, height:24 }}/>
+          </div>
+        </div>
+        {/* Row 2: logo (w:125) | APR (w:100) */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 12px' }}>
+          <div style={{ width:125, paddingTop:2, paddingBottom:2 }}>
+            <div style={{ width:'100%', aspectRatio:'250/100', overflow:'hidden', display:'flex', alignItems:'center' }}>
+              <img src={bank.logo} alt={bank.name} style={{ width:'100%', height:'100%', objectFit:'contain', objectPosition:'left center' }}/>
+            </div>
+          </div>
+          <div style={{ width:100, display:'flex', flexDirection:'column', alignItems:'flex-end', paddingRight:4 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:2 }}>
+              <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14 }}/>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>APR <span style={{ fontSize:10, letterSpacing:0.5 }}>from</span></span>
+            </div>
+            <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1 }}>99.99%</span>
+          </div>
+        </div>
+        {/* Row 3: Loan amount (left) | Loan period (right) */}
+        <div style={{ display:'flex', gap:12, alignItems:'flex-start', maxHeight:68, padding:'0 12px 6px' }}>
+          <div style={{ flex:1, maxWidth:145.5, opacity:0.9 }}>
+            <div>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Loan amount </span>
+              <span style={{ fontSize:10, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>up to</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+              <SarIcon size={14} color={C.gray900}/>
+              <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, letterSpacing:0.1, whiteSpace:'nowrap' }}>99,999,999.99</span>
+            </div>
+          </div>
+          <div style={{ flex:1, maxWidth:145.5, opacity:0.9, display:'flex', flexDirection:'column', alignItems:'flex-end' }}>
+            <div>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Loan period </span>
+              <span style={{ fontSize:10, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>for</span>
+            </div>
+            <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, letterSpacing:0.1, lineHeight:'26px' }}>999 month</span>
+          </div>
+        </div>
+        {/* Row 4: star + execution-time + Tamawal */}
+        <div style={{ display:'flex', alignItems:'center', gap:24, padding:'4px 12px' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <img src="/car-loan-assets/icon-star-no.svg" alt="" style={{ width:18, height:18 }}/>
+            <span style={{ fontSize:15.5, fontWeight:500, color:C.gray500, lineHeight:'22px', letterSpacing:0.1 }}>0.0</span>
+          </div>
+          <img src="/car-loan-assets/icon-instant.svg" alt="" style={{ width:32, height:32, flexShrink:0 }}/>
+          <button onClick={() => nav('/car-loan/offers')} style={{ flex:1, background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'8px 12px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:36, maxHeight:36, minWidth:90 }}>
+            Tamawal
+          </button>
+        </div>
+        {/* Row 5: Compare + register + heart */}
+        <div style={{ display:'flex', alignItems:'center', gap:16, padding:'8px 12px 2px' }}>
+          <button style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:4, border:`1px solid ${C.gray300}`, borderRadius:8, padding:'8px 12px', background:C.white, minHeight:36, maxHeight:36, minWidth:148 }}>
+            <img src="/car-loan-assets/icon-comparing.svg" alt="" style={{ width:20, height:20 }}/>
+            <span style={{ fontSize:13.5, fontWeight:600, color:C.gray600, letterSpacing:0.5 }}>Compare</span>
+          </button>
+
+          <button style={{ background:'none', border:'none', padding:0 }}>
+            <img src="/car-loan-assets/icon-heart-rounded.svg" alt="" style={{ width:24, height:24 }}/>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  function OffersTab({ onChangeClick }) {
+    return (
+      <div>
+        {/* Preliminary search */}
+        <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
+          <button onClick={onChangeClick} style={{ display:'flex', alignItems:'center', gap:4, fontSize:13.5, fontWeight:600, color:C.brand600, background:'none', border:'none', padding:0 }}>
+            Change
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke={C.brand600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+        </div>
+        {/* Eligible text */}
+        <div style={{ padding:'0 24px 12px' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
+            You may be eligible for <span style={{ color:C.gray900 }}>6</span>
+            {' '}<span style={{ color:C.gray400 }}>of</span>{' '}
+            <span style={{ color:C.gray900 }}>6 Products</span>{' '}
+            <span style={{ color:C.gray400 }}>for</span>{' '}
+            <span style={{ color:C.gray900 }}>Car/EV Loan</span>
+          </p>
+        </div>
+        {/* Bank cards */}
+        <div style={{ padding:'0 24px', display:'flex', flexDirection:'column', gap:16 }}>
+          {banks.map((bank, i) => <BankOfferCard key={i} bank={bank}/>)}
+        </div>
+        <div style={{ height:24 }}/>
+      </div>
+    );
+  }
+
+  function DetailsTab({ openFeatures, setOpenFeatures }) {
+    return (
+      <div>
+        {/* Description */}
+        <div style={{ padding:'16px 24px 0' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, lineHeight:'22px', letterSpacing:0.4 }}>
+            The Foxtron Model B is a fully electric compact Sedan designed by Pininfarina and built on Foxtron's MIH platform. Powered by a 57.7 kWh LFP battery, it delivers up to 516 km of range in the single-motor variant, while the dual-motor AWD version produces 400 hp and sprints from 0-100 km/h in 3.9 seconds.
+          </p>
+        </div>
+
+        {/* Specifications */}
+        <div style={{ padding:'24px 24px 0' }}>
+          <p style={{ margin:'0 0 12px', fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Specifications</p>
+          <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
+            {detailSpecs.map((s, i) => (
+              <div key={s.label} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 12px', background:s.alt?C.gray50:C.white }}>
+                <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{s.label}</span>
+                <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'right' }}>{s.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Features, Warranty, Specification cards */}
+        <div style={{ padding:'16px 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
+          {/* Features card */}
+          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px 18px' }}>
+            <button
+              onClick={() => setOpenFeatures(!openFeatures)}
+              style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0, marginBottom:openFeatures?10:0 }}
+            >
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Features</span>
+              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ transform: openFeatures ? 'rotate(180deg)' : 'none', transition:'transform 0.2s' }}>
+                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            {openFeatures && (
+              <>
+                <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+                  This is the manufacturer's list specification for this model, please verify the details when you view the vehicle. The list below will not include any additional options fitted to the vehicle or modifications.
+                </p>
+                <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Other</p>
+                <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                  {features.map((f, i) => (
+                    <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                      <div style={{ paddingTop:2.5, flexShrink:0 }}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="7" stroke={C.brand600} strokeWidth="1.5"/>
+                          <path d="M5 8l2 2 4-4" stroke={C.brand600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Warranty card */}
+          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px' }}>
+            <button style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Warranty</span>
+              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+
+          {/* Specification card */}
+          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px' }}>
+            <button style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Specification</span>
+              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Accessories */}
+        <div style={{ padding:'8px 24px' }}>
+          <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center' }}>Accessories</p>
+          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>None Selected</span>
+              <img src="/car-loan-assets/icon-plus.svg" alt="" style={{ width:24, height:24 }}/>
+            </div>
+            <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>20 Available</span>
+            <div style={{ display:'flex', alignItems:'center', gap:2 }}>
+              <SarIcon size={13} color={C.brand600}/><span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}>44.13</span>
+              <span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}> - </span>
+              <SarIcon size={13} color={C.brand600}/><span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}>3,176.94</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Dealer image with overlay */}
+        <div style={{ padding:'0 24px' }}>
+          <div style={{ position:'relative', width:'100%', height:183.938 }}>
+            {/* Rounded photo */}
+            <div style={{ position:'absolute', inset:0, borderRadius:8, overflow:'hidden' }}>
+              <img src="/car-loan-assets/car-detail-showroom.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}/>
+            </div>
+            {/* Frosted overlay icon — centered at (163.5, 91.5) */}
+            <img src="/car-loan-assets/car-detail-overlay.svg" alt="" style={{ position:'absolute', width:118.425, height:118.425, top:91.5-59.2125, left:'50%', transform:'translateX(-50%)', pointerEvents:'none' }}/>
+          </div>
+        </div>
+
+        {/* Available at dealers */}
+        <div style={{ padding:'24px 24px 0', display:'flex', flexDirection:'column', gap:12, alignItems:'center' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Available at dealers</p>
+          <div style={{ display:'flex', gap:12, alignItems:'center', justifyContent:'center' }}>
+            <button onClick={()=>nav('/car-loan/inventory/wallan')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
+              <img src="/dealer-wallan.png" alt="" style={{ width:80, height:54, objectFit:'contain' }}/>
+            </button>
+            <button onClick={()=>nav('/car-loan/inventory/almajdouie')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
+              <img src="/dealer-almajdouie.png" alt="" style={{ width:110, height:40, objectFit:'contain' }}/>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    );
+  }
+
+  const colorOptions = [
+    { label:'Space Gray', hex:'#6B737D', img:'/car-loan-assets/car-registered-gray-silver.png', count:275, crop:{ w:'114.5%', h:'156.85%', l:'-8.92%',   t:'-24.66%'  } },
+    { label:'Silver',     hex:'#C0C0C0', img:'/car-loan-assets/car-registered-silver.png',      count:142, crop:{ w:'115.5%', h:'158.22%', l:'-9.42%',   t:'-25.34%'  } },
+    { label:'White',      hex:'#F0F0F0', img:'/car-loan-assets/car-registered-rwbk.png',        count:198, crop:{ w:'219%',   h:'300%',    l:'-5.5%',    t:'-35.62%'  } },
+    { label:'Black',      hex:'#1A1A1A', img:'/car-loan-assets/car-registered-rwbk.png',        count:87,  crop:{ w:'226%',   h:'309.59%', l:'-5.67%',   t:'-184.93%' } },
+    { label:'Sand',       hex:'#C4A882', img:'/car-loan-assets/car-registered-rwbk.png',        count:63,  crop:{ w:'223%',   h:'305.48%', l:'-118.33%', t:'-182.19%' } },
+    { label:'Red',        hex:'#CC2222', img:'/car-loan-assets/car-registered-rwbk.png',        count:41,  crop:{ w:'219%',   h:'300%',    l:'-114.83%', t:'-36.99%'  } },
+  ];
+
   function App() {
-    const [activeThumb, setActiveThumb] = useState(1);
+    const [activeThumb, setActiveThumb] = useState(0);
+    const [activeTab, setActiveTab] = useState('offers');
+    const [openFeatures, setOpenFeatures] = useState(true);
+    const [selectedColor, setSelectedColor] = useState(0);
+    const [colorPickerOpen, setColorPickerOpen] = useState(false);
+    const [pendingColor, setPendingColor] = useState(0);
+    const [changeOpen, setChangeOpen] = useState(false);
+
+    const thumbViews = [
+      { src:'/car-loan-assets/car-persv.png', simple:true },
+      { src:'/car-loan-assets/car-view-front.png', simple:true },
+      { src:'/car-loan-assets/car-view-side.png', simple:true },
+      { src:'/car-loan-assets/car-view-rear3q.png', simple:true },
+      { src:'/car-loan-assets/car-view-rear.png', simple:true },
+    ];
 
     return (
-      <div style={{height:'100%',display:'flex',flexDirection:'column',background:C.white,fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif',position:'relative'}}>
+      <div style={{ height:'100%', display:'flex', flexDirection:'column', background:C.white, fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif', position:'relative' }}>
 
         {/* Header */}
-        <div style={{background:C.white,flexShrink:0}}>
+        <div style={{ background:C.white, flexShrink:0 }}>
           <StatusBar/>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 16px 10px'}}>
-            <button onClick={()=>nav('/car-loan/inventory')} style={{background:'none',border:'none',padding:'8px 4px',minWidth:48,display:'flex',alignItems:'center'}}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 16.5L6 10l6.5-6.5" stroke={C.gray900} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'4px 16px 6px' }}>
+            <button onClick={()=>nav('/car-loan/inventory')} style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center' }}>
+              <img src="/car-loan-assets/back-icon.svg" alt="" style={{ width:24, height:24 }}/>
             </button>
-            <span style={{fontSize:15.5,fontWeight:600,color:C.gray900,letterSpacing:0.25}}>Car Details</span>
-            <div style={{minWidth:48}}/>
+            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25, flex:1, textAlign:'center' }}>Car Details</span>
+            <div style={{ minWidth:48 }}/>
           </div>
         </div>
 
         {/* Scrollable content */}
-        <div className="scroll" style={{flex:1,paddingBottom:110}}>
+        <div className="scroll" style={{ flex:1, paddingBottom:activeTab === 'details' ? 90 : 0 }}>
 
-          {/* Main car image */}
-          <div style={{padding:'24px 16px 8px',background:C.white}}>
-            <img src="/car-image.png" alt="MG ZS" style={{width:'100%',height:220,objectFit:'contain',objectPosition:'center',display:'block'}}/>
+          {/* Car image */}
+          <div style={{ paddingTop:24 }}>
+            <div style={{ height:183.5, position:'relative' }}>
+              {activeThumb === 0 || selectedColor !== 0 ? (
+                <div style={{ position:'absolute', top:'6.25%', bottom:'6.25%', left:'6.12%', right:'6.12%' }}>
+                  <div style={{ position:'relative', width:'100%', height:'100%', transform:'scaleX(-1)' }}>
+                    <div style={{ position:'relative', width:'100%', height:'100%' }}>
+                      <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
+                        <img src={colorOptions[selectedColor].img} alt="Foxtron Model B" style={{ position:'absolute', width:colorOptions[selectedColor].crop.w, height:colorOptions[selectedColor].crop.h, left:colorOptions[selectedColor].crop.l, top:colorOptions[selectedColor].crop.t, maxWidth:'none' }}/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <img src={thumbViews[activeThumb].src} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain' }}/>
+              )}
+            </div>
           </div>
 
           {/* Thumbnails */}
-          <div style={{display:'flex',gap:8,padding:'0 8px 20px',background:C.white}}>
-            {thumbs.map((src, i) => (
-              <button key={i} onClick={()=>setActiveThumb(i)} style={{flex:1,height:65,borderRadius:0,overflow:'hidden',border:'none',padding:0,background:'transparent',opacity:activeThumb===i?1:0.4,flexShrink:0}}>
-                <img src={src} alt="" style={{width:'100%',height:'100%',objectFit:'contain',objectPosition:'center'}}/>
-              </button>
+          {selectedColor === 0 && (
+            <div className="hscroll" style={{ width:'100%' }}>
+              <div style={{ display:'flex', gap:8, paddingLeft:20, width:'max-content' }}>
+                {thumbViews.map((view, i) => (
+                  <button key={i} onClick={()=>setActiveThumb(i)} style={{ width:100, height:64, flexShrink:0, border:'none', padding:0, background:'transparent', opacity:activeThumb===i?1:0.45, position:'relative', overflow:'hidden' }}>
+                    <img src={view.src} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain' }}/>
+                  </button>
+                ))}
+                <div style={{ width:20, flexShrink:0 }}/>
+              </div>
+            </div>
+          )}
+
+          {/* Car name + price */}
+          <div style={{ textAlign:'center', padding:'16px 4px 16px', display:'flex', flexDirection:'column', gap:8, alignItems:'center' }}>
+            <div style={{ display:'flex', gap:2, alignItems:'center' }}>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>CEER</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>.</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>2026</span>
+            </div>
+            <p style={{ margin:0, fontSize:23.5, fontWeight:600, color:C.gray900, lineHeight:'30px' }}>Foxtron Model B</p>
+            <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>Car price</span>
+              <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, lineHeight:'26px' }}>
+                <SarIcon size={13} color={C.brand800}/> 69,900
+              </span>
+            </div>
+          </div>
+
+          {/* Spec chips */}
+          <div style={{ display:'flex', gap:2, padding:'0 24px 12px' }}>
+            {specs.map((spec, i) => (
+              <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', gap:6, alignItems:'center', background:C.gray50, borderRadius:12, padding:'12px 4px 8px' }}>
+                <img src={spec.icon} alt="" style={{ width:20, height:20 }}/>
+                <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center', whiteSpace:'nowrap' }}>{spec.label}</span>
+              </div>
             ))}
           </div>
 
-          {/* Car name */}
-          <div style={{borderBottom:`1px solid ${C.gray200}`,paddingBottom:16,textAlign:'center',padding:'20px 16px 16px'}}>
-            <p style={{margin:'0 0 2px',fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>MG</p>
-            <p style={{margin:0,fontSize:23.5,fontWeight:600,color:C.gray900,lineHeight:1.28}}>ZS Luxury 1.5T</p>
-          </div>
-
-          {/* Description */}
-          <div style={{padding:'24px 24px 0'}}>
-            <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.gray600,lineHeight:1.65,letterSpacing:0.4}}>
-              The MG ZS Luxury 1.5T is a feature-rich compact SUV designed for everyday comfort and urban convenience. With its turbocharged engine, automatic transmission, and premium interior, it delivers a smooth ride while offering excellent value for money in its class.
-            </p>
-          </div>
-
-          {/* Specifications */}
-          <div style={{padding:'24px 24px 0',display:'flex',flexDirection:'column',gap:16,alignItems:'center'}}>
-            <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>Specifications</p>
-            <div style={{border:`1px solid ${C.white}`,borderRadius:8,overflow:'hidden',width:'100%'}}>
-              {specs.map((s,i) => (
-                <div key={s.label} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'9px 12px',background:s.alt?C.gray50:C.white}}>
-                  <span style={{fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4,whiteSpace:'nowrap'}}>{s.label}</span>
-                  <span style={{fontSize:15.5,fontWeight:600,color:C.brand800,letterSpacing:0.25,textAlign:'right'}}>{s.value}</span>
+          {/* Color selector */}
+          <div style={{ padding:'8px 24px' }}>
+            <button onClick={()=>{setColorPickerOpen(true);setPendingColor(selectedColor);}} style={{ width:'100%', background:C.white, border:`1px solid ${C.gray200}`, borderRadius:8, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+              <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                <div style={{ width:20, height:20, borderRadius:'50%', background:colorOptions[selectedColor].hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
+                <div style={{ display:'flex', gap:4, alignItems:'center' }}>
+                  <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700, letterSpacing:0.4 }}>{colorOptions[selectedColor].label}</span>
+                  <span style={{ fontSize:13, color:'#98A2B3' }}>({colorOptions[selectedColor].count})</span>
                 </div>
+              </div>
+              <div style={{ padding:'8px 4px' }}>
+                <img src="/car-loan-assets/arrow-small.svg" alt="" style={{ width:12, height:12 }}/>
+              </div>
+            </button>
+          </div>
+
+          {/* Color picker sheet */}
+          {colorPickerOpen && (
+            <div style={{ position:'fixed', inset:0, zIndex:100, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+              <div onClick={()=>setColorPickerOpen(false)} style={{ position:'absolute', inset:0, background:'rgba(13,19,28,0.5)' }}/>
+              <div style={{ position:'relative', background:C.white, borderRadius:'32px 32px 0 0', display:'flex', flexDirection:'column', gap:0 }}>
+                {/* Drag handle */}
+                <div style={{ display:'flex', flexDirection:'column', gap:12, alignItems:'center', padding:'12px 12px 24px' }}>
+                  <div style={{ width:48, height:4, background:C.gray400, borderRadius:999 }}/>
+                </div>
+                {/* Content */}
+                <div style={{ display:'flex', flexDirection:'column', gap:24, padding:'0 24px 6px' }}>
+                  {/* Title + close */}
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                    <span style={{ fontSize:23.5, fontWeight:700, color:C.gray900, lineHeight:'30px' }}>Color variant</span>
+                    <button onClick={()=>setColorPickerOpen(false)} style={{ border:`1px solid ${C.gray100}`, borderRadius:24, padding:6, background:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    </button>
+                  </div>
+                  {/* Color list */}
+                  <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
+                    {colorOptions.map((c, i) => (
+                      <button key={i} onClick={()=>setPendingColor(i)} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', background:'none', border:'none' }}>
+                        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                          {/* Radio button */}
+                          <div style={{ width:20, height:20, borderRadius:'50%', border:`1px solid ${pendingColor===i?C.brand600:C.gray300}`, background: pendingColor===i?C.brand600:'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                            {pendingColor===i && <div style={{ width:6, height:6, borderRadius:'50%', background:C.white }}/>}
+                          </div>
+                          <span style={{ fontSize:15.5, fontWeight:pendingColor===i?600:400, color:C.gray700, letterSpacing:0.25 }}>{c.label}</span>
+                          <span style={{ fontSize:13, color:'#98A2B3' }}>({c.count})</span>
+                        </div>
+                        {/* Color dot */}
+                        <div style={{ width:20, height:20, borderRadius:'50%', background:c.hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Select button + home indicator */}
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, paddingTop:8 }}>
+                  <div style={{ padding:'12px 24px 8px', width:'100%' }}>
+                    <button onClick={()=>{setSelectedColor(pendingColor);setActiveThumb(0);setColorPickerOpen(false);}} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:10, padding:'16px', fontSize:17.5, fontWeight:700, color:C.white, letterSpacing:0.1 }}>
+                      Select
+                    </button>
+                  </div>
+                  <div style={{ background:C.white, height:34, width:'100%', display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8 }}>
+                    <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Blue info card */}
+          <div style={{ padding:'0 24px 0' }}>
+            <div style={{ background:C.brand50, border:`1px solid ${C.brand100}`, borderRadius:12, overflow:'hidden' }}>
+              {/* Top row: Loan amount | APR */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:60, borderBottom:`1px solid ${C.brand100}`, padding:'4px 12px' }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
+                    <span>Loan amount </span><span style={{ fontSize:10, letterSpacing:0.5 }}>up to</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <SarIcon size={14} color={C.gray900}/>
+                    <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99,999,999.99</span>
+                  </div>
+                </div>
+                <div style={{ width:100, display:'flex', flexDirection:'column', alignItems:'flex-end', paddingRight:4 }}>
+                  <div style={{ display:'flex', gap:2, alignItems:'center' }}>
+                    <button style={{ background:'none', border:'none', padding:2, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                      <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14 }}/>
+                    </button>
+                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>APR from</span>
+                  </div>
+                  <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99.99%</span>
+                </div>
+              </div>
+              {/* Bottom: note */}
+              <div style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px' }}>
+                <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14, opacity:0.6 }}/>
+                <span style={{ fontSize:11, fontWeight:500, color:C.gray600 }}>Based on 10% down payment, 60 months</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div style={{ padding:'8px 16px' }}>
+            <div style={{ background:C.gray50, borderRadius:11, padding:3, display:'flex', gap:10 }}>
+              {[['offers','Offers (5)'],['details','Car details']].map(([tab, label]) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    flex:1, padding:'16px', fontSize:13.5, fontWeight:600, letterSpacing:0.5,
+                    color: activeTab===tab ? C.brand600 : C.gray500,
+                    background: activeTab===tab ? C.white : 'transparent',
+                    border: activeTab===tab ? `1px solid ${C.gray100}` : 'none',
+                    borderRadius:8,
+                  }}
+                >
+                  {label}
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Divider dot */}
-          <div style={{display:'flex',justifyContent:'center',padding:'24px 0 0'}}>
-            <div style={{width:40,height:1,background:C.gray200}}/>
-          </div>
+          {/* Tab content */}
+          {activeTab === 'offers' ? <OffersTab onChangeClick={()=>setChangeOpen(true)}/> : <DetailsTab openFeatures={openFeatures} setOpenFeatures={setOpenFeatures}/>}
+        </div>
 
-          {/* Dealer section */}
-          <div style={{padding:'24px 24px 8px',display:'flex',flexDirection:'column',gap:16,alignItems:'center'}}>
-            <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4,whiteSpace:'nowrap'}}>Dealer available</p>
-            <div style={{display:'flex',gap:16,alignItems:'center'}}>
-              <button onClick={()=>nav('/car-loan/inventory/wallan')} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <img src="/dealer-wallan.png" alt="Al Wallan Trading Company" style={{width:94,height:63,objectFit:'contain'}}/>
-              </button>
-              <button onClick={()=>nav('/car-loan/inventory/almajdouie')} style={{background:'none',border:`1px solid ${C.gray100}`,borderRadius:12,padding:'8px 12px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <img src="/dealer-almajdouie.png" alt="Almajdouie" style={{width:135,height:49,objectFit:'contain'}}/>
-              </button>
+        {/* Change drawer */}
+        {changeOpen && (
+          <div style={{ position:'fixed', inset:0, zIndex:200, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+            <div onClick={()=>setChangeOpen(false)} style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.3)' }}/>
+            <div style={{ position:'relative', background:C.white, borderRadius:'20px 20px 0 0', padding:'16px 24px 40px' }}>
+              <div style={{ width:36, height:4, background:C.gray200, borderRadius:2, margin:'0 auto 16px' }}/>
+              {/* Title row */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
+                <span style={{ fontSize:15.5, fontWeight:600, color:C.gray900 }}>Preliminary offers</span>
+                <button style={{ background:'none', border:'none', padding:4, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+              {/* Loan type toggles */}
+              <p style={{ margin:'0 0 10px', fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Loan type</p>
+              <div style={{ display:'flex', gap:8, marginBottom:20 }}>
+                {['Car Loan','EV Financing'].map((t,i) => (
+                  <button key={i} style={{ flex:1, padding:'10px 8px', fontSize:13.5, fontWeight:600, border:`1.5px solid ${i===1?C.brand600:C.gray200}`, borderRadius:10, background:i===1?C.brand50:C.white, color:i===1?C.brand600:C.gray600, fontFamily:'inherit' }}>{t}</button>
+                ))}
+              </div>
+              {/* Selected products */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                <span style={{ fontSize:13.5, fontWeight:600, color:C.gray900 }}>Car/EV Loan</span>
+                <button style={{ background:'none', border:'none', padding:4 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {['Bank AlBilad — EV Financing','SNB الأهلي — Car/EV Loan','Riyad Bank — EV Financing'].map((p,i) => (
+                  <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', borderBottom:`1px solid ${C.gray100}` }}>
+                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700 }}>{p}</span>
+                    <button style={{ background:'none', border:'none', padding:4, display:'flex', alignItems:'center' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>setChangeOpen(false)} style={{ marginTop:24, width:'100%', background:C.brand600, border:'none', borderRadius:12, padding:'14px', fontSize:14, fontWeight:600, color:C.white, fontFamily:'inherit' }}>Apply</button>
             </div>
           </div>
-
-        </div>
+        )}
 
         {/* Bottom CTA */}
-        <div style={{position:'absolute',bottom:0,left:0,right:0,background:C.white,display:'flex',flexDirection:'column',alignItems:'stretch'}}>
-          <div style={{padding:'12px 24px 8px',display:'flex',gap:8}}>
-            <button onClick={()=>nav('/car-loan/offers')} style={{flex:1,background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'12px 16px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:46}}>
-              See offers
-            </button>
+        {activeTab === 'details' && (
+          <div style={{ position:'absolute', bottom:0, left:0, right:0, background:C.white }}>
+            <div style={{ padding:'12px 24px 8px' }}>
+              <button onClick={()=>setActiveTab('offers')} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}>
+                See offers (5)
+              </button>
+            </div>
+            <div style={{ background:C.white, height:34, display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8 }}>
+              <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
+            </div>
           </div>
-          <div style={{background:C.white,height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8}}>
-            <div style={{width:135,height:5,background:'#000',borderRadius:999}}/>
-          </div>
-        </div>
-
+        )}
       </div>
     );
   }
