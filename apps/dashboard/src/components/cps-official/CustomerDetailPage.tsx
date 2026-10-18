@@ -14,6 +14,7 @@ import {
   type Profile,
 } from './cps-data';
 import ViewSwitcherModal from './ViewSwitcherModal';
+import PaymentRequestDrawer from './PaymentRequestDrawer';
 import { TabPageContent } from './cps-tab-pages';
 import ProviderJourneyContent from './ProviderJourneyContent';
 
@@ -957,6 +958,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const [activeMainTab, setActiveMainTab] = useState(0);
   const [activeSubTab,  setActiveSubTab]  = useState(0);
   const [showSwitcher, setShowSwitcher] = useState(false);
+  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
 
   const activeSubTabKey = activeTabs[activeMainTab]?.sub[activeSubTab]?.key ?? '';
   const isJourneyTab = activeMainTab === 0 && activeSubTabKey === 'journey';
@@ -965,6 +967,14 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
     <div className={noTopbar ? "flex-1 flex flex-col overflow-hidden bg-[#f8fafc] dark:bg-slate-950" : "h-screen bg-[#f8fafc] flex flex-col dark:bg-slate-950"} dir={isAr ? 'rtl' : 'ltr'}>
       {!noTopbar && <Topbar onProfileClick={() => setShowSwitcher(true)} />}
       {!noTopbar && showSwitcher && <ViewSwitcherModal onClose={() => setShowSwitcher(false)} />}
+      {showPaymentRequest && (
+        <PaymentRequestDrawer
+          onClose={() => setShowPaymentRequest(false)}
+          customerName={isAr ? profile.nameAr : profile.name}
+          customerId={profile.id}
+          isAr={isAr}
+        />
+      )}
 
       <div className="flex-1 overflow-y-auto">
 
@@ -1001,6 +1011,15 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                     </span>
                     <button className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       {isAr ? 'إرسال رسالة' : 'Send Message'}
+                      <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
+                        <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
+                      </div>
+                      <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+                    </button>
+                    <button
+                      onClick={() => setShowPaymentRequest(true)}
+                      className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                      {isAr ? 'طلب دفع' : 'Payment request'}
                       <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
                         <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
                       </div>
