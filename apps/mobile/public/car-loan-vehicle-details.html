@@ -24,6 +24,7 @@
   const C = { brand600:'#0063F5', yellow:'#FFDD33', gray900:'#121A26', gray500:'#697586', gray100:'#EEF1F6', white:'#FFFFFF' };
   const nav = (p) => (window.top||window).location.href = p;
 
+  const CAR_TYPES = ['SUV','Sedan','Hatchback','Pickup Truck','Crossover','Coupe','Minivan','Van'];
   const MAKES = ['Toyota','Nissan','Hyundai','Kia','Honda','Mercedes-Benz','BMW','Lexus','Mitsubishi','Chevrolet'];
   const MODELS = {
     'Toyota':['Camry','Corolla','Land Cruiser','RAV4','Yaris','Hilux','Fortuner'],
@@ -111,14 +112,15 @@
 
   function App() {
     const [isNew, setIsNew] = useState(true);
+    const [carType, setCarType] = useState('');
     const [make, setMake] = useState('');
     const [model, setModel] = useState('');
     const [year, setYear] = useState('');
-    const [type, setType] = useState('');
+    const [trim, setTrim] = useState('');
     const [price, setPrice] = useState('');
-    const [sheet, setSheet] = useState(null); // null | 'make'|'model'|'year'|'type'
+    const [sheet, setSheet] = useState(null);
 
-    const canContinue = make && model && year && price;
+    const canContinue = carType && make && model && year && price;
 
     const openSheet = (which) => setSheet(which);
     const closeSheet = () => setSheet(null);
@@ -158,10 +160,11 @@
             </div>
           </div>
 
-          <SelectField label="Make" value={make} placeholder="Select make" required onTap={() => openSheet('make')}/>
+          <SelectField label="Type of car" value={carType} placeholder="Select type" required onTap={() => openSheet('carType')}/>
+          <SelectField label="Brand" value={make} placeholder="Select brand" required onTap={() => openSheet('make')}/>
           <SelectField label="Model" value={model} placeholder="Select model" required onTap={() => make && openSheet('model')}/>
           <SelectField label="Year" value={year} placeholder="Select year" required onTap={() => openSheet('year')}/>
-          <SelectField label="Type" value={type} placeholder="Select type" onTap={() => openSheet('type')}/>
+          <SelectField label="Trim (Optional)" value={trim} placeholder="Select trim" onTap={() => openSheet('trim')}/>
 
           {/* Price */}
           <div style={{marginBottom:12}}>
@@ -191,10 +194,11 @@
         </div>
 
         {/* Picker sheets */}
-        {sheet==='make' && <PickerSheet title="Select Make" options={MAKES} value={make} onSelect={v=>{setMake(v);setModel('');setType('');}} onClose={closeSheet}/>}
+        {sheet==='carType' && <PickerSheet title="Type of car" options={CAR_TYPES} value={carType} onSelect={setCarType} onClose={closeSheet}/>}
+        {sheet==='make' && <PickerSheet title="Select Brand" options={MAKES} value={make} onSelect={v=>{setMake(v);setModel('');setTrim('');}} onClose={closeSheet}/>}
         {sheet==='model' && <PickerSheet title="Select Model" options={MODELS[make]||[]} value={model} onSelect={setModel} onClose={closeSheet}/>}
         {sheet==='year' && <PickerSheet title="Select Year" options={YEARS} value={year} onSelect={setYear} onClose={closeSheet}/>}
-        {sheet==='type' && <PickerSheet title="Select Type" options={TYPES} value={type} onSelect={setType} onClose={closeSheet}/>}
+        {sheet==='trim' && <PickerSheet title="Trim (Optional)" options={TYPES} value={trim} onSelect={setTrim} onClose={closeSheet}/>}
       </div>
     );
   }
