@@ -156,17 +156,69 @@
     );
   }
 
-  function OffersTab({ onChangeClick }) {
+  function FindLoanExpanded({ onClose }) {
+    const [salary, setSalary] = useState('12,000');
+    const [hasLoans, setHasLoans] = useState(false);
+    return (
+      <div style={{background:C.white,padding:'12px 24px 20px',borderTop:`1px solid ${C.gray100}`}}>
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:6}}>Salary <span style={{color:'#E53935'}}>*</span></label>
+          <div style={{background:'#F8FAFC',border:'1.5px solid #E2E8F0',borderRadius:12,padding:'12px 14px',display:'flex',alignItems:'center',gap:8}}>
+            <SarIcon size={16}/>
+            <input type="text" placeholder="0" value={salary} onChange={e=>{const raw=e.target.value.replace(/[^0-9]/g,'');const n=parseInt(raw||'0',10);setSalary(n?n.toLocaleString('en-US'):'');}} style={{flex:1,border:'none',background:'transparent',fontSize:16,fontWeight:600,color:'#121A26',fontFamily:'inherit',outline:'none'}}/>
+            <span style={{fontSize:13,color:C.gray600,flexShrink:0}}>Monthly</span>
+          </div>
+        </div>
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:10}}>Do you have active loans? <span style={{color:'#E53935'}}>*</span></label>
+          <div style={{display:'flex',gap:10}}>
+            {[{l:'Yes',v:true},{l:'No',v:false}].map(o=>(
+              <button key={o.l} onClick={()=>setHasLoans(o.v)} style={{flex:1,padding:11,fontSize:14,fontWeight:hasLoans===o.v?600:400,border:`1.5px solid ${hasLoans===o.v?C.brand600:'#E2E8F0'}`,borderRadius:10,background:hasLoans===o.v?'#EBF3FF':C.white,color:hasLoans===o.v?C.brand600:C.gray600,fontFamily:'inherit'}}>{o.l}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{position:'relative',background:'#FFDD33',border:'1px solid #FAD932',borderRadius:16,overflow:'hidden',display:'flex',alignItems:'center',gap:8,paddingRight:12,marginBottom:16}}>
+          <img src="/find-loan/eligible-cta-bg.svg" alt="" style={{position:'absolute',top:'calc(-20.51% - 1.41px)',right:'calc(-5.81% - 1.12px)',bottom:'calc(-21.79% - 1.44px)',left:'calc(-5.81% - 1.12px)',width:'calc(111.62% + 2.24px)',height:'calc(142.3% + 2.85px)'}}/>
+          <div style={{position:'relative',width:77,height:78,flexShrink:0}}>
+            <div style={{position:'absolute',right:-0.4,top:'50%',transform:'translateY(-50%)',width:93.401,height:78,overflow:'hidden'}}>
+              <img src="/car-loan-assets/icon-loan-type.svg" alt="" style={{display:'block',width:94,height:78}}/>
+            </div>
+          </div>
+          <div style={{position:'relative',flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:2,padding:'6px 0'}}>
+            <p style={{margin:0,fontSize:10,fontWeight:500,lineHeight:'14px',letterSpacing:0.5,color:'#121A26'}}>You may be eligible to take a loan up to</p>
+            <div style={{display:'flex',flexWrap:'wrap',alignItems:'center',gap:8}}>
+              <div style={{display:'flex',alignItems:'baseline',gap:4}}>
+                <SarIcon size={22} color="#121A26"/>
+                <span style={{fontSize:29.5,fontWeight:500,lineHeight:'38px',color:'#121A26',whiteSpace:'nowrap'}}>183,552</span>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+                <span style={{fontSize:10,fontWeight:500,lineHeight:'14px',letterSpacing:0.5,color:'#121A26'}}>for</span>
+                <span style={{fontSize:13.5,fontWeight:600,lineHeight:'18px',letterSpacing:0.5,color:'#121A26',whiteSpace:'nowrap'}}>60 Months</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button onClick={onClose} style={{width:'100%',background:C.brand600,border:'none',borderRadius:14,padding:16,fontSize:16,fontWeight:600,color:C.white,fontFamily:'inherit'}}>Update</button>
+      </div>
+    );
+  }
+
+  function OffersTab({ onChangeClick, changeOpen }) {
     return (
       <div>
         {/* Preliminary search */}
         <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
-          <button onClick={onChangeClick} style={{ display:'flex', alignItems:'center', gap:4, fontSize:13.5, fontWeight:600, color:C.brand600, background:'none', border:'none', padding:0 }}>
-            Change
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke={C.brand600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <button onClick={onChangeClick} style={{display:'flex',alignItems:'center',gap:10,background:'none',border:'none',padding:0}}>
+            <span style={{fontSize:12.5,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>Change</span>
+            <div style={{border:`1px solid ${C.gray200}`,borderRadius:34,padding:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{transform:changeOpen?'rotate(180deg)':'rotate(0deg)',transition:'transform 0.2s'}}>
+                <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </button>
         </div>
+        {changeOpen && <FindLoanExpanded onClose={onChangeClick}/>}
         {/* Eligible text */}
         <div style={{ padding:'0 24px 12px' }}>
           <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
@@ -568,50 +620,8 @@
           </div>
 
           {/* Tab content */}
-          {activeTab === 'offers' ? <OffersTab onChangeClick={()=>setChangeOpen(true)}/> : <DetailsTab openFeatures={openFeatures} setOpenFeatures={setOpenFeatures}/>}
+          {activeTab === 'offers' ? <OffersTab onChangeClick={()=>setChangeOpen(o=>!o)} changeOpen={changeOpen}/> : <DetailsTab openFeatures={openFeatures} setOpenFeatures={setOpenFeatures}/>}
         </div>
-
-        {/* Change drawer */}
-        {changeOpen && (
-          <div style={{ position:'fixed', inset:0, zIndex:200, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
-            <div onClick={()=>setChangeOpen(false)} style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.3)' }}/>
-            <div style={{ position:'relative', background:C.white, borderRadius:'20px 20px 0 0', padding:'16px 24px 40px' }}>
-              <div style={{ width:36, height:4, background:C.gray200, borderRadius:2, margin:'0 auto 16px' }}/>
-              {/* Title row */}
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
-                <span style={{ fontSize:15.5, fontWeight:600, color:C.gray900 }}>Preliminary offers</span>
-                <button style={{ background:'none', border:'none', padding:4, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-              </div>
-              {/* Loan type toggles */}
-              <p style={{ margin:'0 0 10px', fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Loan type</p>
-              <div style={{ display:'flex', gap:8, marginBottom:20 }}>
-                {['Car Loan','EV Financing'].map((t,i) => (
-                  <button key={i} style={{ flex:1, padding:'10px 8px', fontSize:13.5, fontWeight:600, border:`1.5px solid ${i===1?C.brand600:C.gray200}`, borderRadius:10, background:i===1?C.brand50:C.white, color:i===1?C.brand600:C.gray600, fontFamily:'inherit' }}>{t}</button>
-                ))}
-              </div>
-              {/* Selected products */}
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
-                <span style={{ fontSize:13.5, fontWeight:600, color:C.gray900 }}>Car/EV Loan</span>
-                <button style={{ background:'none', border:'none', padding:4 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                {['Bank AlBilad — EV Financing','SNB الأهلي — Car/EV Loan','Riyad Bank — EV Financing'].map((p,i) => (
-                  <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', borderBottom:`1px solid ${C.gray100}` }}>
-                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700 }}>{p}</span>
-                    <button style={{ background:'none', border:'none', padding:4, display:'flex', alignItems:'center' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke={C.gray400} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <button onClick={()=>setChangeOpen(false)} style={{ marginTop:24, width:'100%', background:C.brand600, border:'none', borderRadius:12, padding:'14px', fontSize:14, fontWeight:600, color:C.white, fontFamily:'inherit' }}>Apply</button>
-            </div>
-          </div>
-        )}
 
         {/* Bottom CTA */}
         {activeTab === 'details' && (
