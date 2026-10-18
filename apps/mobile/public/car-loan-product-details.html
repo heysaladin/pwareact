@@ -125,21 +125,21 @@ function SegmentedControl({activeTab, onTabChange}) {
 
 const LOAN_PERIODS = [12,18,24,30,36,42,54,60,72];
 
-function LoanPeriodSelector({selected, onSelect}) {
+function LoanPeriodSelector({selected, onSelect, maxPeriod=60}) {
   return (
     <div style={{display:'flex',flexDirection:'column',gap:16,alignItems:'center',width:'100%'}}>
       <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1,width:'100%'}}>Select Loan Period (Months)</p>
-      <div style={{display:'flex',gap:8,alignItems:'flex-start',flexWrap:'wrap',justifyContent:'flex-end',borderRadius:8,width:'100%'}}>
+      <div style={{display:'flex',gap:8,alignItems:'flex-start',flexWrap:'nowrap',overflowX:'auto',scrollbarWidth:'none',touchAction:'pan-x',borderRadius:8,width:'100%'}}>
         {LOAN_PERIODS.map(p => {
           const isActive = p === selected;
-          const isDisabled = p === 72;
+          const isDisabled = p > maxPeriod;
           return (
             <button key={p} onClick={()=>!isDisabled && onSelect(p)}
               style={{
                 padding:12,borderRadius:12,cursor:isDisabled?'default':'pointer',
                 background: isActive ? 'var(--brand-600)' : isDisabled ? 'var(--gray-50)' : 'var(--gray-100)',
                 border: isActive ? '1px solid var(--gray-100)' : isDisabled ? 'none' : '1px solid var(--brand-600)',
-                minWidth:0,
+                minWidth:0,flexShrink:0,
               }}>
               <span style={{fontSize:13.5,fontWeight:600,lineHeight:'20px',color: isActive ? 'white' : isDisabled ? 'var(--gray-400)' : 'var(--gray-600)',letterSpacing:0.5,display:'block',width:19,textAlign:'center'}}>{p}</span>
             </button>
@@ -159,6 +159,76 @@ function LoanAmount({months}) {
         <span style={{display:'flex',alignItems:'baseline',gap:4,fontSize:33.5,fontWeight:500,color:'var(--brand-800)',lineHeight:'45px'}}><SarIcon size={22} color="var(--brand-800)"/>99,999,999.99</span>
         <span style={{fontSize:12.5,fontWeight:500,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.5}}>for {months} months</span>
       </div>
+    </div>
+  );
+}
+
+const fmtSar = n => Math.round(n).toLocaleString('en-US');
+
+function RangeSlider({value, min, max, step, onChange, topLabels, bottomLabels}) {
+  const pct = ((value - min) / (max - min)) * 100;
+  const thumbCenter = `calc(${pct}% + ${(0.5 - pct / 100) * 22}px)`;
+  const labelRow = (labels, withSar) => (
+    <div style={{position:'relative',height:26,width:'100%'}}>
+      {labels.map(({text, at, active}, i) => {
+        const x = at === 'min' ? 0 : at === 'max' ? 100 : pct;
+        const shift = at === 'min' ? '0%' : at === 'max' ? '-100%' : `-${pct}%`;
+        if (!active && Math.abs(x - pct) < 22) return null;
+        return (
+          <span key={i} style={{position:'absolute',left:`${x}%`,transform:`translateX(${shift})`,display:'flex',alignItems:'center',gap:2,fontSize:15.5,fontWeight:600,lineHeight:'26px',letterSpacing:0.1,whiteSpace:'nowrap',color: active ? 'var(--brand-600)' : 'var(--gray-400)'}}>
+            {withSar && <SarIcon size={12} color={active ? 'var(--brand-600)' : 'var(--gray-400)'}/>}{text}
+          </span>
+        );
+      })}
+    </div>
+  );
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,width:'100%'}}>
+      {topLabels && labelRow(topLabels, true)}
+      <div style={{position:'relative',height:24,margin:'0 12px'}}>
+        <div style={{position:'absolute',inset:0,background:'var(--gray-100)',borderRadius:999}}/>
+        <div style={{position:'absolute',left:0,top:0,bottom:0,width:`calc(${thumbCenter} + 11px)`,background:'linear-gradient(90deg, var(--brand-800), var(--brand-600))',borderRadius:999}}/>
+        <div style={{position:'absolute',top:1,left:`calc(${thumbCenter} - 11px)`,width:22,height:22,borderRadius:'50%',background:'white',border:'3px solid var(--brand-600)',pointerEvents:'none'}}/>
+        <input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))}
+          style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:0,margin:0,cursor:'pointer',touchAction:'pan-x'}}/>
+      </div>
+      {bottomLabels && labelRow(bottomLabels, false)}
+    </div>
+  );
+}
+
+const CAR_PRICE = 150000;
+const maxPeriodForDp = pct => pct >= 30 ? 72 : pct >= 20 ? 60 : pct >= 10 ? 54 : 42;
+
+function DownPaymentSlider({percent, onChange}) {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center',width:'100%'}}>
+      <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1}}>Loan amount</p>
+      <RangeSlider value={percent} min={5} max={30} step={1} onChange={onChange}
+        topLabels={[
+          {text:fmtSar(CAR_PRICE*0.05), at:'min'},
+          {text:fmtSar(CAR_PRICE*percent/100), at:'value', active:true},
+          {text:fmtSar(CAR_PRICE*0.30), at:'max'},
+        ]}
+        bottomLabels={[
+          {text:'5%', at:'min'},
+          {text:`${percent}%`, at:'value', active:true},
+          {text:'30%', at:'max'},
+        ]}/>
+    </div>
+  );
+}
+
+function LoanAmountSlider({amount, max, onChange}) {
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center',width:'100%'}}>
+      <p style={{fontSize:15.5,fontWeight:700,lineHeight:'22px',color:'var(--gray-600)',textAlign:'center',letterSpacing:0.1}}>Loan amount</p>
+      <RangeSlider value={amount} min={2000} max={max} step={500} onChange={onChange}
+        topLabels={[
+          {text:'2,000', at:'min'},
+          {text:fmtSar(amount), at:'value', active:true},
+          {text:fmtSar(max), at:'max'},
+        ]}/>
     </div>
   );
 }
@@ -323,6 +393,15 @@ function BottomNav() {
 function App() {
   const [activeTab, setActiveTab] = React.useState('max');
   const [selectedPeriod, setSelectedPeriod] = React.useState(60);
+  const [downPaymentPct, setDownPaymentPct] = React.useState(20);
+  const [loanAmount, setLoanAmount] = React.useState(75000);
+  const maxLoanAmount = CAR_PRICE * (1 - downPaymentPct / 100);
+  const maxPeriod = maxPeriodForDp(downPaymentPct);
+  const changeDownPayment = pct => {
+    setDownPaymentPct(pct);
+    setLoanAmount(a => Math.min(a, CAR_PRICE * (1 - pct / 100)));
+    setSelectedPeriod(m => Math.min(m, Math.max(...LOAN_PERIODS.filter(p => p <= maxPeriodForDp(pct)))));
+  };
 
   return (
     <div style={{width:'100%',minHeight:'100vh',background:'white',position:'relative'}}>
@@ -333,8 +412,18 @@ function App() {
       <SegmentedControl activeTab={activeTab} onTabChange={setActiveTab}/>
 
       <div style={{display:'flex',flexDirection:'column',gap:24,padding:'24px 24px 160px',alignItems:'center'}}>
-        <LoanPeriodSelector selected={selectedPeriod} onSelect={setSelectedPeriod}/>
-        <LoanAmount months={selectedPeriod}/>
+        {activeTab === 'calc' ? (
+          <>
+            <DownPaymentSlider percent={downPaymentPct} onChange={changeDownPayment}/>
+            <LoanPeriodSelector selected={selectedPeriod} onSelect={setSelectedPeriod} maxPeriod={maxPeriod}/>
+            <LoanAmountSlider amount={loanAmount} max={maxLoanAmount} onChange={setLoanAmount}/>
+          </>
+        ) : (
+          <>
+            <LoanPeriodSelector selected={selectedPeriod} onSelect={setSelectedPeriod}/>
+            <LoanAmount months={selectedPeriod}/>
+          </>
+        )}
         <LoanDetailsTable/>
         <FeesContainer/>
         <ExecutionCard/>
