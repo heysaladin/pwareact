@@ -125,7 +125,7 @@ export default function DashboardPage() {
         <main className="flex-1 overflow-auto p-6 flex flex-col gap-6">
           <div>
             <h1 className="text-[22px] font-bold text-[#101828] dark:text-white">Overview</h1>
-            <p className="text-sm text-[#667085] dark:text-slate-400 mt-0.5">Welcome back, Abdullah. Here's what's happening today.</p>
+            <p className="text-sm text-[#667085] dark:text-slate-400 mt-0.5">Welcome back, Abdullah. Here&apos;s what&apos;s happening today.</p>
           </div>
 
           {/* KPIs */}
