@@ -218,9 +218,9 @@
 
   function OffersTab({ onChangeClick, changeOpen, onSortClick, onFilterClick }) {
     return (
-      <div>
+      <div style={{ background:C.gray50 }}>
         {/* Preliminary search */}
-        <div style={{ background:C.gray50 }}>
+        <div>
           <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
             <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
             <button onClick={onChangeClick} style={{display:'flex',alignItems:'center',gap:10,background:'none',border:'none',padding:0}}>
