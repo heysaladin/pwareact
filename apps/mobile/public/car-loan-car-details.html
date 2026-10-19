@@ -664,34 +664,27 @@
             <button onClick={()=>nav(ALREADY ? '/car-loan/vehicle-details' : '/car-loan/inventory')} style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center' }}>
               <img src="/car-loan-assets/back-icon.svg" alt="" style={{ width:24, height:24 }}/>
             </button>
-            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25, flex:1, textAlign:'center' }}>{tabsStuck ? (USER_CAR ? USER_CAR.model : 'Foxtron Model B') : 'Car Details'}</span>
-            {tabsStuck ? (
-              <div style={{ display:'flex', alignItems:'center' }}>
-                <button onClick={backToTop} aria-label="Back to top" style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
+            <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:6, minWidth:0 }}>
+              <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:160 }}>
+                {tabsStuck ? (USER_CAR ? USER_CAR.model : 'Foxtron Model B') : 'Car Details'}
+              </span>
+              {tabsStuck && (
+                <button onClick={backToTop} aria-label="Back to top" style={{ background:'none', border:'none', padding:0, display:'flex', alignItems:'center', flexShrink:0 }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" fill={C.brand600}/>
                     <path d="M12 16.5V7.5M12 7.5L8 11.5M12 7.5L16 11.5" stroke={C.white} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </button>
-                <button style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end', cursor:'pointer' }}>
-                  <div style={{ position:'relative', width:30, height:30 }}>
-                    <img src="/car-loan-assets/icon-comparing.svg" alt="compare" style={{ position:'absolute', bottom:0, left:0, width:24, height:24 }}/>
-                    <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#FA9715', borderRadius:999, border:'1.5px solid white', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <span style={{ fontSize:10, fontWeight:500, color:'white', lineHeight:1 }}>1</span>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            ) : (
-              <button style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end', cursor:'pointer' }}>
-                <div style={{ position:'relative', width:30, height:30 }}>
-                  <img src="/car-loan-assets/icon-comparing.svg" alt="compare" style={{ position:'absolute', bottom:0, left:0, width:24, height:24 }}/>
-                  <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#FA9715', borderRadius:999, border:'1.5px solid white', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <span style={{ fontSize:10, fontWeight:500, color:'white', lineHeight:1 }}>1</span>
-                  </div>
+              )}
+            </div>
+            <button style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end', cursor:'pointer' }}>
+              <div style={{ position:'relative', width:30, height:30 }}>
+                <img src="/car-loan-assets/icon-comparing.svg" alt="compare" style={{ position:'absolute', bottom:0, left:0, width:24, height:24 }}/>
+                <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#FA9715', borderRadius:999, border:'1.5px solid white', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <span style={{ fontSize:10, fontWeight:500, color:'white', lineHeight:1 }}>1</span>
                 </div>
-              </button>
-            )}
+              </div>
+            </button>
           </div>
         </div>
 
