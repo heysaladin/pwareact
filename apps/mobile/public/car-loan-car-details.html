@@ -221,7 +221,7 @@
       <div style={{ background:C.gray50 }}>
         {/* Preliminary search */}
         <div>
-          <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', background:C.gray50 }}>
             <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
             <button onClick={onChangeClick} style={{display:'flex',alignItems:'center',gap:10,background:'none',border:'none',padding:0}}>
               <span style={{fontSize:12.5,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>Change</span>
@@ -276,7 +276,7 @@
 
         {/* Specifications */}
         <div style={{ padding:'24px 24px 0' }}>
-          <p style={{ margin:'0 0 12px', fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Specifications</p>
+          <p style={{ margin:'0 0 12px', fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'left' }}>Specifications</p>
           <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
             {detailSpecs.map((s, i) => (
               <div key={s.label} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 12px', background:s.alt?C.gray50:C.white }}>
