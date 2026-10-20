@@ -15,6 +15,7 @@ import {
 } from './cps-data';
 import ViewSwitcherModal from './ViewSwitcherModal';
 import PaymentRequestDrawer from './PaymentRequestDrawer';
+import SendMessageDrawer from './SendMessageDrawer';
 import { TabPageContent } from './cps-tab-pages';
 import ProviderJourneyContent from './ProviderJourneyContent';
 
@@ -959,6 +960,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const [activeSubTab,  setActiveSubTab]  = useState(0);
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
+  const [showSendMessage, setShowSendMessage] = useState(false);
 
   const activeSubTabKey = activeTabs[activeMainTab]?.sub[activeSubTab]?.key ?? '';
   const isJourneyTab = activeMainTab === 0 && activeSubTabKey === 'journey';
@@ -970,6 +972,14 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
       {showPaymentRequest && (
         <PaymentRequestDrawer
           onClose={() => setShowPaymentRequest(false)}
+          customerName={isAr ? profile.nameAr : profile.name}
+          customerId={profile.id}
+          isAr={isAr}
+        />
+      )}
+      {showSendMessage && (
+        <SendMessageDrawer
+          onClose={() => setShowSendMessage(false)}
           customerName={isAr ? profile.nameAr : profile.name}
           customerId={profile.id}
           isAr={isAr}
@@ -1009,22 +1019,28 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                     <span className="px-4 py-[4px] rounded-full bg-[#ecfdf3] border border-[#079455] text-[#17b26a] text-[14px] font-medium leading-[24px] whitespace-nowrap">
                       {isAr ? 'نشيط' : 'Active'}
                     </span>
-                    <button className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button onClick={() => setShowSendMessage(true)} className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       {isAr ? 'إرسال رسالة' : 'Send Message'}
                       <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
                         <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
                       </div>
                       <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
                     </button>
-                    <button
-                      onClick={() => setShowPaymentRequest(true)}
-                      className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
-                      {isAr ? 'طلب دفع' : 'Payment request'}
-                      <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
-                        <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
+                    <div className="relative group">
+                      <button
+                        onClick={() => setShowPaymentRequest(true)}
+                        className="relative flex items-center gap-[4px] px-[12px] py-[8px] rounded-[8px] border border-[#80b1fa] bg-white text-[#0053cc] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                        {isAr ? 'طلب دفع' : 'Payment request'}
+                        <div className="overflow-clip size-[20px] shrink-0" style={{ transform: isAr ? 'scaleX(-1)' : undefined }}>
+                          <img alt="" className="block size-full" src="/journey-icons/arrow-right.svg" />
+                        </div>
+                        <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+                      </button>
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-[6px] px-[10px] py-[6px] rounded-[6px] bg-[#101828] text-white text-[12px] font-medium leading-[18px] whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
+                        {isAr ? 'بديل: فكر في الحذف' : 'Alternative: Consider to delete'}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#101828]" />
                       </div>
-                      <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-                    </button>
+                    </div>
                   </div>
                 </div>
                 {!isProvider && (

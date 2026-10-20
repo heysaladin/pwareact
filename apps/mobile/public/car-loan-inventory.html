@@ -16,6 +16,8 @@
     input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;outline:none;margin:0;padding:0;}
     input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:#0063F5;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);cursor:pointer;}
     input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#0063F5;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);cursor:pointer;}
+    @keyframes shimmer{0%{background-position:-800px 0}100%{background-position:800px 0}}
+    .shimmer{background:linear-gradient(90deg,#E3E8EF 25%,#EEF1F6 50%,#E3E8EF 75%);background-size:800px 100%;animation:shimmer 1.4s infinite linear;}
   </style>
 </head>
 <body>
@@ -34,14 +36,14 @@
 
   const cars = [
     // car-image_registered (Figma 4001:218875)
-    { id:1,  make:'Foxtron',  model:'Model B',      year:2026, trim:'Standard',  isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-foxconn-model-b.png' },
-    { id:2,  make:'CEER',     model:'Exobot Sedan', year:2026, trim:'Standard',  isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-ceer-sedan.png' },
-    { id:3,  make:'CEER',     model:'Exobot SUV',   year:2026, trim:'Standard',  isNew:true,  price:135000, monthly:2000, img:'/car-loan-assets/car-ceer-suv.png' },
-    { id:4,  make:'Lucid',    model:'Air',          year:2026, trim:'Pure',      isNew:true,  price:310000, monthly:4600, img:'/car-loan-assets/car-lucid-air.png' },
-    { id:5,  make:'Tesla',    model:'Model Y',      year:2026, trim:'Long Range',isNew:true,  price:190000, monthly:2800, img:'/car-loan-assets/car-tesla-model-y.png' },
-    { id:6,  make:'Mercedes-Benz', model:'C-Class', year:2026, trim:'C200',      isNew:true,  price:230000, monthly:3400, img:'/car-loan-assets/car-merc-cclass.png' },
-    { id:7,  make:'Ford',     model:'Ranger Raptor',year:2026, trim:'3.0L V6',   isNew:true,  price:245000, monthly:3600, img:'/car-loan-assets/car-ford-ranger-raptor.png' },
-    { id:8,  make:'MG',       model:'ZS EV',        year:2026, trim:'Standard',  isNew:true,  price:110000, monthly:1650, img:'/car-loan-assets/car-mg-zs-ev.png' },
+    { id:1,  make:'CEER',     model:'Foxtron Model B', year:2026, trim:'77 kWh', name:'CEER Foxtron Model B - EV Hatchback - Limited Edition', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-foxconn-model-b.png' },
+    { id:2,  make:'CEER',     model:'Exobot Sedan', year:2026, trim:'Standard',  isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-ceer-sedan-new.png' },
+    { id:3,  make:'CEER',     model:'Exobot SUV',   year:2026, trim:'Standard',  isNew:true,  price:135000, monthly:2000, img:'/car-loan-assets/car-ceer-suv-new.png' },
+    { id:4,  make:'Lucid',    model:'Air',          year:2026, trim:'Pure',      isNew:true,  price:310000, monthly:4600, img:'/car-loan-assets/car-lucid-air-new.png' },
+    { id:5,  make:'Tesla',    model:'Model Y',      year:2026, trim:'Long Range',isNew:true,  price:190000, monthly:2800, img:'/car-loan-assets/car-tesla-model-y-new.png' },
+    { id:6,  make:'Mercedes-Benz', model:'C-Class', year:2026, trim:'C200',      isNew:true,  price:230000, monthly:3400, img:'/car-loan-assets/car-merc-cclass-new.png' },
+    { id:7,  make:'Ford',     model:'Ranger Raptor',year:2026, trim:'3.0L V6',   isNew:true,  price:245000, monthly:3600, img:'/car-loan-assets/car-ford-raptor-new.png' },
+    { id:8,  make:'MG',       model:'ZS EV',        year:2026, trim:'Standard',  isNew:true,  price:110000, monthly:1650, img:'/car-loan-assets/car-mg-zs-ev-new.png' },
     // car-image_real (Figma 4001:218942)
     { id:9,  make:'Toyota',   model:'Camry',        year:2024, trim:'XLE 2.5L', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-toyota-camry.png' },
     { id:10, make:'Hyundai',  model:'Accent',       year:2024, trim:'1.4L',     isNew:false, price:72000,  monthly:1100, img:'/car-loan-assets/car-hyundai-accent.png' },
@@ -57,7 +59,7 @@
     { id:19, make:'Generic',  model:'Pickup',       year:2024, trim:'Standard', isNew:false, price:85000,  monthly:1300, img:'/car-loan-assets/car-placeholder-pickup.png' },
     { id:20, make:'Generic',  model:'Crossover',    year:2024, trim:'Standard', isNew:false, price:80000,  monthly:1250, img:'/car-loan-assets/car-placeholder-crossover.png' },
     { id:21, make:'Generic',  model:'MPV',          year:2024, trim:'Standard', isNew:false, price:75000,  monthly:1150, img:'/car-loan-assets/car-placeholder-mvp.png' },
-    { id:22, make:'Generic',  model:'Coupe',        year:2024, trim:'Standard', isNew:false, price:95000,  monthly:1400, img:'/car-loan-assets/car-placeholder-coupe.png' },
+    { id:22, make:'Generic',  model:'Coupe',        year:2024, trim:'Standard', isNew:false, price:95000,  monthly:1400, img:'/car-loan-assets/car-merc-sl.png' },
   ];
 
   function StatusBar() {
@@ -73,17 +75,162 @@
     );
   }
 
-  function CarCard({ car }) {
-    const [liked, setLiked] = useState(false);
+  function ViewOptionBar({ selected, onSelect }) {
+    const tabs = [
+      { id:'List', label:'List', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{color:'currentColor'}}><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+      { id:'Square', label:'Square', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M5 8h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+      { id:'Detailed', label:'Detailed', icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M2 6h12" stroke="currentColor" strokeWidth="1.5"/><path d="M6 6v8" stroke="currentColor" strokeWidth="1.5"/></svg> },
+    ];
     return (
-      <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',width:'100%'}}>
-        <div style={{background:C.white,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
-          <img src={car.img} alt={car.model} style={{width:'100%',height:'auto',objectFit:'contain',objectPosition:'center'}}/>
+      <div style={{background:C.gray50,borderRadius:11,padding:3,display:'flex',gap:3,marginBottom:16}}>
+        {tabs.map(tab => (
+          <button key={tab.id} onClick={()=>onSelect(tab.id)} style={{
+            flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:8,
+            padding:'8px 0',borderRadius:8,
+            background: selected===tab.id ? C.white : 'transparent',
+            border: selected===tab.id ? `1px solid ${C.gray100}` : '1px solid transparent',
+            fontSize:12.5,fontWeight:500,letterSpacing:0.5,
+            color: selected===tab.id ? C.brand600 : C.gray500,
+            boxShadow: selected===tab.id ? '0 1px 2px rgba(10,13,18,0.05)' : 'none',
+            cursor:'pointer',fontFamily:'inherit',
+          }}>
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  function HeartButton({ liked, onToggle }) {
+    return (
+      <button onClick={onToggle} style={{background:'none',border:'none',padding:4,display:'flex',flexShrink:0}}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={liked?'#EF4444':'none'} xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.1111 3C19.6333 3 22 6.3525 22 9.48C22 15.8138 12.1778 21 12 21C11.8222 21 2 15.8138 2 9.48C2 6.3525 4.36667 3 7.88889 3C9.91111 3 11.2333 4.02375 12 4.92375C12.7667 4.02375 14.0889 3 16.1111 3Z" stroke={liked?'#EF4444':'#4B5565'} strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+    );
+  }
+
+  function TamawalButton() {
+    return (
+      <button onClick={()=>nav('/car-loan/offers')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'8px 12px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:36,minWidth:90,flexShrink:0,cursor:'pointer',fontFamily:'inherit'}}>
+        Tamawal
+      </button>
+    );
+  }
+
+  function InstallmentRow({ monthly }) {
+    return (
+      <div style={{flex:1,minWidth:0}}>
+        <p style={{margin:'0 0 2px',fontSize:0,color:C.gray600}}>
+          <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>Installment </span>
+          <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>from</span>
+        </p>
+        <div style={{display:'flex',alignItems:'center',gap:2}}>
+          <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,whiteSpace:'nowrap'}}>{monthly.toLocaleString('en-US')}.00</span>
+          <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5,marginLeft:2}}>/month</span>
         </div>
+      </div>
+    );
+  }
+
+  function CarCard({ car, view = 'Square' }) {
+    const [liked, setLiked] = useState(false);
+
+    const cardStyle = {background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',width:'100%'};
+    const chevronRight = <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    const carImg = <div style={{display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><img src={car.img} alt={car.model} style={{width:'100%',height:'auto',objectFit:'contain',objectPosition:'center'}}/></div>;
+
+    if (view === 'List') {
+      return (
+        <div style={cardStyle}>
+          {carImg}
+          <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',minHeight:60}}>
+            <div style={{flex:1,paddingLeft:6,minWidth:0}}>
+              <p style={{margin:'0 0 2px',fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
+                {car.name || `${car.make} ${car.model} ${car.year}`}
+              </p>
+              <div style={{display:'flex',alignItems:'center',gap:4,color:C.gray600,flexWrap:'wrap'}}>
+                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>Installment from</span>
+                <div style={{display:'flex',alignItems:'center',gap:2}}><SAR size={12}/><span style={{fontSize:13.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{car.monthly.toLocaleString('en-US')}.00</span></div>
+                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>/month</span>
+              </div>
+            </div>
+            <button onClick={()=>nav('/car-loan/car-details')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:48,padding:8,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,cursor:'pointer'}}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (view === 'Detailed') {
+      const downPayment = Math.round(car.price * 0.30);
+      const loanAmount = car.price - downPayment;
+      const infoIcon = <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke={C.gray500} strokeWidth="1.5"/><path d="M12 8v1M12 11v5" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round"/></svg>;
+      return (
+        <div style={{...cardStyle,paddingTop:8,paddingBottom:2}}>
+          <div style={{display:'flex',alignItems:'center',gap:12,padding:'0 12px 4px',borderBottom:`1px solid ${C.gray200}`,minHeight:60}}>
+            <div style={{flex:1,paddingLeft:6,minWidth:0}}>
+              <p style={{margin:0,fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1,overflow:'hidden',textOverflow:'ellipsis',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>
+                {car.name || `${car.make} ${car.model} ${car.year} - ${car.trim}`}
+              </p>
+            </div>
+            <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
+              {chevronRight}
+            </button>
+          </div>
+          {carImg}
+          <div style={{display:'flex',alignItems:'center',gap:12,padding:'6px 12px 0',borderTop:`1px solid ${C.gray200}`,minHeight:52}}>
+            <div style={{flex:1,minWidth:0}}>
+              <p style={{margin:'0 0 2px',fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>Car Price</p>
+              <div style={{display:'flex',alignItems:'center',gap:2}}>
+                <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{car.price.toLocaleString('en-US')}.00</span>
+              </div>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',minWidth:0,flexShrink:0}}>
+              <div style={{display:'flex',alignItems:'center',gap:4}}>{infoIcon}<span style={{fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>Down payment</span></div>
+              <div style={{display:'flex',alignItems:'center',gap:4}}>
+                <div style={{display:'flex',alignItems:'center',gap:2}}><SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{downPayment.toLocaleString('en-US')}.00</span></div>
+                <div style={{background:C.brand600,borderRadius:4,padding:'0 4px 0 2px'}}><span style={{fontSize:12.5,fontWeight:500,color:C.white,letterSpacing:0.5}}>30%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px 0',minHeight:52}}>
+            <div style={{flex:1,minWidth:0}}>
+              <p style={{margin:'0 0 2px',fontSize:0,color:C.gray600}}>
+                <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>Loan amount </span>
+                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>up to</span>
+              </p>
+              <div style={{display:'flex',alignItems:'center',gap:2}}>
+                <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{loanAmount.toLocaleString('en-US')}.00</span>
+              </div>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',paddingRight:4,flexShrink:0,minWidth:90}}>
+              <div style={{display:'flex',alignItems:'center',gap:4}}>{infoIcon}<span style={{fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0.4}}>APR </span><span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>from</span></div>
+              <p style={{margin:0,fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1}}>2.24%</p>
+            </div>
+          </div>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 12px 6px'}}>
+            <InstallmentRow monthly={car.monthly}/>
+            <div style={{display:'flex',gap:16,alignItems:'center'}}>
+              <HeartButton liked={liked} onToggle={()=>setLiked(!liked)}/>
+              <TamawalButton/>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Square (default)
+    return (
+      <div style={cardStyle}>
+        {carImg}
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',borderBottom:`1px solid ${C.gray200}`,minHeight:60}}>
           <div style={{flex:1,paddingLeft:6,minWidth:0}}>
             <p style={{margin:'0 0 2px',fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
-              {car.make} {car.model} {car.year}
+              {car.name || `${car.make} ${car.model} ${car.year}`}
             </p>
             <div style={{display:'flex',alignItems:'center',gap:4,color:C.gray600}}>
               <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>{car.trim}</span>
@@ -93,29 +240,67 @@
               <SAR size={12}/><span style={{fontSize:13.5,fontWeight:500,letterSpacing:0}}>{car.price.toLocaleString('en-US')}</span>
             </div>
           </div>
-          <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',margin:'-8px -4px -8px 0',display:'flex',alignItems:'center',flexShrink:0}}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',margin:'-8px -4px -8px 0',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
+            {chevronRight}
           </button>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',minHeight:68}}>
-          <div style={{flex:1,minWidth:0}}>
-            <p style={{margin:'0 0 2px',fontSize:0,color:C.gray600}}>
-              <span style={{fontSize:13.5,fontWeight:500,letterSpacing:0.4}}>Installment </span>
-              <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>from</span>
-            </p>
-            <div style={{display:'flex',alignItems:'center',gap:2}}>
-              <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,whiteSpace:'nowrap'}}>{car.monthly.toLocaleString('en-US')}.00</span>
-              <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5,marginLeft:2}}>/month</span>
-            </div>
+          <InstallmentRow monthly={car.monthly}/>
+          <HeartButton liked={liked} onToggle={()=>setLiked(!liked)}/>
+          <TamawalButton/>
+        </div>
+      </div>
+    );
+  }
+
+  function SkeletonCard({ view }) {
+    const s = { borderRadius: 6 };
+    const card = { background: C.white, border: `1px solid ${C.gray100}`, borderRadius: 16, overflow: 'hidden' };
+    const sh = (style) => <div className="shimmer" style={{ ...s, ...style }} />;
+
+    if (view === 'List') return (
+      <div style={card}>
+        {sh({ height: 160 })}
+        <div style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 18px', minHeight:60 }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8 }}>
+            {sh({ height:17, width:'70%' })}
+            {sh({ height:13, width:'50%' })}
           </div>
-          <button onClick={()=>setLiked(!liked)} style={{background:'none',border:'none',padding:4,display:'flex',flexShrink:0}}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill={liked?'#EF4444':'none'} xmlns="http://www.w3.org/2000/svg">
-              <path d="M16.1111 3C19.6333 3 22 6.3525 22 9.48C22 15.8138 12.1778 21 12 21C11.8222 21 2 15.8138 2 9.48C2 6.3525 4.36667 3 7.88889 3C9.91111 3 11.2333 4.02375 12 4.92375C12.7667 4.02375 14.0889 3 16.1111 3Z" stroke={liked?'#EF4444':'#4B5565'} strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <button onClick={()=>nav('/car-loan/offers')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'8px 12px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:36,minWidth:90,flexShrink:0}}>
-            See offers
-          </button>
+          {sh({ width:36, height:36, borderRadius:'50%', flexShrink:0 })}
+        </div>
+      </div>
+    );
+
+    if (view === 'Detailed') return (
+      <div style={card}>
+        <div style={{ display:'flex', alignItems:'center', padding:'14px 18px', borderBottom:`1px solid ${C.gray200}`, minHeight:60 }}>
+          {sh({ height:17, flex:1 })}
+        </div>
+        {sh({ height: 200, borderRadius:0 })}
+        <div style={{ display:'flex', gap:12, padding:'12px 18px', borderTop:`1px solid ${C.gray200}` }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8 }}>{sh({ height:13, width:'55%' })}{sh({ height:18, width:'80%' })}</div>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8, alignItems:'flex-end' }}>{sh({ height:13, width:'55%' })}{sh({ height:18, width:'80%' })}</div>
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 18px 14px' }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:8 }}>{sh({ height:13, width:80 })}{sh({ height:20, width:120 })}</div>
+          {sh({ height:36, width:90, borderRadius:8 })}
+        </div>
+      </div>
+    );
+
+    return (
+      <div style={card}>
+        {sh({ height: 180, borderRadius:0 })}
+        <div style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 18px', borderBottom:`1px solid ${C.gray200}`, minHeight:60 }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8 }}>
+            {sh({ height:17, width:'75%' })}
+            {sh({ height:13, width:'55%' })}
+          </div>
+          {sh({ width:20, height:20, flexShrink:0 })}
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:12, padding:'8px 18px', minHeight:68 }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8 }}>{sh({ height:13, width:'50%' })}{sh({ height:20, width:'65%' })}</div>
+          {sh({ height:36, width:90, borderRadius:8, flexShrink:0 })}
         </div>
       </div>
     );
@@ -422,6 +607,35 @@
     const [sortOpen, setSortOpen] = useState(false);
     const [activeFilters, setActiveFilters] = useState(null);
     const [sortSel, setSortSel] = useState({ newest: 'asc', price: null, year: null, popularity: null });
+    const [view, setView] = useState('Square');
+    const [visibleCount, setVisibleCount] = useState(6);
+    const [isLoading, setIsLoading] = useState(false);
+    const scrollRef = useRef(null);
+    const loadingRef = useRef(false);
+    const visibleRef = useRef(6);
+
+    useEffect(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const onScroll = () => {
+        if (loadingRef.current) return;
+        if (visibleRef.current >= cars.length) return;
+        const { scrollTop, scrollHeight, clientHeight } = el;
+        if (scrollHeight - scrollTop - clientHeight < 150) {
+          loadingRef.current = true;
+          setIsLoading(true);
+          setTimeout(() => {
+            const next = Math.min(visibleRef.current + 6, cars.length);
+            visibleRef.current = next;
+            setVisibleCount(next);
+            setIsLoading(false);
+            loadingRef.current = false;
+          }, 1500);
+        }
+      };
+      el.addEventListener('scroll', onScroll, { passive: true });
+      return () => el.removeEventListener('scroll', onScroll);
+    }, []);
 
     const dealers = {
       wallan:     { id:'wallan',     name:'Al Wallan Dealer',  logo:'/dealer-wallan.png' },
@@ -479,7 +693,7 @@
           </div>
         )}
 
-        <div className="scroll" style={{flex:1,padding:'24px'}}>
+        <div ref={scrollRef} className="scroll" style={{flex:1,padding:'24px'}}>
 
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
             <p style={{margin:0,fontSize:13.5,fontWeight:500,color:'#98A2B3',letterSpacing:0.4}}>
@@ -506,9 +720,16 @@
             </div>
           </div>
 
+          <ViewOptionBar selected={view} onSelect={setView}/>
           <div style={{display:'flex',flexDirection:'column',gap:16}}>
-            {cars.map(car => <CarCard key={car.id} car={car}/>)}
+            {cars.slice(0, visibleCount).map(car => <CarCard key={car.id} car={car} view={view}/>)}
+            {isLoading && [0,1,2].map(i => <SkeletonCard key={`sk-${i}`} view={view}/>)}
           </div>
+          {!isLoading && visibleCount >= cars.length && (
+            <div style={{background:C.gray50,borderRadius:11,padding:'12px 24px',textAlign:'center',marginTop:24}}>
+              <p style={{margin:0,fontSize:12.5,fontWeight:500,color:C.gray400,letterSpacing:0.5,lineHeight:'18px'}}>You've reached the end of the list</p>
+            </div>
+          )}
         </div>
 
         <div style={{background:C.white,height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0}}>
