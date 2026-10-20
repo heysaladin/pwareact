@@ -137,9 +137,9 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
   const dmRemaining = MAX_CHARS - dmMsg.length;
 
   const t = {
-    title:               isAr ? 'إنشاء رسالة'              : 'Create a Message',
+    title:               isAr ? 'اتخاذ إجراء'               : 'Take an action',
     to:                  isAr ? 'إلى'                       : 'To',
-    notifType:           isAr ? 'نوع الإشعار'               : 'Notification type',
+    notifType:           isAr ? 'الإجراء'                   : 'Action',
     paymentRequest:      isAr ? 'طلب دفع'                   : 'Payment request',
     directMessage:       isAr ? 'رسالة مباشرة'              : 'Direct message',
     accountSuspension:   isAr ? 'تعليق حساب العميل'         : 'Customer account suspension',
@@ -157,7 +157,7 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
     clearAll:            isAr ? 'مسح الكل'                  : 'Clear all',
     preview:             isAr ? 'معاينة'                    : 'Preview',
     cancel:              isAr ? 'يلغي'                      : 'Cancel',
-    review:              isAr ? 'طلب مراجعة'                : 'Review request',
+    review:              isAr ? 'مراجعة'                    : 'Review',
     suspendAccount:      isAr ? 'تعليق الحساب'              : 'Suspend account',
     deactivateAccount:   isAr ? 'تعطيل الحساب'              : 'Deactivate account',
     suspensionPeriod:    isAr ? 'مدة التعليق'               : 'Suspension period',
@@ -606,22 +606,10 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
             {t.cancel}
             <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
           </button>
-          {notifType === 'account-suspension' ? (
-            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#dc6803]">
-              {t.suspendAccount}
-              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-            </button>
-          ) : notifType === 'account-deactivation' ? (
-            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#d92d20]">
-              {t.deactivateAccount}
-              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-            </button>
-          ) : (
-            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#0063f5]">
+          <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#0063f5]">
               {t.review}
               <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
             </button>
-          )}
         </div>
       </div>
     </div>,
