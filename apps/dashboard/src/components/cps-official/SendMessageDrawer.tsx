@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
-type NotifType = 'payment-request' | 'direct-message';
+type NotifType = 'payment-request' | 'direct-message' | 'account-suspension' | 'account-deactivation';
+type SuspensionPeriod = '7d' | '14d' | '30d' | 'lifted';
 
 const QUICK_AMOUNTS = [100, 200, 300, 500];
 
@@ -44,18 +45,40 @@ function buildMessage(templateKey: string, firstName: string, amount: string, is
   }
 }
 
+function addDays(n: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+const SUSPENSION_PERIODS: { key: SuspensionPeriod; label: string; subtitle: string }[] = [
+  { key: '7d',     label: '7 days',       subtitle: `Until ${addDays(7)}`        },
+  { key: '14d',    label: '14 days',      subtitle: `Until ${addDays(14)}`       },
+  { key: '30d',    label: '30 days',      subtitle: `Until ${addDays(30)}`       },
+  { key: 'lifted', label: 'Until lifted', subtitle: 'An admin lifts it manually' },
+];
+
+const REASONS = [
+  { key: 'suspicious-activity', label: 'Suspicious activity' },
+  { key: 'fraud',               label: 'Fraud'               },
+  { key: 'policy-violation',    label: 'Policy violation'    },
+  { key: 'customer-request',    label: 'Customer request'    },
+  { key: 'other',               label: 'Other'               },
+];
+
 type Props = {
   onClose: () => void;
   customerName: string;
   customerId: string;
   isAr?: boolean;
+  initialType?: NotifType;
 };
 
-export default function SendMessageDrawer({ onClose, customerName, customerId, isAr = false }: Props) {
+export default function SendMessageDrawer({ onClose, customerName, customerId, isAr = false, initialType }: Props) {
   const firstName = customerName.split(' ')[0] ?? customerName;
   const templates = isAr ? TEMPLATES.ar : TEMPLATES.en;
 
-  const [notifType, setNotifType]       = useState<NotifType>('direct-message');
+  const [notifType, setNotifType]       = useState<NotifType>(initialType ?? 'direct-message');
   const [showDropdown, setShowDropdown] = useState(false);
   const [channels, setChannels]         = useState<string[]>(['email']);
 
@@ -69,7 +92,13 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
   const [dmTitle, setDmTitle] = useState('');
   const [dmMsg,   setDmMsg]   = useState('');
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  // Suspension state
+  const [suspensionPeriod,   setSuspensionPeriod]   = useState<SuspensionPeriod>('7d');
+  const [reason,             setReason]             = useState('suspicious-activity');
+  const [showReasonDropdown, setShowReasonDropdown] = useState(false);
+
+  const dropdownRef       = useRef<HTMLDivElement>(null);
+  const reasonDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!showDropdown) return;
@@ -81,6 +110,17 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [showDropdown]);
+
+  useEffect(() => {
+    if (!showReasonDropdown) return;
+    function handleClick(e: MouseEvent) {
+      if (reasonDropdownRef.current && !reasonDropdownRef.current.contains(e.target as Node)) {
+        setShowReasonDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showReasonDropdown]);
 
   const toggleChannel = (ch: string) =>
     setChannels(prev => prev.includes(ch) ? prev.filter(c => c !== ch) : [...prev, ch]);
@@ -97,29 +137,40 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
   const dmRemaining = MAX_CHARS - dmMsg.length;
 
   const t = {
-    title:           isAr ? 'إنشاء رسالة'              : 'Create a Message',
-    to:              isAr ? 'إلى'                       : 'To',
-    notifType:       isAr ? 'نوع الإشعار'               : 'Notification type',
-    paymentRequest:  isAr ? 'طلب دفع'                   : 'Payment request',
-    directMessage:   isAr ? 'رسالة مباشرة'              : 'Direct message',
-    channels:        isAr ? 'قنوات'                     : 'Channels',
-    amount:          isAr ? 'كمية'                      : 'Amount',
-    min:             isAr ? 'Min'                       : 'Min',
-    max:             isAr ? 'Max'                       : 'Max',
-    templateLabel:   isAr ? 'نموذج'                     : 'Template',
-    titleField:      isAr ? 'عنوان'                     : 'Title',
-    prTitlePh:       isAr ? 'أدخل الموضوع'              : 'Payment reminder',
-    dmTitlePh:       isAr ? 'اكتب عنوان الرسالة'        : 'Write the message title',
-    message:         isAr ? 'رسالة'                     : 'Message',
-    dmMsgPh:         isAr ? 'اكتب تفاصيل الرسالة'       : 'Write the message details',
-    clearAll:        isAr ? 'مسح الكل'                  : 'Clear all',
-    preview:         isAr ? 'معاينة'                    : 'Preview',
-    cancel:          isAr ? 'يلغي'                      : 'Cancel',
-    review:          isAr ? 'طلب مراجعة'                : 'Review request',
+    title:               isAr ? 'إنشاء رسالة'              : 'Create a Message',
+    to:                  isAr ? 'إلى'                       : 'To',
+    notifType:           isAr ? 'نوع الإشعار'               : 'Notification type',
+    paymentRequest:      isAr ? 'طلب دفع'                   : 'Payment request',
+    directMessage:       isAr ? 'رسالة مباشرة'              : 'Direct message',
+    accountSuspension:   isAr ? 'تعليق حساب العميل'         : 'Customer account suspension',
+    accountDeactivation: isAr ? 'تعطيل حساب العميل'         : 'Customer account deactivation',
+    channels:            isAr ? 'قنوات'                     : 'Channels',
+    amount:              isAr ? 'كمية'                      : 'Amount',
+    min:                 isAr ? 'Min'                       : 'Min',
+    max:                 isAr ? 'Max'                       : 'Max',
+    templateLabel:       isAr ? 'نموذج'                     : 'Template',
+    titleField:          isAr ? 'عنوان'                     : 'Title',
+    prTitlePh:           isAr ? 'أدخل الموضوع'              : 'Payment reminder',
+    dmTitlePh:           isAr ? 'اكتب عنوان الرسالة'        : 'Write the message title',
+    message:             isAr ? 'رسالة'                     : 'Message',
+    dmMsgPh:             isAr ? 'اكتب تفاصيل الرسالة'       : 'Write the message details',
+    clearAll:            isAr ? 'مسح الكل'                  : 'Clear all',
+    preview:             isAr ? 'معاينة'                    : 'Preview',
+    cancel:              isAr ? 'يلغي'                      : 'Cancel',
+    review:              isAr ? 'طلب مراجعة'                : 'Review request',
+    suspendAccount:      isAr ? 'تعليق الحساب'              : 'Suspend account',
+    deactivateAccount:   isAr ? 'تعطيل الحساب'              : 'Deactivate account',
+    suspensionPeriod:    isAr ? 'مدة التعليق'               : 'Suspension period',
+    reason:              isAr ? 'السبب'                     : 'Reason',
+    auditNote:           isAr ? 'محفوظ في سجل التدقيق. غير مظهر للعميل.' : 'Saved in the audit log. Not shown to the customer.',
     remaining: (n: number) => isAr ? `تبقى ${n} حرفاً` : `${n} characters Remaining`,
   };
 
-  const notifTypeLabel = notifType === 'payment-request' ? t.paymentRequest : t.directMessage;
+  const notifTypeLabel =
+    notifType === 'payment-request'      ? t.paymentRequest :
+    notifType === 'direct-message'       ? t.directMessage :
+    notifType === 'account-suspension'   ? t.accountSuspension :
+    t.accountDeactivation;
 
   const channelIcon = (ch: string, active: boolean) =>
     ch === 'sms'
@@ -127,6 +178,8 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
       : ch === 'email'
       ? (active ? '/journey-icons/channel-email-active.svg' : '/journey-icons/channel-email-inactive.svg')
       :  (active ? '/journey-icons/channel-app-active.svg'  : '/journey-icons/channel-app-inactive.svg');
+
+  const isMessagingType = notifType === 'payment-request' || notifType === 'direct-message';
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex" dir={isAr ? 'rtl' : 'ltr'}>
@@ -184,14 +237,17 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
                 <span className="flex-1 text-start">{notifTypeLabel}</span>
               </button>
               {showDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#d5d7da] rounded-[8px] shadow-[0px_4px_6px_-2px_rgba(16,24,40,0.03),0px_12px_16px_-4px_rgba(16,24,40,0.08)] overflow-hidden">
-                  {(['direct-message', 'payment-request'] as NotifType[]).map(tp => (
+                <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#d5d7da] rounded-[8px] shadow-[0px_4px_6px_-2px_rgba(16,24,40,0.03),0px_12px_16px_-4px_rgba(16,24,40,0.08)] overflow-hidden z-10">
+                  {(['direct-message', 'payment-request', 'account-suspension', 'account-deactivation'] as NotifType[]).map(tp => (
                     <button
                       key={tp}
                       onClick={() => { setNotifType(tp); setShowDropdown(false); }}
-                      className={`w-full text-start px-[12px] py-[10px] text-[16px] hover:bg-[#f9fafb] transition-colors ${notifType === tp ? 'text-[#0063f5] font-medium' : 'text-[#181d27]'}`}
+                      className={`w-full text-start px-[12px] py-[10px] text-[16px] hover:bg-[#f9fafb] transition-colors ${notifType === tp ? 'bg-[#fafafa] text-[#0063f5] font-medium' : 'text-[#181d27]'}`}
                     >
-                      {tp === 'payment-request' ? t.paymentRequest : t.directMessage}
+                      {tp === 'payment-request'      ? t.paymentRequest :
+                       tp === 'direct-message'       ? t.directMessage :
+                       tp === 'account-suspension'   ? t.accountSuspension :
+                       t.accountDeactivation}
                     </button>
                   ))}
                 </div>
@@ -199,44 +255,46 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
             </div>
           </div>
 
-          {/* Channels — RTL naturally renders [sms,email,app] as App|Email|SMS */}
-          <div className="flex flex-col gap-[16px]">
-            <p className="text-[14px] font-medium text-[#071329]">
-              {t.channels} <span className="text-[#d91c1c]">*</span>
-            </p>
-            <div className="flex gap-[8px]">
-              {CHANNELS.map(ch => {
-                const active = channels.includes(ch.key);
-                return (
-                  <button
-                    key={ch.key}
-                    onClick={() => toggleChannel(ch.key)}
-                    className={`flex flex-col gap-[12px] items-center pt-[24px] pb-[20px] px-[24px] rounded-[16px] flex-1 border transition-all ${
-                      active
-                        ? 'bg-white border-[#ecedf0] shadow-[0px_4px_4px_rgba(74,110,153,0.06)]'
-                        : 'bg-[rgba(255,255,255,0.48)] border-transparent'
-                    }`}
-                  >
-                    <div className={`size-[16px] rounded-[4px] border flex items-center justify-center transition-colors ${
-                      active ? 'bg-[#f9fbfc] border-[#0063f5]' : 'bg-white border-[#d0d5dd]'
-                    }`}>
-                      {active && (
-                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                          <path d="M1 4L3.5 6.5L9 1" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      )}
-                    </div>
-                    <img
-                      alt={ch.label}
-                      className={`size-[72px] shrink-0 ${!active ? 'mix-blend-luminosity' : ''}`}
-                      src={channelIcon(ch.key, active)}
-                    />
-                    <p className="text-[16px] font-medium text-[#475467]">{ch.label}</p>
-                  </button>
-                );
-              })}
+          {/* Channels — RTL naturally renders [sms,email,app] as App|Email|SMS — only for messaging types */}
+          {isMessagingType && (
+            <div className="flex flex-col gap-[16px]">
+              <p className="text-[14px] font-medium text-[#071329]">
+                {t.channels} <span className="text-[#d91c1c]">*</span>
+              </p>
+              <div className="flex gap-[8px]">
+                {CHANNELS.map(ch => {
+                  const active = channels.includes(ch.key);
+                  return (
+                    <button
+                      key={ch.key}
+                      onClick={() => toggleChannel(ch.key)}
+                      className={`flex flex-col gap-[12px] items-center pt-[24px] pb-[20px] px-[24px] rounded-[16px] flex-1 border transition-all ${
+                        active
+                          ? 'bg-white border-[#ecedf0] shadow-[0px_4px_4px_rgba(74,110,153,0.06)]'
+                          : 'bg-[rgba(255,255,255,0.48)] border-transparent'
+                      }`}
+                    >
+                      <div className={`size-[16px] rounded-[4px] border flex items-center justify-center transition-colors ${
+                        active ? 'bg-[#f9fbfc] border-[#0063f5]' : 'bg-white border-[#d0d5dd]'
+                      }`}>
+                        {active && (
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 4L3.5 6.5L9 1" stroke="#0063F5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                      <img
+                        alt={ch.label}
+                        className={`size-[72px] shrink-0 ${!active ? 'mix-blend-luminosity' : ''}`}
+                        src={channelIcon(ch.key, active)}
+                      />
+                      <p className="text-[16px] font-medium text-[#475467]">{ch.label}</p>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* ── PAYMENT REQUEST content ── */}
           {notifType === 'payment-request' && (
@@ -396,9 +454,150 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
               </div>
             </>
           )}
+
+          {/* ── ACCOUNT SUSPENSION content ── */}
+          {notifType === 'account-suspension' && (
+            <>
+              {/* Warning info box */}
+              <div className="bg-[#fffaeb] border border-[#fec84b] rounded-[12px] p-[20px] flex flex-col gap-[14px]">
+                <div className="flex gap-[12px] items-start">
+                  <div className="bg-[#fedf89] rounded-[10px] size-[40px] flex items-center justify-center shrink-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc6803" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="10" y1="9" x2="10" y2="15" />
+                      <line x1="14" y1="9" x2="14" y2="15" />
+                    </svg>
+                  </div>
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="text-[18px] font-semibold text-[#4e1d09] leading-[28px]">This account will be suspended</p>
+                    <p className="text-[14px] text-[#4e1d09] leading-[22px]">{"Suspension is temporary. The account's data is kept, and access comes back when the suspension ends."}</p>
+                  </div>
+                </div>
+                <div className="h-px bg-[#fec84b]" />
+                <p className="text-[14px] font-medium text-[#414651]">While suspended</p>
+                <div className="flex flex-col gap-[10px]">
+                  {[
+                    "The customer can't sign in or submit new applications.",
+                    'Applications in progress are paused, not cancelled.',
+                    'No new payment requests can be sent.',
+                    'The customer is notified about the suspension.',
+                  ].map(item => (
+                    <div key={item} className="flex gap-[10px] items-start">
+                      <div className="mt-[8px] shrink-0 size-[6px] rounded-[3px] bg-[#dc6803]" />
+                      <p className="text-[14px] text-black leading-[22px]">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Suspension period */}
+              <div className="flex flex-col gap-[8px]">
+                <p className="text-[14px] font-medium text-black">
+                  {t.suspensionPeriod} <span className="text-[#d92d20]">*</span>
+                </p>
+                <div className="grid grid-cols-2 gap-[8px]">
+                  {SUSPENSION_PERIODS.map(period => {
+                    const selected = suspensionPeriod === period.key;
+                    return (
+                      <button
+                        key={period.key}
+                        onClick={() => setSuspensionPeriod(period.key)}
+                        className={`flex gap-[10px] items-start px-[14px] py-[12px] rounded-[10px] border text-start transition-colors ${
+                          selected ? 'bg-[#eaf2ff] border-[#0063f5]' : 'bg-white border-[#d5d7da]'
+                        }`}
+                      >
+                        <div className={`mt-[2px] shrink-0 size-[16px] rounded-full border flex items-center justify-center bg-white ${
+                          selected ? 'border-[#0063f5]' : 'border-[#717680]'
+                        }`}>
+                          {selected && <div className="size-[10px] rounded-full bg-[#0063f5]" />}
+                        </div>
+                        <div className="flex flex-col gap-[2px]">
+                          <p className={`text-[14px] font-medium leading-[20px] ${selected ? 'text-[#0042a3]' : 'text-black'}`}>{period.label}</p>
+                          <p className={`text-[12px] font-medium leading-[18px] ${selected ? 'text-[#5597f8]' : 'text-[#a4a7ae]'}`}>{period.subtitle}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Reason dropdown */}
+              <div className="flex flex-col gap-[6px]" ref={reasonDropdownRef}>
+                <p className="text-[14px] font-medium text-[#071329]">
+                  {t.reason} <span className="text-[#d92d20]">*</span>
+                </p>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowReasonDropdown(v => !v)}
+                    className="w-full bg-white border border-[#d5d7da] rounded-[8px] px-[12px] py-[8px] flex items-center gap-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] text-[16px] text-[#181d27]"
+                  >
+                    <img
+                      alt=""
+                      src="/journey-icons/chevron-down.svg"
+                      className={`size-[20px] shrink-0 ${isAr ? '' : 'order-last'}`}
+                      style={{ transform: showReasonDropdown ? 'rotate(180deg)' : undefined, transition: 'transform 0.15s' }}
+                    />
+                    <span className="flex-1 text-start">
+                      {REASONS.find(r => r.key === reason)?.label ?? ''}
+                    </span>
+                  </button>
+                  {showReasonDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#d5d7da] rounded-[8px] shadow-[0px_4px_6px_-2px_rgba(16,24,40,0.03),0px_12px_16px_-4px_rgba(16,24,40,0.08)] overflow-hidden z-10">
+                      {REASONS.map(r => (
+                        <button
+                          key={r.key}
+                          onClick={() => { setReason(r.key); setShowReasonDropdown(false); }}
+                          className={`w-full text-start px-[12px] py-[10px] text-[16px] hover:bg-[#f9fafb] transition-colors ${reason === r.key ? 'bg-[#fafafa] text-[#0063f5] font-medium' : 'text-[#181d27]'}`}
+                        >
+                          {r.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <p className="text-[14px] text-[#535862] leading-[24px]">{t.auditNote}</p>
+              </div>
+            </>
+          )}
+
+          {/* ── ACCOUNT DEACTIVATION content ── */}
+          {notifType === 'account-deactivation' && (
+            <div className="bg-[#fef3f2] border border-[#fda29b] rounded-[12px] p-[20px] flex flex-col gap-[14px]">
+              <div className="flex gap-[12px] items-start">
+                <div className="bg-[#fee4e2] rounded-[10px] size-[40px] flex items-center justify-center shrink-0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d92d20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-[4px]">
+                  <p className="text-[18px] font-semibold text-[#912018] leading-[28px]">This account will be deactivated</p>
+                  <p className="text-[14px] text-[#912018] leading-[22px]">Deactivating {customerName}&apos;s account takes effect immediately.</p>
+                </div>
+              </div>
+              <div className="h-px bg-[#fecdca]" />
+              <p className="text-[14px] font-medium text-[#252b37]">What happens next</p>
+              <div className="flex flex-col gap-[10px]">
+                {[
+                  "The customer can't sign in to the Tamawal app or website.",
+                  'Applications in progress are put on hold.',
+                  'Unpaid payment requests are cancelled.',
+                  'The customer is notified about the deactivation.',
+                ].map(item => (
+                  <div key={item} className="flex gap-[10px] items-start">
+                    <div className="mt-[8px] shrink-0 size-[6px] rounded-[3px] bg-[#d92d20]" />
+                    <p className="text-[14px] text-black leading-[22px]">{item}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[12px] font-medium text-[#535862] leading-[18px]">An admin can reactivate the account later from this profile.</p>
+            </div>
+          )}
+
         </div>
 
-        {/* Footer — RTL reverses button order: Review(left) | Cancel(right) */}
+        {/* Footer — RTL reverses button order: action(left) | Cancel(right) */}
         <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#e9eaeb] px-[32px] py-[16px] flex gap-[16px] items-center justify-end z-[4]">
           <button
             onClick={onClose}
@@ -407,10 +606,22 @@ export default function SendMessageDrawer({ onClose, customerName, customerId, i
             {t.cancel}
             <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
           </button>
-          <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#0063f5]">
-            {t.review}
-            <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
-          </button>
+          {notifType === 'account-suspension' ? (
+            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#dc6803]">
+              {t.suspendAccount}
+              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+            </button>
+          ) : notifType === 'account-deactivation' ? (
+            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#d92d20]">
+              {t.deactivateAccount}
+              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+            </button>
+          ) : (
+            <button className="relative border-2 border-white/20 rounded-[8px] px-[12px] py-[8px] min-w-[120px] text-[14px] font-medium text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-[#0063f5]">
+              {t.review}
+              <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
+            </button>
+          )}
         </div>
       </div>
     </div>,

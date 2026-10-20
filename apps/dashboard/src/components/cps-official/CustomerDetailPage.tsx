@@ -960,7 +960,8 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
   const [activeSubTab,  setActiveSubTab]  = useState(0);
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
-  const [showSendMessage, setShowSendMessage] = useState(false);
+  const [showSendMessage,     setShowSendMessage]     = useState(false);
+  const [sendMessageInitType, setSendMessageInitType] = useState<'direct-message' | 'account-suspension' | 'account-deactivation'>('direct-message');
 
   const activeSubTabKey = activeTabs[activeMainTab]?.sub[activeSubTab]?.key ?? '';
   const isJourneyTab = activeMainTab === 0 && activeSubTabKey === 'journey';
@@ -983,6 +984,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
           customerName={isAr ? profile.nameAr : profile.name}
           customerId={profile.id}
           isAr={isAr}
+          initialType={sendMessageInitType}
         />
       )}
 
@@ -1045,14 +1047,14 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                 </div>
                 {!isProvider && (
                   <div className="flex gap-[12px] items-start">
-                    <button className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button onClick={() => { setSendMessageInitType('account-deactivation'); setShowSendMessage(true); }} className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       <div className="overflow-clip size-[20px] shrink-0">
                         <img alt="" className="block size-full" src="/tab-icons/profile-delete.svg" />
                       </div>
                       {isAr ? 'إلغاء التنشيط' : 'Deactivate'}
                       <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" />
                     </button>
-                    <button className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
+                    <button onClick={() => { setSendMessageInitType('account-suspension'); setShowSendMessage(true); }} className="relative flex items-center gap-[4px] px-[16px] py-[8px] rounded-[8px] border border-[#fda29b] bg-white text-[#b42318] text-[14px] font-medium leading-5 tracking-[0.014px] min-w-[120px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] whitespace-nowrap">
                       <div className="overflow-clip size-[20px] shrink-0">
                         <img alt="" className="block size-full" src="/tab-icons/shield-cross.svg" />
                       </div>
