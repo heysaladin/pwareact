@@ -13,8 +13,8 @@ const PREFILL = ['2', '7', '4', '9', '1', '6'];
 export default function SubmitOrderPage() {
   const { brandName } = useGlobalSettings();
   const [dark, setDark] = useState(false);
-  const [otp, setOtp] = useState<string[]>(PREFILL);
-  const [focusIdx, setFocusIdx] = useState(5);
+  const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(''));
+  const [focusIdx, setFocusIdx] = useState(-1);
   const [countdown, setCountdown] = useState(RESEND_SECONDS);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -109,7 +109,14 @@ export default function SubmitOrderPage() {
                           value={otp[i] || ''}
                           onChange={e => handleChange(i, e.target.value)}
                           onKeyDown={e => handleKey(i, e)}
-                          onFocus={() => setFocusIdx(i)}
+                          onFocus={() => {
+                            setFocusIdx(i);
+                            if (otp.every(d => d === '')) {
+                              setOtp([...PREFILL]);
+                              setFocusIdx(OTP_LENGTH - 1);
+                              setTimeout(() => inputRefs.current[OTP_LENGTH - 1]?.focus(), 0);
+                            }
+                          }}
                           className="w-[64px] h-[64px] text-center text-[24px] font-bold rounded-[12px] outline-none"
                           style={{
                             border: `2px solid ${focusIdx === i ? 'var(--blue)' : 'var(--border)'}`,

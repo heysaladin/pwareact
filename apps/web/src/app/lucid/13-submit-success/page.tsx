@@ -165,9 +165,9 @@ export default function SubmitSuccessPage() {
             </div>
 
             <div className="mt-auto flex flex-col gap-3 pt-2">
-              <button className="w-full py-4 rounded-xl text-[15px] font-bold text-white flex items-center justify-center gap-2" style={{ background: '#111111' }}>
+              <Link href="/lucid/track-orders" className="w-full py-4 rounded-xl text-[15px] font-bold text-white flex items-center justify-center gap-2" style={{ background: '#111111' }}>
                 Track Order <span>→</span>
-              </button>
+              </Link>
               <Link href="/lucid" className="text-center text-[14px] font-semibold" style={{ color: 'var(--blue)' }}>
                 Back to Home
               </Link>
