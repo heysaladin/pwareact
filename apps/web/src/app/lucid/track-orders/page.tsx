@@ -76,7 +76,9 @@ export default function TrackOrdersPage() {
 
           {/* Top Navbar */}
           <header style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)', height: 56, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 28, paddingRight: 28, gap: 32 }}>
-            <img src="/lucid-motors-logo.svg" alt="Lucid" style={{ height: 9, width: 'auto', filter: dark ? 'brightness(0) invert(1)' : 'brightness(0)' }} />
+            <Link href="/lucid" style={{ display: 'flex', alignItems: 'center', padding: '12px 8px', margin: '-12px -8px' }}>
+              <img src="/lucid-motors-logo.svg" alt="Lucid" style={{ height: 9, width: 'auto', filter: dark ? 'brightness(0) invert(1)' : 'brightness(0)' }} />
+            </Link>
             <div style={{ width: 1, height: 24, background: 'var(--border)', margin: '0 4px' }} />
             <nav style={{ display: 'flex', gap: 28, flex: 1 }}>
               {['VEHICLES', 'OWNERSHIP', 'DISCOVER'].map(item => (
