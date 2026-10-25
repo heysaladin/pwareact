@@ -31,7 +31,7 @@ body {
 }
 
 :lang(ar), [dir="rtl"] {
-  font-family: "SF Arabic", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
+  font-family: "IBM Plex Arabic", "SF Arabic", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
 }
 
 .duration-400 { transition-duration: 400ms; }
@@ -43,6 +43,33 @@ body {
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+@keyframes scroll-partners {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes scroll-partners-rtl {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.automatic-horizontal-scroll {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.partner-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: grayscale(1) opacity(0.5);
+  transition: filter 0.25s ease;
+}
+.partner-logo:hover {
+  filter: grayscale(0) opacity(1);
 }
 
 @keyframes badge-spin {
@@ -57,6 +84,136 @@ body {
 
 .animate-border-ping {
   animation: border-ping 1.5s ease-in-out infinite;
+}
+
+/* ── Hero la- classes ─────────────────────────────────────────────── */
+.la-hero-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.la-text-heading-h1-large {
+  font-size: clamp(52px, 9vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  color: #101828;
+}
+.dark .la-text-heading-h1-large { color: #fff; }
+
+[dir="rtl"] .la-text-heading-h1-large {
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.la-space-heading-subheading { height: 28px; }
+
+.la-text-heading-h1-subheading {
+  font-size: clamp(17px, 1.8vw, 22px);
+  line-height: 1.55;
+  color: #667085;
+  max-width: 580px;
+}
+.dark .la-text-heading-h1-subheading { color: rgba(255,255,255,0.5); }
+
+.la-text-heading-h1-subheading.is-semibold { font-weight: 600; }
+
+.la-app-download-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.la-space-text-btn { height: 40px; }
+
+.la-app-download_component {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.la-app-download-qrcode-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.la-app-download-qrcode-wrapper .qrcode-image {
+  width: 108px;
+  height: 108px;
+  border-radius: 14px;
+  border: 1px solid #eef1f6;
+  background: #fff;
+}
+.dark .la-app-download-qrcode-wrapper .qrcode-image { border-color: rgba(255,255,255,0.1); }
+
+.text-block-39 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+  letter-spacing: -0.01em;
+}
+.dark .text-block-39 { color: rgba(255,255,255,0.6); }
+
+.la-app-download-ios-wrapper {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 767px) {
+  .la-app-download-qrcode-wrapper { display: none; }
+  .la-app-download-ios-wrapper { display: flex; }
+}
+
+/* ── Floating QR / app-download corner widget ─────────────────────── */
+.la-qr-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #eef1f6;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dark .la-qr-float {
+  background: #0d1520;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.la-qr-float--visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* Float shows QR on desktop, store buttons on mobile */
+.la-qr-float .la-app-download-qrcode-wrapper { display: flex; }
+.la-qr-float .la-app-download-ios-wrapper { display: none; }
+
+@media (max-width: 767px) {
+  .la-qr-float {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    border-radius: 16px;
+  }
+  .la-qr-float .la-app-download-qrcode-wrapper { display: none; }
+  .la-qr-float .la-app-download-ios-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+  }
 }
 
 /* Theme toggle icons — CSS drives visibility, no JS state needed */
