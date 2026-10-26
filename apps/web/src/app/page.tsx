@@ -123,6 +123,23 @@ const general = [
     ),
   },
   {
+    id: 'taas',
+    name: 'TaaS',
+    description: 'Technology as a Service — platform design for Tamawal.',
+    href: '/taas',
+    tag: 'TAAS',
+    badge: null,
+    accentColor: '#0063F5',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+  {
     id: 'ceer',
     name: 'Ceer (Alternative)',
     description: "Tamawal as official financing partner for Ceer Motors — Saudi Arabia's electric vehicle brand.",
