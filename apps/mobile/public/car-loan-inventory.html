@@ -18,6 +18,8 @@
     input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#0063F5;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.25);cursor:pointer;}
     @keyframes shimmer{0%{background-position:-800px 0}100%{background-position:800px 0}}
     .shimmer{background:linear-gradient(90deg,#E3E8EF 25%,#EEF1F6 50%,#E3E8EF 75%);background-size:800px 100%;animation:shimmer 1.4s infinite linear;}
+    @keyframes ripple-out{0%{transform:scale(0);opacity:0.45}100%{transform:scale(1);opacity:0}}
+    .ripple-ring{position:absolute;border-radius:50%;background:rgba(0,99,245,0.22);animation:ripple-out 0.6s cubic-bezier(0.2,0.6,0.4,1) forwards;pointer-events:none;}
   </style>
 </head>
 <body>
@@ -137,29 +139,49 @@
 
   function CarCard({ car, view = 'Square' }) {
     const [liked, setLiked] = useState(false);
+    const [ripples, setRipples] = useState([]);
+    const addRipple = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const size = Math.max(rect.width, rect.height) * 2;
+      const id = Date.now();
+      setRipples(r => [...r, {id, x, y, size}]);
+      setTimeout(() => setRipples(r => r.filter(rp => rp.id !== id)), 650);
+    };
 
     const cardStyle = {background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',width:'100%'};
     const chevronRight = <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke={C.gray900} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-    const carImg = <div style={{display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><img src={car.img} alt={car.model} style={{width:'100%',height:'auto',objectFit:'contain',objectPosition:'center'}}/></div>;
+    const carImg = (
+      <div onDoubleClick={addRipple} style={{display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',position:'relative',cursor:'pointer'}}>
+        <img src={car.img} alt={car.model} style={{width:'100%',height:'auto',objectFit:'contain',objectPosition:'center'}}/>
+        {ripples.map(rp => <span key={rp.id} className="ripple-ring" style={{width:rp.size,height:rp.size,left:rp.x-rp.size/2,top:rp.y-rp.size/2}}/>)}
+      </div>
+    );
 
     if (view === 'List') {
       return (
-        <div style={cardStyle}>
-          {carImg}
-          <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',minHeight:60}}>
-            <div style={{flex:1,paddingLeft:6,minWidth:0}}>
-              <p style={{margin:'0 0 2px',fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0.1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
-                {car.name || `${car.make} ${car.model} ${car.year}`}
+        <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',display:'flex',alignItems:'center',justifyContent:'center',width:'100%',minHeight:78}}>
+          <div onDoubleClick={addRipple} style={{width:159,height:78,flexShrink:0,position:'relative',overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+            <img src={car.img} alt={car.model} style={{width:'100%',height:'100%',objectFit:'contain',objectPosition:'center'}}/>
+            {ripples.map(rp => <span key={rp.id} className="ripple-ring" style={{width:rp.size,height:rp.size,left:rp.x-rp.size/2,top:rp.y-rp.size/2}}/>)}
+          </div>
+          <div style={{flex:1,minWidth:0,display:'flex',gap:8,alignItems:'flex-end',padding:'6px 8px'}}>
+            <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',justifyContent:'center',opacity:0.9}}>
+              <p style={{margin:'0 0 0',fontSize:15.5,fontWeight:600,color:C.gray900,letterSpacing:0.25,overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',whiteSpace:'pre-line'}}>
+                {`${car.name || `${car.make} ${car.model}`}\n${car.year}`}
               </p>
-              <div style={{display:'flex',alignItems:'center',gap:4,color:C.gray600,flexWrap:'wrap'}}>
-                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>Installment from</span>
-                <div style={{display:'flex',alignItems:'center',gap:2}}><SAR size={12}/><span style={{fontSize:13.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{car.monthly.toLocaleString('en-US')}.00</span></div>
-                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>/month</span>
+              <div style={{display:'flex',alignItems:'center',gap:2,color:C.gray600,whiteSpace:'nowrap'}}>
+                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>From</span>
+                <SAR size={13} color={C.gray600}/><span style={{fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0}}>{car.monthly.toLocaleString('en-US')}.0</span>
+                <span style={{fontSize:10,fontWeight:500,letterSpacing:0.5}}>/mo</span>
               </div>
             </div>
-            <button onClick={()=>nav('/car-loan/car-details')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:48,padding:8,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,cursor:'pointer'}}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
+            <div style={{display:'flex',alignItems:'center',paddingBottom:1,flexShrink:0}}>
+              <button onClick={()=>nav('/car-loan/car-details')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:48,padding:2,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -259,14 +281,14 @@
     const sh = (style) => <div className="shimmer" style={{ ...s, ...style }} />;
 
     if (view === 'List') return (
-      <div style={card}>
-        {sh({ height: 160 })}
-        <div style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 18px', minHeight:60 }}>
-          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:8 }}>
-            {sh({ height:17, width:'70%' })}
-            {sh({ height:13, width:'50%' })}
+      <div style={{...card, display:'flex', alignItems:'center', height:78, overflow:'hidden'}}>
+        {sh({ width:159, height:78, borderRadius:0, flexShrink:0 })}
+        <div style={{ flex:1, display:'flex', alignItems:'flex-end', gap:8, padding:'6px 8px' }}>
+          <div style={{ flex:1, display:'flex', flexDirection:'column', gap:6 }}>
+            {sh({ height:16, width:'75%' })}
+            {sh({ height:13, width:'55%' })}
           </div>
-          {sh({ width:36, height:36, borderRadius:'50%', flexShrink:0 })}
+          {sh({ width:24, height:24, borderRadius:'50%', flexShrink:0 })}
         </div>
       </div>
     );
@@ -658,7 +680,7 @@
             <button onClick={()=>nav('/car-loan')} style={{background:'none',border:'none',padding:'8px 4px',minWidth:48,display:'flex',alignItems:'center'}}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 19L8 12l7-7" stroke={C.gray900} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-            <span style={{fontSize:15.5,fontWeight:600,color:'#202A39',letterSpacing:0.25}}>Car offers</span>
+            <span onClick={()=>nav('/car-loan/inventory-alternative')} style={{fontSize:15.5,fontWeight:600,color:'#202A39',letterSpacing:0.25,cursor:'pointer'}}>Car offers</span>
             <div style={{minWidth:48}}/>
           </div>
         </div>
