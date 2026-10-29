@@ -116,21 +116,21 @@
     );
     return (
       <div style={{background:C.white,border:`1px solid ${C.gray100}`,borderRadius:16,overflow:'hidden',boxShadow:'0 1px 2px rgba(10,13,18,0.05)',width:'100%'}}>
-        <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',borderBottom:`1px solid ${C.gray200}`,minHeight:60}}>
-          <div style={{flex:1,paddingLeft:6,minWidth:0,display:'flex',alignItems:'center',gap:12}}>
-            <div style={{flex:1,minWidth:0,opacity:0.9}}>
-              <p style={{margin:'0 0 2px',fontSize:13.5,fontWeight:500,color:C.brand600,letterSpacing:0.4}}>{car.year}</p>
-              <p style={{margin:0,fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{car.model}</p>
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',paddingBottom:4,borderBottom:`1px solid ${C.gray200}`,minHeight:60}}>
+          <div style={{flex:1,minWidth:0,display:'flex',alignItems:'center'}}>
+            <div style={{flex:1,minWidth:0,opacity:0.9,display:'flex',flexDirection:'column',justifyContent:'center'}}>
+              <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.brand600,letterSpacing:0.4,lineHeight:'18px'}}>{car.year}</p>
+              <p style={{margin:0,fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,lineHeight:'27px',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{car.model}</p>
             </div>
-            <div style={{flexShrink:0,textAlign:'right',opacity:0.9}}>
+            <div style={{flex:1,minWidth:0,opacity:0.9,display:'flex',flexDirection:'column',alignItems:'flex-end',justifyContent:'center'}}>
               <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',gap:2,whiteSpace:'nowrap'}}>
-                <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>from</span>
-                <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0}}>{car.monthly.toLocaleString('en-US')}.00</span>
-                <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>/mo</span>
+                <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5,lineHeight:'14px'}}>from</span>
+                <SAR size={15}/><span style={{fontSize:17.5,fontWeight:700,color:C.gray900,letterSpacing:0,lineHeight:'27px'}}>{car.monthly.toLocaleString('en-US')}.00</span>
+                <span style={{fontSize:10,fontWeight:500,color:C.gray600,letterSpacing:0.5,lineHeight:'14px'}}>/mo</span>
               </div>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',gap:2}}>
-                <SAR size={13} color={C.gray600}/><span style={{fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0}}>{car.price.toLocaleString('en-US')}.00</span>
-              </div>
+              <p style={{margin:0,fontSize:13.5,fontWeight:500,color:C.gray600,letterSpacing:0,lineHeight:'22px',display:'flex',alignItems:'center',gap:2}}>
+                <SAR size={13} color={C.gray600}/>{car.price.toLocaleString('en-US')}.00
+              </p>
             </div>
           </div>
         </div>
