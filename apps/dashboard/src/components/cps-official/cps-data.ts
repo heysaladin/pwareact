@@ -31,7 +31,7 @@ export const PROFILES: Profile[] = [
   {
     id: '1066388128', initials: 'MA', name: 'Mustafa Ibrahim Barakat Alotaibi', nameAr: 'مصطفى إبراهيم بركات العتيبي',
     phone: '+966543346498', country: 'Saudi Arabia', email: 'mustafa.barakat@gmail.com', nationalId: '9573566234', dob: '23-03-1993', gender: 'Male', type: 'Customer',
-    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم تقديم الطلب',
+    stage: 'Order Submission', stageAr: 'تقديم الطلب', subStage: 'Order Submission Completed', subStageAr: 'تم إرسال الطلب',
     journeyResult: 'Passed', assignedName: 'Omar Almutairi', assignedNameAr: 'عمر المطيري', assignedRole: 'Brokerage',
     simah: true, masdr: false, joinedDate: 'September 09. 2025', joinedTime: '02:18 PM', orderCount: 8,
     labels: ['Priority Follow-up', 'Annoying'], labelsAr: ['متابعة ذات أولوية', 'عميل مزعج'],

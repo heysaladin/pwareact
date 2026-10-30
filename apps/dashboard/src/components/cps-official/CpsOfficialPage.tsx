@@ -124,13 +124,26 @@ function RecordBadge({ type, isAr }: { type: Profile['type']; isAr?: boolean }) 
   return <span className="px-[12px] py-[4px] rounded-2xl bg-[#fffaeb] border border-[#fedf89] text-[#b54708] text-sm font-medium">{isAr ? 'ضيف' : 'Guest'}</span>;
 }
 
+const EN_MONTHS_TO_AR: Record<string, string> = {
+  January: 'يناير', February: 'فبراير', March: 'مارس', April: 'أبريل',
+  May: 'مايو', June: 'يونيو', July: 'يوليو', August: 'أغسطس',
+  September: 'سبتمبر', October: 'أكتوبر', November: 'نوفمبر', December: 'ديسمبر',
+};
+function formatJoinedDateAr(dateStr: string): string {
+  const m = dateStr.match(/^(\w+)\s+(\d+)[.\s]+(\d+)$/);
+  if (!m) return dateStr;
+  const [, month, day, year] = m;
+  return `${parseInt(day, 10)} ${EN_MONTHS_TO_AR[month] ?? month} ${year}`;
+}
+
 function StageBadge({ stage, subStage, isAr }: { stage: string; subStage: string; isAr?: boolean }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="self-start px-[12px] py-[4px] rounded-2xl bg-white border border-[#d0d5dd] text-[#344054] text-sm font-medium">{stage}</span>
-      <div className="flex items-center gap-1 text-[#0053cc] text-sm whitespace-nowrap">
+      <span className="self-start px-[12px] py-[4px] rounded-2xl bg-[#fafafa] border border-[#e9eaeb] text-[#414651] text-sm font-medium">{stage}</span>
+      <div className="flex items-center gap-1 text-[#0053cc] text-sm whitespace-nowrap px-[12px] py-[8px]">
+        {isAr && <ArrowLeft className="w-4 h-4 shrink-0" />}
         <span>{subStage}</span>
-        {isAr ? <ArrowLeft className="w-3 h-3 shrink-0" /> : <ArrowRight className="w-3 h-3 shrink-0" />}
+        {!isAr && <ArrowRight className="w-4 h-4 shrink-0" />}
       </div>
     </div>
   );
@@ -1326,9 +1339,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                       <td className="ps-6 pe-2 py-3">
                         <button
                           onClick={e => { e.stopPropagation(); router.push(`${detailBasePath}/${p.id}?tab=${activeTab}`); }}
-                          className="bg-white border border-[#e3e8ef] rounded-full p-2 flex items-center justify-center hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 transition-colors"
+                          className="bg-white border border-[#e9eaeb] rounded-full p-2 flex items-center justify-center hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 transition-colors"
                         >
-                          <ChevronLeft className="w-4 h-4 text-[#697586] dark:text-slate-400" />
+                          {isAr
+                            ? <ChevronRight className="w-4 h-4 text-[#697586] dark:text-slate-400" />
+                            : <ChevronLeft  className="w-4 h-4 text-[#697586] dark:text-slate-400" />
+                          }
                         </button>
                       </td>
                     )}
@@ -1397,8 +1413,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                             <RecordBadge type={p.type} isAr={isAr} />
                             {p.type === 'Customer' && (
                               <div className="flex items-center gap-1 px-3 py-2 text-[#079455] text-sm font-medium">
-                                <Shield className="w-5 h-5 shrink-0" />
-                                <span>{isAr ? 'نشط' : 'active'}</span>
+                                <span>{isAr ? 'نشيط' : 'Active'}</span>
                               </div>
                             )}
                           </div>
@@ -1475,7 +1490,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                             <div className="w-10 h-10 rounded-full bg-[#bbd5fb] border border-white dark:border-slate-800 flex items-center justify-center text-xs font-semibold text-[#0063f5] shrink-0">
                               {p.assignedName.split(' ').map(n => n[0]).join('').slice(0, 2)}
                             </div>
-                            <div className="flex flex-col min-w-0">
+                            <div className="flex flex-col min-w-0 flex-1">
                               <span className="text-sm font-medium text-[#121a26] dark:text-slate-100 leading-6 truncate">
                                 {isAr ? p.assignedNameAr : p.assignedName}
                               </span>
@@ -1486,6 +1501,12 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                                 </div>
                               )}
                             </div>
+                            <button
+                              onClick={e => e.stopPropagation()}
+                              className="flex items-center justify-center w-9 h-9 shrink-0 rounded-lg border border-[#d5d7da] bg-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] hover:bg-[#f9fafb] dark:bg-slate-800 dark:border-slate-700 transition-colors"
+                            >
+                              <Pencil className="w-[18px] h-[18px] text-[#697586]" />
+                            </button>
                           </div>
                         </td>
 
@@ -1502,7 +1523,7 @@ export default function CpsOfficialPage({ forceLang, detailBasePath = '/cps-offi
                     {/* Joined date */}
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
-                        <span className="text-base font-medium text-[#121a26] dark:text-slate-100 leading-[26px] whitespace-nowrap">{p.joinedDate}</span>
+                        <span className="text-base font-medium text-[#121a26] dark:text-slate-100 leading-[26px] whitespace-nowrap">{isAr ? formatJoinedDateAr(p.joinedDate) : p.joinedDate}</span>
                         <span className="text-sm text-[#697586] dark:text-slate-400">{p.joinedTime}</span>
                       </div>
                     </td>

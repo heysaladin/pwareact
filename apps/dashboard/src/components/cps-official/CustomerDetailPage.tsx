@@ -1259,15 +1259,15 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                         <span className="text-[11px] font-bold text-[#0063f5]">NA</span>
                       </div>
                       <div className="flex flex-col whitespace-nowrap">
-                        <span className="text-[14px] font-medium text-[#181d27] leading-[24px] tracking-[0.0336px]">Noura Alqahtani</span>
-                        <span className="text-[10px] font-bold text-[#a4a7ae] leading-[14px] tracking-[0.05px]">Customer Success</span>
+                        <span className="text-[14px] font-medium text-[#181d27] leading-[24px] tracking-[0.0336px]">{isAr ? 'نورا القحطاني' : 'Noura Alqahtani'}</span>
+                        <span className="text-[10px] font-bold text-[#a4a7ae] leading-[14px] tracking-[0.05px]">{isAr ? 'نجاح العملاء' : 'Customer Success'}</span>
                       </div>
                     </div>
                   </div>
                   <div className="border-t border-[#f5f5f5] pt-[13px] w-full flex flex-col gap-[2px]">
-                    <span className="text-[10px] font-bold text-[#717680] leading-[14px] tracking-[0.05px] whitespace-nowrap">Latest assignment change</span>
-                    <span className="text-[10px] font-bold text-[#181d27] leading-[14px] tracking-[0.05px] whitespace-nowrap">System queue → Noura Alqahtani</span>
-                    <span className="text-[10px] font-bold text-[#717680] leading-[14px] tracking-[0.05px] whitespace-nowrap">Jul 25, 2026 · 09:30</span>
+                    <span className="text-[10px] font-bold text-[#717680] leading-[14px] tracking-[0.05px] whitespace-nowrap">{isAr ? 'آخر تغيير في المهمة' : 'Latest assignment change'}</span>
+                    <span className="text-[10px] font-bold text-[#181d27] leading-[14px] tracking-[0.05px] whitespace-nowrap">{isAr ? 'قائمة انتظار النظام ← نورا القحطاني' : 'System queue → Noura Alqahtani'}</span>
+                    <span className="text-[10px] font-bold text-[#717680] leading-[14px] tracking-[0.05px] whitespace-nowrap">{isAr ? '25 يوليو 2026 · 09:30' : 'Jul 25, 2026 · 09:30'}</span>
                   </div>
                 </div>
               </div>
@@ -1275,7 +1275,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                 <div className="flex flex-col gap-[16px] items-start p-[17px]">
                   <div className="flex gap-[8px] items-center w-full">
                     <span className="text-[18px] font-semibold text-[#181d27] leading-[28px] tracking-[0.027px] flex-1 min-w-0">
-                      {isAr ? 'تعليقات داخلية' : 'Internal comments'}
+                      {isAr ? 'التعليقات الداخلية' : 'Internal comments'}
                     </span>
                     <button className="border border-[#cce0fd] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] bg-white flex items-center gap-[8px] px-[12px] py-[8px]">
                       <span className="text-[14px] font-medium text-[#0042a3] leading-[20px] tracking-[0.014px]">3</span>
@@ -1290,10 +1290,10 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
                     </div>
                     <div className="flex flex-col gap-[8px] flex-1 min-w-0">
                       <div className="flex flex-col gap-[4px]">
-                        <span className="text-[14px] font-medium text-[#181d27] leading-[24px] tracking-[0.0336px]">Noura Alqahtani</span>
+                        <span className="text-[14px] font-medium text-[#181d27] leading-[24px] tracking-[0.0336px]">{isAr ? 'نورا القحطاني' : 'Noura Alqahtani'}</span>
                         <span className="text-[12px] text-[#535862] leading-[14px] tracking-[0.05px]">Identity checks complete. Waiting for the next customer action.</span>
                       </div>
-                      <span className="text-[10px] font-bold text-[#a4a7ae] leading-[14px] tracking-[0.05px] whitespace-nowrap">Yesterday · 14:26</span>
+                      <span className="text-[10px] font-bold text-[#a4a7ae] leading-[14px] tracking-[0.05px] whitespace-nowrap">{isAr ? 'أمس · 14:26' : 'Yesterday · 14:26'}</span>
                     </div>
                   </div>
                 </div>
