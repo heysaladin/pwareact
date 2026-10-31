@@ -103,6 +103,9 @@ const GUEST_TABS: MainTab[] = [
   { key: 'communications', labelEn: 'Communications',    labelAr: 'الاتصالات',           iconSrc: '/tab-icons/message-dots-circle.svg',  sub: [
     { key: 'notifications', labelEn: 'Notifications',    labelAr: 'إشعارات',          Icon: Bell                                     },
   ]},
+  { key: 'reports',        labelEn: 'Reports',           labelAr: 'التقارير',             iconSrc: '/tab-icons/clipboard-minus.svg',      sub: [
+    { key: 'detailed-report', labelEn: 'Detailed Report', labelAr: 'التقرير التفصيلي', Icon: ClipboardList                            },
+  ]},
 ];
 
 const STEP_OVERLINES_EN = [
@@ -151,12 +154,6 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
   const [selectedDataValSub,    setSelectedDataValSub]    = useState(0);
   const [expandedCp,            setExpandedCp]            = useState<number | null>(null);
   const step        = JOURNEY_STEPS[selectedStep];
-  // "required" = all passed checkpoints + all mandatory checkpoints (regardless of status)
-  const requiredCps = step.checkpoints.filter(c => c.status === 'Passed' || c.tag === 'Mandatory');
-  const passed      = requiredCps.filter(c => c.status === 'Passed').length;
-  const open        = requiredCps.filter(c => c.status !== 'Passed').length;
-  const total       = requiredCps.length;
-  const progress    = total > 0 ? Math.round((passed / total) * 100) : 0;
 
   const displayedCheckpoints = selectedStep === 4
     ? DATA_VALIDATION_CP_RANGES[selectedDataValSub].map(i => step.checkpoints[i])
@@ -494,37 +491,6 @@ function JourneyContent({ isAr }: { isAr: boolean }) {
                 </p>
               </div>
             )}
-          </div>
-
-          {/* Right: StepSidePanel */}
-          <div className="bg-[#f8fafc] border border-[#e3e8ef] rounded-[12px] p-[14px] flex flex-col gap-[16px] items-start w-[265px] shrink-0">
-            <div className="flex items-center justify-between w-full">
-              <p className="text-[12px] text-[#697586] leading-[16px] tracking-[0.048px]">
-                {isAr ? 'التقدم المطلوب' : 'Required progress'}
-              </p>
-              <p className="text-[25px] text-[#121a26] leading-[32px]">{progress}%</p>
-            </div>
-            <div className="relative w-full h-[8px] bg-[#e9eaeb] rounded-[4px]">
-              <div
-                className="absolute bg-[#0063f5] h-[8px] start-0 rounded-[4px] top-0"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="flex gap-[4px] items-start w-full">
-              {[
-                { num: passed, label: isAr ? 'مطلوب اجتياز' : 'Required passed' },
-                { num: open,   label: isAr ? 'مطلوب فتح'   : 'Open required'   },
-                { num: 0,      label: isAr ? 'الي'           : 'Optional'        },
-              ].map(stat => (
-                <div
-                  key={stat.label}
-                  className="bg-white border border-[#e9eaeb] flex-1 min-w-px rounded-[7px] flex flex-col gap-[4px] items-center p-[9px]"
-                >
-                  <p className="text-[25px] text-[#121827] text-center leading-[32px] whitespace-nowrap">{stat.num}</p>
-                  <p className="text-[10px] font-bold text-[#697386] text-center tracking-[0.05px] w-full leading-[14px]">{stat.label}</p>
-                </div>
-              ))}
-            </div>
           </div>
 
         </div>
@@ -1239,7 +1205,7 @@ export default function CustomerDetailPage({ profileId, forceLang, listPath = '/
             )}
           </div>
 
-          {activeMainTab === 0 && activeSubTabKey === 'summary' && !isGuest && (
+          {activeMainTab === 0 && activeSubTabKey === 'summary' && (
             <div className="flex flex-col gap-[8px] items-start w-[250px] shrink-0">
               <div className="bg-white border border-[#e9eaeb] rounded-[12px] w-full">
                 <div className="flex flex-col gap-[16px] items-start p-[17px]">

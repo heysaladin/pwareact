@@ -935,6 +935,157 @@ export function NotificationsContent({ isAr }: { isAr: boolean; profile: Profile
   );
 }
 
+// ─── GuestSummaryContent ─────────────────────────────────────────────────────
+
+const INTEREST_FIELDS = [
+  { icon: '/tab-icons/bar-chart-square-plus.svg', labelEn: 'Product interest',   labelAr: 'الاهتمام بالمنتج',  valueEn: 'Personal finance',           valueAr: 'التمويل الشخصي'       },
+  { icon: '/tab-icons/bank-note-02.svg',           labelEn: 'Preferred amount',   labelAr: 'المبلغ المفضل',     valueEn: 'SAR 120,000',                valueAr: 'ر.س 120,000'          },
+  { icon: '/tab-icons/building-05.svg',            labelEn: 'Sector',             labelAr: 'القطاع',             valueEn: 'Government',                 valueAr: 'حكومي'                },
+  { icon: '/tab-icons/building-01.svg',            labelEn: 'Entity',             labelAr: 'الجهة',              valueEn: 'Emirate of Riyadh Region',   valueAr: 'إمارة منطقة الرياض'  },
+  { icon: '/tab-icons/briefcase-02.svg',           labelEn: 'Job title',          labelAr: 'المسمى الوظيفي',    valueEn: 'Administrative specialist',  valueAr: 'أخصائي إداري'        },
+  { icon: '/tab-icons/bank.svg',                   labelEn: 'Salary bank',        labelAr: 'بنك الراتب',         valueEn: 'SNB',                        valueAr: 'بنك الأهلي'           },
+  { icon: '/journey-icons/calendar.svg',           labelEn: 'Hiring date',        labelAr: 'تاريخ التوظيف',     valueEn: 'Mar 09, 2022',               valueAr: '09 مارس 2022'         },
+  { icon: '/tab-icons/arrow-circle-right.svg',     labelEn: 'Salary transfer',    labelAr: 'تحويل الراتب',      valueEn: 'Yes, agreed',                valueAr: 'نعم، موافق'           },
+] as const;
+
+export function GuestSummaryContent({ isAr }: { isAr: boolean }) {
+  const mid = Math.ceil(INTEREST_FIELDS.length / 2);
+  const cols = [INTEREST_FIELDS.slice(0, mid), INTEREST_FIELDS.slice(mid)] as const;
+  return (
+    <div className="bg-white border border-[#e3e8f1] rounded-xl p-[17px] flex flex-col gap-[16px]">
+      <div className="flex items-center gap-[12px]">
+        <span className="text-[17.5px] font-bold text-[#181d27] leading-[26px] tracking-[0.1px]">
+          {isAr ? 'معلومات الاهتمام' : 'Interest information'}
+        </span>
+        <span className="bg-[#ecfdf3] border border-[#abefc6] text-[#067647] text-[12px] font-medium px-[8px] py-[2px] rounded-full whitespace-nowrap">
+          {isAr ? 'تم الإرسال' : 'Submitted'}
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-x-[8px]">
+        {cols.map((col, ci) => (
+          <div key={ci} className="flex flex-col">
+            {col.map((f, i) => (
+              <div key={f.labelEn} className={`flex items-center gap-[12px] px-[16px] py-[8px] rounded-[8px] ${i % 2 === 1 ? 'bg-[#fafafa]' : ''}`}>
+                <div className="flex items-center justify-center size-[48px] bg-white border border-[#f5f5f5] rounded-[8px] shrink-0">
+                  <img alt="" src={f.icon} className="size-[24px]" />
+                </div>
+                <div className="flex flex-col gap-[2px] min-w-0">
+                  <span className="text-[12px] text-[#717680] leading-[18px]">{isAr ? f.labelAr : f.labelEn}</span>
+                  <span className="text-[14px] font-medium text-[#181d27] leading-[20px] truncate">{isAr ? f.valueAr : f.valueEn}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── GuestLoyaltyPointsContent ────────────────────────────────────────────────
+
+const LOYALTY_STATS = [
+  { labelEn: 'Total',    labelAr: 'الإجمالي'  },
+  { labelEn: 'Redeemed', labelAr: 'المستبدل'  },
+  { labelEn: 'Expired',  labelAr: 'المنتهي'   },
+  { labelEn: 'Active',   labelAr: 'النشط'      },
+] as const;
+
+const LOYALTY_TABLE_HEADERS = [
+  { labelEn: 'Date & Time',    labelAr: 'التاريخ والوقت'  },
+  { labelEn: 'Mission Name',   labelAr: 'اسم المهمة'      },
+  { labelEn: 'Points Type',    labelAr: 'نوع النقاط'      },
+  { labelEn: 'Points Amount',  labelAr: 'مقدار النقاط'    },
+  { labelEn: 'Action',         labelAr: 'الإجراء'          },
+] as const;
+
+export function GuestLoyaltyPointsContent({ isAr }: { isAr: boolean }) {
+  return (
+    <div className="flex flex-col gap-[16px]">
+      {/* Stats row */}
+      <div className="flex bg-white border border-[#e3e8f1] rounded-xl overflow-hidden">
+        {LOYALTY_STATS.map((stat, i) => (
+          <div
+            key={stat.labelEn}
+            className={`flex-1 flex flex-col gap-[8px] p-[24px] ${i < LOYALTY_STATS.length - 1 ? (isAr ? 'border-s border-[#e3e8f1]' : 'border-e border-[#e3e8f1]') : ''}`}
+          >
+            <span className="text-[17.5px] font-bold text-[#181d27] leading-[26px]">{isAr ? stat.labelAr : stat.labelEn}</span>
+            <span className="text-[32px] font-medium text-[#181d27] leading-[40px]">0</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Table card */}
+      <div className="bg-white border border-[#e3e8f1] rounded-xl flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between px-[16px] py-[12px] border-b border-[#f5f5f5]">
+          <div className="flex flex-1 min-w-0">
+            {LOYALTY_TABLE_HEADERS.map(h => (
+              <span key={h.labelEn} className="flex-1 text-[12px] font-semibold text-[#697586] px-[4px]">{isAr ? h.labelAr : h.labelEn}</span>
+            ))}
+          </div>
+          <button className="ms-[16px] shrink-0 border border-[#aacbfc] bg-white flex items-center gap-[8px] px-[14px] py-[8px] rounded-[8px] text-[14px] font-medium text-[#0042a3] whitespace-nowrap shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+            {isAr ? 'إضافة نقاط مجانية' : 'Add Complimentary Points'}
+          </button>
+        </div>
+
+        {/* Empty state */}
+        <div className="flex flex-col items-center justify-center py-[60px] gap-[12px]">
+          <div className="size-[64px] bg-[#f5f5f5] rounded-full flex items-center justify-center">
+            <img alt="" src="/tab-icons/gift.svg" className="size-[32px] opacity-40" />
+          </div>
+          <span className="text-[14px] text-[#697586]">{isAr ? 'لا توجد نقاط' : 'No points yet'}</span>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between px-[16px] py-[16px] border-t border-[#f5f5f5]">
+          <div className="flex items-center gap-[8px]">
+            <span className="text-[14px] text-[#697586]">{isAr ? 'عرض' : 'Show'}</span>
+            <button className="border border-[#d5d7da] flex items-center gap-[4px] px-[10px] py-[6px] rounded-[6px] text-[14px] text-[#414651] bg-white">
+              10
+              <img alt="" src="/journey-icons/chevron-down.svg" className="size-[16px]" />
+            </button>
+          </div>
+          <div className="flex items-center gap-[4px]">
+            <button className="border border-[#d5d7da] flex items-center justify-center size-[36px] rounded-[6px] bg-white">
+              <img alt="" src="/journey-icons/chevron-down.svg" className="size-[16px] rotate-90" />
+            </button>
+            <span className="text-[14px] font-medium text-[#0053cc] w-[31px] text-center">1</span>
+            <button className="border border-[#d5d7da] flex items-center justify-center size-[36px] rounded-[6px] bg-white">
+              <img alt="" src="/journey-icons/chevron-down.svg" className="size-[16px] -rotate-90" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── GuestDetailedReportContent ───────────────────────────────────────────────
+
+export function GuestDetailedReportContent({ isAr }: { isAr: boolean }) {
+  return (
+    <div className="bg-white border border-[#e3e8f1] rounded-xl flex flex-col">
+      <div className="flex items-center justify-between px-[24px] py-[28px]">
+        <span className="text-[25px] font-medium text-[#181d27] leading-[32px]">
+          {isAr ? 'التقرير التفصيلي' : 'Detailed Report'}
+        </span>
+        <button className="border border-[#d5d7da] bg-white flex items-center gap-[8px] px-[12px] py-[8px] rounded-[8px] text-[14px] font-medium text-[#414651] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+          <img alt="" src="/icon-filter.svg" className="size-[16px]" />
+          {isAr ? 'تصفية' : 'Filter'}
+          <img alt="" src="/journey-icons/chevron-down.svg" className="size-[16px]" />
+        </button>
+      </div>
+      <div className="flex flex-col items-center justify-center py-[80px] gap-[12px]">
+        <div className="size-[64px] bg-[#f5f5f5] rounded-full flex items-center justify-center">
+          <img alt="" src="/tab-icons/clipboard-minus.svg" className="size-[32px] opacity-40" />
+        </div>
+        <span className="text-[14px] text-[#697586]">{isAr ? 'لا يوجد تقرير' : 'No report available'}</span>
+      </div>
+    </div>
+  );
+}
+
 // ─── TabPageContent (router) ──────────────────────────────────────────────────
 
 type TabPageContentProps = {
@@ -946,27 +1097,29 @@ type TabPageContentProps = {
 
 export function TabPageContent({ mainTabKey, subTabKey, isAr, profile }: TabPageContentProps) {
   const key = `${mainTabKey}/${subTabKey}`;
+  const isGuest = profile.type === 'Guest';
 
   switch (key) {
-    case 'overview/summary':        return <SummaryContent isAr={isAr} />;
-    case 'overview/comments':       return <CommentsContent isAr={isAr} profile={profile} />;
-    case 'verification/screening':  return <ScreeningContent isAr={isAr} profile={profile} />;
-    case 'verification/risk':       return <RiskContent isAr={isAr} profile={profile} />;
-    case 'reports/kyc':             return <KycContent isAr={isAr} profile={profile} />;
-    case 'reports/masdr':           return <MasdrContent isAr={isAr} profile={profile} />;
-    case 'reports/simah':           return <SimahContent isAr={isAr} profile={profile} />;
-    case 'financing/preliminary':   return <PreliminaryContent isAr={isAr} profile={profile} />;
-    case 'financing/applications':  return <ApplicationsContent isAr={isAr} profile={profile} />;
-    case 'financing/decisions':     return <DecisionsContent isAr={isAr} profile={profile} />;
-    case 'financing/orders':        return <OrdersContent isAr={isAr} profile={profile} />;
-    case 'billing/invoices':        return <InvoicesContent isAr={isAr} profile={profile} />;
-    case 'billing/billing':         return <BillingContent isAr={isAr} profile={profile} />;
-    case 'loyalty/points':          return <PointsContent isAr={isAr} profile={profile} />;
-    case 'loyalty/rewards':         return <RewardsContent isAr={isAr} profile={profile} />;
-    case 'security/devices':        return <DevicesContent isAr={isAr} profile={profile} />;
-    case 'security/ip':             return <IpContent isAr={isAr} profile={profile} />;
-    case 'security/logs':           return <LogsContent isAr={isAr} profile={profile} />;
+    case 'overview/summary':          return isGuest ? <GuestSummaryContent isAr={isAr} /> : <SummaryContent isAr={isAr} />;
+    case 'overview/comments':         return <CommentsContent isAr={isAr} profile={profile} />;
+    case 'verification/screening':    return <ScreeningContent isAr={isAr} profile={profile} />;
+    case 'verification/risk':         return <RiskContent isAr={isAr} profile={profile} />;
+    case 'reports/kyc':               return <KycContent isAr={isAr} profile={profile} />;
+    case 'reports/masdr':             return <MasdrContent isAr={isAr} profile={profile} />;
+    case 'reports/simah':             return <SimahContent isAr={isAr} profile={profile} />;
+    case 'reports/detailed-report':   return <GuestDetailedReportContent isAr={isAr} />;
+    case 'financing/preliminary':     return <PreliminaryContent isAr={isAr} profile={profile} />;
+    case 'financing/applications':    return <ApplicationsContent isAr={isAr} profile={profile} />;
+    case 'financing/decisions':       return <DecisionsContent isAr={isAr} profile={profile} />;
+    case 'financing/orders':          return <OrdersContent isAr={isAr} profile={profile} />;
+    case 'billing/invoices':          return <InvoicesContent isAr={isAr} profile={profile} />;
+    case 'billing/billing':           return <BillingContent isAr={isAr} profile={profile} />;
+    case 'loyalty/points':            return isGuest ? <GuestLoyaltyPointsContent isAr={isAr} /> : <PointsContent isAr={isAr} profile={profile} />;
+    case 'loyalty/rewards':           return <RewardsContent isAr={isAr} profile={profile} />;
+    case 'security/devices':          return <DevicesContent isAr={isAr} profile={profile} />;
+    case 'security/ip':               return <IpContent isAr={isAr} profile={profile} />;
+    case 'security/logs':             return <LogsContent isAr={isAr} profile={profile} />;
     case 'communications/notifications': return <NotificationsContent isAr={isAr} profile={profile} />;
-    default:                        return <SummaryContent isAr={isAr} />;
+    default:                          return isGuest ? <GuestSummaryContent isAr={isAr} /> : <SummaryContent isAr={isAr} />;
   }
 }

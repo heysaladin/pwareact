@@ -9,7 +9,7 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { background: #fff; font-family: -apple-system, 'SF Pro Text', sans-serif; overflow-x: hidden; }
+  body { background: #f8fafc; font-family: -apple-system, 'SF Pro Text', sans-serif; overflow-x: hidden; }
   :root {
     --brand-600: #0063f5;
     --gray-50: #f8fafc;
@@ -22,6 +22,8 @@
     --gray-800: #202a39;
     --gray-900: #121a26;
   }
+  .scroll { overflow-y: auto; scrollbar-width: none; }
+  .scroll::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
@@ -30,7 +32,7 @@
 
 function StatusBar() {
   return (
-    <div style={{height:38,position:'relative',overflow:'hidden',width:'100%'}}>
+    <div style={{height:38,position:'relative',overflow:'hidden',width:'100%',background:'white'}}>
       <div style={{position:'absolute',right:14.67,top:'50%',transform:'translateY(-50%)',display:'flex',alignItems:'center',gap:6}}>
         <img src="/car-loan-assets/status-signal.svg" style={{width:17,height:10.67}} alt=""/>
         <img src="/car-loan-assets/status-wifi.svg" style={{width:15.27,height:10.97}} alt=""/>
@@ -46,90 +48,191 @@ function StatusBar() {
 }
 
 const cars = [
-  { name:'Foxtron Model B', image:'/car-loan-assets/car-foxconn-model-b.png', mirror:true, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
-  { name:'MeRC C-Class 2026', image:'/car-loan-assets/car-merc-cclass.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
-  { name:'CEER Exobot Sedan 2026', image:'/car-loan-assets/car-ceer-sedan.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
-  { name:'Toyota Camry 2024', image:'/car-loan-assets/car-toyota-camry.png', mirror:false, specs:'XLE 2.5L · NEW · ﷼122,000', installment:'﷼1,850.00' },
+  { name:'Foxtron Model B', image:'/car-loan-assets/car-foxconn-model-b.png', mirror:true,  specs:'XLE 2.5L · NEW · 150,000.00', installment:'1,850.00' },
+  { name:'Mercedes-Benz C-Class 2026', image:'/car-loan-assets/car-merc-cclass.png', mirror:false, specs:'XLE 2.5L · NEW · 150,000.00', installment:'1,850.00' },
+  { name:'CEER Exobot Sedan 2026', image:'/car-loan-assets/car-ceer-sedan.png', mirror:false, specs:'XLE 2.5L · NEW · 150,000.00', installment:'1,850.00' },
+  { name:'Toyota Camry 2024', image:'/car-loan-assets/car-ford-ranger-raptor.png', mirror:false, specs:'XLE 2.5L · NEW · 150,000.00', installment:'1,850.00' },
 ];
 
-function CarCard({car}) {
+function SarIcon({ size = 13, color = '#121a26' }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} style={{width:size,height:size,flexShrink:0,display:'inline-block'}}>
+      <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+      <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+    </svg>
+  );
+}
+
+function CarCard({ car }) {
   const [hearted, setHearted] = React.useState(false);
   return (
-    <div style={{background:'white',border:'1px solid var(--gray-200)',borderRadius:8,overflow:'hidden'}}>
+    <div style={{background:'white',border:'1px solid var(--gray-100)',borderRadius:16,overflow:'hidden',boxShadow:'0px 1px 2px rgba(10,13,18,0.05)',width:'100%'}}>
       {/* Car image */}
       <div style={{height:160,background:'var(--gray-100)',overflow:'hidden',position:'relative'}}>
         <img src={car.image} alt={car.name} style={{width:'100%',height:'100%',objectFit:'cover',transform: car.mirror ? 'scaleX(-1)' : 'none'}}/>
       </div>
-      {/* Content */}
-      <div style={{padding:'12px 12px 12px'}}>
-        {/* Name + chevron row */}
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}}>
-          <span style={{fontSize:16,fontWeight:700,color:'var(--gray-900)',lineHeight:'22px'}}>{car.name}</span>
-          <img src="/car-loan-assets/chevron-right.svg" style={{width:16,height:16,flexShrink:0}} alt=""/>
-        </div>
-        {/* Specs */}
-        <p style={{fontSize:12.5,color:'var(--gray-600)',lineHeight:'18px',marginBottom:12}}>{car.specs}</p>
-        {/* Bottom action row */}
-        <div style={{display:'flex',alignItems:'center',gap:8}}>
-          <div style={{flex:1}}>
-            <p style={{fontSize:11,color:'var(--gray-500)',lineHeight:'16px'}}>Installment from</p>
-            <p style={{fontSize:14,fontWeight:700,color:'var(--gray-900)',lineHeight:'20px',fontFamily:'SF Arabic, -apple-system'}}>{car.installment}<span style={{fontSize:11,fontWeight:500,color:'var(--gray-500)'}}>/month</span></p>
+      {/* Title + specs row */}
+      <div style={{display:'flex',alignItems:'center',gap:12,padding:'8px 12px 8px 18px',borderBottom:'1px solid var(--gray-200)',minHeight:60}}>
+        <div style={{flex:1}}>
+          <p style={{fontSize:17.5,fontWeight:700,color:'var(--gray-900)',lineHeight:'26px',letterSpacing:0.1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{car.name}</p>
+          <div style={{display:'flex',alignItems:'center',gap:4,flexWrap:'nowrap'}}>
+            <span style={{fontSize:13.5,color:'var(--gray-600)',lineHeight:'18px'}}>{car.specs.split('·')[0].trim()}</span>
+            <span style={{fontSize:10,color:'var(--gray-600)'}}>·</span>
+            <span style={{fontSize:13.5,color:'var(--gray-600)',lineHeight:'18px'}}>{car.specs.split('·')[1].trim()}</span>
+            <span style={{fontSize:10,color:'var(--gray-600)'}}>·</span>
+            <div style={{display:'flex',alignItems:'center',gap:1}}>
+              <SarIcon size={12} color="#4b5565"/>
+              <span style={{fontSize:13.5,color:'var(--gray-600)',lineHeight:'22px'}}>{car.specs.split('·')[2].trim()}</span>
+            </div>
           </div>
-          <button onClick={()=>setHearted(!hearted)} style={{width:36,height:36,background:'var(--gray-100)',border:'none',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',flexShrink:0}}>
-            <img src="/car-loan-assets/icon-heart-new.svg" style={{width:20,height:20,opacity: hearted ? 1 : 0.5}} alt=""/>
-          </button>
-          <button style={{minHeight:36,background:'var(--brand-600)',border:'none',borderRadius:8,padding:'0 16px',fontSize:13,fontWeight:600,color:'white',cursor:'pointer',flexShrink:0}}>
-            See offers
-          </button>
+        </div>
+        <div style={{width:24,height:24,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 5.5L15 12L9 18.5" stroke="#121a26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      {/* Installment + heart + Tamawal */}
+      <div style={{display:'flex',alignItems:'center',gap:12,padding:'8px 12px',minHeight:52}}>
+        <div style={{flex:1}}>
+          <p style={{fontSize:13.5,color:'var(--gray-600)',lineHeight:'18px',letterSpacing:0.4}}>Installment from</p>
+          <div style={{display:'flex',alignItems:'center',gap:2}}>
+            <SarIcon size={14} color="#121a26"/>
+            <span style={{fontSize:17.5,fontWeight:700,color:'var(--gray-900)',lineHeight:'27px',letterSpacing:0}}>{car.installment}</span>
+            <span style={{fontSize:10,color:'var(--gray-600)',lineHeight:'14px',marginLeft:1}}>/month</span>
+          </div>
+        </div>
+        <button onClick={() => setHearted(!hearted)} style={{background:'none',border:'none',padding:0,display:'flex',alignItems:'center',justifyContent:'center',width:24,height:24,flexShrink:0}}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill={hearted ? '#ef4444' : 'none'}>
+            <path d="M16.1111 3C19.6333 3 22 6.3525 22 9.48C22 15.8138 12.1778 21 12 21C11.8222 21 2 15.8138 2 9.48C2 6.3525 4.36667 3 7.88889 3C9.91111 3 11.2333 4.02375 12 4.92375C12.7667 4.02375 14.0889 3 16.1111 3Z" stroke={hearted ? '#ef4444' : '#697586'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        <div style={{background:'var(--brand-600)',border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,minHeight:36,minWidth:90,display:'flex',alignItems:'center',justifyContent:'center',padding:'8px 12px',flexShrink:0,cursor:'pointer'}}>
+          <span style={{fontSize:13.5,fontWeight:600,color:'white',lineHeight:'18px',letterSpacing:0.5,whiteSpace:'nowrap'}}>Tamawal</span>
         </div>
       </div>
     </div>
   );
 }
 
-function App() {
+function ViewTabBar({ selected, onChange }) {
+  const tabs = [
+    { id:'List', icon: (active) => (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="2" y="4" width="12" height="1.5" rx="0.75" fill={active ? '#0063f5' : '#697586'}/>
+        <rect x="2" y="7.25" width="12" height="1.5" rx="0.75" fill={active ? '#0063f5' : '#697586'}/>
+        <rect x="2" y="10.5" width="12" height="1.5" rx="0.75" fill={active ? '#0063f5' : '#697586'}/>
+      </svg>
+    )},
+    { id:'Square', icon: (active) => (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="2" y="2" width="5.5" height="5.5" rx="1" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.3"/>
+        <rect x="8.5" y="2" width="5.5" height="5.5" rx="1" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.3"/>
+        <rect x="2" y="8.5" width="5.5" height="5.5" rx="1" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.3"/>
+        <rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.3"/>
+      </svg>
+    )},
+    { id:'Detailed', icon: (active) => (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="2" y="2.5" width="12" height="9" rx="1.5" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.3"/>
+        <line x1="2" y1="5.5" x2="14" y2="5.5" stroke={active ? '#0063f5' : '#697586'} strokeWidth="1.2"/>
+        <rect x="4" y="7.5" width="4" height="2" rx="0.5" fill={active ? '#0063f5' : '#697586'} opacity="0.6"/>
+      </svg>
+    )},
+  ];
   return (
-    <div style={{width:'100%',height:'100vh',background:'white',display:'flex',flexDirection:'column'}}>
-      <StatusBar/>
-      {/* Header */}
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingLeft:16,paddingRight:16,paddingTop:4,paddingBottom:6}}>
-        <div style={{minWidth:48,display:'flex',alignItems:'center'}}>
-          <img src="/car-loan-assets/chevron-left.svg" style={{width:24,height:24}} alt="back"/>
+    <div style={{background:'#f8fafc',borderRadius:11,padding:3,display:'flex',gap:3}}>
+      {tabs.map(tab => {
+        const active = selected === tab.id;
+        return (
+          <button key={tab.id} onClick={() => onChange(tab.id)} style={{
+            flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+            padding:'8px 16px', borderRadius:8, border:'none', cursor:'pointer',
+            background: active ? 'white' : 'transparent',
+            boxShadow: active ? '0 1px 2px rgba(10,13,18,0.06), 0 0 0 1px #eef1f6' : 'none',
+          }}>
+            {tab.icon(active)}
+            <span style={{fontSize:12.5,fontWeight:500,color: active ? '#0063f5' : '#697586',lineHeight:'18px',letterSpacing:0.5,whiteSpace:'nowrap'}}>{tab.id}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function App() {
+  const [view, setView] = React.useState('Square');
+
+  return (
+    <div style={{width:'100%',height:'100vh',background:'#f8fafc',display:'flex',flexDirection:'column'}}>
+      {/* White header area */}
+      <div style={{background:'white',flexShrink:0}}>
+        <StatusBar/>
+        {/* Nav */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',paddingLeft:16,paddingRight:16,paddingTop:4,paddingBottom:6}}>
+          <div style={{minWidth:48,display:'flex',alignItems:'center'}}>
+            <img src="/car-loan-assets/chevron-left.svg" style={{width:24,height:24}} alt="back"/>
+          </div>
+          <p style={{flex:1,textAlign:'center',fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Car offers</p>
+          <div style={{minWidth:48}}/>
         </div>
-        <p style={{flex:1,textAlign:'center',fontSize:15.5,fontWeight:600,lineHeight:'22px',color:'var(--gray-800)',letterSpacing:0.25}}>Car offers</p>
-        <div style={{minWidth:48}}/>
-      </div>
-
-      {/* Find your car bar */}
-      <div style={{margin:'0 16px',background:'white',border:'1px solid var(--gray-200)',borderRadius:8,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontSize:15.5,fontWeight:700,color:'#121a26',lineHeight:'22px'}}>Find your car</span>
-        <div style={{display:'flex',alignItems:'center',gap:6,border:'1px solid var(--gray-300)',borderRadius:8,padding:'4px 8px'}}>
-          <span style={{fontSize:12.5,color:'var(--gray-500)'}}>Change</span>
-          <img src="/car-loan-assets/icon-change.svg" style={{width:16,height:16}} alt=""/>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div style={{height:1,background:'var(--gray-100)',margin:'12px 0'}}/>
-
-      {/* Scrollable list */}
-      <div style={{flex:1,overflowY:'auto',padding:'0 24px 40px',display:'flex',flexDirection:'column',gap:16}}>
-        {/* Count row */}
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-          <p style={{fontSize:13.5,color:'var(--gray-500)',lineHeight:'20px'}}>
-            You may be eligible for <span style={{fontWeight:700,color:'var(--gray-900)'}}>6 Cars</span>
-          </p>
-          <div style={{display:'flex',gap:8}}>
-            <img src="/car-loan-assets/icon-filter.svg" style={{width:24,height:24,cursor:'pointer'}} alt="filter"/>
-            <img src="/car-loan-assets/icon-sort.svg" style={{width:24,height:24,cursor:'pointer'}} alt="sort"/>
+        {/* Find your car */}
+        <div style={{padding:'8px 24px'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <span style={{fontSize:15.5,fontWeight:700,color:'var(--gray-900)',lineHeight:'22px',letterSpacing:0.1}}>Find your car</span>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <span style={{fontSize:12.5,color:'var(--gray-500)',fontWeight:500,letterSpacing:0.5}}>Change</span>
+              <div style={{border:'1px solid var(--gray-200)',borderRadius:34,padding:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="#697586" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
-        {/* Cards */}
-        {cars.map((car,i) => <CarCard key={i} car={car}/>)}
+      </div>
+
+      {/* Scrollable content */}
+      <div className="scroll" style={{flex:1,padding:'12px 24px 40px',display:'flex',flexDirection:'column',gap:16}}>
+        {/* Count + sort/filter row */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <p style={{fontSize:13.5,color:'var(--gray-400)',lineHeight:'18px',letterSpacing:0.4}}>
+            You may be eligible for{' '}<span style={{fontWeight:500,color:'#202a39'}}>6 Cars</span>
+          </p>
+          <div style={{display:'flex',gap:24,alignItems:'center'}}>
+            {/* Sort icon */}
+            <button style={{background:'none',border:'none',padding:0,display:'flex',cursor:'pointer'}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M13.5 15.75L17.25 19.5L21 15.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M17.25 10.5V19.5" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4.5 12H11.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4.5 6H17.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4.5 18H9.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {/* Filter icon */}
+            <button style={{background:'none',border:'none',padding:0,display:'flex',cursor:'pointer'}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3.94507 4.5H20.0513C20.1968 4.50005 20.3391 4.5424 20.461 4.62191C20.5828 4.70141 20.6789 4.81463 20.7375 4.94777C20.7961 5.08092 20.8148 5.22824 20.7911 5.37179C20.7675 5.51533 20.7026 5.64891 20.6045 5.75625L14.4451 12.5344C14.3169 12.6716 14.2464 12.8529 14.2482 13.0406V18.3469C14.2493 18.4715 14.219 18.5944 14.16 18.7042C14.101 18.814 14.0153 18.9072 13.9107 18.975L10.9107 20.9719C10.7982 21.046 10.6677 21.0884 10.5331 21.0947C10.3985 21.101 10.2647 21.0709 10.1458 21.0076C10.0268 20.9443 9.92713 20.8501 9.85717 20.7349C9.78721 20.6198 9.74956 20.4879 9.7482 20.3531V13.0406C9.75001 12.8529 9.67952 12.6716 9.55132 12.5344L3.39195 5.75625C3.29375 5.64891 3.22889 5.51533 3.20527 5.37179C3.18164 5.22824 3.20028 5.08092 3.2589 4.94777C3.31753 4.81463 3.41361 4.70141 3.53544 4.62191C3.65727 4.5424 3.7996 4.50005 3.94507 4.5Z" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* View tab bar */}
+        <ViewTabBar selected={view} onChange={setView}/>
+
+        {/* Car cards */}
+        {cars.map((car, i) => <CarCard key={i} car={car}/>)}
+
+        {/* End of list */}
+        <div style={{background:'#f8fafc',borderRadius:11,padding:'12px 24px',textAlign:'center'}}>
+          <p style={{fontSize:12.5,color:'var(--gray-400)',lineHeight:'18px',letterSpacing:0.5}}>You've reached the end of the list</p>
+        </div>
       </div>
 
       {/* Home indicator */}
-      <div style={{height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0}}>
+      <div style={{height:34,display:'flex',alignItems:'flex-end',justifyContent:'center',paddingBottom:8,flexShrink:0,background:'white'}}>
         <div style={{width:134,height:5,background:'black',borderRadius:999}}/>
       </div>
     </div>
