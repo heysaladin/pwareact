@@ -31,6 +31,44 @@ const t = {
 
     productTabs: ['Car Financing', 'Personal Loans', 'Real Estate', 'Credit Cards', 'Business Loans', 'Home Equity', 'Lease Finance', 'Micro Finance', 'Auto Refinance', 'Student Loans'],
 
+    productsLabel: 'Products',
+    productsTitle: 'Finance anything\nyou need',
+    productsSub: 'From cars to homes, personal needs to business goals — compare real offers across all major product types.',
+    loanTypes: [
+      {
+        key: 'car',
+        title: 'Car Financing',
+        desc: 'Compare offers from 15+ banks and drive away with the best rate. New, used, or electric — we cover it all.',
+        stat1: '15+ banks', stat2: 'From 2.5% APR',
+        cta: 'Explore Car Loans',
+        bg: '#EEF5FF', accent: '#0063F5', icon: '/products/car.svg',
+      },
+      {
+        key: 'personal',
+        title: 'Personal Loans',
+        desc: 'Quick personal financing with flexible repayment terms. Get approved in as little as 24 hours.',
+        stat1: 'Up to SAR 500K', stat2: 'Up to 5 years',
+        cta: 'Explore Personal Loans',
+        bg: '#F3EEFF', accent: '#7C3AED', icon: '/products/personal.svg',
+      },
+      {
+        key: 'mortgage',
+        title: 'Real Estate',
+        desc: 'Finance your dream home or investment property with competitive mortgage rates from top Saudi banks.',
+        stat1: 'Up to SAR 5M', stat2: 'Up to 30 years',
+        cta: 'Explore Mortgages',
+        bg: '#EEFAF4', accent: '#059669', icon: '/products/mortgage.svg',
+      },
+      {
+        key: 'card',
+        title: 'Credit Cards',
+        desc: 'Compare credit cards by cashback, rewards, and benefits. Find the card that fits your lifestyle.',
+        stat1: '10+ card options', stat2: '0% intro APR',
+        cta: 'Explore Credit Cards',
+        bg: '#FFF8EE', accent: '#D97706', icon: '/products/card.svg',
+      },
+    ],
+
     cards: [
       { number: '01', title: 'Tell us what you need', desc: 'Answer a few quick questions about your financing needs. Takes less than 2 minutes.' },
       { number: '02', title: 'We check your eligibility', desc: 'Tamawal analyzes your profile against 15+ bank criteria — no credit inquiry.' },
@@ -55,6 +93,14 @@ const t = {
     findAmountLabel: 'Loan Amount', findSalaryLabel: 'Monthly Salary',
     findEmployLabel: 'Employment Type', findEmployOptions: ['Employed', 'Self Employed', 'Government'],
     findCta: 'Find My Loan',
+    findLoanTypeLabel: 'Select Loan Type',
+    findLoanTypes: ['Personal Loan', 'Real Estate', 'Car Loan', 'Card Finance'],
+    findMonthlySalaryLabel: 'Your Monthly Salary',
+    findActiveLoansLabel: 'Do you have active loans?',
+    findYes: 'YES', findNo: 'NO',
+    findPurposeLabel: 'Select Loan Purpose',
+    findPurposes: ['Renovation & Home Improvements', 'Travel & Vacation', 'Education', 'Medical Expenses', 'Debt Consolidation', 'Wedding', 'Electronics & Appliances'],
+    findContinue: 'Continue',
 
     faqLabel: 'FAQ', faqTitle: 'Questions you might ask',
     faqs: [
@@ -97,6 +143,44 @@ const t = {
 
     productTabs: ['تمويل سيارة', 'قروض شخصية', 'عقار', 'بطاقات ائتمان', 'قروض تجارية', 'ضمان عقاري', 'تمويل إيجاري', 'تمويل صغير', 'إعادة تمويل سيارة', 'قروض طلابية'],
 
+    productsLabel: 'المنتجات',
+    productsTitle: 'موّل كل ما تحتاجه',
+    productsSub: 'من السيارات إلى المنازل، الاحتياجات الشخصية إلى الأهداف التجارية — قارن عروضاً حقيقية عبر جميع أنواع المنتجات الرئيسية.',
+    loanTypes: [
+      {
+        key: 'car',
+        title: 'تمويل سيارة',
+        desc: 'قارن عروض أكثر من 15 بنكاً وانطلق بأفضل معدل. جديدة، مستعملة، أو كهربائية — نغطي كل شيء.',
+        stat1: '+15 بنكاً', stat2: 'من 2.5% سنوياً',
+        cta: 'استعرض تمويل السيارات',
+        bg: '#EEF5FF', accent: '#0063F5', icon: '/products/car.svg',
+      },
+      {
+        key: 'personal',
+        title: 'قروض شخصية',
+        desc: 'تمويل شخصي سريع بشروط سداد مرنة. احصل على الموافقة في غضون 24 ساعة.',
+        stat1: 'حتى 500,000 ريال', stat2: 'حتى 5 سنوات',
+        cta: 'استعرض القروض الشخصية',
+        bg: '#F3EEFF', accent: '#7C3AED', icon: '/products/personal.svg',
+      },
+      {
+        key: 'mortgage',
+        title: 'التمويل العقاري',
+        desc: 'موّل منزل أحلامك أو عقارك الاستثماري بمعدلات رهن عقاري تنافسية من أفضل البنوك السعودية.',
+        stat1: 'حتى 5 مليون ريال', stat2: 'حتى 30 سنة',
+        cta: 'استعرض التمويل العقاري',
+        bg: '#EEFAF4', accent: '#059669', icon: '/products/mortgage.svg',
+      },
+      {
+        key: 'card',
+        title: 'بطاقات الائتمان',
+        desc: 'قارن بطاقات الائتمان حسب الكاش باك والمكافآت والمزايا. اعثر على البطاقة التي تناسب أسلوب حياتك.',
+        stat1: '+10 خيارات للبطاقات', stat2: 'فائدة 0% في البداية',
+        cta: 'استعرض بطاقات الائتمان',
+        bg: '#FFF8EE', accent: '#D97706', icon: '/products/card.svg',
+      },
+    ],
+
     cards: [
       { number: '٠١', title: 'أخبرنا بما تحتاج', desc: 'أجب على بعض الأسئلة السريعة حول احتياجاتك التمويلية. يستغرق أقل من دقيقتين.' },
       { number: '٠٢', title: 'نتحقق من أهليتك', desc: 'يحلل تامول ملفك الشخصي مقابل معايير أكثر من 15 بنكاً — دون أي استعلام ائتماني.' },
@@ -121,6 +205,14 @@ const t = {
     findAmountLabel: 'مبلغ القرض', findSalaryLabel: 'الراتب الشهري',
     findEmployLabel: 'جهة العمل', findEmployOptions: ['موظف حكومي', 'موظف خاص', 'عمل حر'],
     findCta: 'ابحث عن قرضي',
+    findLoanTypeLabel: 'اختر نوع القرض',
+    findLoanTypes: ['قرض شخصي', 'عقار', 'قرض سيارة', 'بطاقة ائتمان'],
+    findMonthlySalaryLabel: 'راتبك الشهري',
+    findActiveLoansLabel: 'هل لديك قروض نشطة؟',
+    findYes: 'نعم', findNo: 'لا',
+    findPurposeLabel: 'اختر الغرض من القرض',
+    findPurposes: ['تجديد المنزل وتحسينه', 'السفر والإجازة', 'التعليم', 'النفقات الطبية', 'توحيد الديون', 'حفلات الزفاف', 'الإلكترونيات والأجهزة'],
+    findContinue: 'متابعة',
 
     faqLabel: 'الأسئلة الشائعة', faqTitle: 'أسئلة قد تخطر على بالك',
     faqs: [
@@ -164,6 +256,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 export default function TamweelWebHome() {
   const [lang, setLang] = useState<Lang>('en');
   const [findProduct, setFindProduct] = useState(0);
+  const [salary, setSalary] = useState(7000);
+  const [hasActiveLoans, setHasActiveLoans] = useState<boolean | null>(null);
+  const [loanPurpose, setLoanPurpose] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const isRtl = lang === 'ar';
   const c = t[lang];
@@ -258,6 +353,99 @@ export default function TamweelWebHome() {
         </div>
       </div>
 
+      {/* ── Loan Types ───────────────────────────────────────────────────── */}
+      <section id="products" className="py-24 border-t border-[#eef1f6] dark:border-white/[0.06] overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-semibold tracking-widest uppercase text-[#0063F5] mb-4">{c.productsLabel}</p>
+            <h2 className="text-5xl md:text-6xl font-bold text-[#101828] dark:text-white leading-tight whitespace-pre-line">{c.productsTitle}</h2>
+            <p className="mt-4 text-base text-[#667085] dark:text-white/50 max-w-xl mx-auto leading-relaxed">{c.productsSub}</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            {/* right col — Car + Credit Card */}
+            <div className="flex flex-col gap-6">
+              {[c.loanTypes[0], c.loanTypes[3]].map((loan) => (
+                <div
+                  key={loan.key}
+                  className="rounded-[48px] p-10 flex flex-col justify-between relative overflow-hidden"
+                  style={{ backgroundColor: loan.bg, minHeight: 460 }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: loan.accent }}>{c.productsLabel}</p>
+                      <h3 className="text-2xl font-bold text-[#101828] leading-tight">{loan.title}</h3>
+                    </div>
+                    <Image src={loan.icon} alt={loan.title} width={80} height={80} className="shrink-0" />
+                  </div>
+                  <p className="text-sm text-[#667085] leading-relaxed max-w-xs mt-4">{loan.desc}</p>
+                  <div className="flex gap-6 mt-6">
+                    <div>
+                      <p className="text-lg font-bold text-[#101828]">{loan.stat1}</p>
+                      <p className="text-xs text-[#9aa4b2] mt-0.5">{isRtl ? 'خيارات متاحة' : 'available'}</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-[#101828]">{loan.stat2}</p>
+                      <p className="text-xs text-[#9aa4b2] mt-0.5">{isRtl ? 'أفضل معدل' : 'best rate'}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/tamweel-web/hub"
+                    className="mt-8 inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl text-white transition-opacity hover:opacity-80"
+                    style={{ backgroundColor: loan.accent }}
+                  >
+                    {loan.cta}
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className={isRtl ? 'rotate-180' : ''}>
+                      <path d="M2.5 7h9M8 3.5 11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            {/* left col — Personal + Mortgage, offset down */}
+            <div className="flex flex-col gap-6 mt-36">
+              {[c.loanTypes[1], c.loanTypes[2]].map((loan) => (
+                <div
+                  key={loan.key}
+                  className="rounded-[48px] p-10 flex flex-col justify-between relative overflow-hidden"
+                  style={{ backgroundColor: loan.bg, minHeight: 460 }}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: loan.accent }}>{c.productsLabel}</p>
+                      <h3 className="text-2xl font-bold text-[#101828] leading-tight">{loan.title}</h3>
+                    </div>
+                    <Image src={loan.icon} alt={loan.title} width={80} height={80} className="shrink-0" />
+                  </div>
+                  <p className="text-sm text-[#667085] leading-relaxed max-w-xs mt-4">{loan.desc}</p>
+                  <div className="flex gap-6 mt-6">
+                    <div>
+                      <p className="text-lg font-bold text-[#101828]">{loan.stat1}</p>
+                      <p className="text-xs text-[#9aa4b2] mt-0.5">{isRtl ? 'خيارات متاحة' : 'available'}</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-[#101828]">{loan.stat2}</p>
+                      <p className="text-xs text-[#9aa4b2] mt-0.5">{isRtl ? 'أفضل معدل' : 'best rate'}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/tamweel-web/hub"
+                    className="mt-8 inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl text-white transition-opacity hover:opacity-80"
+                    style={{ backgroundColor: loan.accent }}
+                  >
+                    {loan.cta}
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className={isRtl ? 'rotate-180' : ''}>
+                      <path d="M2.5 7h9M8 3.5 11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Phone Flip (How It Works) ────────────────────────────────────── */}
       <div id="how-it-works">
         <PhoneFlip lang={lang} />
@@ -284,44 +472,114 @@ export default function TamweelWebHome() {
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-3xl bg-white dark:bg-[#0d1520] shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:shadow-none dark:border dark:border-white/[0.08]" style={{ minHeight: 520 }}>
-              <div className="border-b border-[#EAECF0] dark:border-white/[0.08] bg-[#F1F7FF] dark:bg-[#0a1628] px-6 pb-5 pt-6">
-                <h2 className="text-center text-xl font-bold leading-tight text-[#021945] dark:text-white">{c.findTitle}</h2>
+            <div className="overflow-hidden rounded-[32px] bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.08)]" style={{ minHeight: 520 }}>
+              {/* Header */}
+              <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
+                <p className="text-[#021945] text-[20px] font-bold text-center">{c.findTitle}</p>
               </div>
-              <div className="flex flex-col gap-5 px-6 py-8">
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {c.productTabs.slice(0, 5).map((tab, i) => (
+
+              {/* Body */}
+              <div className="px-10 py-10 flex flex-col items-center gap-12 bg-white">
+
+                {/* Loan Type */}
+                <div className="flex flex-col items-center gap-2 w-full">
+                  <p className="text-[#475467] text-[13px]">{c.findLoanTypeLabel}</p>
+                  <div className="flex gap-2 items-center justify-center w-full flex-wrap">
+                    {c.findLoanTypes.map((type, i) => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setFindProduct(i)}
+                        className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${findProduct === i ? 'bg-[#0063F5] border-[#D7E7FE] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Monthly Salary */}
+                <div className="flex flex-col items-center gap-2 w-full">
+                  <div className="flex gap-1 items-start">
+                    <p className="text-[#475467] text-[13px]">{c.findMonthlySalaryLabel}</p>
+                    <p className="text-[#d91c1c] text-[13px]">*</p>
+                  </div>
+                  <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6] w-full">
+                    <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
+                    <span className="text-[#101828] text-[24px] font-bold">
+                      {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
+                    <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                      <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
+                    </span>
+                    <input
+                      type="range"
+                      min={1000}
+                      max={100000}
+                      step={500}
+                      value={salary}
+                      onChange={(e) => setSalary(Number(e.target.value))}
+                      className="flex-1 h-1 accent-[#2563EB] cursor-grab"
+                    />
+                    <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                      <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 100 K
+                    </span>
+                  </div>
+                </div>
+
+                {/* Active Loans */}
+                <div className="flex flex-col items-center gap-2 w-full">
+                  <p className="text-[#475467] text-[13px]">{c.findActiveLoansLabel}</p>
+                  <div className="flex gap-3">
                     <button
-                      key={tab}
-                      onClick={() => setFindProduct(i)}
-                      className={`px-4 h-10 rounded-full text-sm font-medium transition-all ${findProduct === i ? 'bg-[#0063F5] text-white' : 'bg-[#F1F7FF] dark:bg-white/[0.06] text-[#344054] dark:text-white/60 hover:bg-[#deeaff] dark:hover:bg-white/[0.1]'}`}
+                      type="button"
+                      onClick={() => setHasActiveLoans(true)}
+                      className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === true ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
                     >
-                      {tab}
+                      {c.findYes}
                     </button>
-                  ))}
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#101828] dark:text-white mb-2">{c.findAmountLabel}</label>
-                  <div className="flex items-center gap-2 bg-[#F9FAFB] dark:bg-[#0a1628] border border-[#EAECF0] dark:border-white/[0.08] rounded-lg px-4 h-11">
-                    <span className="text-xs text-[#9aa4b2]">SAR</span>
-                    <input type="number" defaultValue={50000} className="flex-1 bg-transparent text-sm text-[#101828] dark:text-white outline-none" />
+                    <button
+                      type="button"
+                      onClick={() => setHasActiveLoans(false)}
+                      className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === false ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
+                    >
+                      {c.findNo}
+                    </button>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#101828] dark:text-white mb-2">{c.findSalaryLabel}</label>
-                  <div className="flex items-center gap-2 bg-[#F9FAFB] dark:bg-[#0a1628] border border-[#EAECF0] dark:border-white/[0.08] rounded-lg px-4 h-11">
-                    <span className="text-xs text-[#9aa4b2]">SAR</span>
-                    <input type="number" defaultValue={10000} className="flex-1 bg-transparent text-sm text-[#101828] dark:text-white outline-none" />
+
+                {/* Loan Purpose */}
+                <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
+                  <p className="text-[#475467] text-[13px]">{c.findPurposeLabel}</p>
+                  <div className="relative w-full">
+                    <select
+                      value={loanPurpose}
+                      onChange={(e) => setLoanPurpose(Number(e.target.value))}
+                      className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 bg-white text-[#101828] text-[18px] font-bold outline-none focus:border-[#0063F5] appearance-none cursor-pointer"
+                    >
+                      {c.findPurposes.map((p, i) => <option key={i} value={i}>{p}</option>)}
+                    </select>
+                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#101828] dark:text-white mb-2">{c.findEmployLabel}</label>
-                  <select className="w-full bg-[#F9FAFB] dark:bg-[#0a1628] border border-[#EAECF0] dark:border-white/[0.08] rounded-lg px-4 h-11 text-sm text-[#101828] dark:text-white outline-none appearance-none">
-                    {c.findEmployOptions.map((o) => <option key={o}>{o}</option>)}
-                  </select>
-                </div>
-                <Link href="/tamweel-web/hub" className="mt-1 w-full text-center text-sm font-semibold text-white bg-[#0063F5] py-3.5 rounded-lg hover:bg-[#0052cc] transition-colors">
-                  {c.findCta}
+
+              </div>
+
+              {/* Footer */}
+              <div className="bg-white px-6 pb-10 pt-4 rounded-b-[32px] flex justify-center items-start">
+                <Link
+                  href={hasActiveLoans !== null ? '/tamweel-web/hub' : '#'}
+                  onClick={(e) => hasActiveLoans === null && e.preventDefault()}
+                  className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
+                >
+                  <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
+                    <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </Link>
               </div>
             </div>
