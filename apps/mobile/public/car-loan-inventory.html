@@ -38,30 +38,34 @@
 
   const cars = [
     // car-image_registered (Figma 4001:218875)
-    { id:1,  make:'CEER',     model:'Foxtron Model B', year:2026, trim:'77 kWh', name:'CEER Foxtron Model B - EV Hatchback - Limited Edition', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-foxconn-model-b.png' },
-    { id:2,  make:'CEER',     model:'Exobot Sedan', year:2026, trim:'Standard',  isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-ceer-sedan-new.png' },
-    { id:3,  make:'CEER',     model:'Exobot SUV',   year:2026, trim:'Standard',  isNew:true,  price:135000, monthly:2000, img:'/car-loan-assets/car-ceer-suv-new.png' },
-    { id:4,  make:'Lucid',    model:'Air',          year:2026, trim:'Pure',      isNew:true,  price:310000, monthly:4600, img:'/car-loan-assets/car-lucid-air-new.png' },
-    { id:5,  make:'Tesla',    model:'Model Y',      year:2026, trim:'Long Range',isNew:true,  price:190000, monthly:2800, img:'/car-loan-assets/car-tesla-model-y-new.png' },
-    { id:6,  make:'Mercedes-Benz', model:'C-Class', year:2026, trim:'C200',      isNew:true,  price:230000, monthly:3400, img:'/car-loan-assets/car-merc-cclass-new.png' },
-    { id:7,  make:'Ford',     model:'Ranger Raptor',year:2026, trim:'3.0L V6',   isNew:true,  price:245000, monthly:3600, img:'/car-loan-assets/car-ford-raptor-new.png' },
-    { id:8,  make:'MG',       model:'ZS EV',        year:2026, trim:'Standard',  isNew:true,  price:110000, monthly:1650, img:'/car-loan-assets/car-mg-zs-ev-new.png' },
+    { id:4,  make:'CEER',     model:'Foxtron Model B', year:2026, trim:'77 kWh', name:'CEER Foxtron Model B - EV Hatchback - Limited Edition', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-foxconn-model-b.png' },
+    { id:5,  make:'CEER',     model:'Exobot Sedan', year:2026, trim:'Standard',  isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-ceer-sedan-new.png' },
+    { id:6,  make:'CEER',     model:'Exobot SUV',   year:2026, trim:'Standard',  isNew:true,  price:135000, monthly:2000, img:'/car-loan-assets/car-ceer-suv-new.png' },
+    { id:7,  make:'Lucid',    model:'Air',          year:2026, trim:'Pure',      isNew:true,  price:310000, monthly:4600, img:'/car-loan-assets/car-lucid-air-new.png' },
+    { id:8,  make:'Tesla',    model:'Model Y',      year:2026, trim:'Long Range',isNew:true,  price:190000, monthly:2800, img:'/car-loan-assets/car-tesla-model-y-new.png' },
+    { id:9,  make:'Mercedes-Benz', model:'C-Class', year:2026, trim:'C200',      isNew:true,  price:230000, monthly:3400, img:'/car-loan-assets/car-merc-cclass-new.png' },
+    { id:10, make:'Ford',     model:'Ranger Raptor',year:2026, trim:'3.0L V6',   isNew:true,  price:245000, monthly:3600, img:'/car-loan-assets/car-ford-raptor-new.png' },
+    { id:11, make:'MG',       model:'ZS EV',        year:2026, trim:'Standard',  isNew:true,  price:110000, monthly:1650, img:'/car-loan-assets/car-mg-zs-ev-new.png' },
+    // NEW cars (Figma 4325) — just before Camry
+    { id:1,  make:'Lucid',         model:'Gravity Touring',       year:2026, trim:'Touring', isNew:true,  price:450000, monthly:6750, img:'/car-loan-assets/car-lucid-gravity-touring.png' },
+    { id:2,  make:'Mercedes-Benz', model:'S 450 4MATIC Long',     year:2026, trim:'Long',    isNew:true,  price:480000, monthly:7200, img:'/car-loan-assets/car-mercedes-s450.png' },
+    { id:3,  make:'Toyota',        model:'Hilux SC-GL Diesel 2.8', year:2024, trim:'SC-GL',  isNew:true,  price:135000, monthly:2050, img:'/car-loan-assets/car-toyota-hilux-scgl.png' },
     // car-image_real (Figma 4001:218942)
-    { id:9,  make:'Toyota',   model:'Camry',        year:2024, trim:'XLE 2.5L', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-toyota-camry.png' },
-    { id:10, make:'Hyundai',  model:'Accent',       year:2024, trim:'1.4L',     isNew:false, price:72000,  monthly:1100, img:'/car-loan-assets/car-hyundai-accent.png' },
-    { id:11, make:'Toyota',   model:'Yaris',        year:2024, trim:'1.5L',     isNew:true,  price:78000,  monthly:1200, img:'/car-loan-assets/car-toyota-yaris.png' },
-    { id:12, make:'Toyota',   model:'Hilux',        year:2024, trim:'2.8L 4x4', isNew:true,  price:165000, monthly:2450, img:'/car-loan-assets/car-toyota-hilux.png' },
-    { id:13, make:'Hyundai',  model:'Elantra',      year:2024, trim:'1.6L',     isNew:true,  price:98000,  monthly:1490, img:'/car-loan-assets/car-hyundai-elantra.png' },
-    { id:14, make:'KIA',      model:'Pegas',        year:2024, trim:'1.4L',     isNew:false, price:68000,  monthly:1050, img:'/car-loan-assets/car-kia-pegas.png' },
-    { id:15, make:'Ford',     model:'Taurus',       year:2024, trim:'2.0L EcoBoost', isNew:true, price:135000, monthly:2000, img:'/car-loan-assets/car-ford-taurus.png' },
+    { id:12, make:'Toyota',   model:'Camry',        year:2024, trim:'XLE 2.5L', isNew:true,  price:122000, monthly:1850, img:'/car-loan-assets/car-toyota-camry.png' },
+    { id:13, make:'Hyundai',  model:'Accent',       year:2024, trim:'1.4L',     isNew:false, price:72000,  monthly:1100, img:'/car-loan-assets/car-hyundai-accent.png' },
+    { id:14, make:'Toyota',   model:'Yaris',        year:2024, trim:'1.5L',     isNew:true,  price:78000,  monthly:1200, img:'/car-loan-assets/car-toyota-yaris.png' },
+    { id:15, make:'Toyota',   model:'Hilux',        year:2024, trim:'2.8L 4x4', isNew:true,  price:165000, monthly:2450, img:'/car-loan-assets/car-toyota-hilux.png' },
+    { id:16, make:'Hyundai',  model:'Elantra',      year:2024, trim:'1.6L',     isNew:true,  price:98000,  monthly:1490, img:'/car-loan-assets/car-hyundai-elantra.png' },
+    { id:17, make:'KIA',      model:'Pegas',        year:2024, trim:'1.4L',     isNew:false, price:68000,  monthly:1050, img:'/car-loan-assets/car-kia-pegas.png' },
+    { id:18, make:'Ford',     model:'Taurus',       year:2024, trim:'2.0L EcoBoost', isNew:true, price:135000, monthly:2000, img:'/car-loan-assets/car-ford-taurus.png' },
     // car-image_placeholder (Figma 4001:218913)
-    { id:16, make:'Generic',  model:'Sedan',        year:2024, trim:'Standard', isNew:false, price:60000,  monthly:950,  img:'/car-loan-assets/car-placeholder-sedan.png' },
-    { id:17, make:'Generic',  model:'Hatchback',    year:2024, trim:'Standard', isNew:false, price:55000,  monthly:880,  img:'/car-loan-assets/car-placeholder-hatchback.png' },
-    { id:18, make:'Generic',  model:'SUV',          year:2024, trim:'Standard', isNew:false, price:90000,  monthly:1350, img:'/car-loan-assets/car-placeholder-suv.png' },
-    { id:19, make:'Generic',  model:'Pickup',       year:2024, trim:'Standard', isNew:false, price:85000,  monthly:1300, img:'/car-loan-assets/car-placeholder-pickup.png' },
-    { id:20, make:'Generic',  model:'Crossover',    year:2024, trim:'Standard', isNew:false, price:80000,  monthly:1250, img:'/car-loan-assets/car-placeholder-crossover.png' },
-    { id:21, make:'Generic',  model:'MPV',          year:2024, trim:'Standard', isNew:false, price:75000,  monthly:1150, img:'/car-loan-assets/car-placeholder-mvp.png' },
-    { id:22, make:'Generic',  model:'Coupe',        year:2024, trim:'Standard', isNew:false, price:95000,  monthly:1400, img:'/car-loan-assets/car-merc-sl.png' },
+    { id:19, make:'Generic',  model:'Sedan',        year:2024, trim:'Standard', isNew:false, price:60000,  monthly:950,  img:'/car-loan-assets/car-placeholder-sedan.png' },
+    { id:20, make:'Generic',  model:'Hatchback',    year:2024, trim:'Standard', isNew:false, price:55000,  monthly:880,  img:'/car-loan-assets/car-placeholder-hatchback.png' },
+    { id:21, make:'Generic',  model:'SUV',          year:2024, trim:'Standard', isNew:false, price:90000,  monthly:1350, img:'/car-loan-assets/car-placeholder-suv.png' },
+    { id:22, make:'Generic',  model:'Pickup',       year:2024, trim:'Standard', isNew:false, price:85000,  monthly:1300, img:'/car-loan-assets/car-placeholder-pickup.png' },
+    { id:23, make:'Generic',  model:'Crossover',    year:2024, trim:'Standard', isNew:false, price:80000,  monthly:1250, img:'/car-loan-assets/car-placeholder-crossover.png' },
+    { id:24, make:'Generic',  model:'MPV',          year:2024, trim:'Standard', isNew:false, price:75000,  monthly:1150, img:'/car-loan-assets/car-placeholder-mvp.png' },
+    { id:25, make:'Generic',  model:'Coupe',        year:2024, trim:'Standard', isNew:false, price:95000,  monthly:1400, img:'/car-loan-assets/car-mercedes-s450.png' },
   ];
 
   function StatusBar() {
@@ -114,9 +118,9 @@
     );
   }
 
-  function TamawalButton() {
+  function TamawalButton({ carId }) {
     return (
-      <button onClick={()=>nav('/car-loan/car-details')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'8px 12px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:36,minWidth:90,flexShrink:0,cursor:'pointer',fontFamily:'inherit'}}>
+      <button onClick={()=>nav(`/car-loan/car-details?id=${carId}`)} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:8,padding:'8px 12px',fontSize:13.5,fontWeight:600,color:C.white,letterSpacing:0.5,minHeight:36,minWidth:90,flexShrink:0,cursor:'pointer',fontFamily:'inherit'}}>
         Tamawal
       </button>
     );
@@ -178,7 +182,7 @@
               </div>
             </div>
             <div style={{display:'flex',alignItems:'center',paddingBottom:1,flexShrink:0}}>
-              <button onClick={()=>nav('/car-loan/car-details')} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:48,padding:2,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+              <button onClick={()=>nav(`/car-loan/car-details?id=${car.id}`)} style={{background:C.brand600,border:'2px solid rgba(255,255,255,0.12)',borderRadius:48,padding:2,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             </div>
@@ -199,7 +203,7 @@
                 {car.name || `${car.make} ${car.model} ${car.year} - ${car.trim}`}
               </p>
             </div>
-            <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
+            <button onClick={()=>nav(`/car-loan/car-details?id=${car.id}`)} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
               {chevronRight}
             </button>
           </div>
@@ -238,7 +242,7 @@
             <InstallmentRow monthly={car.monthly}/>
             <div style={{display:'flex',gap:16,alignItems:'center'}}>
               <HeartButton liked={liked} onToggle={()=>setLiked(!liked)}/>
-              <TamawalButton/>
+              <TamawalButton carId={car.id}/>
             </div>
           </div>
         </div>
@@ -262,14 +266,14 @@
               <SAR size={12}/><span style={{fontSize:13.5,fontWeight:500,letterSpacing:0}}>{car.price.toLocaleString('en-US')}</span>
             </div>
           </div>
-          <button onClick={()=>nav('/car-loan/car-details')} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',margin:'-8px -4px -8px 0',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
+          <button onClick={()=>nav(`/car-loan/car-details?id=${car.id}`)} style={{background:'none',border:'none',padding:'8px 4px 8px 16px',margin:'-8px -4px -8px 0',display:'flex',alignItems:'center',flexShrink:0,cursor:'pointer'}}>
             {chevronRight}
           </button>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'4px 12px',minHeight:68}}>
           <InstallmentRow monthly={car.monthly}/>
           <HeartButton liked={liked} onToggle={()=>setLiked(!liked)}/>
-          <TamawalButton/>
+          <TamawalButton carId={car.id}/>
         </div>
       </div>
     );

@@ -22,11 +22,12 @@
 <script type="text/babel">
   const { useState, useRef, useEffect } = React;
   const C = {
-    brand900:'#00317A', brand800:'#0041A3', brand700:'#004FC6', brand600:'#0063F5', brand400:'#92BAF6', brand300:'#BBD5FB', brand100:'#EBF3FF', brand50:'#F5F9FF',
+    brand900:'#00317A', brand800:'#0041A3', brand700:'#004FC6', brand600:'#0063F5', brand400:'#92BAF6', brand300:'#BBD5FB', brand200:'#D7E7FE', brand100:'#EBF3FF', brand50:'#F5F9FF',
     yellow:'#FFDD33',
     gray900:'#101828', gray800:'#202A39', gray700:'#43524E', gray600:'#4B5565', gray500:'#697586',
     gray400:'#9AA4B2', gray300:'#CDD4DF', gray200:'#E3E8EF', gray100:'#EEF1F6', gray50:'#F8FAFC',
     white:'#FFFFFF',
+    green500:'#12B76A',
   };
   const nav = (p) => (window.top||window).location.href = p;
 
@@ -35,19 +36,175 @@
   const ALREADY = QS.get('already') === 'yes';
   const PLACEHOLDERS = { 'SUV':'suv', 'Sedan':'sedan', 'Hatchback':'hatchback', 'Pickup Truck':'pickup', 'Crossover':'crossover', 'Coupe':'coupe', 'Minivan':'mvp', 'Van':'mvp' };
   const USER_CAR = ALREADY ? {
-    make:    QS.get('make')  || '',
-    model:   [QS.get('model'), QS.get('trim')].filter(Boolean).join(' '),
-    year:    QS.get('year')  || '',
-    carType: QS.get('carType') || '',
-    price:   QS.get('price') ? parseInt(QS.get('price'),10).toLocaleString('en-US') : '',
-    img:     `/car-loan-assets/car-placeholder-${PLACEHOLDERS[QS.get('carType')] || 'sedan'}.png`,
+    make:    QS.get('make')  || 'Toyota',
+    model:   QS.get('model') || 'Hilux Tarantula R',
+    trim:    QS.get('trim')  || 'XLE',
+    year:    QS.get('year')  || '2026',
+    carType: QS.get('carType') || 'SUV',
+    condition: QS.get('condition') || 'New',
+    price:   QS.get('price') ? parseInt(QS.get('price'),10).toLocaleString('en-US') : '150,000',
+    priceRaw: QS.get('price') ? parseInt(QS.get('price'),10) : 150000,
+    img:     `/car-loan-assets/car-placeholder-${PLACEHOLDERS[QS.get('carType')] || 'pickup'}.png`,
   } : null;
+
+  /* ?id=X — look up inventory car specs by id */
+  const INVENTORY_ID = !ALREADY ? parseInt(QS.get('id') || '0', 10) : 0;
+
+  const CARS_DATA = {
+    1: {
+      make:'LUCID', model:'Gravity Touring', year:'2026', price:'450,000',
+      condition:'New', bodyStyle:'SUV',
+      img:'/car-loan-assets/car-lucid-gravity-touring.png',
+      views:[
+        '/car-loan-assets/car-lucid-gravity-touring.png',
+        '/car-loan-assets/car-lucid-view.png',
+        '/car-loan-assets/car-lucid-view-1.png',
+        '/car-loan-assets/car-lucid-view-2.png',
+        '/car-loan-assets/car-lucid-view-3.png',
+        '/car-loan-assets/car-lucid-view-4.png',
+      ],
+      colors:[
+        { label:'Quantum Gray Metallic', hex:'#6B7280', img:'/car-loan-assets/car-lucid-view.png', count:0 },
+        { label:'Mojave Tan',            hex:'#C4A882', img:'/car-loan-assets/car-lucid-view.png', count:0 },
+      ],
+      stars:5,
+      pills:[
+        { icon:'/car-loan-assets/icon-seats.svg',        label:'7 Seats'   },
+        { icon:'/car-loan-assets/icon-transmission.svg', label:'Single Speed' },
+        { icon:'/car-loan-assets/icon-fuel.svg',         label:'Electric'  },
+        { icon:'/car-loan-assets/icon-cartype.svg',      label:'SUV'       },
+      ],
+      highlights:[['440 mi','Range'],['828 hp','Power'],['4.0 s','0–100 km/h'],['118 kWh','Battery']],
+      description:'The Lucid Gravity Touring is a fully electric 3-row SUV delivering 828 hp from a dual-motor AWD powertrain and up to 440 miles of range. Built on Lucid\'s LEAP platform with 900V architecture for ultra-fast charging.',
+      engineSpecs:[
+        ['Motor type',          'Dual motor (front & rear)'],
+        ['Max power',           '828 hp'],
+        ['Max torque',          '960 Nm'],
+        ['Traction',            'All-wheel drive (AWD)'],
+        ['Transmission',        'Single speed'],
+        ['Acceleration (0-100)','4.0 s'],
+      ],
+      dimensionsSpecs:[
+        ['L × W × H',     '5,034 × 1,999 × 1,744 mm'],
+        ['Wheelbase',      '3,050 mm'],
+        ['Curb weight',    '3,033 kg'],
+        ['Cargo capacity', '2,299 L'],
+        ['Tires',          '23" Pirelli / Bridgestone'],
+      ],
+      exterior:['LED Matrix headlamps with DRL','Power-folding side mirrors','Flush door handles','Panoramic glass roof','20" Aero wheels'],
+      interior:['Leather seating for 7','12-way power front seats','Tri-zone automatic climate control','Heated & ventilated front seats','Keyless entry & push-button start'],
+      infotainment:['34" curved Glass Cockpit display','Lucid UX infotainment','Wireless Apple CarPlay & Android Auto','Surreal Sound Pro audio system','OTA software updates'],
+      safety:['Highway Assist (hands-free)','Automatic emergency braking','Blind-spot monitoring','Rear cross-traffic alert','360° surround-view camera'],
+    },
+    2: {
+      make:'Mercedes-Benz', model:'S 450 4MATIC Long', year:'2026', price:'480,000',
+      condition:'New', bodyStyle:'Sedan',
+      img:'/car-loan-assets/car-mercedes-s450.png',
+      views:[
+        '/car-loan-assets/car-mercedes-s450.png',
+        '/car-loan-assets/car-merc-view.png',
+        '/car-loan-assets/car-merc-view-1.png',
+        '/car-loan-assets/car-merc-view-2.png',
+        '/car-loan-assets/car-merc-view-3.png',
+        '/car-loan-assets/car-merc-view-4.png',
+      ],
+      colors:[
+        { label:'Obsidian Black',         hex:'#1A1A1A', img:'/car-loan-assets/car-mercedes-s450.png', count:0 },
+        { label:'Manufaktur Rubellite Red',hex:'#A52222', img:'/car-loan-assets/car-mercedes-s450.png', count:0 },
+      ],
+      stars:5,
+      pills:[
+        { icon:'/car-loan-assets/icon-seats.svg',        label:'5 Seats'    },
+        { icon:'/car-loan-assets/icon-transmission.svg', label:'9G-TRONIC'  },
+        { icon:'/car-loan-assets/icon-fuel.svg',         label:'Gasoline'   },
+        { icon:'/car-loan-assets/icon-cartype.svg',      label:'Sedan'      },
+      ],
+      highlights:[['367 hp','Power'],['500 Nm','Torque'],['5.1 s','0–100 km/h'],['3.0L Turbo','Engine']],
+      description:'The Mercedes-Benz S 450 4MATIC Long defines automotive luxury with a 3.0L inline-6 turbocharged engine, 4MATIC all-wheel drive, and the extended wheelbase Long body for first-class rear seating.',
+      engineSpecs:[
+        ['Engine',         '3.0L Inline-6 Turbo'],
+        ['Max power',      '367 hp'],
+        ['Max torque',     '500 Nm'],
+        ['Drivetrain',     '4MATIC AWD'],
+        ['Transmission',   '9G-TRONIC'],
+        ['Displacement',   '2,999 cc'],
+        ['Cylinder config','Inline-6'],
+      ],
+      dimensionsSpecs:[
+        ['L × W × H',  '5,289 × 1,954 × 1,503 mm'],
+        ['Wheelbase',   '3,216 mm'],
+        ['Curb weight', '2,175 kg'],
+        ['Cargo',       '510 L'],
+        ['Wheels',      '20" AMG multi-spoke alloy'],
+      ],
+      exterior:['Multibeam LED headlamps','Panoramic sunroof','Power-folding mirrors','Chrome trim package','20" AMG multi-spoke alloys'],
+      interior:['Nappa leather seats','14-way power driver seat','4-zone climate control','Heated & ventilated front & rear seats','Rear executive seats with footrest'],
+      infotainment:['MBUX Hyperscreen (56" curved display)','Burmester® 4D surround sound','Wireless Apple CarPlay & Android Auto','Head-up display','OTA software updates'],
+      safety:['PRE-SAFE® Plus','Active Brake Assist','Blind Spot Assist','Active Lane Keep Assist','360° camera system'],
+    },
+    3: {
+      make:'Toyota', model:'Hilux SC-GL Diesel 2.8', year:'2024', price:'135,000',
+      condition:'New', bodyStyle:'Pickup Truck',
+      img:'/car-loan-assets/car-toyota-hilux-scgl.png',
+      views:[
+        '/car-loan-assets/car-toyota-hilux-scgl.png',
+        '/car-loan-assets/car-hilux-view.png',
+        '/car-loan-assets/car-hilux-view-1.png',
+        '/car-loan-assets/car-hilux-view-2.png',
+        '/car-loan-assets/car-hilux-view-3.png',
+        '/car-loan-assets/car-hilux-view-4.png',
+      ],
+      colors:[
+        { label:'Attitude Black', hex:'#1A1A1A', img:'/car-loan-assets/car-toyota-hilux-scgl.png', count:0 },
+        { label:'White Pearl',    hex:'#F0F0F0', img:'/car-loan-assets/car-toyota-hilux-scgl.png', count:0 },
+      ],
+      stars:4,
+      pills:[
+        { icon:'/car-loan-assets/icon-seats.svg',        label:'5 Seats'   },
+        { icon:'/car-loan-assets/icon-transmission.svg', label:'6-Speed Manual' },
+        { icon:'/car-loan-assets/icon-fuel.svg',         label:'Diesel'    },
+        { icon:'/car-loan-assets/icon-cartype.svg',      label:'Pickup'    },
+      ],
+      highlights:[['204 hp','Power'],['420 Nm','Torque'],['2.8L Diesel','Engine'],['4x4','Drivetrain']],
+      description:'The Toyota Hilux SC-GL is a single-cab 4x4 pickup built for work and adventure. Its 2.8L diesel engine delivers 204 hp and 420 Nm of torque with a 6-speed manual gearbox and permanent 4WD capability.',
+      engineSpecs:[
+        ['Engine',      '2.8L 4-Cyl Diesel'],
+        ['Max power',   '204 hp @ 3,400 rpm'],
+        ['Max torque',  '420 Nm @ 1,400–2,800 rpm'],
+        ['Fuel type',   'Diesel'],
+        ['Transmission','6-speed manual'],
+        ['Drivetrain',  '4x4 AWD'],
+      ],
+      dimensionsSpecs:[
+        ['L × W × H', '5,340 × 1,855 × 1,795 mm'],
+        ['Wheelbase',  '3,085 mm'],
+        ['Payload',    '945 kg'],
+        ['GVW',        '2,690 kg'],
+      ],
+      exterior:['LED headlamps','Steel front bumper','16" alloy wheels','Tow bar rating 3,500 kg','Roof-mounted antenna'],
+      interior:['Fabric bench seat','Manual air conditioning','6-speaker audio','Multi-information display','Steering wheel controls'],
+      infotainment:['8" touchscreen display','Apple CarPlay & Android Auto','Bluetooth connectivity','USB & AUX inputs','Reversing camera'],
+      safety:['Toyota Safety Sense','Pre-collision system','Lane departure alert','Automatic high beam','Vehicle stability control'],
+    },
+  };
+
+  /* resolve which car to show when not ALREADY */
+  const INV_CAR = (!ALREADY && INVENTORY_ID && CARS_DATA[INVENTORY_ID]) ? CARS_DATA[INVENTORY_ID] : null;
 
   function SarIcon({ size = 14, color = 'currentColor' }) {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1124.14 1256.39" fill={color} style={{ width:size, height:size, flexShrink:0 }}>
         <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
         <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+      </svg>
+    );
+  }
+
+  function CheckIcon({ size = 16 }) {
+    return (
+      <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink:0 }}>
+        <circle cx="8" cy="8" r="7.5" fill={C.green500}/>
+        <path d="M5 8.5l2 2 4-5" stroke={C.white} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     );
   }
@@ -65,6 +222,412 @@
     );
   }
 
+  const HomeBar = () => (
+    <div style={{ background:C.white, height:34, display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8, flexShrink:0 }}>
+      <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
+    </div>
+  );
+
+  /* ── Spec row component ── */
+  function SpecRow({ label, value, alt }) {
+    return (
+      <div style={{ display:'flex', gap:6, alignItems:'center', padding:'4px 12px', background:alt ? C.gray50 : C.white }}>
+        <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, whiteSpace:'nowrap' }}>{label}</span>
+        <span style={{ flex:1, fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'right', minWidth:0 }}>{value}</span>
+      </div>
+    );
+  }
+
+  function SpecTable({ rows }) {
+    return (
+      <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
+        {rows.map((r, i) => <SpecRow key={i} label={r[0]} value={r[1]} alt={i % 2 === 1}/>)}
+      </div>
+    );
+  }
+
+  function Card({ title, rightEl, children }) {
+    return (
+      <div style={{ background:C.white, border:`1px solid ${C.gray100}`, borderRadius:8, padding:'12px 16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>{title}</span>
+          {rightEl}
+        </div>
+        {children}
+      </div>
+    );
+  }
+
+  function DocList({ items }) {
+    return (
+      <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ display:'flex', gap:12, alignItems:'flex-start' }}>
+            <div style={{ paddingTop:2.5, flexShrink:0 }}>
+              <CheckIcon size={16}/>
+            </div>
+            <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>{item}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  function HowItWorks() {
+    const steps = [
+      'Choose an offer that fits you',
+      "Upload the seller's price quotation",
+      'Lender checks the car and price',
+      'Sign the contract digitally',
+      'Lender pays the seller, you get your car',
+    ];
+    return (
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+        <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>How it works</span>
+        <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
+          {steps.map((step, i) => (
+            <div key={i} style={{ display:'flex', gap:12, alignItems:'center', padding:'8px 12px', background:i % 2 === 1 ? C.gray50 : C.white }}>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, flexShrink:0 }}>{i + 1}</span>
+              <span style={{ flex:1, fontSize:13.5, fontWeight:500, color:C.gray800, letterSpacing:0.4 }}>{step}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const docsForEvery = [
+    'National ID / Iqama (verified with Nafath)',
+    'Salary certificate or bank statement',
+    'Price quotation from the seller',
+    'Comprehensive insurance (arranged with the lender)',
+  ];
+  const docsUsedOnly = [
+    'Vehicle registration (Istimara)',
+    'Periodic inspection report (Fahas)',
+    'Mileage and accident history',
+  ];
+
+  /* ════════════════════════════════════════
+     SCREEN A  —  From inventory (ALREADY=false)
+     CEER Foxtron Model B, full specs
+  ════════════════════════════════════════ */
+
+  const colorOptions = [
+    { label:'Space Gray', hex:'#6B737D', img:'/car-loan-assets/car-color-space-gray.png', count:275 },
+    { label:'Silver',     hex:'#C0C0C0', img:'/car-loan-assets/car-color-silver.png',      count:142 },
+    { label:'White',      hex:'#F0F0F0', img:'/car-loan-assets/car-color-white.png',        count:198 },
+    { label:'Black',      hex:'#1A1A1A', img:'/car-loan-assets/car-color-black.png',        count:87  },
+    { label:'Sand',       hex:'#C4A882', img:'/car-loan-assets/car-color-sand.png',         count:63  },
+    { label:'Red',        hex:'#CC2222', img:'/car-loan-assets/car-color-red.png',          count:41  },
+  ];
+
+  const DEFAULT_THUMB_VIEWS = [
+    '/car-loan-assets/car-ceer-sedan-persv.png',
+    '/car-loan-assets/car-detail-1.png',
+    '/car-loan-assets/car-detail-2.png',
+    '/car-loan-assets/car-persv.png',
+  ];
+
+  const overviewSpecs = [
+    ['Make',          'CEER'],
+    ['Model',         'Foxtron Model B'],
+    ['Trim',          'Long Range RWD'],
+    ['Model year',    '2026'],
+    ['Condition',     'New'],
+    ['Body type',     'Sedan'],
+    ['Exterior color','Gray'],
+    ['Interior',      'Black vegan leather'],
+    ['Doors / Seats', '4 / 5'],
+  ];
+  const engineSpecs = [
+    ['Fuel type',    'Electric (BEV)'],
+    ['Motor',        'Single rear motor'],
+    ['Max power',    '231 hp (170 kW)'],
+    ['Max torque',   '320 Nm'],
+    ['Transmission', 'Single-speed automatic'],
+    ['Drivetrain',   'Rear-wheel drive (RWD)'],
+    ['0–100 km/h',   '6.9 s'],
+    ['Top speed',    '180 km/h'],
+  ];
+  const batterySpecs = [
+    ['Battery',              '57.7 kWh LFP'],
+    ['Range (CLTC)',         '516 km'],
+    ['Energy use',           '13.9 kWh / 100 km'],
+    ['DC fast charge (10–80%)', '~30 min'],
+    ['AC charging',          '11 kW · ~6 h'],
+    ['Charge port',          'CCS2'],
+  ];
+  const dimensionsSpecs = [
+    ['L × W × H',        '4,645 × 1,895 × 1,445 mm'],
+    ['Wheelbase',         '2,920 mm'],
+    ['Ground clearance',  '140 mm'],
+    ['Curb weight',       '1,780 kg'],
+    ['Cargo space',       '470 L'],
+    ['Wheels & tires',    '18-inch alloy · 235/50R18'],
+  ];
+
+  const exteriorFeatures = [
+    'LED projector headlamps with auto high beam',
+    'LED tail lamps',
+    'Power-folding side mirrors with turn signals',
+    'Flush door handles',
+    'Panoramic glass roof',
+  ];
+  const interiorFeatures = [
+    'Vegan leather seats',
+    '6-way power driver seat',
+    'Dual-zone automatic climate control',
+    'Heated & ventilated front seats',
+    'Keyless entry & push-button start',
+  ];
+  const infoFeatures = [
+    '15.6-inch central touchscreen',
+    '10.25-inch digital instrument cluster',
+    'Wireless Apple CarPlay & Android Auto',
+    'Bose 8-speaker audio system',
+    'OTA software updates',
+  ];
+  const safetyFeatures = [
+    'Adaptive cruise control with lane centering',
+    'Automatic emergency braking (AEB)',
+    'Blind-spot monitoring',
+    'Rear cross-traffic alert',
+    '360° surround-view camera',
+  ];
+
+  /* Financing estimate calc for Screen A */
+  const CEER_PRICE = 69900;
+  const CEER_DOWN = Math.round(CEER_PRICE * 0.1);
+  const CEER_FINANCE = CEER_PRICE - CEER_DOWN;
+  const CEER_MONTHLY = Math.round(CEER_FINANCE * (1 + 0.04) / 60);
+
+  function InventoryCarDetailsTab({ car }) {
+    const [featuresOpen, setFeaturesOpen] = useState(false);
+
+    /* when car prop provided, use its data; else fall back to hardcoded CEER */
+    const highlights = car ? car.highlights : [['516 km','Range (CLTC)'],['231 hp','Power'],['6.9 s','0–100 km/h'],['57.7 kWh','Battery']];
+    const description = car ? car.description : "The Foxtron Model B is a fully electric compact sedan designed by Pininfarina and built on Foxtron's MIH platform. The Long Range RWD version uses a 57.7 kWh LFP battery for up to 516 km of range (CLTC), with DC fast charging from 10–80% in about 30 minutes.";
+    const curEngineSpecs = car ? car.engineSpecs : engineSpecs;
+    const curDimensionsSpecs = car ? car.dimensionsSpecs : dimensionsSpecs;
+    const curExteriorFeatures = car ? car.exterior : exteriorFeatures;
+    const curInteriorFeatures = car ? car.interior : interiorFeatures;
+    const curInfoFeatures = car ? car.infotainment : infoFeatures;
+    const curSafetyFeatures = car ? car.safety : safetyFeatures;
+
+    const priceRaw = car ? parseInt((car.price||'').replace(/,/g,''), 10) : CEER_PRICE;
+    const finDown = Math.round(priceRaw * 0.1);
+    const finAmount = priceRaw - finDown;
+    const finMonthly = Math.round(finAmount * (1 + 0.04) / 60);
+
+    return (
+      <div style={{ display:'flex', flexDirection:'column', gap:24, padding:'24px 24px 100px' }}>
+        {/* Description */}
+        <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+          {description}
+        </p>
+
+        {/* Key highlights */}
+        <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+          <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Key highlights</span>
+          <div style={{ display:'flex', gap:8 }}>
+            {highlights.map(([val,lbl],i)=>(
+              <div key={i} style={{ flex:1, background:C.gray50, borderRadius:12, padding:'12px 4px', display:'flex', flexDirection:'column', gap:2, alignItems:'center' }}>
+                <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'center' }}>{val}</span>
+                <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'center' }}>{lbl}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Specifications */}
+        <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+          <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Specifications</span>
+
+          {!car && (
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Overview</span>
+              <SpecTable rows={overviewSpecs}/>
+            </div>
+          )}
+
+          <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+            <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Engine &amp; performance</span>
+            <SpecTable rows={curEngineSpecs}/>
+          </div>
+
+          {!car && (
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Battery &amp; charging</span>
+              <SpecTable rows={batterySpecs}/>
+            </div>
+          )}
+
+          <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+            <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Dimensions &amp; capacity</span>
+            <SpecTable rows={curDimensionsSpecs}/>
+          </div>
+        </div>
+
+        {/* Features card */}
+        <Card
+          title="Features"
+          rightEl={
+            <button onClick={()=>setFeaturesOpen(o=>!o)} style={{ background:'none', border:'none', padding:'8px 4px', display:'flex', alignItems:'center' }}>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ transform:featuresOpen?'rotate(180deg)':'none', transition:'transform 0.2s' }}>
+                <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          }
+        >
+          {featuresOpen && (
+            <>
+              <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+                This is the manufacturer's list specification for this model. Please verify the details when you view the vehicle. Dealer-installed options and modifications are not included.
+              </p>
+
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Exterior</span>
+              <DocList items={curExteriorFeatures}/>
+
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Interior &amp; comfort</span>
+              <DocList items={curInteriorFeatures}/>
+
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Infotainment</span>
+              <DocList items={curInfoFeatures}/>
+
+              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Safety &amp; ADAS</span>
+              <DocList items={curSafetyFeatures}/>
+            </>
+          )}
+        </Card>
+
+        {/* Financing estimate */}
+        <Card title="Financing estimate">
+          <SpecTable rows={[
+            ['Vehicle price',      `SAR ${priceRaw.toLocaleString('en-US')}`],
+            ['Down payment (10%)', `SAR ${finDown.toLocaleString('en-US')}`],
+            ['Financing amount',   `SAR ${finAmount.toLocaleString('en-US')}`],
+            ['Tenor',              '60 months'],
+            ['Estimated monthly',  `SAR ${finMonthly.toLocaleString('en-US')} / mo`],
+          ]}/>
+          <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+            Estimate based on a 4% flat profit rate. Final rate, monthly installment and eligibility are set by each lender in your offers.
+          </p>
+        </Card>
+
+        {/* Documents needed */}
+        <Card title="Documents you'll need">
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>For every car</span>
+          <DocList items={docsForEvery}/>
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Used car only</span>
+          <DocList items={docsUsedOnly}/>
+        </Card>
+
+        {/* How it works */}
+        <HowItWorks/>
+      </div>
+    );
+  }
+
+  /* ════════════════════════════════════════
+     SCREEN B  —  From form / vehicle-details (ALREADY=true)
+     User-entered car, official specs not available
+  ════════════════════════════════════════ */
+
+  function ManualCarDetailsTab({ car }) {
+    const priceRaw = car.priceRaw || 150000;
+    const downPayment = Math.round(priceRaw * 0.1);
+    const financingAmount = priceRaw - downPayment;
+    const estimatedMonthly = Math.round(financingAmount * (1 + 0.04) / 60);
+
+    const carDetailRows = [
+      ['Condition',     car.condition || 'New car'],
+      ['Type of car',   car.carType],
+      ['Brand',         car.make],
+      ['Model',         car.model],
+      ['Year',          car.year],
+      ['Trim',          car.trim || 'XLE'],
+      ['Vehicle price', `SAR ${car.price}`],
+    ];
+
+    const financingRows = [
+      ['Vehicle price',      `SAR ${priceRaw.toLocaleString('en-US')}`],
+      ['Down payment (10%)', `SAR ${downPayment.toLocaleString('en-US')}`],
+      ['Financing amount',   `SAR ${financingAmount.toLocaleString('en-US')}`],
+      ['Tenor',              '60 months'],
+      ['Estimated monthly',  `SAR ${estimatedMonthly.toLocaleString('en-US')} / mo`],
+    ];
+
+    const optionalRows = [
+      ['Fuel type',      '+ Add'],
+      ['Transmission',   '+ Add'],
+      ['Seats',          '+ Add'],
+      ['Exterior color', '+ Add'],
+      ['Seller / dealer','+ Add'],
+    ];
+
+    return (
+      <div style={{ display:'flex', flexDirection:'column', gap:24, padding:'24px 24px 100px' }}>
+
+        {/* Official specs not available notice */}
+        <div style={{ background:C.brand50, border:`1px solid ${C.brand200}`, borderRadius:8, padding:'12px 16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Official specs not available</span>
+          <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+            You added this car manually, so we can't show manufacturer specs or features. Your offers are based on the details and price you entered. The lender will confirm the car and its price with the seller.
+          </p>
+        </div>
+
+        {/* Your car details */}
+        <Card
+          title="Your car details"
+          rightEl={
+            <button style={{ background:'none', border:'none', padding:0, fontSize:15.5, fontWeight:600, color:C.brand600, letterSpacing:0.25 }}>Edit</button>
+          }
+        >
+          <SpecTable rows={carDetailRows}/>
+        </Card>
+
+        {/* Financing estimate */}
+        <Card title="Financing estimate">
+          <SpecTable rows={financingRows}/>
+          <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+            Estimate based on a 4% flat profit rate. Final rate, monthly installment and eligibility are set by each lender in your offers.
+          </p>
+        </Card>
+
+        {/* Add more details (optional) */}
+        <Card title="Add more details (optional)">
+          <p style={{ margin:0, fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
+            More details help lenders give you a more accurate offer.
+          </p>
+          <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
+            {optionalRows.map(([label, val], i) => (
+              <div key={i} style={{ display:'flex', gap:6, alignItems:'center', padding:'4px 12px', background:i % 2 === 1 ? C.gray50 : C.white }}>
+                <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, whiteSpace:'nowrap' }}>{label}</span>
+                <span style={{ flex:1, fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'right' }}>{val}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Documents needed */}
+        <Card title="Documents you'll need">
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>For every car</span>
+          <DocList items={docsForEvery}/>
+          <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Used car only</span>
+          <DocList items={docsUsedOnly}/>
+        </Card>
+
+        {/* How it works */}
+        <HowItWorks/>
+      </div>
+    );
+  }
+
+  /* ════════════════════════════════════════
+     OFFERS TAB (shared)
+  ════════════════════════════════════════ */
+
   const banks = [
     { name:'Bank AlBilad',  logo:'/car-loan-assets/bank-albilad.png',  product:'CEER Foxtron Model B - Car/\nEV Financing' },
     { name:'SNB الأهلي',    logo:'/car-loan-assets/bank-2.png',         product:'CEER Foxtron Model B - Car/\nEV Financing' },
@@ -73,42 +636,17 @@
     { name:'SAB',           logo:'/car-loan-assets/bank-sab.png',        product:'CEER Foxtron Model B - Car/\nEV Financing' },
   ];
 
-  const specs = [
-    { icon:'/car-loan-assets/icon-seats.svg',        label:'5 Seats'   },
-    { icon:'/car-loan-assets/icon-transmission.svg', label:'Automatic' },
-    { icon:'/car-loan-assets/icon-fuel.svg',         label:'Electric'  },
-    { icon:'/car-loan-assets/icon-cartype.svg',      label:'Sedan'     },
-  ];
-
-  const detailSpecs = [
-    { label:'Engine',       value:'1.2L 4-Cylinder Diesel' },
-    { label:'Transmission', value:'5-Speed Manual',        alt:true },
-    { label:'Fuel Economy', value:'18.5 km/L' },
-    { label:'Seating',      value:'5 Passengers',          alt:true },
-    { label:'Warranty',     value:'5 Years / 100,000 km' },
-  ];
-
-  const features = [
-    '45.7 cm (18-inch) 5-twin-spoke light-alloy wheels',
-    '4-way lumbar support',
-    '7G-DCT',
-    'Active Brake Assist',
-    'Active Parking Assist with PARKTRONIC',
-  ];
-
   function BankOfferCard({ bank }) {
     return (
       <div style={{ border:`1px solid ${C.gray100}`, borderRadius:16, background:C.white, overflow:'hidden', boxShadow:'0px 1px 2px 0px rgba(10,13,18,0.05)', padding:'8px 0' }}>
-        {/* Row 1: title + chevron */}
         <div style={{ display:'flex', alignItems:'center', gap:12, minHeight:60, borderBottom:`1px solid ${C.gray200}`, padding:'4px 12px 4px' }}>
           <div style={{ flex:1, paddingLeft:6, overflow:'hidden' }}>
             <p style={{ margin:0, fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1, whiteSpace:'pre-line' }}>{bank.product}</p>
           </div>
           <button onClick={()=>nav('/car-loan/product-details')} aria-label="Product details" style={{ width:48, height:48, flexShrink:0, padding:12, margin:-12, background:'none', border:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <img src="/car-loan-assets/chevron-right.svg" alt="" style={{ width:24, height:24 }}/>
+            <img src="/car-loan-assets/icon-next.svg" alt="" style={{ width:24, height:24 }}/>
           </button>
         </div>
-        {/* Row 2: logo (w:125) | APR (w:100) */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 12px' }}>
           <div style={{ width:125, paddingTop:2, paddingBottom:2 }}>
             <div style={{ width:'100%', aspectRatio:'250/100', overflow:'hidden', display:'flex', alignItems:'center' }}>
@@ -123,7 +661,6 @@
             <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1 }}>99.99%</span>
           </div>
         </div>
-        {/* Row 3: Loan amount (left) | Loan period (right) */}
         <div style={{ display:'flex', gap:12, alignItems:'flex-start', maxHeight:68, padding:'0 12px 6px' }}>
           <div style={{ flex:1, maxWidth:145.5, opacity:0.9 }}>
             <div>
@@ -143,7 +680,6 @@
             <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, letterSpacing:0.1, lineHeight:'26px' }}>999 month</span>
           </div>
         </div>
-        {/* Row 4: star + execution-time + Tamawal */}
         <div style={{ display:'flex', alignItems:'center', gap:24, padding:'4px 12px' }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <img src="/car-loan-assets/icon-star-no.svg" alt="" style={{ width:18, height:18 }}/>
@@ -154,13 +690,11 @@
             Tamawal
           </button>
         </div>
-        {/* Row 5: Compare + register + heart */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:16, padding:'8px 12px 2px' }}>
           <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:4, border:`1px solid ${C.gray300}`, borderRadius:8, padding:'8px 12px', background:C.white, minHeight:36, maxHeight:36 }}>
             <img src="/car-loan-assets/icon-comparing.svg" alt="" style={{ width:20, height:20 }}/>
             <span style={{ fontSize:13.5, fontWeight:600, color:C.gray600, letterSpacing:0.5 }}>Compare</span>
           </button>
-
           <button style={{ background:'none', border:'none', padding:0 }}>
             <img src="/car-loan-assets/icon-heart-rounded.svg" alt="" style={{ width:24, height:24 }}/>
           </button>
@@ -169,462 +703,62 @@
     );
   }
 
-  function FindLoanExpanded({ onClose }) {
-    const [salary, setSalary] = useState('12,000');
-    const [hasLoans, setHasLoans] = useState(false);
-    return (
-      <div style={{background:C.white,padding:'12px 24px 20px',borderTop:`1px solid ${C.gray100}`}}>
-        <div style={{marginBottom:16}}>
-          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:6}}>Salary <span style={{color:'#E53935'}}>*</span></label>
-          <div style={{background:'#F8FAFC',border:'1.5px solid #E2E8F0',borderRadius:12,padding:'12px 14px',display:'flex',alignItems:'center',gap:8}}>
-            <SarIcon size={16}/>
-            <input type="text" placeholder="0" value={salary} onChange={e=>{const raw=e.target.value.replace(/[^0-9]/g,'');const n=parseInt(raw||'0',10);setSalary(n?n.toLocaleString('en-US'):'');}} style={{flex:1,border:'none',background:'transparent',fontSize:16,fontWeight:600,color:'#121A26',fontFamily:'inherit',outline:'none'}}/>
-            <span style={{fontSize:13,color:C.gray600,flexShrink:0}}>Monthly</span>
-          </div>
-        </div>
-        <div style={{marginBottom:16}}>
-          <label style={{display:'block',fontSize:12.5,color:C.gray600,marginBottom:10}}>Do you have active loans? <span style={{color:'#E53935'}}>*</span></label>
-          <div style={{display:'flex',gap:10}}>
-            {[{l:'Yes',v:true},{l:'No',v:false}].map(o=>(
-              <button key={o.l} onClick={()=>setHasLoans(o.v)} style={{flex:1,padding:11,fontSize:14,fontWeight:hasLoans===o.v?600:400,border:`1.5px solid ${hasLoans===o.v?C.brand600:'#E2E8F0'}`,borderRadius:10,background:hasLoans===o.v?'#EBF3FF':C.white,color:hasLoans===o.v?C.brand600:C.gray600,fontFamily:'inherit'}}>{o.l}</button>
-            ))}
-          </div>
-        </div>
-        <div style={{position:'relative',background:'#FFDD33',border:'1px solid #FAD932',borderRadius:16,overflow:'hidden',display:'flex',alignItems:'center',gap:8,paddingRight:12,marginBottom:16}}>
-          <img src="/find-loan/eligible-cta-bg.svg" alt="" style={{position:'absolute',top:'calc(-20.51% - 1.41px)',right:'calc(-5.81% - 1.12px)',bottom:'calc(-21.79% - 1.44px)',left:'calc(-5.81% - 1.12px)',width:'calc(111.62% + 2.24px)',height:'calc(142.3% + 2.85px)'}}/>
-          <div style={{position:'relative',width:77,height:78,flexShrink:0}}>
-            <div style={{position:'absolute',right:-0.4,top:'50%',transform:'translateY(-50%)',width:93.401,height:78,overflow:'hidden'}}>
-              <img src="/car-loan-assets/icon-loan-type.svg" alt="" style={{display:'block',width:94,height:78}}/>
-            </div>
-          </div>
-          <div style={{position:'relative',flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:2,padding:'6px 0'}}>
-            <p style={{margin:0,fontSize:10,fontWeight:500,lineHeight:'14px',letterSpacing:0.5,color:'#121A26'}}>You may be eligible to take a loan up to</p>
-            <div style={{display:'flex',flexWrap:'wrap',alignItems:'center',gap:8}}>
-              <div style={{display:'flex',alignItems:'baseline',gap:4}}>
-                <SarIcon size={22} color="#121A26"/>
-                <span style={{fontSize:29.5,fontWeight:500,lineHeight:'38px',color:'#121A26',whiteSpace:'nowrap'}}>183,552</span>
-              </div>
-              <div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
-                <span style={{fontSize:10,fontWeight:500,lineHeight:'14px',letterSpacing:0.5,color:'#121A26'}}>for</span>
-                <span style={{fontSize:13.5,fontWeight:600,lineHeight:'18px',letterSpacing:0.5,color:'#121A26',whiteSpace:'nowrap'}}>60 Months</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button onClick={onClose} style={{width:'100%',background:C.brand600,border:'none',borderRadius:14,padding:16,fontSize:16,fontWeight:600,color:C.white,fontFamily:'inherit'}}>Update</button>
-      </div>
-    );
-  }
-
-  function OffersTab({ onChangeClick, changeOpen, onSortClick, onFilterClick }) {
+  function OffersTab({ offerCount }) {
     return (
       <div style={{ background:C.gray50 }}>
-        {/* Preliminary search */}
-        <div>
-          <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', background:C.gray50 }}>
-            <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
-            <button onClick={onChangeClick} style={{display:'flex',alignItems:'center',gap:10,background:'none',border:'none',padding:0}}>
-              <span style={{fontSize:12.5,fontWeight:500,color:C.gray600,letterSpacing:0.5}}>Change</span>
-              <div style={{border:`1px solid ${C.gray200}`,borderRadius:34,padding:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{transform:changeOpen?'rotate(180deg)':'rotate(0deg)',transition:'transform 0.2s'}}>
-                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+        <div style={{ padding:'16px 24px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', background:C.gray50 }}>
+          <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Preliminary offers</span>
+          <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+            <button style={{ background:'none', border:'none', padding:0, display:'flex' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.5 15.75L17.25 19.5L21 15.75" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M17.25 10.5V19.5" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 12H11.25" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 6H17.25" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 18H9.75" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <button style={{ background:'none', border:'none', padding:0, position:'relative', display:'flex' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3.94507 4.5H20.0513C20.1968 4.50005 20.3391 4.5424 20.461 4.62191C20.5828 4.70141 20.6789 4.81463 20.7375 4.94777C20.7961 5.08092 20.8148 5.22824 20.7911 5.37179C20.7675 5.51533 20.7026 5.64891 20.6045 5.75625L14.4451 12.5344C14.3169 12.6716 14.2464 12.8529 14.2482 13.0406V18.3469C14.2493 18.4715 14.219 18.5944 14.16 18.7042C14.101 18.814 14.0153 18.9072 13.9107 18.975L10.9107 20.9719C10.7982 21.046 10.6677 21.0884 10.5331 21.0947C10.3985 21.101 10.2647 21.0709 10.1458 21.0076C10.0268 20.9443 9.92713 20.8501 9.85717 20.7349C9.78721 20.6198 9.74956 20.4879 9.7482 20.3531V13.0406C9.75001 12.8529 9.67952 12.6716 9.55132 12.5344L3.39195 5.75625C3.29375 5.64891 3.22889 5.51533 3.20527 5.37179C3.18164 5.22824 3.20028 5.08092 3.2589 4.94777C3.31753 4.81463 3.41361 4.70141 3.53544 4.62191C3.65727 4.5424 3.7996 4.50005 3.94507 4.5Z" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <div style={{ position:'absolute', top:-4, right:-4, width:14, height:14, background:C.brand600, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <span style={{ fontSize:9, fontWeight:700, color:'white', lineHeight:1 }}>1</span>
               </div>
             </button>
           </div>
-          {changeOpen && <FindLoanExpanded onClose={onChangeClick}/>}
-          {/* Eligible text */}
-          <div style={{ padding:'0 24px 12px', display:'flex', alignItems:'center', gap:24 }}>
-            <p style={{ margin:0, flex:1, fontSize:13.5, fontWeight:500, color:'#98A2B3', letterSpacing:0.4 }}>
-              You may be eligible for <span style={{ color:'#1D2939' }}>6</span>
-              {' '}<span style={{ color:'#98A2B3' }}>of</span>{' '}
-              <span style={{ color:'#1D2939' }}>6 Products</span>{' '}
-              <span style={{ color:'#98A2B3' }}>for</span>{' '}
-              <span style={{ color:'#1D2939' }}>Car/EV Loan</span>
-            </p>
-            <div style={{ display:'flex', gap:24, alignItems:'center' }}>
-              <button onClick={onFilterClick} style={{ background:'none', border:'none', padding:0, position:'relative', display:'flex' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 15.75L17.25 19.5L21 15.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M17.25 10.5V19.5" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 12H11.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 6H17.25" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M4.5 18H9.75" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <button onClick={onSortClick} style={{ background:'none', border:'none', padding:0, position:'relative', display:'flex' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.94507 4.5H20.0513C20.1968 4.50005 20.3391 4.5424 20.461 4.62191C20.5828 4.70141 20.6789 4.81463 20.7375 4.94777C20.7961 5.08092 20.8148 5.22824 20.7911 5.37179C20.7675 5.51533 20.7026 5.64891 20.6045 5.75625L14.4451 12.5344C14.3169 12.6716 14.2464 12.8529 14.2482 13.0406V18.3469C14.2493 18.4715 14.219 18.5944 14.16 18.7042C14.101 18.814 14.0153 18.9072 13.9107 18.975L10.9107 20.9719C10.7982 21.046 10.6677 21.0884 10.5331 21.0947C10.3985 21.101 10.2647 21.0709 10.1458 21.0076C10.0268 20.9443 9.92713 20.8501 9.85717 20.7349C9.78721 20.6198 9.74956 20.4879 9.7482 20.3531V13.0406C9.75001 12.8529 9.67952 12.6716 9.55132 12.5344L3.39195 5.75625C3.29375 5.64891 3.22889 5.51533 3.20527 5.37179C3.18164 5.22824 3.20028 5.08092 3.2589 4.94777C3.31753 4.81463 3.41361 4.70141 3.53544 4.62191C3.65727 4.5424 3.7996 4.50005 3.94507 4.5Z" stroke="#697586" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                <div style={{ position:'absolute', top:-4, right:-4, width:14, height:14, background:'#0063F5', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <span style={{ fontSize:9, fontWeight:700, color:'white', lineHeight:1 }}>1</span>
-                </div>
-              </button>
-            </div>
-          </div>
         </div>
-        {/* Bank cards */}
+        <div style={{ padding:'0 24px 12px' }}>
+          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:'#98A2B3', letterSpacing:0.4 }}>
+            You may be eligible for <span style={{ color:'#1D2939' }}>{offerCount}</span>
+            {' '}<span style={{ color:'#98A2B3' }}>of</span>{' '}
+            <span style={{ color:'#1D2939' }}>{offerCount} Products</span>{' '}
+            <span style={{ color:'#98A2B3' }}>for</span>{' '}
+            <span style={{ color:'#1D2939' }}>Car/EV Loan</span>
+          </p>
+        </div>
         <div style={{ padding:'0 24px', display:'flex', flexDirection:'column', gap:16 }}>
-          {banks.map((bank, i) => <BankOfferCard key={i} bank={bank}/>)}
+          {banks.slice(0, offerCount).map((bank, i) => <BankOfferCard key={i} bank={bank}/>)}
         </div>
         <div style={{ height:24 }}/>
       </div>
     );
   }
 
-  function DetailsTab({ openFeatures, setOpenFeatures }) {
-    return (
-      <div>
-        {/* Description */}
-        <div style={{ padding:'16px 24px 0' }}>
-          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, lineHeight:'22px', letterSpacing:0.4 }}>
-            The Foxtron Model B is a fully electric compact Sedan designed by Pininfarina and built on Foxtron's MIH platform. Powered by a 57.7 kWh LFP battery, it delivers up to 516 km of range in the single-motor variant, while the dual-motor AWD version produces 400 hp and sprints from 0-100 km/h in 3.9 seconds.
-          </p>
-        </div>
-
-        {/* Specifications */}
-        <div style={{ padding:'24px 24px 0' }}>
-          <p style={{ margin:'0 0 12px', fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4, textAlign:'left' }}>Specifications</p>
-          <div style={{ border:`1px solid ${C.white}`, borderRadius:8, overflow:'hidden' }}>
-            {detailSpecs.map((s, i) => (
-              <div key={s.label} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 12px', background:s.alt?C.gray50:C.white }}>
-                <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{s.label}</span>
-                <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, letterSpacing:0.25, textAlign:'right' }}>{s.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Features, Warranty, Specification cards */}
-        <div style={{ padding:'16px 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
-          {/* Features card */}
-          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px 18px' }}>
-            <button
-              onClick={() => setOpenFeatures(!openFeatures)}
-              style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0, marginBottom:openFeatures?10:0 }}
-            >
-              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Features</span>
-              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ transform: openFeatures ? 'rotate(180deg)' : 'none', transition:'transform 0.2s' }}>
-                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </button>
-            {openFeatures && (
-              <>
-                <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>
-                  This is the manufacturer's list specification for this model, please verify the details when you view the vehicle. The list below will not include any additional options fitted to the vehicle or modifications.
-                </p>
-                <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Other</p>
-                <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                  {features.map((f, i) => (
-                    <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                      <div style={{ paddingTop:2.5, flexShrink:0 }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <circle cx="8" cy="8" r="7" stroke={C.brand600} strokeWidth="1.5"/>
-                          <path d="M5 8l2 2 4-4" stroke={C.brand600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, lineHeight:'18px', letterSpacing:0.5 }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Warranty card */}
-          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px' }}>
-            <button style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0 }}>
-              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Warranty</span>
-              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </button>
-          </div>
-
-          {/* Specification card */}
-          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px' }}>
-            <button style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', padding:0 }}>
-              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>Specification</span>
-              <div style={{ padding:'8px 4px', display:'flex', alignItems:'center' }}>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke={C.gray600} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        {/* Accessories */}
-        <div style={{ padding:'8px 24px' }}>
-          <p style={{ margin:'0 0 8px', fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center' }}>Accessories</p>
-          <div style={{ background:C.white, border:`1px solid #f4f6f6`, borderRadius:8, padding:'12px 16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-              <span style={{ fontSize:12.5, fontWeight:500, color:C.gray800, letterSpacing:0.5 }}>None Selected</span>
-              <img src="/car-loan-assets/icon-plus.svg" alt="" style={{ width:24, height:24 }}/>
-            </div>
-            <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>20 Available</span>
-            <div style={{ display:'flex', alignItems:'center', gap:2 }}>
-              <SarIcon size={13} color={C.brand600}/><span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}>44.13</span>
-              <span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}> - </span>
-              <SarIcon size={13} color={C.brand600}/><span style={{ fontSize:15.5, fontWeight:500, color:C.brand600 }}>3,176.94</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Dealer image with overlay */}
-        <div style={{ padding:'0 24px' }}>
-          <div style={{ position:'relative', width:'100%', height:183.938 }}>
-            {/* Rounded photo */}
-            <div style={{ position:'absolute', inset:0, borderRadius:8, overflow:'hidden' }}>
-              <img src="/car-loan-assets/car-detail-showroom.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }}/>
-            </div>
-            {/* Frosted overlay icon — centered at (163.5, 91.5) */}
-            <img src="/car-loan-assets/car-detail-overlay.svg" alt="" style={{ position:'absolute', width:118.425, height:118.425, top:91.5-59.2125, left:'50%', transform:'translateX(-50%)', pointerEvents:'none' }}/>
-          </div>
-        </div>
-
-        {/* Available at dealers */}
-        <div style={{ padding:'24px 24px 32px', display:'flex', flexDirection:'column', gap:12, alignItems:'center' }}>
-          <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>Available at dealers</p>
-          <div style={{ display:'flex', gap:12, alignItems:'center', justifyContent:'center' }}>
-            <button onClick={()=>nav('/car-loan/inventory/wallan')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
-              <img src="/dealer-wallan.png" alt="" style={{ width:80, height:54, objectFit:'contain' }}/>
-            </button>
-            <button onClick={()=>nav('/car-loan/inventory/almajdouie')} style={{ background:'none', border:`1px solid ${C.gray100}`, borderRadius:12, padding:'8px 12px' }}>
-              <img src="/dealer-almajdouie.png" alt="" style={{ width:110, height:40, objectFit:'contain' }}/>
-            </button>
-          </div>
-        </div>
-
-      </div>
-    );
-  }
-
-  const colorOptions = [
-    { label:'Space Gray', hex:'#6B737D', img:'/car-loan-assets/car-colors/space-gray.png', count:275, crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-    { label:'Silver',     hex:'#C0C0C0', img:'/car-loan-assets/car-colors/silver.png',      count:142, crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-    { label:'White',      hex:'#F0F0F0', img:'/car-loan-assets/car-colors/white.png',        count:198, crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-    { label:'Black',      hex:'#1A1A1A', img:'/car-loan-assets/car-colors/black.png',        count:87,  crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-    { label:'Sand',       hex:'#C4A882', img:'/car-loan-assets/car-colors/sand.png',        count:63,  crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-    { label:'Red',        hex:'#CC2222', img:'/car-loan-assets/car-colors/red.png',        count:41,  crop:{ w:'100%', h:'100%', l:'0%', t:'0%' } },
-  ];
-
-  function SheetOverlay({ children, onDismiss }) {
-    const [visible, setVisible] = useState(false);
-    useEffect(() => { requestAnimationFrame(() => setVisible(true)); }, []);
-    const dismiss = () => { setVisible(false); setTimeout(onDismiss, 280); };
-    return (
-      <div onClick={dismiss} style={{ position:'fixed', inset:0, background:'rgba(13,19,28,0.5)', zIndex:200, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
-        <div onClick={e => e.stopPropagation()} style={{ background:C.white, borderRadius:'32px 32px 0 0', display:'flex', flexDirection:'column', transform:visible?'translateY(0)':'translateY(100%)', transition:'transform 0.28s cubic-bezier(0.4,0,0.2,1)' }}>
-          {children(dismiss)}
-        </div>
-      </div>
-    );
-  }
-
-  const DragHandle = () => (
-    <div style={{ display:'flex', justifyContent:'center', padding:'12px 12px 24px', flexShrink:0 }}>
-      <div style={{ width:48, height:4, background:C.gray400, borderRadius:999 }}/>
-    </div>
-  );
-
-  const HomeBar = () => (
-    <div style={{ background:C.white, height:34, display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8, flexShrink:0 }}>
-      <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
-    </div>
-  );
-
-  function DualRangeSlider({ min, max, step, valueMin, valueMax, onChangeMin, onChangeMax, renderLabel }) {
-    const pct1 = ((valueMin - min) / (max - min)) * 100;
-    const pct2 = ((valueMax - min) / (max - min)) * 100;
-    const [minOnTop, setMinOnTop] = useState(false);
-    const fmt = renderLabel || ((v) => v.toLocaleString('en-US'));
-    const handlePointerDown = (e) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const clickPct = ((e.clientX - rect.left) / rect.width) * 100;
-      setMinOnTop(Math.abs(clickPct - pct1) <= Math.abs(clickPct - pct2));
-    };
-    return (
-      <div style={{ position:'relative', paddingBottom:24 }} onPointerDown={handlePointerDown}>
-        <div style={{ position:'relative', height:6, borderRadius:999, background:C.gray200, margin:'12px 0 8px' }}>
-          <div style={{ position:'absolute', left:`${pct1}%`, width:`${pct2-pct1}%`, height:'100%', background:C.brand600, borderRadius:999 }}/>
-          <div style={{ position:'absolute', left:`${pct1}%`, top:'50%', transform:'translate(-50%,-50%)', width:24, height:24, borderRadius:999, background:C.brand600, border:`2.5px solid ${C.white}`, pointerEvents:'none', zIndex:2 }}/>
-          <div style={{ position:'absolute', left:`${pct2}%`, top:'50%', transform:'translate(-50%,-50%)', width:24, height:24, borderRadius:999, background:C.brand600, border:`2.5px solid ${C.white}`, pointerEvents:'none', zIndex:2 }}/>
-        </div>
-        <input type="range" min={min} max={max} step={step} value={valueMin}
-          onChange={e => { const v=+e.target.value; if(v < valueMax-step) onChangeMin(v); }}
-          style={{ position:'absolute', top:5, left:0, width:'100%', height:28, opacity:0, cursor:'pointer', zIndex:minOnTop?5:3 }}/>
-        <input type="range" min={min} max={max} step={step} value={valueMax}
-          onChange={e => { const v=+e.target.value; if(v > valueMin+step) onChangeMax(v); }}
-          style={{ position:'absolute', top:5, left:0, width:'100%', height:28, opacity:0, cursor:'pointer', zIndex:minOnTop?3:5 }}/>
-        <div style={{ position:'relative', height:20 }}>
-          <div style={{ position:'absolute', left:`${pct1}%`, transform:'translateX(-50%)', display:'flex', alignItems:'baseline', gap:1, color:C.brand700, fontSize:13.5, fontWeight:500, whiteSpace:'nowrap' }}>
-            {fmt(valueMin)}
-          </div>
-          <div style={{ position:'absolute', left:`${pct2}%`, transform:'translateX(-50%)', display:'flex', alignItems:'baseline', gap:1, color:C.brand700, fontSize:13.5, fontWeight:500, whiteSpace:'nowrap' }}>
-            {fmt(valueMax)}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function Tag({ label, selected, onToggle }) {
-    return (
-      <button onClick={onToggle} style={{ background:selected?C.brand50:C.white, border:`1px solid ${selected?C.brand300:C.gray200}`, borderRadius:32, padding:'4px 12px', minHeight:32, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13.5, fontWeight:600, color:selected?C.brand700:C.gray700, whiteSpace:'nowrap', flexShrink:0 }}>
-        {label}
-      </button>
-    );
-  }
-
-  function toggleTag(arr, setArr, val) {
-    if (arr.includes(val)) setArr(arr.filter(v => v !== val));
-    else setArr([...arr, val]);
-  }
-
-  function SortSheetCarDetails({ onClose }) {
-    const rows = [
-      { label:'APR',                  minIcon:'/car-loan-assets/sort-icon-apr-min.svg',         maxIcon:'/car-loan-assets/sort-icon-apr-max.svg'         },
-      { label:'Monthly Installment',  minIcon:'/car-loan-assets/sort-icon-installment-min.svg', maxIcon:'/car-loan-assets/sort-icon-installment-max.svg' },
-      { label:'You Saved',            minIcon:'/car-loan-assets/sort-icon-saved-min.svg',        maxIcon:'/car-loan-assets/sort-icon-saved-max.svg'        },
-      { label:'Rating',               minIcon:'/car-loan-assets/sort-icon-rating-min.svg',       maxIcon:'/car-loan-assets/sort-icon-rating-max.svg'       },
-    ];
-    return (
-      <SheetOverlay onDismiss={onClose}>
-        {(dismiss) => (
-          <>
-            <DragHandle/>
-            <div style={{ padding:'0 24px 6px', display:'flex', flexDirection:'column', gap:24 }}>
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                <span style={{ fontSize:23.5, fontWeight:600, color:C.gray900, lineHeight:'30px' }}>Sort</span>
-                <button onClick={dismiss} style={{ border:`1px solid ${C.gray100}`, borderRadius:24, padding:6, background:C.white, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <img src="/close-icon.svg" alt="" style={{ width:18, height:18 }}/>
-                </button>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column' }}>
-                <div style={{ display:'flex', gap:16, justifyContent:'flex-end', paddingRight:8 }}>
-                  <div style={{ width:40, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <span style={{ fontSize:12.5, fontWeight:500, color:C.gray500, letterSpacing:0.5 }}>Min.</span>
-                  </div>
-                  <div style={{ width:40, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <span style={{ fontSize:12.5, fontWeight:500, color:C.gray500, letterSpacing:0.5 }}>Max.</span>
-                  </div>
-                </div>
-                {rows.map(row => (
-                  <div key={row.label} style={{ display:'flex', gap:16, alignItems:'center', padding:'8px 0' }}>
-                    <span style={{ flex:1, fontSize:15.5, fontWeight:500, color:C.gray600, lineHeight:'22px', letterSpacing:0.1 }}>{row.label}</span>
-                    <button style={{ border:`1px solid ${C.gray100}`, borderRadius:8, padding:8, background:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <img src={row.minIcon} alt="" style={{ width:24, height:24 }}/>
-                    </button>
-                    <button style={{ border:`1px solid ${C.gray100}`, borderRadius:8, padding:8, background:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <img src={row.maxIcon} alt="" style={{ width:24, height:24 }}/>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <HomeBar/>
-          </>
-        )}
-      </SheetOverlay>
-    );
-  }
-
-  function FilterSheetCarDetails({ onClose }) {
-    const [loanYears, setLoanYears] = useState([5]);
-    const [priceMin, setPriceMin] = useState(20000);
-    const [priceMax, setPriceMax] = useState(120000);
-    const [aprMin, setAprMin] = useState(102);
-    const [aprMax, setAprMax] = useState(200);
-    const [installMin, setInstallMin] = useState(30);
-    const [installMax, setInstallMax] = useState(200);
-    const [rating, setRating] = useState([1,2,3,4]);
-    const [likeStatus, setLikeStatus] = useState([]);
-    const Divider = () => <div style={{ height:1, background:C.gray200, width:'100%', flexShrink:0 }}/>;
-    const reset = () => {
-      setLoanYears([]); setPriceMin(20000); setPriceMax(120000);
-      setAprMin(102); setAprMax(200); setInstallMin(30); setInstallMax(200);
-      setRating([]); setLikeStatus([]);
-    };
-    return (
-      <SheetOverlay onDismiss={onClose}>
-        {(dismiss) => (
-          <>
-            <DragHandle/>
-            <div className="scroll" style={{ padding:'0 24px', display:'flex', flexDirection:'column', gap:20, maxHeight:'70vh' }}>
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'26px', letterSpacing:0.1 }}>Filter</span>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray500, letterSpacing:0.4 }}>Property Loan Period (Years)</p>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
-                  {[1,2,3,4,5,6,7].map(y => (
-                    <Tag key={y} label={String(y)} selected={loanYears.includes(y)} onToggle={() => toggleTag(loanYears, setLoanYears, y)}/>
-                  ))}
-                </div>
-              </div>
-              <Divider/>
-              <button style={{ background:C.gray100, borderRadius:12, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', border:'none', width:'100%' }}>
-                <span style={{ fontSize:15.5, fontWeight:500, color:C.gray500, lineHeight:'22px', letterSpacing:0.1 }}>Institution Type</span>
-                <img src="/car-loan-assets/filter-chevron-down.svg" alt="" style={{ width:14, height:14 }}/>
-              </button>
-              <button style={{ background:C.gray100, borderRadius:12, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', border:'none', width:'100%' }}>
-                <span style={{ fontSize:15.5, fontWeight:500, color:C.gray500, lineHeight:'22px', letterSpacing:0.1 }}>Institution Name</span>
-                <img src="/car-loan-assets/filter-chevron-down.svg" alt="" style={{ width:14, height:14 }}/>
-              </button>
-              <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray500, letterSpacing:0.4 }}>Property Price</p>
-                <DualRangeSlider min={0} max={500000} step={5000} valueMin={priceMin} valueMax={priceMax} onChangeMin={setPriceMin} onChangeMax={setPriceMax}
-                  renderLabel={v => <><SarIcon size={10} color={C.brand700}/><span>{v.toLocaleString('en-US')}</span></>}/>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray500, letterSpacing:0.4 }}>APR</p>
-                <DualRangeSlider min={0} max={1000} step={1} valueMin={aprMin} valueMax={aprMax} onChangeMin={setAprMin} onChangeMax={setAprMax}
-                  renderLabel={v => `${(v/100).toFixed(2)}%`}/>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray500, letterSpacing:0.4 }}>Monthly Installment</p>
-                <DualRangeSlider min={0} max={1000} step={10} valueMin={installMin} valueMax={installMax} onChangeMin={setInstallMin} onChangeMax={setInstallMax}
-                  renderLabel={v => <><SarIcon size={10} color={C.brand700}/><span>{v}</span></>}/>
-              </div>
-              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:600, color:C.gray500, letterSpacing:0.5 }}>Product Rating</p>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                  {[1,2,3,4,5].map(n => {
-                    const sel = rating.includes(n);
-                    const starSrc = sel && n < 5 ? (n===1?'/car-loan-assets/filter-star-1.svg':'/car-loan-assets/filter-star-2.svg') : '/car-loan-assets/filter-star-empty.svg';
-                    return (
-                      <button key={n} onClick={() => toggleTag(rating, setRating, n)} style={{ background:C.white, border:`1px solid ${sel?C.brand400:C.gray100}`, borderRadius:10, padding:'8px 12px', display:'flex', alignItems:'center', gap:4, flexShrink:0 }}>
-                        <img src={starSrc} alt="" style={{ width:22, height:22 }}/>
-                        <span style={{ fontSize:15.5, fontWeight:700, color:sel?C.brand600:C.gray900, letterSpacing:0.1, width:12, textAlign:'center' }}>{n}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <Divider/>
-              <p style={{ margin:0, fontSize:15.5, fontWeight:600, color:C.gray500, letterSpacing:0.25 }}>PREFERENCES</p>
-              <div style={{ display:'flex', flexDirection:'column', gap:8, paddingBottom:8 }}>
-                <p style={{ margin:0, fontSize:13.5, fontWeight:500, color:C.gray500, letterSpacing:0.4 }}>Like Status</p>
-                <div style={{ display:'flex', gap:8 }}>
-                  {['Liked','Unliked'].map(v => <Tag key={v} label={v} selected={likeStatus.includes(v)} onToggle={() => toggleTag(likeStatus, setLikeStatus, v)}/>)}
-                </div>
-              </div>
-            </div>
-            <div style={{ padding:'12px 24px 8px' }}>
-              <div style={{ display:'flex', gap:8 }}>
-                <button onClick={reset} style={{ flex:1, background:C.white, border:`1px solid ${C.gray200}`, borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.gray600, letterSpacing:0.5, minHeight:46 }}>Reset</button>
-                <button onClick={dismiss} style={{ flex:1, background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}>Apply</button>
-              </div>
-            </div>
-            <HomeBar/>
-          </>
-        )}
-      </SheetOverlay>
-    );
-  }
+  /* ════════════════════════════════════════
+     MAIN APP
+  ════════════════════════════════════════ */
 
   function App() {
+    const [activeTab, setActiveTab] = useState('details');
+    const [selectedColor, setSelectedColor] = useState(0);
+    const [colorPickerOpen, setColorPickerOpen] = useState(false);
+    const [pendingColor, setPendingColor] = useState(0);
     const [activeThumb, setActiveThumb] = useState(0);
-    const [activeTab, setActiveTab] = useState('offers');
     const scrollRef = useRef(null);
     const tabsAnchorRef = useRef(null);
+    const [tabsStuck, setTabsStuck] = useState(false);
+
+    const handleScroll = () => {
+      const scrollEl = scrollRef.current, anchorEl = tabsAnchorRef.current;
+      if (!scrollEl || !anchorEl) return;
+      setTabsStuck(anchorEl.getBoundingClientRect().bottom <= scrollEl.getBoundingClientRect().top + 1);
+    };
+
+    const backToTop = () => scrollRef.current && scrollRef.current.scrollTo({ top:0, behavior:'smooth' });
+
     const goToOffers = () => {
       setActiveTab('offers');
       requestAnimationFrame(() => {
@@ -633,28 +767,37 @@
         scrollEl.scrollTop += anchorEl.getBoundingClientRect().bottom - scrollEl.getBoundingClientRect().top;
       });
     };
-    const [tabsStuck, setTabsStuck] = useState(false);
-    const handleScroll = () => {
-      const scrollEl = scrollRef.current, anchorEl = tabsAnchorRef.current;
-      if (!scrollEl || !anchorEl) return;
-      setTabsStuck(anchorEl.getBoundingClientRect().bottom <= scrollEl.getBoundingClientRect().top + 1);
-    };
-    const backToTop = () => scrollRef.current && scrollRef.current.scrollTo({ top:0, behavior:'smooth' });
-    const [openFeatures, setOpenFeatures] = useState(true);
-    const [selectedColor, setSelectedColor] = useState(0);
-    const [colorPickerOpen, setColorPickerOpen] = useState(false);
-    const [pendingColor, setPendingColor] = useState(0);
-    const [changeOpen, setChangeOpen] = useState(false);
-    const [sortOpen, setSortOpen] = useState(false);
-    const [filterOpen, setFilterOpen] = useState(false);
 
-    const thumbViews = [
-      { src:'/car-loan-assets/car-persv.png', simple:true },
-      { src:'/car-loan-assets/car-view-front.png', simple:true },
-      { src:'/car-loan-assets/car-view-side.png', simple:true },
-      { src:'/car-loan-assets/car-view-rear3q.png', simple:true },
-      { src:'/car-loan-assets/car-view-rear.png', simple:true },
+    const offerCount = ALREADY ? 3 : 5;
+    const carLabel = ALREADY
+      ? (USER_CAR.model || 'Hilux Tarantula R')
+      : INV_CAR ? INV_CAR.model : 'Foxtron Model B';
+    const carMake = ALREADY ? (USER_CAR.make || 'TOYOTA') : INV_CAR ? INV_CAR.make : 'CEER';
+    const carYear = ALREADY ? (USER_CAR.year || '2026') : INV_CAR ? INV_CAR.year : '2026';
+    const carPrice = ALREADY ? USER_CAR.price : INV_CAR ? INV_CAR.price : '69,900';
+
+    /* active color options for current car */
+    const activeColorOptions = INV_CAR ? INV_CAR.colors : colorOptions;
+    const thumbViews = INV_CAR && INV_CAR.views ? INV_CAR.views : DEFAULT_THUMB_VIEWS;
+    const carImg = ALREADY
+      ? USER_CAR.img
+      : (thumbViews[activeThumb] || (activeColorOptions[selectedColor] ? activeColorOptions[selectedColor].img : (INV_CAR ? INV_CAR.img : '/car-loan-assets/car-foxconn-model-b.png')));
+
+    /* Spec pills for Screen A (inventory) */
+    const inventoryPills = INV_CAR ? INV_CAR.pills : [
+      { icon:'/car-loan-assets/icon-seats.svg',        label:'5 Seats'   },
+      { icon:'/car-loan-assets/icon-transmission.svg', label:'Automatic' },
+      { icon:'/car-loan-assets/icon-fuel.svg',         label:'Electric'  },
+      { icon:'/car-loan-assets/icon-cartype.svg',      label:'Sedan'     },
     ];
+
+    /* Simple text pills for Screen B (manual car) */
+    const manualPills = ALREADY ? [
+      USER_CAR.condition || 'New car',
+      USER_CAR.carType || 'SUV',
+      USER_CAR.year || '2026',
+      (USER_CAR.trim ? USER_CAR.trim + ' trim' : 'XLE trim'),
+    ] : [];
 
     return (
       <div style={{ height:'100%', display:'flex', flexDirection:'column', background:C.white, fontFamily:'"SF Arabic",system-ui,-apple-system,Arial,sans-serif', position:'relative' }}>
@@ -663,170 +806,131 @@
         <div style={{ background:C.white, flexShrink:0 }}>
           <StatusBar/>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'4px 16px 6px' }}>
-            <button onClick={()=>nav(ALREADY ? '/car-loan/vehicle-details' : '/car-loan/inventory')} style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center' }}>
+            {/* Back button */}
+            <button
+              onClick={() => nav(ALREADY ? '/car-loan/vehicle-details' : '/car-loan/inventory')}
+              style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center' }}
+            >
               <img src="/car-loan-assets/back-icon.svg" alt="" style={{ width:24, height:24 }}/>
             </button>
+
+            {/* Center: title or car name when sticky */}
             {tabsStuck ? (
-              <button onClick={backToTop} aria-label="Back to top" style={{ flex:1, background:'none', border:'none', padding:'8px 4px', display:'flex', alignItems:'center', justifyContent:'center', gap:6, minWidth:0, cursor:'pointer' }}>
+              <button onClick={backToTop} style={{ flex:1, background:'none', border:'none', padding:'8px 4px', display:'flex', alignItems:'center', justifyContent:'center', gap:6, minWidth:0, cursor:'pointer' }}>
                 <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:160 }}>
-                  {USER_CAR ? USER_CAR.model : 'Foxtron Model B'}
+                  {carLabel}
                 </span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink:0 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink:0 }}>
                   <circle cx="12" cy="12" r="10" fill={C.brand600}/>
                   <path d="M12 16.5V7.5M12 7.5L8 11.5M12 7.5L16 11.5" stroke={C.white} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
             ) : (
-              <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', minWidth:0 }}>
+              <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <span style={{ fontSize:15.5, fontWeight:600, color:C.gray800, letterSpacing:0.25 }}>Car Details</span>
               </div>
             )}
-            <button style={{ background:'none', border:'none', padding:'8px 4px', minWidth:48, display:'flex', alignItems:'center', justifyContent:'flex-end', cursor:'pointer' }}>
-              <div style={{ position:'relative', width:30, height:30 }}>
-                <img src="/car-loan-assets/icon-comparing.svg" alt="compare" style={{ position:'absolute', bottom:0, left:0, width:24, height:24 }}/>
-                <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#FA9715', borderRadius:999, border:'1.5px solid white', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <span style={{ fontSize:10, fontWeight:500, color:'white', lineHeight:1 }}>1</span>
+
+            {/* Right: compare icon (+ wishlist icon only for Screen A) */}
+            <div style={{ display:'flex', alignItems:'center', gap:8, minWidth:48, justifyContent:'flex-end' }}>
+              {!ALREADY && (
+                <button style={{ background:'none', border:'none', padding:0, display:'flex', alignItems:'center' }}>
+                  <img src="/car-loan-assets/icon-heart.svg" alt="" style={{ width:24, height:24 }}/>
+                </button>
+              )}
+              <button style={{ background:'none', border:'none', padding:'4px', display:'flex', alignItems:'center', cursor:'pointer' }}>
+                <div style={{ position:'relative', width:30, height:30 }}>
+                  <img src="/car-loan-assets/icon-comparing.svg" alt="compare" style={{ position:'absolute', bottom:0, left:0, width:24, height:24 }}/>
+                  <div style={{ position:'absolute', top:0, right:0, width:14, height:14, background:'#FA9715', borderRadius:999, border:'1.5px solid white', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <span style={{ fontSize:10, fontWeight:500, color:'white', lineHeight:1 }}>1</span>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Scrollable content */}
-        <div ref={scrollRef} onScroll={handleScroll} className="scroll" style={{ flex:1, paddingBottom:activeTab === 'details' ? 90 : 0 }}>
+        <div ref={scrollRef} onScroll={handleScroll} className="scroll" style={{ flex:1, paddingBottom: activeTab === 'details' ? 90 : 0 }}>
 
-          {/* Car image */}
-          <div style={{ paddingTop:24 }}>
-            <div style={{ height:183.5, position:'relative' }}>
-              {USER_CAR ? (
-                <img src={USER_CAR.img} alt={USER_CAR.model} style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain' }}/>
-              ) : activeThumb === 0 || selectedColor !== 0 ? (
-                <div style={{ position:'absolute', top:'6.25%', bottom:'6.25%', left:'6.12%', right:'6.12%' }}>
-                  <div style={{ position:'relative', width:'100%', height:'100%' }}>
-                    <div style={{ position:'relative', width:'100%', height:'100%' }}>
-                      <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
-                        <img src={colorOptions[selectedColor].img} alt="Foxtron Model B" style={{ position:'absolute', width:colorOptions[selectedColor].crop.w, height:colorOptions[selectedColor].crop.h, left:colorOptions[selectedColor].crop.l, top:colorOptions[selectedColor].crop.t, maxWidth:'none' }}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <img src={thumbViews[activeThumb].src} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain' }}/>
-              )}
+          {/* Car image area */}
+          <div>
+            <div style={{ height:240, position:'relative' }}>
+              <img
+                src={carImg}
+                alt={carLabel}
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }}
+              />
             </div>
-          </div>
 
-          {/* Thumbnails */}
-          {!USER_CAR && selectedColor === 0 && (
-            <div className="hscroll" style={{ width:'100%' }}>
-              <div style={{ display:'flex', gap:8, paddingLeft:20, width:'max-content' }}>
-                {thumbViews.map((view, i) => (
-                  <button key={i} onClick={()=>setActiveThumb(i)} style={{ width:100, height:64, flexShrink:0, border:'none', padding:0, background:'transparent', opacity:activeThumb===i?1:0.45, position:'relative', overflow:'hidden' }}>
-                    <img src={view.src} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain' }}/>
+            {/* Thumb strip — only for Screen A (inventory) */}
+            {!ALREADY && (
+              <div style={{ display:'flex', width:'100%', overflowX:'auto' }}>
+                {thumbViews.map((src, i) => (
+                  <button key={i} onClick={()=>setActiveThumb(i)} style={{ width:100, flexShrink:0, height:72, border:'none', padding:0, background:'#000', position:'relative', overflow:'hidden', outline: activeThumb===i ? '2px solid #0063F5' : 'none', outlineOffset:'-2px' }}>
+                    <img src={src} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', opacity: activeThumb===i ? 1 : 0.6 }}/>
                   </button>
                 ))}
-                <div style={{ width:20, flexShrink:0 }}/>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Car name + price */}
           <div style={{ textAlign:'center', padding:'16px 4px 16px', display:'flex', flexDirection:'column', gap:8, alignItems:'center' }}>
             <div style={{ display:'flex', gap:2, alignItems:'center' }}>
-              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{USER_CAR ? USER_CAR.make : 'CEER'}</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{carMake}</span>
               <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>.</span>
-              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{USER_CAR ? USER_CAR.year : '2026'}</span>
+              <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>{carYear}</span>
             </div>
-            <p style={{ margin:0, fontSize:23.5, fontWeight:600, color:C.gray900, lineHeight:'30px' }}>{USER_CAR ? USER_CAR.model : 'Foxtron Model B'}</p>
+            <p style={{ margin:0, fontSize:23.5, fontWeight:600, color:C.gray900, lineHeight:'30px' }}>{carLabel}</p>
             <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
               <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5 }}>Car price</span>
-              <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, lineHeight:'26px' }}>
-                <SarIcon size={13} color={C.brand800}/> {USER_CAR ? USER_CAR.price : '69,900'}
+              <span style={{ fontSize:15.5, fontWeight:600, color:C.brand800, lineHeight:'26px', display:'flex', alignItems:'center', gap:3 }}>
+                <SarIcon size={13} color={C.brand800}/>{carPrice}
               </span>
             </div>
           </div>
 
-          {/* Spec chips */}
+          {/* Pills row */}
           <div style={{ display:'flex', gap:2, padding:'0 24px 12px' }}>
-            {(USER_CAR && USER_CAR.carType ? specs.map(s => s.icon.endsWith('icon-cartype.svg') ? { ...s, label:USER_CAR.carType } : s) : specs).map((spec, i) => (
-              <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', gap:6, alignItems:'center', background:C.gray50, borderRadius:12, padding:'12px 4px 8px' }}>
-                <img src={spec.icon} alt="" style={{ width:20, height:20 }}/>
-                <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center', whiteSpace:'nowrap' }}>{spec.label}</span>
-              </div>
-            ))}
+            {ALREADY ? (
+              manualPills.map((label, i) => (
+                <div key={i} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', background:C.gray50, borderRadius:12, padding:'12px 4px 8px' }}>
+                  <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center', whiteSpace:'nowrap' }}>{label}</span>
+                </div>
+              ))
+            ) : (
+              inventoryPills.map((spec, i) => (
+                <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', gap:6, alignItems:'center', background:C.gray50, borderRadius:12, padding:'12px 4px 8px' }}>
+                  <img src={spec.icon} alt="" style={{ width:20, height:20 }}/>
+                  <span style={{ fontSize:12.5, fontWeight:500, color:C.gray600, letterSpacing:0.5, textAlign:'center', whiteSpace:'nowrap' }}>{spec.label}</span>
+                </div>
+              ))
+            )}
           </div>
 
-          {/* Color selector */}
-          <div style={{ padding:'8px 24px' }}>
-            <button onClick={()=>{setColorPickerOpen(true);setPendingColor(selectedColor);}} style={{ width:'100%', background:C.white, border:`1px solid ${C.gray200}`, borderRadius:8, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
-              <div style={{ display:'flex', gap:12, alignItems:'center' }}>
-                <div style={{ width:20, height:20, borderRadius:'50%', background:colorOptions[selectedColor].hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
-                <div style={{ display:'flex', gap:4, alignItems:'center' }}>
-                  <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700, letterSpacing:0.4 }}>{colorOptions[selectedColor].label}</span>
-                  <span style={{ fontSize:13, color:'#98A2B3' }}>({colorOptions[selectedColor].count})</span>
-                </div>
-              </div>
-              <div style={{ padding:'8px 4px' }}>
-                <img src="/car-loan-assets/arrow-small.svg" alt="" style={{ width:12, height:12 }}/>
-              </div>
-            </button>
-          </div>
-
-          {/* Color picker sheet */}
-          {colorPickerOpen && (
-            <div style={{ position:'fixed', inset:0, zIndex:100, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
-              <div onClick={()=>setColorPickerOpen(false)} style={{ position:'absolute', inset:0, background:'rgba(13,19,28,0.5)' }}/>
-              <div style={{ position:'relative', background:C.white, borderRadius:'32px 32px 0 0', display:'flex', flexDirection:'column', gap:0 }}>
-                {/* Drag handle */}
-                <div style={{ display:'flex', flexDirection:'column', gap:12, alignItems:'center', padding:'12px 12px 24px' }}>
-                  <div style={{ width:48, height:4, background:C.gray400, borderRadius:999 }}/>
-                </div>
-                {/* Content */}
-                <div style={{ display:'flex', flexDirection:'column', gap:24, padding:'0 24px 6px' }}>
-                  {/* Title + close */}
-                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                    <span style={{ fontSize:23.5, fontWeight:700, color:C.gray900, lineHeight:'30px' }}>Color variant</span>
-                    <button onClick={()=>setColorPickerOpen(false)} style={{ border:`1px solid ${C.gray100}`, borderRadius:24, padding:6, background:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round"/></svg>
-                    </button>
-                  </div>
-                  {/* Color list */}
-                  <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
-                    {colorOptions.map((c, i) => (
-                      <button key={i} onClick={()=>setPendingColor(i)} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', background:'none', border:'none' }}>
-                        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                          {/* Radio button */}
-                          <div style={{ width:20, height:20, borderRadius:'50%', border:`1px solid ${pendingColor===i?C.brand600:C.gray300}`, background: pendingColor===i?C.brand600:'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                            {pendingColor===i && <div style={{ width:6, height:6, borderRadius:'50%', background:C.white }}/>}
-                          </div>
-                          <span style={{ fontSize:15.5, fontWeight:pendingColor===i?600:400, color:C.gray700, letterSpacing:0.25 }}>{c.label}</span>
-                          <span style={{ fontSize:13, color:'#98A2B3' }}>({c.count})</span>
-                        </div>
-                        {/* Color dot */}
-                        <div style={{ width:20, height:20, borderRadius:'50%', background:c.hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
-                      </button>
-                    ))}
+          {/* Color selector (Screen A only) */}
+          {!ALREADY && activeColorOptions && activeColorOptions.length > 0 && (
+            <div style={{ padding:'0 24px 4px', opacity:0.8 }}>
+              <button onClick={()=>{setColorPickerOpen(true);setPendingColor(selectedColor);}} style={{ width:'100%', background:C.white, border:`1px solid ${C.gray200}`, borderRadius:8, padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+                <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                  <div style={{ width:20, height:20, borderRadius:'50%', background:(activeColorOptions[selectedColor]||activeColorOptions[0]).hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
+                  <div style={{ display:'flex', gap:4, alignItems:'center' }}>
+                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray700, letterSpacing:0.4 }}>{(activeColorOptions[selectedColor]||activeColorOptions[0]).label}</span>
+                    {(activeColorOptions[selectedColor]||activeColorOptions[0]).count > 0 && <span style={{ fontSize:13, color:'#98A2B3' }}>({(activeColorOptions[selectedColor]||activeColorOptions[0]).count})</span>}
                   </div>
                 </div>
-                {/* Select button + home indicator */}
-                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, paddingTop:8 }}>
-                  <div style={{ padding:'12px 24px 8px', width:'100%' }}>
-                    <button onClick={()=>{setSelectedColor(pendingColor);setActiveThumb(0);setColorPickerOpen(false);}} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:10, padding:'16px', fontSize:17.5, fontWeight:700, color:C.white, letterSpacing:0.1 }}>
-                      Select
-                    </button>
-                  </div>
-                  <div style={{ background:C.white, height:34, width:'100%', display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8 }}>
-                    <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
-                  </div>
+                <div style={{ padding:'8px 4px' }}>
+                  <img src="/car-loan-assets/arrow-small.svg" alt="" style={{ width:12, height:12 }}/>
                 </div>
-              </div>
+              </button>
             </div>
           )}
 
-          {/* Blue info card */}
-          <div ref={tabsAnchorRef} style={{ padding:'0 24px 0' }}>
+          {/* Loan amount / APR info card */}
+          <div ref={tabsAnchorRef} style={{ padding:'8px 24px 0' }}>
             <div style={{ background:C.brand50, border:`1px solid ${C.brand100}`, borderRadius:12, overflow:'hidden' }}>
-              {/* Top row: Loan amount | APR */}
+              {/* Top row */}
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', minHeight:60, borderBottom:`1px solid ${C.brand100}`, padding:'4px 12px' }}>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>
@@ -834,20 +938,18 @@
                   </div>
                   <div style={{ display:'flex', alignItems:'center', gap:4 }}>
                     <SarIcon size={14} color={C.gray900}/>
-                    <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99,999,999.99</span>
+                    <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99,999,999</span>
                   </div>
                 </div>
                 <div style={{ width:100, display:'flex', flexDirection:'column', alignItems:'flex-end', paddingRight:4 }}>
                   <div style={{ display:'flex', gap:2, alignItems:'center' }}>
-                    <button style={{ background:'none', border:'none', padding:2, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14 }}/>
-                    </button>
-                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>APR from</span>
+                    <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14 }}/>
+                    <span style={{ fontSize:13.5, fontWeight:500, color:C.gray600, letterSpacing:0.4 }}>APR <span style={{ fontSize:10, letterSpacing:0.5 }}>from</span></span>
                   </div>
                   <span style={{ fontSize:17.5, fontWeight:700, color:C.gray900, lineHeight:'27px' }}>99.99%</span>
                 </div>
               </div>
-              {/* Bottom: note */}
+              {/* Bottom note */}
               <div style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px' }}>
                 <img src="/car-loan-assets/info-circle.svg" alt="" style={{ width:14, height:14, opacity:0.6 }}/>
                 <span style={{ fontSize:11, fontWeight:500, color:C.gray600 }}>Based on 10% down payment, 60 months</span>
@@ -858,15 +960,15 @@
           {/* Tabs */}
           <div style={{ padding:'8px 16px', position:'sticky', top:0, zIndex:1, background:C.white }}>
             <div style={{ background:C.gray50, borderRadius:11, padding:3, display:'flex', gap:10 }}>
-              {[['offers','Offers (5)'],['details','Car details']].map(([tab, label]) => (
+              {[['offers', `Offers (${offerCount})`], ['details', 'Car details']].map(([tab, label]) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   style={{
                     flex:1, padding:'16px', fontSize:13.5, fontWeight:600, letterSpacing:0.5,
-                    color: activeTab===tab ? C.brand600 : C.gray500,
-                    background: activeTab===tab ? C.white : 'transparent',
-                    border: activeTab===tab ? `1px solid ${C.gray100}` : 'none',
+                    color: activeTab === tab ? C.brand600 : C.gray500,
+                    background: activeTab === tab ? C.white : 'transparent',
+                    border: activeTab === tab ? `1px solid ${C.gray100}` : 'none',
                     borderRadius:8,
                   }}
                 >
@@ -877,25 +979,74 @@
           </div>
 
           {/* Tab content */}
-          {activeTab === 'offers' ? <OffersTab onChangeClick={()=>setChangeOpen(o=>!o)} changeOpen={changeOpen} onSortClick={()=>setSortOpen(true)} onFilterClick={()=>setFilterOpen(true)}/> : <DetailsTab openFeatures={openFeatures} setOpenFeatures={setOpenFeatures}/>}
+          {activeTab === 'offers'
+            ? <OffersTab offerCount={offerCount}/>
+            : ALREADY
+              ? <ManualCarDetailsTab car={USER_CAR}/>
+              : INV_CAR
+                ? <InventoryCarDetailsTab car={INV_CAR}/>
+                : <InventoryCarDetailsTab car={null}/>
+          }
         </div>
 
-        {/* Bottom CTA */}
+        {/* Sticky bottom CTA (only on details tab) */}
         {activeTab === 'details' && (
           <div style={{ position:'absolute', bottom:0, left:0, right:0, background:C.white }}>
             <div style={{ padding:'12px 24px 8px' }}>
-              <button onClick={goToOffers} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}>
-                See offers (5)
+              <button
+                onClick={goToOffers}
+                style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:8, padding:'12px 16px', fontSize:13.5, fontWeight:600, color:C.white, letterSpacing:0.5, minHeight:46 }}
+              >
+                See offers ({offerCount})
               </button>
             </div>
-            <div style={{ background:C.white, height:34, display:'flex', alignItems:'flex-end', justifyContent:'center', paddingBottom:8 }}>
-              <div style={{ width:135, height:5, background:'#000', borderRadius:999 }}/>
-            </div>
+            <HomeBar/>
           </div>
         )}
 
-        {sortOpen && <SortSheetCarDetails onClose={() => setSortOpen(false)}/>}
-        {filterOpen && <FilterSheetCarDetails onClose={() => setFilterOpen(false)}/>}
+        {/* Color picker sheet (Screen A only) */}
+        {colorPickerOpen && (
+          <div style={{ position:'fixed', inset:0, zIndex:100, display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+            <div onClick={()=>setColorPickerOpen(false)} style={{ position:'absolute', inset:0, background:'rgba(13,19,28,0.5)' }}/>
+            <div style={{ position:'relative', background:C.white, borderRadius:'32px 32px 0 0', display:'flex', flexDirection:'column' }}>
+              {/* Drag handle */}
+              <div style={{ display:'flex', flexDirection:'column', gap:12, alignItems:'center', padding:'12px 12px 24px' }}>
+                <div style={{ width:48, height:4, background:C.gray400, borderRadius:999 }}/>
+              </div>
+              {/* Content */}
+              <div style={{ display:'flex', flexDirection:'column', gap:24, padding:'0 24px 6px' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                  <span style={{ fontSize:23.5, fontWeight:700, color:C.gray900, lineHeight:'30px' }}>Color variant</span>
+                  <button onClick={()=>setColorPickerOpen(false)} style={{ border:`1px solid ${C.gray100}`, borderRadius:24, padding:6, background:'none', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke={C.gray500} strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  </button>
+                </div>
+                <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
+                  {activeColorOptions.map((c, i) => (
+                    <button key={i} onClick={()=>setPendingColor(i)} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', background:'none', border:'none' }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                        <div style={{ width:20, height:20, borderRadius:'50%', border:`1px solid ${pendingColor===i?C.brand600:C.gray300}`, background:pendingColor===i?C.brand600:'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                          {pendingColor===i && <div style={{ width:6, height:6, borderRadius:'50%', background:C.white }}/>}
+                        </div>
+                        <span style={{ fontSize:15.5, fontWeight:pendingColor===i?600:400, color:C.gray700, letterSpacing:0.25 }}>{c.label}</span>
+                        {c.count > 0 && <span style={{ fontSize:13, color:'#98A2B3' }}>({c.count})</span>}
+                      </div>
+                      <div style={{ width:20, height:20, borderRadius:'50%', background:c.hex, border:`1px solid ${C.gray200}`, flexShrink:0 }}/>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, paddingTop:8 }}>
+                <div style={{ padding:'12px 24px 8px', width:'100%' }}>
+                  <button onClick={()=>{setSelectedColor(pendingColor);setActiveThumb(0);setColorPickerOpen(false);}} style={{ width:'100%', background:C.brand600, border:'2px solid rgba(255,255,255,0.12)', borderRadius:10, padding:'16px', fontSize:17.5, fontWeight:700, color:C.white, letterSpacing:0.1 }}>
+                    Select
+                  </button>
+                </div>
+                <HomeBar/>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
