@@ -6,12 +6,15 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 
 const PhoneFlip = dynamic(() => import('./PhoneFlip'), { ssr: false });
+const DownloadMockup = dynamic(() => import('./DownloadMockup'), { ssr: false });
 
 type Lang = 'en' | 'ar';
 
 const t = {
   en: {
-    navHowItWorks: 'How it Works',
+    navPersonal: 'Personal',
+    navBusiness: 'Business',
+    navHowItWorks: 'How it works',
     navFeatures: 'Features',
     navDownload: 'Download',
     navFaq: 'FAQ',
@@ -119,10 +122,16 @@ const t = {
     footerPlatform: 'Platform', footerCompany: 'Company',
     footerLinks: ['Hub', 'How it Works', 'Download'],
     footerCompanyLinks: ['About Us', 'Brand', 'Materials'],
+    footerPlatformLinks: ['Hub', 'How it works', 'Download', 'Loan finder'],
+    footerCompanyLinks2: ['About us', 'Brand', 'Materials', 'Careers'],
+    footerSupportLinks: ['FAQ', 'Contact us', 'Privacy policy', 'Terms of use'],
+    footerGetApp: 'GET THE APP',
     copyright: '© 2026 Tamawal. All rights reserved.',
     regulated: 'Regulated by SAMA',
   },
   ar: {
+    navPersonal: 'أفراد',
+    navBusiness: 'أعمال',
     navHowItWorks: 'كيف يعمل',
     navFeatures: 'المميزات',
     navDownload: 'تحميل',
@@ -231,6 +240,10 @@ const t = {
     footerPlatform: 'المنصة', footerCompany: 'الشركة',
     footerLinks: ['المحور', 'كيف يعمل', 'تحميل'],
     footerCompanyLinks: ['من نحن', 'الهوية البصرية', 'المواد'],
+    footerPlatformLinks: ['المحور', 'كيف يعمل', 'تحميل', 'مكتشف القرض'],
+    footerCompanyLinks2: ['من نحن', 'الهوية البصرية', 'المواد', 'وظائف'],
+    footerSupportLinks: ['الأسئلة الشائعة', 'تواصل معنا', 'سياسة الخصوصية', 'شروط الاستخدام'],
+    footerGetApp: 'حمّل التطبيق',
     copyright: '© 2026 تامول. جميع الحقوق محفوظة.',
     regulated: 'مرخص من ساما',
   },
@@ -273,33 +286,28 @@ export default function TamweelWebHome() {
     <div className="min-h-screen bg-white dark:bg-[#080d14] font-sans" dir={isRtl ? 'rtl' : 'ltr'}>
 
       {/* ── Nav ─────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-[#eef1f6] dark:border-white/[0.06] bg-white/95 dark:bg-[#080d14]/95 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-[#9aa4b2] hover:text-[#667085] transition-colors me-1">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={isRtl ? 'rotate-180' : ''}>
-                <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
-            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={28} />
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#eef1f6]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div className="flex items-center justify-between px-[64px] py-[20px]">
+          <div className="flex items-center gap-[48px]">
+            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
+            <nav className="hidden md:flex items-center gap-[32px]">
+              <a href="#" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navPersonal}</a>
+              <a href="#" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navBusiness}</a>
+              <a href="#how-it-works" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navHowItWorks}</a>
+              <a href="#faq" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navFaq}</a>
+            </nav>
           </div>
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#how-it-works" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">{c.navHowItWorks}</a>
-            <a href="#features" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">{c.navFeatures}</a>
-            <a href="#download" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">{c.navDownload}</a>
-            <a href="#faq" className="text-sm text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">{c.navFaq}</a>
-          </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-[24px]">
             <button
               onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-              className="text-sm font-medium text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-[#f8fafc] dark:hover:bg-white/[0.04]"
+              className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity"
             >
               {lang === 'en' ? 'عربي' : 'EN'}
             </button>
-            <a href="#" className="hidden md:block text-sm font-medium text-[#667085] dark:text-white/50 hover:text-[#101828] dark:hover:text-white transition-colors">
+            <a href="#" className="hidden md:block text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">
               {c.navSignIn}
             </a>
-            <Link href="/tamweel-web/hub" className="text-sm font-semibold text-white bg-[#0063F5] px-4 py-2 rounded-lg hover:bg-[#0052cc] transition-colors">
+            <Link href="/tamweel-web/hub" className="text-[14px] font-bold text-white bg-[#0063f5] px-[24px] py-[12px] rounded-[128px] hover:bg-[#0052cc] transition-colors">
               {c.navGetStarted}
             </Link>
           </div>
@@ -454,9 +462,14 @@ export default function TamweelWebHome() {
       {/* ── Download + Calculator ────────────────────────────────────────── */}
       <section id="download" className="py-20 border-t border-[#eef1f6] dark:border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+            <style>{`@keyframes badge-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+            <div className="hidden lg:block absolute top-[395px] left-[515px] w-[157px] h-[157px] z-10 pointer-events-none">
+              <img src="/badge.svg" alt="" className="w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+              <img src="/badge-center.svg" alt="Licensed by SAMA" className="absolute inset-0 w-full h-full" />
+            </div>
 
-            <div className="bg-[#0063F5] rounded-[48px] p-10 flex flex-col justify-between overflow-hidden relative" style={{ minHeight: 520 }}>
+            <div className="bg-[#0063F5] rounded-[48px] p-10 flex flex-col justify-between overflow-hidden relative" style={{ minHeight: 520, paddingBottom: 0 }}>
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_80%_120%,rgba(255,255,255,0.08),transparent)]" />
               <div className="relative">
                 <p className="text-xs font-semibold tracking-widest uppercase text-white/60 mb-4">{c.dlLabel}</p>
@@ -467,19 +480,19 @@ export default function TamweelWebHome() {
                   <Image src="/playstore.svg" alt="Google Play" width={140} height={44} />
                 </div>
               </div>
-              <div className={`relative flex mt-8 ${isRtl ? 'justify-start' : 'justify-end'}`}>
-                <Image src="/mockup.png" alt="Download app" width={160} height={176} className="object-contain" />
+              <div className="relative mt-6 flex-1 min-h-[240px]">
+                <DownloadMockup />
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-[32px] bg-white shadow-[0px_4px_12px_rgba(0,0,0,0.08)]" style={{ minHeight: 520 }}>
+            <div className="w-full lg:w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white" style={{ minHeight: 520 }}>
               {/* Header */}
               <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
                 <p className="text-[#021945] text-[20px] font-bold text-center">{c.findTitle}</p>
               </div>
 
               {/* Body */}
-              <div className="px-10 py-10 flex flex-col items-center gap-12 bg-white">
+              <div className="px-10 py-10 flex flex-col items-center gap-[48px] bg-white">
 
                 {/* Loan Type */}
                 <div className="flex flex-col items-center gap-2 w-full">
@@ -504,7 +517,7 @@ export default function TamweelWebHome() {
                     <p className="text-[#475467] text-[13px]">{c.findMonthlySalaryLabel}</p>
                     <p className="text-[#d91c1c] text-[13px]">*</p>
                   </div>
-                  <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6] w-full">
+                  <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6]">
                     <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
                     <span className="text-[#101828] text-[24px] font-bold">
                       {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
@@ -554,33 +567,33 @@ export default function TamweelWebHome() {
                 <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
                   <p className="text-[#475467] text-[13px]">{c.findPurposeLabel}</p>
                   <div className="relative w-full">
-                    <select
-                      value={loanPurpose}
-                      onChange={(e) => setLoanPurpose(Number(e.target.value))}
-                      className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 bg-white text-[#101828] text-[18px] font-bold outline-none focus:border-[#0063F5] appearance-none cursor-pointer"
+                    <button
+                      type="button"
+                      onClick={() => setLoanPurpose((loanPurpose + 1) % c.findPurposes.length)}
+                      className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left"
                     >
-                      {c.findPurposes.map((p, i) => <option key={i} value={i}>{p}</option>)}
-                    </select>
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                      <span className="text-[#101828] text-[18px] font-bold">{c.findPurposes[loanPurpose]}</span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
 
               </div>
 
               {/* Footer */}
-              <div className="bg-white px-6 pb-10 pt-4 rounded-b-[32px] flex justify-center items-start">
-                <Link
-                  href={hasActiveLoans !== null ? '/tamweel-web/hub' : '#'}
-                  onClick={(e) => hasActiveLoans === null && e.preventDefault()}
+              <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start">
+                <button
+                  disabled={hasActiveLoans === null}
+                  onClick={() => hasActiveLoans !== null && (window.location.href = '/tamweel-web/hub')}
                   className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
                 >
                   <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
                     <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -601,46 +614,58 @@ export default function TamweelWebHome() {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer className="border-t border-[#eef1f6] dark:border-white/[0.06] overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-start justify-between gap-8">
-          <div>
-            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={28} className="mb-4" />
-            <p className="text-xs text-[#667085] dark:text-white/40 leading-relaxed max-w-xs">{c.footerDesc}</p>
-          </div>
-          <div className="flex gap-16">
-            <div>
-              <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">{c.footerPlatform}</p>
-              <ul className="space-y-2.5">
-                {c.footerLinks.map((item, i) => (
-                  <li key={item}>
-                    <a href={['#', '#how-it-works', '#download'][i]} className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
+      <footer className="bg-[#07122e] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div className="flex items-start justify-between pt-[80px] pb-[40px] px-[130px] gap-[56px] flex-col">
+          <div className="flex items-start justify-between w-full">
+            {/* Brand */}
+            <div className="flex flex-col gap-[16px] items-start shrink-0">
+              <div className="bg-white px-[14px] py-[10px] rounded-[14px] inline-flex">
+                <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
+              </div>
+              <p className="text-[#9fb2d6] text-[14px] leading-[22px]">
+                Licensed financial aggregator regulated<br />by the Saudi Central Bank (SAMA).
+              </p>
             </div>
-            <div>
-              <p className="text-xs font-semibold text-[#101828] dark:text-white mb-4">{c.footerCompany}</p>
-              <ul className="space-y-2.5">
-                {c.footerCompanyLinks.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-xs text-[#667085] dark:text-white/40 hover:text-[#101828] dark:hover:text-white transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
 
-        <div className="select-none pointer-events-none overflow-hidden">
-          <p className="text-[#f5f5f5] dark:text-white/[0.04] font-bold text-[clamp(80px,18vw,260px)] leading-none text-center tracking-tight">
+            {/* Links */}
+            <div className="flex gap-[72px] items-start shrink-0">
+              <div className="flex flex-col gap-[14px] items-start">
+                <p className="text-[12px] font-bold text-white tracking-[1.2px]">PLATFORM</p>
+                {c.footerPlatformLinks.map((item) => (
+                  <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
+                ))}
+              </div>
+              <div className="flex flex-col gap-[14px] items-start">
+                <p className="text-[12px] font-bold text-white tracking-[1.2px]">COMPANY</p>
+                {c.footerCompanyLinks2.map((item) => (
+                  <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
+                ))}
+              </div>
+              <div className="flex flex-col gap-[14px] items-start">
+                <p className="text-[12px] font-bold text-white tracking-[1.2px]">SUPPORT</p>
+                {c.footerSupportLinks.map((item) => (
+                  <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
+                ))}
+              </div>
+            </div>
+
+            {/* App */}
+            <div className="flex flex-col gap-[12px] items-start shrink-0">
+              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerGetApp}</p>
+              <Image src="/appstore.svg" alt="App Store" width={140} height={45} />
+              <Image src="/playstore.svg" alt="Google Play" width={140} height={45} />
+            </div>
+          </div>
+
+          {/* Giant wordmark */}
+          <p className="select-none pointer-events-none text-white font-extrabold leading-none tracking-[-11px] whitespace-nowrap" style={{ fontSize: 'clamp(80px, 22vw, 324px)', fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}>
             tamawal
           </p>
-        </div>
 
-        <div className="border-t border-[#eef1f6] dark:border-white/[0.06]">
-          <div className="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
-            <p className="text-xs text-[#9aa4b2] dark:text-white/25">{c.copyright}</p>
-            <p className="text-xs text-[#9aa4b2] dark:text-white/25">{c.regulated}</p>
+          {/* Bottom bar */}
+          <div className="border-t border-[rgba(255,255,255,0.12)] pt-[24px] flex items-center justify-between w-full">
+            <p className="text-[13px] text-[#7f93ba]">{c.copyright}</p>
+            <p className="text-[13px] font-semibold text-[#7f93ba]">{c.regulated}</p>
           </div>
         </div>
       </footer>
