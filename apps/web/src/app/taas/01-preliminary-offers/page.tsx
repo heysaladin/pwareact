@@ -61,9 +61,17 @@ export default function PreliminaryOffersPage() {
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-8 pt-7 pb-6 flex flex-col gap-5">
           {/* Page title */}
-          <div>
-            <h1 className="font-['Newsreader',Georgia,serif] text-[38px] font-medium text-[#101828] leading-tight">View preliminary offers</h1>
-            <p className="text-[#475467] text-[15px] mt-2">Based on the details you provided, here are indicative financing options. Select one to continue.</p>
+          <div className="flex items-start gap-6">
+            <div className="flex-1">
+              <h1 className="font-['Newsreader',Georgia,serif] text-[38px] font-medium text-[#101828] leading-tight">View preliminary offers</h1>
+              <p className="text-[#475467] text-[15px] mt-2">Based on the details you provided, here are indicative financing options. Select one to continue.</p>
+            </div>
+            <Link href="/taas/15-register-interest" className="flex items-center gap-1.5 shrink-0 bg-white border-[1.5px] border-[#0063f5] text-[#0063f5] text-[13.5px] font-semibold tracking-[0.5px] px-4 py-3 rounded-lg min-h-[46px] w-[227px] justify-center">
+              Register interest offers
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7.5 15l5-5-5-5" />
+              </svg>
+            </Link>
           </div>
 
           {/* Your details bar */}

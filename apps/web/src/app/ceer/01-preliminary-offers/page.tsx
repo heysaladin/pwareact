@@ -53,7 +53,7 @@ export default function PreliminaryOffersPage() {
   const [selected, setSelected] = useState('aljazira');
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
 
       <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
         <div className="text-4xl mb-4">🖥️</div>
@@ -78,9 +78,17 @@ export default function PreliminaryOffersPage() {
                     <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
                   </button>
                 </div>
-                <Link href="/ceer/00-explore-financing" className="text-[13px] font-semibold flex items-center gap-1" style={{ color: 'var(--muted)' }}>
-                  ← Back
-                </Link>
+                <div className="flex items-center gap-3">
+                  <Link href="/ceer/00-explore-financing" className="text-[13px] font-semibold flex items-center gap-1" style={{ color: 'var(--muted)' }}>
+                    ← Back
+                  </Link>
+                  <Link href="/ceer/15-register-interest" className="flex items-center gap-1.5 text-[13.5px] font-semibold tracking-[0.5px] px-4 py-3 rounded-lg" style={{ border: '1.5px solid #0063f5', color: '#0063f5', background: 'transparent' }}>
+                    Register interest offers
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7.5 15l5-5-5-5" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
 
               {/* Filter bar */}
@@ -229,8 +237,8 @@ export default function PreliminaryOffersPage() {
       </div>
 
       <style>{`
-        [data-theme="dark"]{--bg:#0b1420;--card:#121e2e;--border:#2a3a4f;--text:#e6edf5;--muted:#93a4b8;--blue:#4f95ff;--heading:#dbe7f5;--highlight:#16283f;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#f4f6f9;--card:#ffffff;--border:#dde3ec;--text:#1a2636;--muted:#64748b;--blue:#2563eb;--heading:#0f172a;--highlight:#eff6ff;--green:#16a34a;--red:#dc2626;}
+        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
+        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
         .viewport-warning{background:var(--bg);}
         @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
       `}</style>

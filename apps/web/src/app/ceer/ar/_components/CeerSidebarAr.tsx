@@ -7,7 +7,7 @@ interface Props {
 
 export default function CeerSidebarAr({ backHref, backLabel = 'العودة إلى سير' }: Props) {
   return (
-    <aside className="w-[350px] shrink-0 bg-[#0b1420] border-l border-[#2a3a4f] flex flex-col p-6 gap-0 sticky top-0 h-full overflow-y-auto">
+    <aside className="w-[350px] shrink-0 bg-[#030b10] border-l border-[rgba(189,189,189,0.2)] flex flex-col p-6 gap-0 sticky top-0 h-full overflow-y-auto">
 
       {/* Header */}
       <div className="flex items-center justify-between py-2">
@@ -33,15 +33,15 @@ export default function CeerSidebarAr({ backHref, backLabel = 'العودة إل
       </div>
 
       {/* Car card */}
-      <div className="mt-3.5 bg-[#121e2e] border border-[#2a3a4f] rounded-2xl p-[21px] flex flex-col">
+      <div className="mt-3.5 bg-[#0b1315] border border-[rgba(189,189,189,0.2)] rounded-2xl p-[21px] flex flex-col">
         <div className="w-full h-[180px] rounded-xl relative overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 160%, rgba(37,63,98,1) 25%, rgba(28,47,72,1) 62%, rgba(18,30,46,1) 100%)' }}>
           <img src="/ceer-car-00.png" alt="EXOBOT SUV" className="absolute left-0 top-5 w-[240px] h-[160px] object-cover pointer-events-none" />
         </div>
 
-        <p className="mt-4 font-bold text-base text-[#e6edf5]">EXOBOT SUV</p>
-        <p className="mt-1 text-sm text-[#93a4b8]">دفع رباعي متميز – 2026</p>
+        <p className="mt-4 font-bold text-base text-[#dadada]">EXOBOT SUV</p>
+        <p className="mt-1 text-sm text-[rgba(189,189,189,0.6)]">دفع رباعي متميز – 2026</p>
 
-        <div className="mt-3.5 border-t border-[#2a3a4f] pt-1.5 flex flex-col">
+        <div className="mt-3.5 border-t border-[rgba(189,189,189,0.2)] pt-1.5 flex flex-col">
           {[
             ['🎨 المظهر', 'رمادي كوانتم'],
             ['💺 المقصورة', 'أسود أونيكس'],
@@ -50,54 +50,54 @@ export default function CeerSidebarAr({ backHref, backLabel = 'العودة إل
             ['📏 المدى', '610 كم'],
           ].map(([label, value]) => (
             <div key={label} className="flex items-center justify-between py-1.5 h-[31px] text-[13px]">
-              <span className="text-[#93a4b8]">{label}</span>
-              <span className="text-[#e6edf5] font-semibold">{value}</span>
+              <span className="text-[rgba(189,189,189,0.6)]">{label}</span>
+              <span className="text-[#dadada] font-semibold">{value}</span>
             </div>
           ))}
         </div>
 
-        <div className="mt-2 border-t border-[#2a3a4f] pt-3.5 flex flex-col">
+        <div className="mt-2 border-t border-[rgba(189,189,189,0.2)] pt-3.5 flex flex-col">
           <div className="flex justify-between py-1.5 text-[13px]">
-            <span className="text-[#93a4b8]">سعر المركبة (شامل ض.ق.م)</span>
-            <span className="text-[#e6edf5] font-semibold">٢٢٨٬٧٥٠ ر.س</span>
+            <span className="text-[rgba(189,189,189,0.6)]">سعر المركبة (شامل ض.ق.م)</span>
+            <span className="text-[#dadada] font-semibold">٢٢٨٬٧٥٠ ر.س</span>
           </div>
           <div className="flex justify-between py-1.5 text-[13px]">
-            <span className="text-[#93a4b8]">الدفعة المقدمة (20%)</span>
-            <span className="text-[#e6edf5] font-semibold">٤٥٬٧٥٠ ر.س</span>
+            <span className="text-[rgba(189,189,189,0.6)]">الدفعة المقدمة (20%)</span>
+            <span className="text-[#dadada] font-semibold">٤٥٬٧٥٠ ر.س</span>
           </div>
         </div>
 
-        <div className="mt-3.5 bg-[#16283f] rounded-[10px] px-4 py-3 flex items-center justify-between">
-          <span className="text-[13px] text-[#e6edf5]">مبلغ التمويل</span>
-          <span className="text-[15px] font-bold text-[#e6edf5]">١٨٣٬٠٠٠ ر.س</span>
+        <div className="mt-3.5 bg-[#2e3f46] rounded-[10px] px-4 py-3 flex items-center justify-between">
+          <span className="text-[13px] text-[#dadada]">مبلغ التمويل</span>
+          <span className="text-[15px] font-bold text-[#dadada]">١٨٣٬٠٠٠ ر.س</span>
         </div>
 
         <div className="flex justify-between pt-4 pb-1.5 text-[13px]">
-          <span className="text-[#93a4b8]">مدة التمويل</span>
-          <span className="text-[#e6edf5] font-semibold">60 شهراً</span>
+          <span className="text-[rgba(189,189,189,0.6)]">مدة التمويل</span>
+          <span className="text-[#dadada] font-semibold">60 شهراً</span>
         </div>
 
-        <div className="mt-2.5 bg-[#00265f] border border-[#0041a3] rounded-[10px] px-[17px] py-[13px] flex items-center justify-between">
+        <div className="mt-2.5 bg-[#ff8204] border border-[#ff8204] rounded-[10px] px-[17px] py-[13px] flex items-center justify-between">
           <span className="text-[12px] text-white">إجمالي المستحق (SNB)</span>
           <span className="text-[15px] font-bold text-white">٢١٨٬٨٨٠ ر.س</span>
         </div>
       </div>
 
       {/* Security note */}
-      <div className="mt-3 bg-[#121e2e] border border-[#2a3a4f] rounded-xl p-[15px] flex gap-3 items-center">
-        <div className="w-[34px] h-[34px] bg-[#16283f] rounded-full flex items-center justify-center shrink-0 text-[15px]">🛡️</div>
+      <div className="mt-3 bg-[#0b1315] border border-[rgba(189,189,189,0.2)] rounded-xl p-[15px] flex gap-3 items-center">
+        <div className="w-[34px] h-[34px] bg-[#2e3f46] rounded-full flex items-center justify-center shrink-0 text-[15px]">🛡️</div>
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-bold text-[#e6edf5]">بياناتك آمنة</p>
-          <p className="text-[12.5px] text-[#93a4b8] mt-0.5">نستخدم تشفيراً بمستوى بنكي لحماية معلوماتك.</p>
+          <p className="text-[13px] font-bold text-[#dadada]">بياناتك آمنة</p>
+          <p className="text-[12.5px] text-[rgba(189,189,189,0.6)] mt-0.5">نستخدم تشفيراً بمستوى بنكي لحماية معلوماتك.</p>
         </div>
       </div>
 
       {/* Nafath note */}
-      <div className="mt-3 bg-[#121e2e] border border-[#2a3a4f] rounded-xl p-[15px] flex gap-3 items-center">
+      <div className="mt-3 bg-[#0b1315] border border-[rgba(189,189,189,0.2)] rounded-xl p-[15px] flex gap-3 items-center">
         <div className="shrink-0 px-2 py-0.5">
-          <p className="text-[11px] font-black text-[#93a4b8] w-[39px] leading-[16.5px]" dir="auto">نفاذ Nafath</p>
+          <p className="text-[11px] font-black text-[rgba(189,189,189,0.6)] w-[39px] leading-[16.5px]" dir="auto">نفاذ Nafath</p>
         </div>
-        <p className="flex-1 text-[12.5px] text-[#93a4b8] leading-[18.75px]">التحقق مدعوم بـ نفاذ — خدمات الهوية الرقمية الحكومية الموثوقة.</p>
+        <p className="flex-1 text-[12.5px] text-[rgba(189,189,189,0.6)] leading-[18.75px]">التحقق مدعوم بـ نفاذ — خدمات الهوية الرقمية الحكومية الموثوقة.</p>
       </div>
 
     </aside>

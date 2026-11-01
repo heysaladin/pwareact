@@ -61,9 +61,17 @@ export default function PreliminaryOffersArPage() {
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-8 pt-7 pb-6 flex flex-col gap-5">
           {/* Page title */}
-          <div>
-            <h1 className="font-['Newsreader',Georgia,serif] text-[38px] font-medium text-[#101828] leading-tight">عروضك الأولية</h1>
-            <p className="text-[#475467] text-[15px] mt-2">بناءً على البيانات التي أدخلتها، إليك خيارات التمويل الأولية. اختر واحدة للمتابعة.</p>
+          <div className="flex items-start gap-6">
+            <Link href="/taas/ar/15-register-interest" className="flex items-center gap-1.5 shrink-0 bg-white border-[1.5px] border-[#0063f5] text-[#0063f5] text-[13.5px] font-semibold tracking-[0.5px] px-4 py-3 rounded-lg min-h-[46px] w-[206px] justify-center">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12.5 15l-5-5 5-5" />
+              </svg>
+              عروض تسجيل الإهتمام
+            </Link>
+            <div className="flex-1 text-right">
+              <h1 className="font-['Noto_Sans_Arabic',sans-serif] text-[28px] font-bold text-[#101828] leading-tight">عروضك الأولية</h1>
+              <p className="text-[#475467] text-[15px] mt-2">بناءً على البيانات التي أدخلتها، إليك خيارات التمويل الأولية. اختر واحدة للمتابعة.</p>
+            </div>
           </div>
 
           {/* Your details bar */}

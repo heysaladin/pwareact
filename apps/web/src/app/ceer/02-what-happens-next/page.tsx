@@ -25,7 +25,7 @@ export default function WhatHappensNextPage() {
   const [dark, setDark] = useState(false);
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ minHeight: '100vh', background: 'var(--bg-page)', color: 'var(--text)', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif' }}>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ minHeight: '100vh', background: 'var(--bg-page)', color: 'var(--text)', fontFamily: ''ceerBeta3Font', Arial, sans-serif' }}>
       <div className="vp-warn" style={{ display: 'none', position: 'fixed', inset: 0, zIndex: 50, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, textAlign: 'center', background: 'var(--surface)' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🖥️</div>
         <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--navy)' }}>Screen too small</h2>
@@ -155,8 +155,8 @@ export default function WhatHappensNextPage() {
 
       <style>{`
         *{margin:0;padding:0;box-sizing:border-box;}
-        :root,[data-theme="light"]{--blue:#1a73f5;--blue-dark:#0b57d0;--navy:#14233c;--text:#1c2b3a;--muted:#5b6b7c;--border:#e3e8ef;--bg-light:#eaf2fe;--bg-page:#f7f9fc;--green:#1db954;--green-dark:#14833b;--red:#e5484d;--surface:#ffffff;}
-        [data-theme="dark"]{--blue:#4f95ff;--navy:#dbe7f5;--text:#e6edf5;--muted:#93a4b8;--border:#2a3a4f;--bg-light:#16283f;--bg-page:#0b1420;--surface:#121e2e;}
+        :root,[data-theme="light"]{--blue:#ff8204;--blue-dark:#0b57d0;--navy:#dadada;--text:#dadada;--muted:rgba(189,189,189,0.6);--border:rgba(189,189,189,0.2);--bg-light:#2e3f46;--bg-page:#030b10;--green:#1db954;--green-dark:#14833b;--red:#e5484d;--surface:#0b1315;}
+        [data-theme="dark"]{--blue:#ff8204;--navy:#dadada;--text:#dadada;--muted:rgba(189,189,189,0.6);--border:rgba(189,189,189,0.2);--bg-light:#2e3f46;--bg-page:#030b10;--surface:#0b1315;}
         @media(max-width:1279px){.vp-warn{display:flex !important;}}
         a{text-decoration:none;}
       `}</style>

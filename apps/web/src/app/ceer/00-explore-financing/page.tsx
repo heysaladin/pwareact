@@ -30,7 +30,7 @@ export default function ExploreFinancingPage() {
   const trackPct = dp * 2;
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} className="min-h-screen" style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif", background: 'var(--bg)', color: 'var(--text)' }}>
+    <div data-theme={dark ? 'dark' : 'light'} className="min-h-screen" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif", background: 'var(--bg)', color: 'var(--text)' }}>
       <div className="flex flex-col lg:flex-row min-h-screen">
 
         <div className="hidden lg:flex">
@@ -181,24 +181,24 @@ export default function ExploreFinancingPage() {
 
       <style>{`
         [data-theme="dark"] {
-          --bg: #0b1420;
-          --card: #121e2e;
-          --border: #2a3a4f;
-          --text: #e6edf5;
-          --muted: #93a4b8;
-          --blue: #4f95ff;
-          --heading: #dbe7f5;
-          --highlight: #16283f;
+          --bg: #030b10;
+          --card: #0b1315;
+          --border: rgba(189,189,189,0.2);
+          --text: #dadada;
+          --muted: rgba(189,189,189,0.6);
+          --blue: #ff8204;
+          --heading: #dadada;
+          --highlight: #2e3f46;
         }
         [data-theme="light"] {
-          --bg: #f4f6f9;
-          --card: #ffffff;
-          --border: #dde3ec;
-          --text: #1a2636;
-          --muted: #64748b;
-          --blue: #2563eb;
-          --heading: #0f172a;
-          --highlight: #eff6ff;
+          --bg: #030b10;
+          --card: #0b1315;
+          --border: rgba(189,189,189,0.2);
+          --text: #dadada;
+          --muted: rgba(189,189,189,0.6);
+          --blue: #ff8204;
+          --heading: #dadada;
+          --highlight: #2e3f46;
         }
         .tw-slider {
           height: 16px;

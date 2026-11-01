@@ -20,7 +20,7 @@ export default function SubmitOrderPage() {
   }
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" }}>
+    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
 
       {/* Viewport warning */}
       <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
@@ -365,27 +365,27 @@ export default function SubmitOrderPage() {
 
       <style>{`
         [data-theme="dark"] {
-          --bg: #0b1420;
-          --card: #121e2e;
-          --border: #2a3a4f;
-          --text: #e6edf5;
-          --muted: #93a4b8;
-          --blue: #4f95ff;
-          --navy: #dbe7f5;
-          --highlight: #16283f;
-          --bg-light: #16283f;
+          --bg: #030b10;
+          --card: #0b1315;
+          --border: rgba(189,189,189,0.2);
+          --text: #dadada;
+          --muted: rgba(189,189,189,0.6);
+          --blue: #ff8204;
+          --navy: #dadada;
+          --highlight: #2e3f46;
+          --bg-light: #2e3f46;
           --green: #1db954;
         }
         [data-theme="light"] {
-          --bg: #f7f9fc;
-          --card: #ffffff;
-          --border: #e3e8ef;
-          --text: #1c2b3a;
-          --muted: #5b6b7c;
-          --blue: #1a73f5;
-          --navy: #14233c;
-          --highlight: #eff6ff;
-          --bg-light: #eaf2fe;
+          --bg: #030b10;
+          --card: #0b1315;
+          --border: rgba(189,189,189,0.2);
+          --text: #dadada;
+          --muted: rgba(189,189,189,0.6);
+          --blue: #ff8204;
+          --navy: #dadada;
+          --highlight: #2e3f46;
+          --bg-light: #2e3f46;
           --green: #1db954;
         }
         .viewport-warning { background: var(--bg); }
