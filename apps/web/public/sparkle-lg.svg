@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="Sparkle" d="M28 0L33.5437 22.4563L56 28L33.5437 33.5437L28 56L22.4563 33.5437L0 28L22.4563 22.4563L28 0Z" fill="url(#paint0_linear_5281_283566)"/>
+<defs>
+<linearGradient id="paint0_linear_5281_283566" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C4D9FF"/>
+<stop offset="0.5" stop-color="#4C91FF"/>
+<stop offset="1" stop-color="#0063F5"/>
+</linearGradient>
+</defs>
+</svg>
