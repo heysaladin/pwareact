@@ -1,202 +1,206 @@
-'use client'
-import Link from 'next/link'
-import CeerSidebar from '../_components/CeerSidebar'
+'use client';
+import Link from 'next/link';
+import TaasPageLayout from '../_components/TaasPageLayout';
+
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+
+function InputField({
+  label,
+  placeholder,
+  hint,
+}: {
+  label: string;
+  placeholder: string;
+  hint?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-[6px] w-full">
+      <div className="flex gap-[2px] items-start text-[14px] leading-[23px]" style={saira}>
+        <span style={{ color: '#1d2d33' }}>{label}</span>
+        <span style={{ color: '#d92d20' }}>*</span>
+      </div>
+      <div
+        className="bg-white flex gap-[8px] items-center px-[14px] py-[10px] rounded-[8px] w-full"
+        style={{ border: '1px solid rgba(48,63,70,0.2)', boxShadow: '0px 1px 1px rgba(10,13,18,0.05)' }}
+      >
+        <p
+          className="flex-1 text-[16px] leading-[22px] overflow-hidden text-ellipsis whitespace-nowrap"
+          style={{ ...saira, color: 'rgba(48,63,70,0.7)' }}
+        >
+          {placeholder}
+        </p>
+        {hint === 'help' && (
+          <img alt="" className="shrink-0 size-[16px]" src="/taas/icon-circle-help.svg" />
+        )}
+      </div>
+      {hint && hint !== 'help' && (
+        <p className="text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>{hint}</p>
+      )}
+    </div>
+  );
+}
 
 export default function RegisterInterestPage() {
-  return (
-    <div data-theme="dark" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens. Please open it on a laptop or desktop.</p>
+  const footer = (
+    <>
+      {/* Left: lock note */}
+      <div className="flex gap-[8px] items-center shrink-0">
+        <img alt="" className="shrink-0 size-[16px]" src="/taas/icon-lock.svg" />
+        <p className="text-[12px] leading-[16px] whitespace-nowrap" style={{ ...saira, color: 'rgba(48,63,70,0.7)' }}>
+          We only use your details to notify you when this offer becomes available.
+        </p>
       </div>
 
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
+      {/* Right: buttons */}
+      <div className="flex gap-[12px] items-center shrink-0">
+        {/* Cancel */}
+        <Link
+          href="/ceer/01-preliminary-offers"
+          className="flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] relative overflow-hidden"
+          style={{ border: '1px solid rgba(48,63,70,0.2)', boxShadow: '0px 1px 2px rgba(16,24,40,0.05)' }}
+        >
+          <span aria-hidden className="absolute inset-0 bg-white rounded-[8px] pointer-events-none" />
+          <span className="relative text-[12px] leading-[19px] uppercase text-[#1d2d33]" style={oxanium}>
+            Cancel
+          </span>
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-[8px] pointer-events-none"
+            style={{ boxShadow: 'inset 0px 0px 0px 1px rgba(10,13,18,0.18), inset 0px -2px 0px 0px rgba(10,13,18,0.05)' }}
+          />
+        </Link>
 
-          <CeerSidebar backHref="/ceer" />
+        {/* Register your interest */}
+        <Link
+          href="/ceer/15b-register-interest-success"
+          className="flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] relative overflow-hidden"
+          style={{ border: '2px solid rgba(255,255,255,0.12)', boxShadow: '0px 1px 2px rgba(16,24,40,0.05)' }}
+        >
+          <span aria-hidden className="absolute inset-0 bg-[#003e52] rounded-[8px] pointer-events-none" />
+          <span className="relative text-[12px] leading-[19px] uppercase text-white" style={oxanium}>
+            Register your interest
+          </span>
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-[8px] pointer-events-none"
+            style={{ boxShadow: 'inset 0px 0px 0px 1px rgba(10,13,18,0.18), inset 0px -2px 0px 0px rgba(10,13,18,0.05)' }}
+          />
+        </Link>
+      </div>
+    </>
+  );
 
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col gap-5 p-6 overflow-y-auto">
+  return (
+    <TaasPageLayout currentStep={5} footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] items-start w-full shrink-0 text-[#1d2d33]">
+        <p className="text-[32px] leading-[36px] uppercase w-full" style={oxanium}>
+          Register your interest
+        </p>
+        <p className="text-[16px] leading-[22px] w-full" style={saira}>
+          This financial institution will join Tamawal&apos;s partners soon. Register your interest and we&apos;ll let you know as soon as financing is available.
+        </p>
+      </div>
 
-              {/* Page title */}
-              <div>
-                <h1 className="font-['Newsreader',Georgia,serif] text-[38px] font-medium leading-tight" style={{ color: 'var(--heading)' }}>Register your interest</h1>
-                <p className="text-[15px] mt-2" style={{ color: 'var(--muted)' }}>This financial institution will join Tamawal's partners soon. Register your interest and we'll notify you once financing is available.</p>
-              </div>
+      {/* Two-column layout */}
+      <div className="flex gap-[24px] items-start w-full shrink-0">
 
-              {/* Two-column layout */}
-              <div className="flex gap-6 items-start">
-                {/* Left: form */}
-                <div className="flex-1 flex flex-col gap-4">
-                  {/* National ID / Iqama number */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      National ID / Iqama number <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your National ID or Iqama number"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
+        {/* Left: form */}
+        <div className="flex flex-[1_0_0] flex-col gap-[20px] items-start min-w-0">
 
-                  {/* City */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      City <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Select your city"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
-
-                  {/* Sector */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      Sector <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Select your sector"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
-
-                  {/* Entity */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      Entity <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your entity / employer"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
-
-                  {/* Job title */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      Job title <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your job title"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
-
-                  {/* Salary bank */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[14px] font-medium" style={{ color: 'var(--text)' }}>
-                      Salary bank <span style={{ color: '#e03137' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Select your salary bank"
-                      className="rounded-[8px] px-[14px] py-[10px] text-[14px] outline-none"
-                      style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                    />
-                  </div>
-                </div>
-
-                {/* Right: bank card */}
-                <div className="w-[340px] rounded-[14px] p-6 flex flex-col gap-4 shrink-0" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                  {/* Shield icon */}
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ stroke: 'var(--blue)' }}>
-                      <path d="M18 3L5 8v9c0 7.95 5.54 15.19 13 17 7.46-1.81 13-9.05 13-17V8L18 3z" />
-                    </svg>
-                  </div>
-
-                  {/* Title */}
-                  <div>
-                    <p className="text-[16px] font-bold leading-snug" style={{ color: 'var(--text)' }}>Microfinance for Employee &amp; their Family Daily Needs</p>
-                    <p className="text-[13px] mt-1" style={{ color: 'var(--muted)' }}>by Bank Albilad</p>
-                  </div>
-
-                  {/* Blue divider */}
-                  <div className="h-[2px] rounded-full w-12" style={{ background: 'var(--blue)' }} />
-
-                  {/* Orange badge */}
-                  <div className="inline-flex self-start px-3 py-1 rounded-full" style={{ background: 'var(--highlight)', border: '1px solid var(--blue)' }}>
-                    <span className="text-[12px] font-semibold" style={{ color: 'var(--blue)' }}>Joining Tamawal soon</span>
-                  </div>
-
-                  {/* Stats rows */}
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between text-[13px]">
-                      <span style={{ color: 'var(--muted)' }}>APR from</span>
-                      <span className="font-semibold" style={{ color: 'var(--text)' }}>5.66%</span>
-                    </div>
-                    <div className="h-px" style={{ background: 'var(--border)' }} />
-                    <div className="flex items-center justify-between text-[13px]">
-                      <span style={{ color: 'var(--muted)' }}>Installment from</span>
-                      <span className="font-semibold" style={{ color: 'var(--text)' }}>SAR 1,250/mo</span>
-                    </div>
-                    <div className="h-px" style={{ background: 'var(--border)' }} />
-                    <div className="flex items-center justify-between text-[13px]">
-                      <span style={{ color: 'var(--muted)' }}>Financing up to</span>
-                      <span className="font-semibold" style={{ color: 'var(--text)' }}>SAR 250,000</span>
-                    </div>
-                  </div>
-
-                  {/* Disclaimer */}
-                  <p className="text-[11px] leading-relaxed" style={{ color: 'var(--muted)' }}>
-                    Rates shown are indicative and subject to credit assessment. Final terms confirmed upon partner availability.
-                  </p>
-                </div>
-              </div>
+          {/* National ID */}
+          <div className="flex flex-col gap-[6px] w-full">
+            <div className="flex gap-[2px] items-start text-[14px] leading-[23px]" style={saira}>
+              <span style={{ color: '#1d2d33' }}>National ID / Iqama number</span>
+              <span style={{ color: '#d92d20' }}>*</span>
             </div>
+            <div
+              className="bg-white flex gap-[8px] items-center px-[14px] py-[10px] rounded-[8px] w-full"
+              style={{ border: '1px solid rgba(48,63,70,0.2)', boxShadow: '0px 1px 1px rgba(10,13,18,0.05)' }}
+            >
+              <p
+                className="flex-1 text-[16px] leading-[22px] overflow-hidden text-ellipsis whitespace-nowrap"
+                style={{ ...saira, color: 'rgba(48,63,70,0.7)' }}
+              >
+                1XXXXXXXXX
+              </p>
+              <img alt="" className="shrink-0 size-[16px]" src="/taas/icon-circle-help.svg" />
+            </div>
+            <p className="text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>
+              Must match the ID registered with Absher.
+            </p>
+          </div>
 
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--muted)' }}>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="5" width="10" height="8" rx="1" />
-                  <path d="M5 5V4a3 3 0 0 1 6 0v1" />
-                  <circle cx="8" cy="9" r="1" fill="currentColor" stroke="none" />
-                </svg>
-                Your data is encrypted and handled in accordance with SAMA's data protection guidelines.
-              </div>
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/ceer/01-preliminary-offers"
-                  className="px-5 py-3 rounded-xl text-[14px] font-bold"
-                  style={{ border: '1.5px solid var(--border)', color: 'var(--muted)', background: 'transparent' }}
-                >
-                  Cancel
-                </Link>
-                <Link
-                  href="/ceer/15b-register-interest-success"
-                  className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                  style={{ background: 'var(--blue)' }}
-                >
-                  Register your interest
-                </Link>
-              </div>
+          {/* City + Sector row */}
+          <div className="flex gap-[20px] items-start w-full">
+            <InputField label="City" placeholder="Select city" />
+            <InputField label="Sector" placeholder="Select sector" />
+          </div>
+
+          {/* Entity + Job title row */}
+          <div className="flex gap-[20px] items-start w-full">
+            <InputField label="Entity" placeholder="Select your employer" />
+            <InputField label="Job title" placeholder="Select job title" />
+          </div>
+
+          {/* Salary bank */}
+          <InputField label="Salary bank" placeholder="Select your salary bank" />
+        </div>
+
+        {/* Right: secure verification panel */}
+        <div
+          className="flex flex-col gap-[14px] items-start p-[24px] rounded-[14px] shrink-0 w-[340px]"
+          style={{ backgroundColor: '#f4f5f3' }}
+        >
+          {/* Shield icon */}
+          <div className="bg-white flex items-center justify-center rounded-[12px] shrink-0 size-[44px]">
+            <img alt="" className="size-[22px] object-contain" src="/taas/icon-shield.svg" />
+          </div>
+
+          {/* Product name */}
+          <p className="text-[16px] leading-[22px] text-[#1d2d33]" style={saira}>
+            Microfinance for Employee &amp; their Family Daily Needs
+          </p>
+          <p className="text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>
+            by Bank Albilad
+          </p>
+
+          {/* Divider */}
+          <div className="h-px w-full" style={{ backgroundColor: 'rgba(48,63,70,0.2)' }} />
+
+          {/* Badge */}
+          <div
+            className="flex gap-[6px] items-center px-[10px] py-[4px] rounded-[999px]"
+            style={{ backgroundColor: '#f4f5f3' }}
+          >
+            <p className="text-[12px] leading-[16px] text-[#db6903]" style={saira}>
+              Joining Tamawal soon
+            </p>
+          </div>
+
+          {/* Offer rows */}
+          <div className="flex flex-col gap-[10px] items-start w-full text-[#1d2d33]">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-[14px] leading-[23px] w-[58px]" style={saira}>APR from</p>
+              <p className="text-[16px] leading-[22px] whitespace-nowrap" style={saira}>5.66%</p>
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <p className="text-[14px] leading-[23px] w-[100px]" style={saira}>Installment from</p>
+              <p className="text-[16px] leading-[22px] whitespace-nowrap" style={saira}>⃁ 1,250 / mo</p>
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <p className="text-[14px] leading-[23px] w-[95px]" style={saira}>Financing up to</p>
+              <p className="text-[16px] leading-[22px] whitespace-nowrap" style={saira}>⃁ 250,000</p>
             </div>
           </div>
 
+          {/* Disclaimer */}
+          <p className="text-[12px] leading-[16px] w-full" style={{ ...saira, color: 'rgba(48,63,70,0.7)' }}>
+            Final offer, rate and eligibility are confirmed by the lender once it joins Tamawal.
+          </p>
         </div>
       </div>
-
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        input::placeholder{color:rgba(189,189,189,0.4);}
-      `}</style>
-    </div>
-  )
+    </TaasPageLayout>
+  );
 }

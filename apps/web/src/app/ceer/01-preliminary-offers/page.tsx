@@ -1,247 +1,224 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebar from '../_components/CeerSidebar';
-import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
-import { SarAmount } from '@/components/SarSymbol';
+import TaasPageLayout from '../_components/TaasPageLayout';
 
-const TERMS = [24, 36, 48, 60];
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
 
 const offers = [
   {
-    id: 'aljazira',
-    bankAr: 'بنك الجزيرة',
-    bankEn: 'BANK ALJAZIRA',
-    monthly: 'SAR 8,513',
-    apr: '5.29%',
-    tenure: '36 Months',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: 'Lowest monthly payment',
-    feats: ['No processing fee', 'Early settlement available', 'Fast digital journey'],
+    id: 'snb',
+    bankName: 'Saudi National Bank',
+    logo: '/taas/bank-snb-logo.png',
+    apr: '4.89%',
+    monthly: '3,648',
+    tenure: '60 months',
+    totalPayable: '218,880',
+    features: ['No processing fee', 'Early settlement available', 'Free comprehensive insurance'],
+    recommended: true,
   },
   {
     id: 'alinma',
-    bankAr: 'مصرف الإنماء',
-    bankEn: 'alinma bank',
-    monthly: 'SAR 8,742',
-    apr: '5.59%',
-    tenure: '36 Months',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: '',
-    feats: ['No processing fee', 'Flexible payment options', 'Early settlement available'],
+    bankName: 'Alinma Bank',
+    logo: '/taas/bank-alinma-logo.png',
+    apr: '5.19%',
+    monthly: '3,755',
+    tenure: '60 months',
+    totalPayable: '225,300',
+    features: ['Flexible payment options', 'No processing fee', 'Early settlement available'],
+    recommended: false,
   },
   {
-    id: 'snb',
-    bankAr: 'SNB الأهلي',
-    bankEn: 'Saudi National Bank',
-    monthly: 'SAR 8,915',
-    apr: '5.89%',
-    tenure: '36 Months',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: '',
-    feats: ['No processing fee', 'Early settlement available', 'Relationship benefits'],
+    id: 'riyad',
+    bankName: 'Riyad Bank',
+    logo: '/taas/bank-riyad-logo.png',
+    apr: '5.49%',
+    monthly: '3,697',
+    tenure: '60 months',
+    totalPayable: '221,820',
+    features: ['Fast approval', 'Free comprehensive insurance', 'Digital account management'],
+    recommended: false,
   },
 ];
 
 export default function PreliminaryOffersPage() {
-  const { brandName } = useGlobalSettings();
-  const [dark, setDark] = useState(true);
-  const [term, setTerm] = useState(36);
-  const [selected, setSelected] = useState('aljazira');
+  const [selected, setSelected] = useState('snb');
+
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center shrink-0">
+        <img alt="" className="size-[16px]" src="/taas/icon-info.svg" />
+        <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)] whitespace-nowrap" style={saira}>
+          Preliminary offers are based on the details you entered. Final offers are confirmed after identity verification.
+        </p>
+      </div>
+      <div className="flex gap-[12px] items-center shrink-0">
+        <Link
+          href="/ceer/00-explore-financing"
+          className="border border-[rgba(48,63,70,0.2)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden bg-white"
+        >
+          <p className="relative text-[12px] leading-[19px] text-[#1d2d33] uppercase whitespace-nowrap" style={oxanium}>
+            Back
+          </p>
+        </Link>
+        <Link
+          href="/ceer/02-what-happens-next"
+          className="border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-[#003e52] rounded-[8px]" />
+          <p className="relative text-[12px] leading-[19px] text-white uppercase whitespace-pre" style={oxanium}>
+            {'Continue  →'}
+          </p>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens. Please open it on a laptop or desktop.</p>
+    <TaasPageLayout currentStep={1} footer={footer}>
+      {/* Header row: title + register interest button */}
+      <div className="flex gap-[24px] items-start w-full shrink-0">
+        <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0 text-[#1d2d33]">
+          <p className="text-[32px] leading-[36px] uppercase w-full" style={oxanium}>
+            View preliminary offers
+          </p>
+          <p className="text-[16px] leading-[22px] w-full" style={saira}>
+            Based on the details you provided, here are financing options for your EXOBOT SUV. Compare and pick the one that suits you best.
+          </p>
+        </div>
+        <Link
+          href="/ceer/15-register-interest"
+          className="bg-white border-[1.5px] border-[#003e52] flex gap-[6px] items-center justify-center px-[16px] py-[12px] rounded-[8px] shrink-0 min-w-[90px] overflow-hidden"
+        >
+          <p className="text-[12px] leading-[19px] text-[#003e52] uppercase flex-1 min-w-0" style={oxanium}>
+            Register interest offers
+          </p>
+          <img alt="" src="/taas/icon-chevron-right.svg" className="size-[20px] shrink-0" />
+        </Link>
       </div>
 
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-
-          <CeerSidebar backHref="/ceer" />
-
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col gap-4 p-6 overflow-y-auto">
-
-              {/* Logo row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Link href="/ceer/00-explore-financing" className="text-[13px] font-semibold flex items-center gap-1" style={{ color: 'var(--muted)' }}>
-                    ← Back
-                  </Link>
-                  <Link href="/ceer/15-register-interest" className="flex items-center gap-1.5 text-[13.5px] font-semibold tracking-[0.5px] px-4 py-3 rounded-lg" style={{ border: '1.5px solid #0063f5', color: '#0063f5', background: 'transparent' }}>
-                    Register interest offers
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M7.5 15l5-5-5-5" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Filter bar */}
-              <div className="rounded-[14px] px-5 py-4 flex items-center gap-4 flex-wrap" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
-                  <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold"><SarAmount v="SAR 25,000" /></span>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
-                  <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold"><SarAmount v="SAR 3,500" /></span>
-                  <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex items-center gap-2 text-[13px]">
-                  <span>20%</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex gap-1">
-                  {TERMS.map(m => (
-                    <button
-                      key={m}
-                      onClick={() => setTerm(m)}
-                      className="px-3 py-1.5 rounded-lg text-[12px] font-semibold"
-                      style={term === m
-                        ? { background: 'var(--highlight)', border: '1.5px solid var(--blue)', color: 'var(--blue)' }
-                        : { background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--muted)' }
-                      }
-                    >
-                      {m}M
-                    </button>
-                  ))}
-                </div>
-                <div className="ml-auto">
-                  <button className="px-5 py-2 rounded-lg text-[13px] font-bold" style={{ background: 'var(--blue)', color: '#fff' }}>Apply</button>
-                </div>
-              </div>
-
-              {/* Disclaimer */}
-              <div className="rounded-xl px-4 py-3 flex items-start gap-2.5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <span className="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                <p className="text-[12.5px] italic" style={{ color: 'var(--muted)' }}>Preliminary offers are indicative and based on the information provided. Final offers are subject to credit assessment and identity verification.</p>
-              </div>
-
-              {/* Summary bar */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { icon: '🏷️', label: 'Down payment', value: 'SAR 79,800 (20%)' as string },
-                  { icon: '📅', label: 'Financing term', value: `${term} Months` },
-                  { icon: '📄', label: 'Amount to finance', value: 'SAR 319,200' as string },
-                ].map(item => (
-                  <div key={item.label} className="rounded-[12px] px-4 py-3.5 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <span className="text-lg">{item.icon}</span>
-                    <div>
-                      <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                      <div className="text-[14px] font-bold mt-0.5"><SarAmount v={item.value} /></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Offer list */}
-              <div className="flex flex-col gap-3">
-                {offers.map(offer => (
-                  <div
-                    key={offer.id}
-                    onClick={() => setSelected(offer.id)}
-                    className="rounded-[14px] px-5 py-4 cursor-pointer"
-                    style={{ background: 'var(--card)', border: `1.5px solid ${selected === offer.id ? 'var(--blue)' : 'var(--border)'}` }}
-                  >
-                    {offer.badge && (
-                      <div className="inline-flex mb-3 px-3 py-1 rounded-full text-[11px] font-bold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>
-                        {offer.badge}
-                      </div>
-                    )}
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-[16px] font-bold">{offer.bankAr}</div>
-                        {offer.bankEn && <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>{offer.bankEn}</div>}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>Monthly payment from</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}><SarAmount v={offer.monthly} /></div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>APR from</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.apr}</div>
-                        </div>
-                        <button className="px-4 py-2 rounded-lg text-[12px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)', background: 'transparent' }}>
-                          Preliminary offer
-                        </button>
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-3 flex items-center gap-8" style={{ borderTop: '1px solid var(--border)' }}>
-                      <div className="flex flex-col gap-1.5">
-                        {offer.feats.map(f => (
-                          <div key={f} className="text-[12px] flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
-                            <span style={{ color: 'var(--green)' }}>✓</span> {f}
-                          </div>
-                        ))}
-                      </div>
-                      <div className="ml-auto grid grid-cols-3 gap-x-6 text-[12px]">
-                        {[['Tenure', offer.tenure], ['Amount to finance', offer.financed], ['Down payment', offer.dp]].map(([k, v]) => (
-                          <div key={k}>
-                            <div style={{ color: 'var(--muted)' }}>{k}</div>
-                            <div className="font-semibold mt-0.5"><SarAmount v={v} /></div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+      {/* Your details bar */}
+      <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[14px] rounded-[12px] shrink-0 w-full">
+        <div className="flex gap-[32px] items-center shrink-0 text-[#1d2d33] whitespace-nowrap" style={saira}>
+          {[
+            { label: 'Monthly salary', value: '⃁ 25,000' },
+            { label: 'Commitments', value: '⃁ 3,500' },
+            { label: 'Down payment', value: '20% · ⃁ 45,750' },
+            { label: 'Term', value: '60 months' },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex flex-col gap-[2px] items-start shrink-0">
+              <p className="text-[12px] leading-[16px]" style={saira}>{label}</p>
+              <p className="text-[14px] leading-[23px]" style={saira}>{value}</p>
             </div>
-
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--muted)' }}>
-                <span>🛡️</span>
-                Preliminary offers are not a guarantee of financing approval.
-              </div>
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/ceer/02-what-happens-next"
-                  className="px-5 py-3 rounded-xl text-[14px] font-bold"
-                  style={{ border: '1.5px solid var(--border)', color: 'var(--muted)', background: 'transparent' }}
-                >
-                  See the flow
-                </Link>
-                <Link
-                  href="/ceer/03-verify-id"
-                  className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                  style={{ background: 'var(--blue)' }}
-                >
-                  {brandName} →
-                </Link>
-              </div>
-            </div>
-          </div>
-
+          ))}
+        </div>
+        <div className="flex gap-[6px] items-center shrink-0">
+          <img alt="" className="size-[14px]" src="/taas/icon-edit.svg" />
+          <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={saira}>Edit details</p>
         </div>
       </div>
 
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-      `}</style>
-    </div>
+      {/* Count + sort */}
+      <div className="flex items-center justify-between shrink-0 w-full">
+        <p className="text-[16px] leading-[22px] text-[#1d2d33] whitespace-nowrap" style={saira}>
+          3 preliminary offers
+        </p>
+        <div className="flex gap-[6px] items-center shrink-0">
+          <img alt="" className="size-[14px]" src="/taas/icon-sliders.svg" />
+          <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={saira}>
+            Sorted by lowest monthly payment
+          </p>
+        </div>
+      </div>
+
+      {/* Offer rows */}
+      <div className="flex flex-col gap-[14px] items-start shrink-0 w-full">
+        {offers.map((offer) => {
+          const isSelected = selected === offer.id;
+          return (
+            <button
+              key={offer.id}
+              onClick={() => setSelected(offer.id)}
+              className="flex gap-[20px] items-center px-[20px] py-[22px] rounded-[14px] shrink-0 w-full text-left relative"
+              style={isSelected
+                ? { backgroundColor: '#f4f5f3', border: '1.5px solid #003e52' }
+                : { backgroundColor: 'white', border: '1px solid rgba(48,63,70,0.2)' }
+              }
+            >
+              {/* Recommended badge */}
+              {offer.recommended && (
+                <div className="absolute bg-[#003e52] flex items-center left-[18.5px] px-[10px] py-[3px] rounded-[999px] top-[-11.5px]">
+                  <p className="text-[8px] leading-[13px] text-white uppercase whitespace-nowrap font-bold" style={{ fontFamily: "'Oxanium', sans-serif" }}>
+                    RECOMMENDED
+                  </p>
+                </div>
+              )}
+
+              {/* Radio */}
+              <div
+                className="relative rounded-[10px] shrink-0 size-[20px]"
+                style={isSelected
+                  ? { backgroundColor: 'white', border: '6px solid #003e52' }
+                  : { backgroundColor: 'white', border: '1.5px solid rgba(48,63,70,0.2)' }
+                }
+              />
+
+              {/* Bank logo + name */}
+              <div className="flex flex-col gap-[2px] items-start shrink-0 w-[120px]">
+                <div className="h-[44px] overflow-hidden shrink-0 w-[110px] relative">
+                  <img alt={offer.bankName} className="absolute inset-0 max-w-none object-contain size-full" src={offer.logo} />
+                </div>
+                <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={saira}>{offer.bankName}</p>
+              </div>
+
+              {/* Metrics */}
+              <div className="flex flex-1 min-w-0 items-center justify-between whitespace-nowrap">
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={saira}>
+                  <p className="text-[12px] leading-[16px]">APR</p>
+                  <p className="text-[16px] leading-[22px]">{offer.apr}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0">
+                  <p className="text-[12px] leading-[16px] text-[#1d2d33]" style={saira}>Monthly payment</p>
+                  <p className="text-[20px] leading-[21px] text-[#003e52] uppercase" style={oxanium}>⃁ {offer.monthly}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={saira}>
+                  <p className="text-[12px] leading-[16px]">Tenure</p>
+                  <p className="text-[16px] leading-[22px]">{offer.tenure}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={saira}>
+                  <p className="text-[12px] leading-[16px]">Total payable</p>
+                  <p className="text-[16px] leading-[22px]">⃁ {offer.totalPayable}</p>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="flex flex-col gap-[6px] items-start shrink-0 w-[190px]">
+                {offer.features.map((feat) => (
+                  <div key={feat} className="flex gap-[6px] items-center shrink-0">
+                    <div className="overflow-hidden shrink-0 size-[14px] relative">
+                      <div className="absolute bottom-[29.17%] left-[16.67%] right-[16.67%] top-1/4">
+                        <img alt="" className="block max-w-none size-full" src="/taas/icon-check-teal.svg" />
+                      </div>
+                    </div>
+                    <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={saira}>{feat}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* View details */}
+              <div className="flex gap-[4px] items-center shrink-0">
+                <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={saira}>View details</p>
+                <div className="overflow-hidden shrink-0 size-[14px] relative">
+                  <div className="absolute inset-[20.83%]">
+                    <img alt="" className="block max-w-none size-full" src="/taas/icon-arrow-right.svg" />
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </TaasPageLayout>
   );
 }

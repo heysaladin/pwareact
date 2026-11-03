@@ -1,45 +1,10 @@
 export default function CeerLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="[&_h1]:font-ceer [&_h2]:font-ceer [&_h1]:uppercase [&_h2]:uppercase" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
+    <>
       <style>{`
-        .ceer-theme {
-          --bg: #030b10;
-          --card: #0b1315;
-          --border: rgba(189,189,189,0.2);
-          --text: #dadada;
-          --muted: rgba(189,189,189,0.6);
-          --blue: #ff8204;
-          --accent: #ff8204;
-          --heading: #dadada;
-          --highlight: #2e3f46;
-          --green: #ff8204;
-        }
-        [data-theme="dark"] {
-          --bg: #030b10;
-          --card: #0b1315;
-          --border: rgba(189,189,189,0.2);
-          --text: #dadada;
-          --muted: rgba(189,189,189,0.6);
-          --blue: #ff8204;
-          --accent: #ff8204;
-          --heading: #dadada;
-          --highlight: #2e3f46;
-          --green: #ff8204;
-        }
-        [data-theme="light"] {
-          --bg: #030b10;
-          --card: #0b1315;
-          --border: rgba(189,189,189,0.2);
-          --text: #dadada;
-          --muted: rgba(189,189,189,0.6);
-          --blue: #ff8204;
-          --accent: #ff8204;
-          --heading: #dadada;
-          --highlight: #2e3f46;
-          --green: #ff8204;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400&family=Saira:wdth,wght@75..125,100..900&family=Almarai:wght@400&display=swap');
       `}</style>
       {children}
-    </div>
+    </>
   );
 }

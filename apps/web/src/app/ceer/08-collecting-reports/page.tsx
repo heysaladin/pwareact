@@ -1,131 +1,151 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebar from '../_components/CeerSidebar';
-import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import TaasPageLayout from '../_components/TaasPageLayout';
 
-const providers = [
-  { id: 'simah', name: 'SIMAH', desc: 'Credit report & financial obligations', status: 'done' },
-  { id: 'gosi', name: 'GOSI', desc: 'Employment & salary information', status: 'progress' },
-  { id: 'masdr', name: 'MASDR', desc: 'Income verification', status: 'progress' },
-  { id: 'tawakkalna', name: 'Tawakkalna', desc: 'Identity & profile verification', status: 'pending' },
-  { id: 'elm', name: 'ELM', desc: 'Car history', status: 'pending' },
-];
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
 
-export default function CollectingReportsPage() {
-  const { brandName } = useGlobalSettings();
-  const [dark, setDark] = useState(true);
+type ProviderStatus = 'completed' | 'in-progress' | 'pending';
+
+function ProviderRow({
+  name,
+  subtitle,
+  status,
+}: {
+  name: string;
+  subtitle: string;
+  status: ProviderStatus;
+}) {
+  const statusLabel = status === 'completed' ? 'Completed' : status === 'in-progress' ? 'In progress' : 'Pending';
+  const statusColor = status === 'completed' ? '#067647' : status === 'in-progress' ? '#003e52' : '#1d2d33';
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>Screen too small</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>This dashboard is designed for wide screens.</p>
-      </div>
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebar backHref="/ceer/07-personal-details" />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer/07-personal-details" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>← Back</Link>
-              </div>
-
-              <div className="flex gap-6">
-                {/* Left */}
-                <div className="flex-[1.4] min-w-0">
-                  <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)' }}>Collecting your reports</h1>
-                  <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>We are securely connecting with trusted government and financial data providers to retrieve your information.</p>
-
-                  <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <div className="spinning-dot shrink-0" />
-                    <span className="text-[13px]" style={{ color: 'var(--muted)' }}>Connecting to third-party providers... This may take a moment.</span>
-                  </div>
-
-                  <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    {providers.map((p, i) => (
-                      <div key={p.id} className="flex items-center gap-4 px-5 py-4" style={{ borderBottom: i < providers.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                        <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 text-[11px] font-black" style={{ background: 'var(--highlight)', color: 'var(--blue)', border: '1px solid var(--border)' }}>
-                          {p.name.slice(0, 3)}
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-[14px] font-semibold">{p.name}</div>
-                          <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>{p.desc}</div>
-                        </div>
-                        {p.status === 'done' && (
-                          <span className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(29,185,84,0.12)', color: 'var(--green)' }}>
-                            <span className="w-3 h-3 rounded-full flex items-center justify-center text-[8px] font-bold" style={{ background: 'var(--green)', color: '#fff' }}>✓</span>
-                            Completed
-                          </span>
-                        )}
-                        {p.status === 'progress' && (
-                          <span className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1 rounded-full" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>
-                            <span className="mini-spin" />
-                            In progress
-                          </span>
-                        )}
-                        {p.status === 'pending' && (
-                          <span className="text-[12px] font-semibold px-3 py-1 rounded-full" style={{ background: 'var(--bg)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
-                            Pending
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
-                  <div className="rounded-[16px] p-5" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)' }}>What happens next?</h3>
-                    {[
-                      { n: '1', label: 'We collect your information', desc: 'Securely retrieve your data from authorized providers.' },
-                      { n: '2', label: 'We validate your eligibility', desc: 'Your information is analyzed to determine eligible financing offers.' },
-                      { n: '3', label: "You'll see your offers", desc: 'Once complete, compare financing offers tailored to you.' },
-                    ].map(step => (
-                      <div key={step.n} className="flex gap-3 mt-3.5 text-[13px]">
-                        <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>{step.n}</div>
-                        <div>
-                          <div className="font-semibold">{step.label}</div>
-                          <div className="mt-0.5" style={{ color: 'var(--muted)' }}>{step.desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="mt-4 pt-4 flex items-center gap-2 text-[12px]" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
-                      <span>🔒</span> All data is retrieved over encrypted channels and never shared without consent.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                <span>🔔</span> You can safely leave this page, and we&apos;ll notify you when collection is complete.
-              </div>
-              <Link href="/ceer/09-eligibility-offers" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>
-                Continue →
-              </Link>
-            </div>
-          </div>
+    <div className="border-t border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[14px] w-full">
+      <div className="flex gap-[14px] items-center">
+        {/* Status indicator */}
+        <div
+          className="flex items-center justify-center rounded-[14px] size-[28px] shrink-0"
+          style={{ background: status === 'completed' ? '#12b76a' : '#f4f5f3' }}
+        >
+          {status === 'completed' ? (
+            <img alt="" className="size-[14px]" src="/taas/icon-check-14.svg" />
+          ) : status === 'in-progress' ? (
+            <img alt="" className="size-[14px]" src="/taas/icon-loader-sm.svg" />
+          ) : (
+            <img alt="" className="size-[14px]" src="/taas/icon-clock.svg" />
+          )}
+        </div>
+        {/* Provider icon */}
+        <div className="bg-[#f4f5f3] flex items-center justify-center rounded-[12px] size-[36px] shrink-0">
+          <img alt="" className="size-[18px]" src="/taas/icon-db.svg" />
+        </div>
+        <div className="flex flex-col text-[#1d2d33] whitespace-nowrap">
+          <p className="text-[14px] leading-[23px]" style={saira}>{name}</p>
+          <p className="text-[12px] leading-[16px]" style={saira}>{subtitle}</p>
         </div>
       </div>
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        @keyframes spin{to{transform:rotate(360deg);}}
-        .spinning-dot{width:18px;height:18px;border:2.5px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;flex-shrink:0;}
-        .mini-spin{width:10px;height:10px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;}
-      `}</style>
+      <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+        <p className="text-[12px] leading-[16px] whitespace-nowrap" style={{ ...saira, color: statusColor }}>{statusLabel}</p>
+      </div>
     </div>
+  );
+}
+
+function NextStep({ num, title, subtitle }: { num: string; title: string; subtitle: string }) {
+  return (
+    <div className="flex gap-[12px] items-start w-full">
+      <div className="bg-[#f4f5f3] flex items-center justify-center rounded-[14px] size-[28px] shrink-0">
+        <p className="text-[12px] text-[#003e52] leading-[16px] text-center" style={saira}>{num}</p>
+      </div>
+      <div className="flex flex-[1_0_0] flex-col gap-[2px] min-w-px text-[#1d2d33]">
+        <p className="text-[14px] leading-[23px] w-full" style={saira}>{title}</p>
+        <p className="text-[12px] leading-[16px] w-full" style={saira}>{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function CollectingReportsPage() {
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center">
+        <img alt="" className="size-[16px]" src="/taas/icon-lock.svg" />
+        <p className="text-[12px] text-[rgba(48,63,70,0.7)] leading-[16px] whitespace-nowrap" style={saira}>
+          Your information stays encrypted throughout the process.
+        </p>
+      </div>
+      <Link
+        href="/ceer/09-eligibility-offers"
+        className="relative border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]"
+      >
+        <span className="absolute bg-[#003e52] inset-0 rounded-[8px]" aria-hidden />
+        <span className="absolute inset-0 rounded-[8px] shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" aria-hidden />
+        <span className="relative text-[12px] uppercase text-white whitespace-pre" style={oxanium}>{`Continue  →`}</span>
+      </Link>
+    </>
+  );
+
+  return (
+    <TaasPageLayout currentStep={4} footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] w-full">
+        <p className="text-[32px] uppercase text-[#1d2d33] leading-[36px]" style={oxanium}>Collecting your reports</p>
+        <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={saira}>
+          {`We're securely connecting with trusted government and financial providers to collect your credit and employment information.`}
+        </p>
+      </div>
+
+      {/* Main content */}
+      <div className="flex gap-[20px] items-start w-full">
+        {/* Left: providers list */}
+        <div className="border border-[rgba(48,63,70,0.2)] flex flex-[1_0_0] flex-col min-w-px overflow-clip rounded-[14px]">
+          {/* Progress header */}
+          <div className="bg-[#f4f5f3] flex flex-col gap-[12px] p-[20px] w-full">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[12px] items-center">
+                <div className="bg-white flex items-center justify-center rounded-[12px] size-[40px] shrink-0">
+                  <img alt="" className="size-[20px]" src="/taas/icon-loader.svg" />
+                </div>
+                <div className="flex flex-col gap-[2px] text-[#1d2d33] whitespace-nowrap">
+                  <p className="text-[16px] leading-[22px]" style={saira}>Connecting to providers…</p>
+                  <p className="text-[12px] leading-[16px]" style={saira}>This may take up to 60 seconds. Please keep this page open.</p>
+                </div>
+              </div>
+              <p className="text-[14px] text-[#003e52] leading-[23px] whitespace-nowrap" style={saira}>3 of 5 completed</p>
+            </div>
+            {/* Progress bar */}
+            <div className="bg-[#f4f5f3] h-[8px] overflow-clip rounded-[4px] w-full">
+              <div className="bg-[#003e52] h-[8px] rounded-[4px]" style={{ width: '60%' }} />
+            </div>
+          </div>
+
+          {/* Provider rows */}
+          <ProviderRow name="SIMAH" subtitle="Credit report & financial obligations" status="completed" />
+          <ProviderRow name="GOSI" subtitle="Employment & salary information" status="completed" />
+          <ProviderRow name="Masdr" subtitle="Income verification" status="completed" />
+          <ProviderRow name="Tawakkalna" subtitle="Identity & profile verification" status="in-progress" />
+          <ProviderRow name="ELM" subtitle="Asset & ownership history" status="pending" />
+        </div>
+
+        {/* Right: what happens next */}
+        <div className="border border-[rgba(48,63,70,0.2)] flex flex-col gap-[16px] p-[24px] rounded-[14px] shrink-0 w-[300px]">
+          <p className="text-[16px] text-[#1d2d33] leading-[22px] whitespace-nowrap" style={saira}>What happens next?</p>
+          <NextStep
+            num="1"
+            title="We collect your information"
+            subtitle="Securely retrieved from authorized providers."
+          />
+          <NextStep
+            num="2"
+            title="We validate your eligibility"
+            subtitle="Each provider's criteria are applied to your data."
+          />
+          <NextStep
+            num="3"
+            title="You see your final offers"
+            subtitle="Compare and choose the offer that fits you."
+          />
+        </div>
+      </div>
+    </TaasPageLayout>
   );
 }
