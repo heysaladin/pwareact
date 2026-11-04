@@ -1,140 +1,117 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
-import { SarAmount } from '@/components/SarSymbol';
+import Link from 'next/link';
+import TaasPageLayout from '../../_components/TaasPageLayout';
 
-export default function SubmitOrderArPage() {
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+
+const orderDetails = [
+  ['اسم العميل', 'محمد عبدالله الغامدي'],
+  ['رقم الهوية الوطنية', '1082XXXXXXX'],
+  ['رقم الجوال', '+966 5X XXX XXXX'],
+  ['المركبة', 'CEER EXOBOT SUV – Premium AWD 2026'],
+  ['اللون', 'كوانتم جراي'],
+  ['البنك', 'البنك الأهلي السعودي'],
+  ['نسبة الفائدة', '4.89%'],
+  ['الدفعة الشهرية', '3,648 ⃁'],
+  ['الدفعة المقدمة', '45,750 ⃁'],
+  ['مبلغ التمويل', '183,000 ⃁'],
+  ['مدة التمويل', '60 شهرًا'],
+  ['إجمالي المدفوع', '218,880 ⃁'],
+  ['رقم مرجع الطلب', 'AELG-2026-05-18-1123'],
+];
+
+export default function ConfirmOrderArPage() {
   const router = useRouter();
-  const [dark, setDark] = useState(true);
-  const [otp, setOtp] = useState('');
+  const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   function handleSubmit() {
+    if (!agreed || submitting) return;
     setSubmitting(true);
-    setTimeout(() => {
-      router.push('/ceer-ar/13-submit-success');
-    }, 1200);
+    setTimeout(() => router.push('/ceer/ar/13-submit-success'), 1200);
   }
 
-  return (
-    <div data-theme={dark ? 'dark' : 'light'} dir="rtl" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الواجهة مصممة للشاشات العريضة.</p>
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center shrink-0">
+        <img alt="" className="size-[16px]" src="/taas/icon-lock.svg" />
+        <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)]" style={almarai}>
+          معلوماتك مشفرة ولن تُشارك دون موافقتك.
+        </p>
       </div>
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebarAr backHref="/ceer-ar/11-offer-details" backLabel="العودة لتفاصيل العرض" />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="تمول" className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer-ar/11-offer-details" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>رجوع →</Link>
-              </div>
+      <div className="flex gap-[12px] items-center shrink-0">
+        <Link href="/ceer/ar/11-offer-details" className="border border-[rgba(48,63,70,0.2)] flex items-center px-[18px] py-[10px] rounded-[8px] text-[14px] text-[#1d2d33]" style={almarai}>
+          → رجوع
+        </Link>
+        <button
+          onClick={handleSubmit}
+          disabled={!agreed || submitting}
+          className="border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden disabled:opacity-40"
+        >
+          <div className="absolute inset-0 bg-[#003e52] rounded-[8px]" />
+          <p className="relative text-[12px] leading-[19px] text-white uppercase" style={oxanium}>
+            {submitting ? 'جارٍ الإرسال…' : 'تقديم الطلب →'}
+          </p>
+        </button>
+      </div>
+    </>
+  );
 
-              <h1 className="text-[26px] font-extrabold mb-1" style={{ color: 'var(--heading)' }}>تأكيد طلبك</h1>
-              <p className="text-[13px] mb-6" style={{ color: 'var(--muted)' }}>أدخل رمز التحقق المرسل إلى جوالك لإتمام الطلب.</p>
+  return (
+    <TaasPageLayout currentStep={6} lang="AR" footer={footer}>
+      {/* Title */}
+      <div className="flex flex-col gap-[8px] items-start w-full shrink-0">
+        <p className="text-[32px] leading-[36px] uppercase text-[#1d2d33]" style={oxanium}>
+          مراجعة وتأكيد الطلب
+        </p>
+        <p className="text-[16px] leading-[22px] text-[rgba(48,63,70,0.7)]" style={almarai}>
+          يرجى مراجعة جميع التفاصيل بعناية قبل الإرسال. سيبدأ البنك المعالجة عند التقديم.
+        </p>
+      </div>
 
-              <div className="flex gap-6 items-start">
-                {/* Left: OTP form */}
-                <div className="flex flex-col gap-5" style={{ width: 560 }}>
-                  <div className="rounded-[16px] p-6" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <label className="block text-[13px] font-semibold mb-2" style={{ color: 'var(--text)' }}>
-                      رمز التحقق (OTP)
-                    </label>
-                    <div className="flex items-center rounded-[10px] overflow-hidden" style={{ border: '1.5px solid var(--border)', background: 'var(--bg)' }}>
-                      <span className="px-4 text-[18px] shrink-0" style={{ color: 'var(--muted)' }}>🔒</span>
-                      <input
-                        type="text"
-                        value={otp}
-                        onChange={e => setOtp(e.target.value)}
-                        placeholder="١ ٢٣٤ ٥٦٧"
-                        className="flex-1 py-4 bg-transparent text-[20px] font-bold tracking-widest outline-none"
-                        style={{ color: 'var(--text)' }}
-                        dir="ltr"
-                      />
-                    </div>
-                    <p className="mt-2 text-[12px]" style={{ color: 'var(--muted)' }}>نستخدم تشفيراً بمستوى بنكي لحماية معلوماتك.</p>
-
-                    <button
-                      onClick={handleSubmit}
-                      disabled={submitting}
-                      className="mt-6 w-full rounded-[12px] text-[16px] font-bold text-white flex items-center justify-center"
-                      style={{
-                        height: 57,
-                        background: submitting ? 'var(--border)' : 'var(--blue)',
-                        cursor: submitting ? 'not-allowed' : 'pointer',
-                        color: submitting ? 'var(--muted)' : '#fff',
-                      }}
-                    >
-                      {submitting ? 'جارٍ التأكيد…' : 'تأكيد وإنشاء الطلب ←'}
-                    </button>
-                  </div>
-
-                  {/* Security note */}
-                  <div className="rounded-[14px] p-4 flex items-center gap-3" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-[15px]" style={{ background: 'var(--bg)' }}>🛡️</div>
-                    <p className="text-[13px]" style={{ color: 'var(--muted)' }}>طلبك محمي بتشفير بمستوى بنكي.</p>
-                  </div>
-                </div>
-
-                {/* Right: Order summary card */}
-                <div className="flex-1 min-w-0">
-                  <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <div className="px-5 py-4 text-[14px] font-bold" style={{ borderBottom: '1px solid var(--border)', color: 'var(--heading)' }}>ملخص الطلب</div>
-                    {[
-                      ['البنك', 'البنك الأهلي السعودي'],
-                      ['الدفعة الشهرية', 'SAR 3,648' as string],
-                      ['مدة التمويل', '60 شهراً'],
-                      ['مبلغ التمويل', 'SAR 183,000' as string],
-                      ['الدفعة المقدمة', 'SAR 45,750' as string],
-                      ['الإجمالي', 'SAR 218,880' as string],
-                      ['المركبة', 'CEER EXOBOT SUV'],
-                      ['رقم الطلب', 'AELG-2026-05-18-1123'],
-                    ].map(([k, v], i, arr) => (
-                      <div key={k} className="flex justify-between px-5 py-3 text-[13px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                        <span style={{ color: 'var(--muted)' }}>{k}</span>
-                        <span className="font-semibold"><SarAmount v={v} /></span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+      {/* Order details table */}
+      <div className="border border-[rgba(48,63,70,0.2)] overflow-hidden rounded-[14px] w-full shrink-0">
+        <div className="border-b border-[rgba(48,63,70,0.2)] px-[24px] py-[16px]">
+          <p className="text-[20px] leading-[21px] uppercase text-[#1d2d33]" style={oxanium}>تفاصيل الطلب</p>
+        </div>
+        <div className="grid grid-cols-2">
+          {orderDetails.map(([k, v], i) => (
+            <div
+              key={k}
+              className={`flex items-center justify-between px-[24px] py-[12px] ${i % 2 === 0 ? 'border-r border-[rgba(48,63,70,0.2)]' : ''} ${i < orderDetails.length - 2 ? 'border-b border-[rgba(48,63,70,0.2)]' : ''}`}
+            >
+              <p className="text-[14px] leading-[23px] text-[rgba(48,63,70,0.7)]" style={almarai}>{k}</p>
+              <p className="text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>{v}</p>
             </div>
-
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <Link href="/ceer-ar/11-offer-details" className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)' }}>→ العودة للعروض</Link>
-              <div className="flex items-center gap-3">
-                <button className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--border)', color: 'var(--text)', background: 'transparent' }}>حفظ المسودة</button>
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                  style={{ background: submitting ? 'var(--border)' : 'var(--blue)', cursor: submitting ? 'not-allowed' : 'pointer' }}
-                >
-                  {submitting ? 'جارٍ التأكيد…' : 'تأكيد وإنشاء الطلب ←'}
-                </button>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        a{text-decoration:none;}
-      `}</style>
-    </div>
+
+      {/* Declaration */}
+      <div className="border border-[rgba(48,63,70,0.2)] flex flex-col gap-[16px] items-start p-[24px] rounded-[14px] w-full shrink-0">
+        <p className="text-[20px] leading-[21px] uppercase text-[#1d2d33]" style={oxanium}>الإقرار والموافقة</p>
+        <p className="text-[14px] leading-[22px] text-[rgba(48,63,70,0.7)]" style={almarai}>
+          بتقديم هذا الطلب، أؤكد أن جميع المعلومات المقدمة دقيقة وكاملة. أوافق على معالجة البنك الأهلي السعودي لطلبي وفقًا لشروطهم وأحكامهم والأنظمة السعودية المعمول بها. أقر بأن هذا طلب تمويل ملزم يخضع للموافقة الائتمانية النهائية.
+        </p>
+        <label className="flex gap-[12px] items-start cursor-pointer">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={e => setAgreed(e.target.checked)}
+            className="mt-[3px] size-[16px] shrink-0 cursor-pointer accent-[#003e52]"
+          />
+          <p className="text-[14px] leading-[22px] text-[#1d2d33]" style={almarai}>
+            اطلعت على{' '}
+            <a href="#" className="text-[#003e52] underline">الشروط والأحكام</a>،{' '}
+            <a href="#" className="text-[#003e52] underline">الإفصاح عن المنتج</a> و{' '}
+            <a href="#" className="text-[#003e52] underline">جدول الرسوم</a> وأوافق عليها.
+          </p>
+        </label>
+      </div>
+    </TaasPageLayout>
   );
 }

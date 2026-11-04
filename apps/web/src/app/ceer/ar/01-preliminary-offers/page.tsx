@@ -1,246 +1,225 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
-import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
-import { SarAmount } from '@/components/SarSymbol';
+import TaasPageLayout from '../../_components/TaasPageLayout';
 
-const TERMS = [24, 36, 48, 60];
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
 
 const offers = [
   {
-    id: 'aljazira',
-    bankAr: 'بنك الجزيرة',
-    bankEn: 'BANK ALJAZIRA',
-    monthly: 'SAR 8,513',
-    apr: '5.29%',
-    tenure: '36 شهراً',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: 'أقل دفعة شهرية',
-    feats: ['بدون رسوم معالجة', 'تسوية مبكرة متاحة', 'رحلة رقمية سريعة'],
+    id: 'snb',
+    bankName: 'البنك الأهلي السعودي',
+    logo: '/taas/bank-snb-logo.png',
+    apr: '4.89%',
+    monthly: '3,648',
+    tenure: '60 شهرًا',
+    totalPayable: '218,880',
+    features: ['بدون رسوم معالجة', 'تسوية مبكرة متاحة', 'تأمين شامل مجاني'],
+    recommended: true,
   },
   {
     id: 'alinma',
-    bankAr: 'مصرف الإنماء',
-    bankEn: 'alinma bank',
-    monthly: 'SAR 8,742',
-    apr: '5.59%',
-    tenure: '36 شهراً',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: '',
-    feats: ['بدون رسوم معالجة', 'خيارات دفع مرنة', 'تسوية مبكرة متاحة'],
+    bankName: 'مصرف الإنماء',
+    logo: '/taas/bank-alinma-logo.png',
+    apr: '5.19%',
+    monthly: '3,755',
+    tenure: '60 شهرًا',
+    totalPayable: '225,300',
+    features: ['خيارات دفع مرنة', 'بدون رسوم معالجة', 'تسوية مبكرة متاحة'],
+    recommended: false,
   },
   {
-    id: 'snb',
-    bankAr: 'SNB الأهلي',
-    bankEn: 'Saudi National Bank',
-    monthly: 'SAR 8,915',
-    apr: '5.89%',
-    tenure: '36 شهراً',
-    financed: 'SAR 319,200',
-    dp: 'SAR 79,800',
-    badge: '',
-    feats: ['بدون رسوم معالجة', 'تسوية مبكرة متاحة', 'مزايا العلاقة'],
+    id: 'riyad',
+    bankName: 'بنك الرياض',
+    logo: '/taas/bank-riyad-logo.png',
+    apr: '5.49%',
+    monthly: '3,697',
+    tenure: '60 شهرًا',
+    totalPayable: '221,820',
+    features: ['موافقة سريعة', 'تأمين شامل مجاني', 'إدارة حساب رقمية'],
+    recommended: false,
   },
 ];
 
 export default function PreliminaryOffersArPage() {
-  const { brandName } = useGlobalSettings();
-  const [dark, setDark] = useState(true);
-  const [term, setTerm] = useState(36);
-  const [selected, setSelected] = useState('aljazira');
+  const [selected, setSelected] = useState('snb');
+
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center shrink-0">
+        <img alt="" className="size-[16px]" src="/taas/icon-info.svg" />
+        <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)] whitespace-nowrap" style={almarai}>
+          العروض المبدئية مبنية على التفاصيل التي أدخلتها. العروض النهائية تُؤكد بعد التحقق من الهوية.
+        </p>
+      </div>
+      <div className="flex gap-[12px] items-center shrink-0">
+        <Link
+          href="/ceer/ar/00-explore-financing"
+          className="border border-[rgba(48,63,70,0.2)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden bg-white"
+        >
+          <p className="relative text-[12px] leading-[19px] text-[#1d2d33] uppercase whitespace-nowrap" style={oxanium}>
+            رجوع
+          </p>
+        </Link>
+        <Link
+          href="/ceer/ar/02-what-happens-next"
+          className="border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-[#003e52] rounded-[8px]" />
+          <p className="relative text-[12px] leading-[19px] text-white uppercase whitespace-pre" style={oxanium}>
+            {'متابعة  →'}
+          </p>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الصفحة مصممة للشاشات الواسعة. يرجى فتحها على حاسوب محمول أو مكتبي.</p>
+    <TaasPageLayout currentStep={1} lang="AR" footer={footer}>
+      {/* Header row */}
+      <div className="flex gap-[24px] items-start w-full shrink-0">
+        <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0 text-[#1d2d33]">
+          <p className="text-[32px] leading-[36px] uppercase w-full" style={oxanium}>
+            عرض العروض المبدئية
+          </p>
+          <p className="text-[16px] leading-[22px] w-full" style={almarai}>
+            بناءً على التفاصيل التي قدمتها، إليك خيارات تمويل لسيارتك EXOBOT SUV. قارن واختر ما يناسبك.
+          </p>
+        </div>
+        <Link
+          href="/ceer/ar/15-register-interest"
+          className="bg-white border-[1.5px] border-[#003e52] flex gap-[6px] items-center justify-center px-[16px] py-[12px] rounded-[8px] shrink-0 min-w-[90px] overflow-hidden"
+        >
+          <p className="text-[12px] leading-[19px] text-[#003e52] uppercase flex-1 min-w-0" style={oxanium}>
+            تسجيل الاهتمام
+          </p>
+          <img alt="" src="/taas/icon-chevron-right.svg" className="size-[20px] shrink-0" />
+        </Link>
       </div>
 
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-
-          {/* Main content */}
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col gap-4 p-6 overflow-y-auto">
-
-              {/* Logo row */}
-              <div className="flex items-center justify-between">
-                <Link href="/ceer-ar/00-explore-financing" className="text-[13px] font-semibold flex items-center gap-1" style={{ color: 'var(--muted)' }}>
-                  → رجوع
-                </Link>
-                <div className="flex items-center gap-3">
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
-                </div>
-              </div>
-
-              {/* Title */}
-              <div>
-                <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)' }}>عرض العروض الأولية</h1>
-                <p className="mt-1 text-[14px]" style={{ color: 'var(--muted)' }}>راجع العروض الأولية بناءً على التفاصيل التي أدخلتها.</p>
-              </div>
-
-              {/* Filter bar */}
-              <div className="rounded-[14px] px-5 py-4 flex items-center gap-4 flex-wrap" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
-                  <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold">ر.س 25,000</span>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--text)' }}>
-                  <span style={{ color: 'var(--blue)' }}>💼</span>
-                  <span className="font-semibold">ر.س 3,500</span>
-                  <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex items-center gap-2 text-[13px]">
-                  <span>20%</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                </div>
-                <div className="w-px h-5" style={{ background: 'var(--border)' }} />
-                <div className="flex gap-1">
-                  {TERMS.map(m => (
-                    <button
-                      key={m}
-                      onClick={() => setTerm(m)}
-                      className="px-3 py-1.5 rounded-lg text-[12px] font-semibold"
-                      style={term === m
-                        ? { background: 'var(--highlight)', border: '1.5px solid var(--blue)', color: 'var(--blue)' }
-                        : { background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--muted)' }
-                      }
-                    >
-                      {m}ش
-                    </button>
-                  ))}
-                </div>
-                <div className="mr-auto">
-                  <button className="px-5 py-2 rounded-lg text-[13px] font-bold" style={{ background: 'var(--blue)', color: '#fff' }}>تطبيق</button>
-                </div>
-              </div>
-
-              {/* Disclaimer */}
-              <div className="rounded-xl px-4 py-3 flex items-start gap-2.5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <span className="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                <p className="text-[12.5px] italic" style={{ color: 'var(--muted)' }}>العروض الأولية استرشادية وتستند إلى المعلومات المُقدَّمة. العروض النهائية تخضع لتقييم الائتمان والتحقق من الهوية.</p>
-              </div>
-
-              {/* Summary bar */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { icon: '🏷️', label: 'الدفعة المقدمة', value: 'SAR 79,800 (20%)' as string },
-                  { icon: '📅', label: 'مدة التمويل', value: `${term} شهراً` },
-                  { icon: '📄', label: 'مبلغ التمويل', value: 'SAR 319,200' as string },
-                ].map(item => (
-                  <div key={item.label} className="rounded-[12px] px-4 py-3.5 flex items-center gap-3" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <span className="text-lg">{item.icon}</span>
-                    <div>
-                      <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{item.label}</div>
-                      <div className="text-[14px] font-bold mt-0.5"><SarAmount v={item.value} /></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Offer list */}
-              <div className="flex flex-col gap-3">
-                {offers.map(offer => (
-                  <div
-                    key={offer.id}
-                    onClick={() => setSelected(offer.id)}
-                    className="rounded-[14px] px-5 py-4 cursor-pointer"
-                    style={{ background: 'var(--card)', border: `1.5px solid ${selected === offer.id ? 'var(--blue)' : 'var(--border)'}` }}
-                  >
-                    {offer.badge && (
-                      <div className="inline-flex mb-3 px-3 py-1 rounded-full text-[11px] font-bold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>
-                        {offer.badge}
-                      </div>
-                    )}
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-[16px] font-bold">{offer.bankAr}</div>
-                        {offer.bankEn && <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>{offer.bankEn}</div>}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>الدفعة الشهرية من</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}><SarAmount v={offer.monthly} /></div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[11px]" style={{ color: 'var(--muted)' }}>نسبة الفائدة</div>
-                          <div className="text-[18px] font-extrabold mt-0.5" style={{ color: 'var(--blue)' }}>{offer.apr}</div>
-                        </div>
-                        <button className="px-4 py-2 rounded-lg text-[12px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)', background: 'transparent' }}>
-                          عرض أولي
-                        </button>
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-3 flex items-center gap-8" style={{ borderTop: '1px solid var(--border)' }}>
-                      <div className="flex flex-col gap-1.5">
-                        {offer.feats.map(f => (
-                          <div key={f} className="text-[12px] flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
-                            <span style={{ color: 'var(--green)' }}>✓</span> {f}
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mr-auto grid grid-cols-3 gap-x-6 text-[12px]">
-                        {[['المدة', offer.tenure], ['مبلغ التمويل', offer.financed], ['الدفعة المقدمة', offer.dp]].map(([k, v]) => (
-                          <div key={k}>
-                            <div style={{ color: 'var(--muted)' }}>{k}</div>
-                            <div className="font-semibold mt-0.5"><SarAmount v={v} /></div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+      {/* Your details bar */}
+      <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[14px] rounded-[12px] shrink-0 w-full">
+        <div className="flex gap-[32px] items-center shrink-0 text-[#1d2d33] whitespace-nowrap" style={almarai}>
+          {[
+            { label: 'الراتب الشهري', value: '25,000 ⃁' },
+            { label: 'الالتزامات', value: '3,500 ⃁' },
+            { label: 'الدفعة المقدمة', value: '20% · 45,750 ⃁' },
+            { label: 'المدة', value: '60 شهرًا' },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex flex-col gap-[2px] items-start shrink-0">
+              <p className="text-[12px] leading-[16px]" style={almarai}>{label}</p>
+              <p className="text-[14px] leading-[23px]" style={almarai}>{value}</p>
             </div>
-
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--muted)' }}>
-                <span>🛡️</span>
-                العروض الأولية ليست ضماناً للموافقة على التمويل.
-              </div>
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/ceer-ar/02-what-happens-next"
-                  className="px-5 py-3 rounded-xl text-[14px] font-bold"
-                  style={{ border: '1.5px solid var(--border)', color: 'var(--muted)', background: 'transparent' }}
-                >
-                  شاهد مسار العملية
-                </Link>
-                <Link
-                  href="/ceer-ar/03-verify-id"
-                  className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                  style={{ background: 'var(--blue)' }}
-                >
-                  تمول ←
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <CeerSidebarAr backHref="/ceer-ar" />
-
+          ))}
+        </div>
+        <div className="flex gap-[6px] items-center shrink-0">
+          <img alt="" className="size-[14px]" src="/taas/icon-edit.svg" />
+          <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={almarai}>تعديل التفاصيل</p>
         </div>
       </div>
 
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-      `}</style>
-    </div>
+      {/* Count + sort */}
+      <div className="flex items-center justify-between shrink-0 w-full">
+        <p className="text-[16px] leading-[22px] text-[#1d2d33] whitespace-nowrap" style={almarai}>
+          3 عروض مبدئية
+        </p>
+        <div className="flex gap-[6px] items-center shrink-0">
+          <img alt="" className="size-[14px]" src="/taas/icon-sliders.svg" />
+          <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={almarai}>
+            مرتبة حسب أقل دفعة شهرية
+          </p>
+        </div>
+      </div>
+
+      {/* Offer rows */}
+      <div className="flex flex-col gap-[14px] items-start shrink-0 w-full">
+        {offers.map((offer) => {
+          const isSelected = selected === offer.id;
+          return (
+            <button
+              key={offer.id}
+              onClick={() => setSelected(offer.id)}
+              className="flex gap-[20px] items-center px-[20px] py-[22px] rounded-[14px] shrink-0 w-full text-right relative"
+              style={isSelected
+                ? { backgroundColor: '#f4f5f3', border: '1.5px solid #003e52' }
+                : { backgroundColor: 'white', border: '1px solid rgba(48,63,70,0.2)' }
+              }
+            >
+              {/* Recommended badge */}
+              {offer.recommended && (
+                <div className="absolute bg-[#003e52] flex items-center end-[18.5px] px-[10px] py-[3px] rounded-[999px] top-[-11.5px]">
+                  <p className="text-[8px] leading-[13px] text-white uppercase whitespace-nowrap font-bold" style={{ fontFamily: "'Oxanium', sans-serif" }}>
+                    موصى به
+                  </p>
+                </div>
+              )}
+
+              {/* Radio */}
+              <div
+                className="relative rounded-[10px] shrink-0 size-[20px]"
+                style={isSelected
+                  ? { backgroundColor: 'white', border: '6px solid #003e52' }
+                  : { backgroundColor: 'white', border: '1.5px solid rgba(48,63,70,0.2)' }
+                }
+              />
+
+              {/* Bank logo + name */}
+              <div className="flex flex-col gap-[2px] items-start shrink-0 w-[120px]">
+                <div className="h-[44px] overflow-hidden shrink-0 w-[110px] relative">
+                  <img alt={offer.bankName} className="absolute inset-0 max-w-none object-contain size-full" src={offer.logo} />
+                </div>
+                <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={almarai}>{offer.bankName}</p>
+              </div>
+
+              {/* Metrics */}
+              <div className="flex flex-1 min-w-0 items-center justify-between whitespace-nowrap">
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={almarai}>
+                  <p className="text-[12px] leading-[16px]">نسبة الفائدة</p>
+                  <p className="text-[16px] leading-[22px]" style={saira}>{offer.apr}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0">
+                  <p className="text-[12px] leading-[16px] text-[#1d2d33]" style={almarai}>الدفعة الشهرية</p>
+                  <p className="text-[20px] leading-[21px] text-[#003e52] uppercase" style={oxanium}>⃁ {offer.monthly}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={almarai}>
+                  <p className="text-[12px] leading-[16px]">المدة</p>
+                  <p className="text-[16px] leading-[22px]">{offer.tenure}</p>
+                </div>
+                <div className="flex flex-col gap-[4px] items-start shrink-0 text-[#1d2d33]" style={almarai}>
+                  <p className="text-[12px] leading-[16px]">إجمالي المدفوع</p>
+                  <p className="text-[16px] leading-[22px]">⃁ {offer.totalPayable}</p>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="flex flex-col gap-[6px] items-start shrink-0 w-[190px]">
+                {offer.features.map((feat) => (
+                  <div key={feat} className="flex gap-[6px] items-center shrink-0">
+                    <div className="overflow-hidden shrink-0 size-[14px] relative">
+                      <div className="absolute bottom-[29.17%] left-[16.67%] right-[16.67%] top-1/4">
+                        <img alt="" className="block max-w-none size-full" src="/taas/icon-check-teal.svg" />
+                      </div>
+                    </div>
+                    <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={almarai}>{feat}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* View details */}
+              <div className="flex gap-[4px] items-center shrink-0">
+                <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={almarai}>عرض التفاصيل</p>
+                <div className="overflow-hidden shrink-0 size-[14px] relative">
+                  <div className="absolute inset-[20.83%]">
+                    <img alt="" className="block max-w-none size-full" style={{ transform: 'scaleX(-1)' }} src="/taas/icon-arrow-right.svg" />
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </TaasPageLayout>
   );
 }

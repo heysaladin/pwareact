@@ -1,126 +1,216 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
-import { SarAmount } from '@/components/SarSymbol';
+import TaasPageLayout from '../../_components/TaasPageLayout';
 
-const banks = [
-  { id: 'snb', ar: 'SNB الأهلي', en: 'البنك الأهلي السعودي', apr: '4.69%', monthly: 'SAR 3,648', total: 'SAR 218,880', dp: 'SAR 45,750', tenure: '60 شهراً', fee: 'SAR 0', settlement: true, insurance: true, digital: 'متقدمة', rating: '4.8' },
-  { id: 'alinma', ar: 'مصرف الإنماء', en: 'alinma bank', apr: '4.29%', monthly: 'SAR 3,564', total: 'SAR 213,840', dp: 'SAR 45,750', tenure: '60 شهراً', fee: 'SAR 500', settlement: true, insurance: false, digital: 'قياسية', rating: '4.5' },
-  { id: 'riyad', ar: 'بنك الرياض', en: 'Riyad Bank', apr: '4.99%', monthly: 'SAR 3,721', total: 'SAR 223,260', dp: 'SAR 45,750', tenure: '60 شهراً', fee: 'SAR 0', settlement: false, insurance: true, digital: 'قياسية', rating: '4.3' },
-  { id: 'tamweel', ar: 'تمويل الأولى', en: 'Tamweel Aloula', apr: '5.19%', monthly: 'SAR 3,775', total: 'SAR 226,500', dp: 'SAR 45,750', tenure: '60 شهراً', fee: 'SAR 750', settlement: true, insurance: false, digital: 'قياسية', rating: '4.1' },
-];
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+
+const bankSnb = '/taas/bank-snb.png';
+const bankAlinma = '/taas/bank-alinma.png';
+const bankRiyad = '/taas/bank-riyad.png';
+const iconCheckTeal = '/taas/icon-check-teal.svg';
+const iconCheckCircleGreen = '/taas/icon-check-circle-green.svg';
+const iconXCircle = '/taas/icon-x-circle.svg';
+const iconStar = '/taas/icon-star.svg';
+
+function BoolCell({ value, bg }: { value: boolean; bg?: boolean }) {
+  return (
+    <div className={`flex flex-1 items-center min-w-0 px-[16px] py-[10px] relative${bg ? ' bg-[#f4f5f3]' : ''}`}>
+      <div className="flex gap-[6px] items-center shrink-0">
+        <div className="flex items-center justify-center relative rounded-[10px] shrink-0 size-[20px]" style={{ backgroundColor: '#f4f5f3' }}>
+          <div className="overflow-clip relative shrink-0 size-[12px]">
+            {value ? (
+              <div className="absolute bottom-[29.17%] left-[16.67%] right-[16.67%] top-1/4">
+                <div className="absolute inset-[-18.18%_-12.5%]">
+                  <img alt="" className="block max-w-none size-full" src={iconCheckCircleGreen} />
+                </div>
+              </div>
+            ) : (
+              <div className="absolute inset-1/4">
+                <div className="absolute inset-[-16.67%]">
+                  <img alt="" className="block max-w-none size-full" src={iconXCircle} />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <p className="text-[14px] leading-[23px] whitespace-nowrap" style={{ ...almarai, color: value ? '#067647' : 'rgba(48,63,70,0.7)' }}>
+          {value ? 'نعم' : 'لا'}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function CompareOffersArPage() {
-  const [dark, setDark] = useState(true);
-  const [selected, setSelected] = useState('snb');
+  const footer = (
+    <>
+      <Link href="/ceer/ar/09-eligibility-offers" className="text-[#003e52] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>
+        العودة للعروض
+      </Link>
+      <div className="flex gap-[12px] items-center shrink-0">
+        <button
+          className="relative flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px]"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid rgba(48,63,70,0.2)',
+            boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05), inset 0px 0px 0px 1px rgba(10,13,18,0.18), inset 0px -2px 0px 0px rgba(10,13,18,0.05)',
+          }}
+        >
+          <p className="text-[#1d2d33] text-[12px] leading-[19px] uppercase whitespace-nowrap" style={oxanium}>حفظ المقارنة</p>
+        </button>
+        <Link
+          href="/ceer/ar/11-offer-details"
+          className="relative flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px]"
+          style={{
+            backgroundColor: '#003e52',
+            border: '2px solid rgba(255,255,255,0.12)',
+            boxShadow: '0px 1px 2px 0px rgba(16,24,40,0.05), inset 0px 0px 0px 1px rgba(10,13,18,0.18), inset 0px -2px 0px 0px rgba(10,13,18,0.05)',
+          }}
+        >
+          <p className="text-white text-[12px] leading-[19px] uppercase whitespace-pre" style={oxanium}>{`إنشاء طلب  →`}</p>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} dir="rtl" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الواجهة مصممة للشاشات العريضة.</p>
+    <TaasPageLayout currentStep={5} lang="AR" footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] items-start shrink-0 text-[#1d2d33] w-full">
+        <p className="text-[32px] leading-[36px] uppercase w-full" style={oxanium}>قارن واختر أفضل عرض</p>
+        <p className="text-[16px] leading-[22px] w-full" style={almarai}>
+          قارن عروض البنوك الشريكة جنبًا إلى جنب واختر الأنسب لك.
+        </p>
       </div>
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebarAr backHref="/ceer-ar/09-eligibility-offers" />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="تمول" className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer-ar/09-eligibility-offers" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>رجوع →</Link>
-              </div>
 
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h1 className="text-[26px] font-extrabold" style={{ color: 'var(--heading)' }}>قارن واختر أفضل عرض لك</h1>
-                  <p className="text-[13px] mt-0.5" style={{ color: 'var(--muted)' }}>قارن عروض التمويل من شركائنا الموثوقين واختر الأنسب لك.</p>
-                </div>
-                <button className="text-[12px] font-semibold" style={{ color: 'var(--blue)', background: 'none', border: 'none', cursor: 'pointer' }}>مسح الاختيار</button>
-              </div>
-              <p className="text-[12px] mb-4" style={{ color: 'var(--muted)' }}>مقارنة حتى 4 عروض</p>
-
-              {/* Comparison table */}
-              <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                {/* Bank header row */}
-                <div className="grid" style={{ gridTemplateColumns: '180px repeat(4, 1fr)', borderBottom: '1px solid var(--border)' }}>
-                  <div className="px-4 py-3" />
-                  {banks.map(b => (
-                    <div key={b.id} className="px-3 py-3 flex flex-col items-center gap-2 text-center" style={{ borderRight: '1px solid var(--border)' }}>
-                      <div className="text-[14px] font-bold">{b.ar}</div>
-                      <div className="text-[11px]" style={{ color: 'var(--muted)' }}>{b.en}</div>
-                      <button
-                        onClick={() => setSelected(b.id)}
-                        className="px-4 py-1.5 rounded-full text-[12px] font-bold"
-                        style={{ background: selected === b.id ? 'var(--blue)' : 'transparent', color: selected === b.id ? '#fff' : 'var(--blue)', border: `1.5px solid var(--blue)` }}
-                      >
-                        {selected === b.id ? '✓ محدد' : 'اختر'}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Section header */}
-                <div className="px-4 py-2 text-[11px] font-bold uppercase tracking-wider" style={{ background: 'var(--bg)', color: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                  التفاصيل الرئيسية
-                </div>
-
-                {/* Rows */}
-                {[
-                  { label: 'نسبة الفائدة السنوية', key: 'apr', blue: true },
-                  { label: 'الدفعة الشهرية', key: 'monthly' },
-                  { label: 'إجمالي المستحق', key: 'total' },
-                  { label: 'الدفعة المقدمة', key: 'dp' },
-                  { label: 'مدة التمويل', key: 'tenure' },
-                  { label: 'رسوم المعالجة', key: 'fee' },
-                  { label: 'ميزة التسوية المبكرة', key: 'settlement', bool: true },
-                  { label: 'تأمين شامل مجاني', key: 'insurance', bool: true },
-                  { label: 'الخدمات الرقمية', key: 'digital' },
-                  { label: 'تقييم العملاء', key: 'rating', star: true },
-                ].map((row) => (
-                  <div key={row.label} className="grid" style={{ gridTemplateColumns: '180px repeat(4, 1fr)', borderBottom: '1px solid var(--border)' }}>
-                    <div className="px-4 py-3 text-[12.5px] font-semibold flex items-center" style={{ color: 'var(--muted)' }}>{row.label}</div>
-                    {banks.map(b => {
-                      const val = b[row.key as keyof typeof b];
-                      return (
-                        <div key={b.id} className="px-3 py-3 flex items-center justify-center text-[13px] font-semibold" style={{ borderRight: '1px solid var(--border)', color: row.blue ? 'var(--blue)' : 'var(--text)' }}>
-                          {row.bool
-                            ? <span style={{ color: val ? 'var(--green)' : 'var(--muted)' }}>{val ? '✓ نعم' : '✕ لا'}</span>
-                            : row.star
-                            ? <span>★ {val}</span>
-                            : <span><SarAmount v={String(val)} /></span>
-                          }
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
+      {/* Comparison table */}
+      <div
+        className="flex flex-col items-start overflow-clip relative rounded-[14px] shrink-0 w-full"
+        style={{ border: '1px solid rgba(48,63,70,0.2)' }}
+      >
+        {/* Header row */}
+        <div className="flex items-start relative shrink-0 w-full">
+          <div className="flex flex-col gap-[4px] items-start p-[16px] relative shrink-0 w-[240px] whitespace-nowrap">
+            <p className="text-[#1d2d33] text-[14px] leading-[23px]" style={almarai}>التفاصيل الرئيسية</p>
+            <p className="text-[#003e52] text-[12px] leading-[16px]" style={almarai}>إلغاء التحديد</p>
+          </div>
+          {/* SNB — selected / recommended */}
+          <div className="bg-[#f4f5f3] flex flex-1 flex-col gap-[8px] items-start min-w-0 p-[16px] relative">
+            <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] relative rounded-[999px] shrink-0">
+              <p className="text-[#003e52] text-[12px] leading-[16px] whitespace-nowrap" style={almarai}>موصى به</p>
+            </div>
+            <div className="h-[36px] overflow-clip relative shrink-0 w-[90px]">
+              <div className="absolute inset-[7%_0.18%_27.08%_-0.18%]">
+                <img alt="SNB logo" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={bankSnb} />
               </div>
             </div>
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <Link href="/ceer-ar/09-eligibility-offers" className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--blue)', color: 'var(--blue)' }}>→ العودة للعروض</Link>
-              <div className="flex items-center gap-3">
-                <button className="px-5 py-3 rounded-xl text-[14px] font-bold" style={{ border: '1.5px solid var(--border)', color: 'var(--text)', background: 'transparent' }}>حفظ المقارنة</button>
-                <Link href="/ceer-ar/12-submit-order" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>إنشاء طلب ←</Link>
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>البنك الأهلي السعودي</p>
+            <div
+              className="flex gap-[6px] items-center px-[14px] py-[6px] relative rounded-[8px] shrink-0"
+              style={{ backgroundColor: '#003e52', border: '1px solid #003e52' }}
+            >
+              <div className="overflow-clip relative shrink-0 size-[12px]">
+                <div className="absolute bottom-[29.17%] left-[16.67%] right-[16.67%] top-1/4">
+                  <div className="absolute inset-[-18.18%_-12.5%]">
+                    <img alt="" className="block max-w-none size-full" src={iconCheckTeal} />
+                  </div>
+                </div>
               </div>
+              <p className="text-white text-[12px] leading-[16px] whitespace-nowrap" style={almarai}>مختار</p>
+            </div>
+          </div>
+          {/* Alinma */}
+          <div className="flex flex-1 flex-col gap-[8px] items-start min-w-0 p-[16px] relative">
+            <div className="h-[20px] relative shrink-0 w-[100px]" />
+            <div className="h-[36px] overflow-clip relative shrink-0 w-[90px]">
+              <img alt="Alinma logo" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={bankAlinma} style={{ transform: 'translate(-50%,-50%)', left: '50%', top: '50%', width: '86.76px', height: '32.4px' }} />
+            </div>
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>مصرف الإنماء</p>
+            <div
+              className="flex items-center px-[14px] py-[6px] relative rounded-[8px] shrink-0"
+              style={{ backgroundColor: '#ffffff', border: '1px solid rgba(48,63,70,0.2)' }}
+            >
+              <p className="text-[#1d2d33] text-[12px] leading-[16px] whitespace-nowrap" style={almarai}>اختر</p>
+            </div>
+          </div>
+          {/* Riyad */}
+          <div className="flex flex-1 flex-col gap-[8px] items-start min-w-0 p-[16px] relative">
+            <div className="h-[20px] relative shrink-0 w-[100px]" />
+            <div className="h-[36px] overflow-clip relative shrink-0 w-[90px]">
+              <img alt="Riyad Bank logo" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={bankRiyad} />
+            </div>
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>بنك الرياض</p>
+            <div
+              className="flex items-center px-[14px] py-[6px] relative rounded-[8px] shrink-0"
+              style={{ backgroundColor: '#ffffff', border: '1px solid rgba(48,63,70,0.2)' }}
+            >
+              <p className="text-[#1d2d33] text-[12px] leading-[16px] whitespace-nowrap" style={almarai}>اختر</p>
             </div>
           </div>
         </div>
+
+        {[
+          { label: 'نسبة الفائدة (ثابتة)', values: ['4.89%', '5.19%', '5.49%'], isNum: true },
+          { label: 'الدفعة الشهرية', values: ['⃁ 3,648', '⃁ 3,755', '⃁ 3,697'], isNum: true, accent: true },
+          { label: 'إجمالي المدفوع', values: ['⃁ 218,880', '⃁ 225,300', '⃁ 221,820'], isNum: true },
+          { label: 'مبلغ التمويل', values: ['⃁ 183,000', '⃁ 183,000', '⃁ 183,000'], isNum: true },
+          { label: 'مدة التمويل', values: ['60 شهرًا', '60 شهرًا', '60 شهرًا'], isNum: false },
+          { label: 'رسوم المعالجة', values: ['⃁ 0', '⃁ 500', '⃁ 0'], isNum: true },
+        ].map(({ label, values, isNum, accent }) => (
+          <div key={label} className="flex items-center relative shrink-0 w-full" style={{ borderTop: '1px solid rgba(48,63,70,0.2)' }}>
+            <div className="flex items-center px-[16px] py-[10px] relative shrink-0 w-[240px]">
+              <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>{label}</p>
+            </div>
+            {values.map((v, i) => (
+              <div key={i} className={`${i === 0 ? 'bg-[#f4f5f3] ' : ''}flex flex-1 items-center min-w-0 px-[16px] py-[10px] relative`}>
+                <p className="text-[14px] leading-[23px] whitespace-nowrap" style={{ ...(isNum ? saira : almarai), color: accent ? '#003e52' : '#1d2d33' }}>{v}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* Early settlement */}
+        <div className="flex items-center relative shrink-0 w-full" style={{ borderTop: '1px solid rgba(48,63,70,0.2)' }}>
+          <div className="flex items-center px-[16px] py-[10px] relative shrink-0 w-[240px]">
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>التسوية المبكرة</p>
+          </div>
+          <BoolCell value={true} bg />
+          <BoolCell value={true} />
+          <BoolCell value={false} />
+        </div>
+
+        {/* Free insurance */}
+        <div className="flex items-center relative shrink-0 w-full" style={{ borderTop: '1px solid rgba(48,63,70,0.2)' }}>
+          <div className="flex items-center px-[16px] py-[10px] relative shrink-0 w-[240px]">
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>تأمين شامل مجاني</p>
+          </div>
+          <BoolCell value={true} bg />
+          <BoolCell value={false} />
+          <BoolCell value={true} />
+        </div>
+
+        {/* Rating */}
+        <div className="flex items-center relative shrink-0 w-full" style={{ borderTop: '1px solid rgba(48,63,70,0.2)' }}>
+          <div className="flex items-center px-[16px] py-[10px] relative shrink-0 w-[240px]">
+            <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={almarai}>تقييم العملاء</p>
+          </div>
+          {[{ rating: '4.8', bg: true }, { rating: '4.5', bg: false }, { rating: '4.3', bg: false }].map(({ rating, bg }) => (
+            <div key={rating} className={`flex flex-1 items-center min-w-0 px-[16px] py-[10px] relative${bg ? ' bg-[#f4f5f3]' : ''}`}>
+              <div className="flex gap-[4px] items-center shrink-0">
+                <div className="overflow-clip relative shrink-0 size-[14px]">
+                  <div className="absolute inset-[8.33%_8.33%_12.5%_8.33%]">
+                    <div className="absolute inset-[-9.02%_-8.57%]">
+                      <img alt="" className="block max-w-none size-full" src={iconStar} />
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[#1d2d33] text-[14px] leading-[23px] whitespace-nowrap" style={saira}>{rating}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        a{text-decoration:none;}
-      `}</style>
-    </div>
+    </TaasPageLayout>
   );
 }

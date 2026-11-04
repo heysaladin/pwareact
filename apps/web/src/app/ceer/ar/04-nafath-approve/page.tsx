@@ -1,173 +1,188 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
-import { useGlobalSettings } from '@/contexts/GlobalSettingsContext';
+import TaasPageLayout from '../../_components/TaasPageLayout';
+
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
 
 export default function NafathApproveArPage() {
-  const { brandName } = useGlobalSettings();
-  const [dark, setDark] = useState(true);
   const [secs, setSecs] = useState(162);
+  const [resendSecs, setResendSecs] = useState(42);
 
   useEffect(() => {
-    const t = setInterval(() => setSecs(s => s > 0 ? s - 1 : 0), 1000);
+    const t = setInterval(() => {
+      setSecs((s) => (s > 0 ? s - 1 : 0));
+      setResendSecs((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
     return () => clearInterval(t);
   }, []);
 
   const mins = String(Math.floor(secs / 60)).padStart(2, '0');
   const ss = String(secs % 60).padStart(2, '0');
+  const rMins = String(Math.floor(resendSecs / 60)).padStart(2, '0');
+  const rSecs = String(resendSecs % 60).padStart(2, '0');
+
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center shrink-0">
+        <div className="overflow-hidden shrink-0 size-[14px] relative">
+          <div className="absolute inset-[12.5%_12.5%_12.47%_12.5%]">
+            <img alt="" className="block max-w-none size-full" src="/taas/icon-refresh.svg" />
+          </div>
+        </div>
+        <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-pre" style={almarai}>
+          {`إعادة الإرسال (${rMins}:${rSecs})   ·   تغيير الهوية / الإقامة`}
+        </p>
+      </div>
+      <div className="flex gap-[12px] items-center shrink-0">
+        <Link
+          href="/ceer/ar/03-verify-id"
+          className="border border-[rgba(48,63,70,0.2)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden bg-white"
+        >
+          <p className="relative text-[12px] leading-[19px] text-[#1d2d33] uppercase whitespace-nowrap" style={oxanium}>
+            إلغاء
+          </p>
+        </Link>
+        <Link
+          href="/ceer/ar/05-mobile-verification"
+          className="border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-[#003e52] rounded-[8px]" />
+          <p className="relative text-[12px] leading-[19px] text-white uppercase whitespace-pre" style={oxanium}>
+            {'متابعة  →'}
+          </p>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الصفحة مصممة للشاشات الواسعة.</p>
+    <TaasPageLayout currentStep={2} lang="AR" footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] items-start w-full shrink-0 text-[#1d2d33]">
+        <p className="text-[32px] leading-[36px] uppercase w-full" style={oxanium}>
+          اعتمد هويتك في نفاذ
+        </p>
+        <p className="text-[16px] leading-[22px] w-full" style={almarai}>
+          أرسلنا طلب تحقق آمن إلى تطبيق نفاذ. اعتمده باستخدام الرقم أدناه.
+        </p>
       </div>
 
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-
-          {/* Main content */}
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-
-              {/* Logo row */}
-              <div className="flex items-center justify-between mb-5">
-                <Link href="/ceer-ar/03-verify-id" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>→ رجوع</Link>
-                <div className="flex items-center gap-3">
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt={brandName} className="h-8 w-auto" />
-                </div>
-              </div>
-
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)' }}>وافق على هويتك في نفاذ</h1>
-              <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>تم إرسال طلب تحقق آمن إلى تطبيق نفاذ الخاص بك.</p>
-
-              {/* Verified ID bar */}
-              <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0" style={{ background: 'var(--green)', color: '#fff' }}>✓</span>
-                <span className="text-[13px]" style={{ color: 'var(--muted)' }}>تم التحقق من الهوية الوطنية / الإقامة</span>
-                <span className="mr-auto font-bold text-[13px]">١ •••• •••• ٣٤</span>
-              </div>
-
-              <div className="flex gap-6">
-                {/* Left: verification code + instructions */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
-
-                  {/* Code card */}
-                  <div className="rounded-[16px] p-6 flex flex-col items-center text-center" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <p className="text-[13px]" style={{ color: 'var(--muted)' }}>رقم التحقق</p>
-                    <div className="mt-4 flex items-center gap-8">
-                      <div
-                        className="w-[110px] h-[88px] rounded-[14px] flex items-center justify-center text-[52px] font-extrabold"
-                        style={{ border: '2px solid var(--blue)', color: 'var(--blue)', background: 'var(--highlight)' }}
-                      >
-                        67
-                      </div>
-                      <div className="text-right">
-                        <div className="text-[22px] font-extrabold">{mins}:{ss}</div>
-                        <div className="text-[12px] mt-0.5" style={{ color: 'var(--muted)' }}>الوقت المتبقي</div>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 w-full text-[14px] font-semibold" style={{ borderTop: '1px solid var(--border)', color: '#f5a623' }}>
-                      ⏳ في انتظار موافقتك
-                    </div>
-                  </div>
-
-                  {/* Instructions */}
-                  <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[15px] font-bold mb-4" style={{ color: 'var(--heading)' }}>كيفية الموافقة</h3>
-                    <ol className="flex flex-col gap-3">
-                      {[
-                        'افتح تطبيق نفاذ',
-                        'راجع طلب التحقق من الهوية',
-                        ['اختر الرقم المطابق', '67'],
-                        'وافق على الطلب',
-                        'عُد بعد تأكيد التحقق',
-                      ].map((step, i) => (
-                        <li key={i} className="flex items-center gap-3 text-[13.5px]">
-                          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>{i + 1}</div>
-                          {Array.isArray(step)
-                            ? <span>{step[0]} <strong style={{ color: 'var(--blue)' }}>{step[1]}</strong></span>
-                            : <span>{step}</span>
-                          }
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-
-                  {/* Action links */}
-                  <div className="flex items-center gap-4 text-[13px] font-semibold flex-wrap">
-                    <button className="cursor-pointer" style={{ color: 'var(--blue)', background: 'none', border: 'none' }}>↻ إعادة إرسال الطلب</button>
-                    <span style={{ color: 'var(--border)' }}>·</span>
-                    <button className="cursor-pointer" style={{ color: 'var(--red)', background: 'none', border: 'none' }}>✕ إلغاء التحقق</button>
-                    <span style={{ color: 'var(--border)' }}>·</span>
-                    <Link href="/ceer-ar/03-verify-id" style={{ color: 'var(--blue)' }}>تغيير رقم الهوية</Link>
+      {/* Two-column layout */}
+      <div className="flex gap-[20px] items-start shrink-0 w-full">
+        {/* Left column */}
+        <div className="flex flex-1 min-w-0 flex-col gap-[16px] items-start">
+          {/* Verification card */}
+          <div className="border border-[rgba(48,63,70,0.2)] flex flex-col gap-[18px] items-start p-[20px] rounded-[14px] shrink-0 w-full">
+            {/* ID row */}
+            <div className="bg-[#f4f5f3] flex items-center justify-between px-[18px] py-[14px] rounded-[12px] shrink-0 w-full">
+              <div className="flex gap-[12px] items-center shrink-0">
+                <div className="overflow-hidden shrink-0 size-[20px] relative">
+                  <div className="absolute inset-[20.83%_8.33%]">
+                    <img alt="" className="block max-w-none size-full" src="/taas/icon-id.svg" />
                   </div>
                 </div>
+                <div className="flex flex-col gap-[2px] items-start shrink-0 text-[#1d2d33] whitespace-nowrap" style={almarai}>
+                  <p className="text-[12px] leading-[16px]">الهوية الوطنية / الإقامة المحققة</p>
+                  <p className="text-[16px] leading-[22px]" style={saira}>1 •••• •••• 34</p>
+                </div>
+              </div>
+              <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px] shrink-0">
+                <p className="text-[12px] leading-[16px] text-[#067647] whitespace-nowrap" style={almarai}>محقق</p>
+              </div>
+            </div>
 
-                {/* Right: phone mockup + security notes */}
-                <div className="flex items-start gap-5" style={{ width: 440, flexShrink: 0 }}>
-                  {/* Phone */}
-                  <div className="overflow-hidden" style={{ width: 220, flexShrink: 0, border: '10px solid #0a1520', borderRadius: 34, background: 'var(--card)', boxShadow: '0 18px 40px rgba(0,0,0,0.4)' }}>
-                    <div style={{ width: 80, height: 16, background: '#0a1520', borderRadius: '0 0 10px 10px', margin: '0 auto' }} />
-                    <div className="px-4 py-5 text-center">
-                      <div className="font-extrabold text-[16px]" style={{ color: '#0b8a5c' }}>
-                        <span className="block text-[13px]">نفاذ</span>Nafath
-                      </div>
-                      <div className="text-[11px] mt-3" style={{ color: 'var(--muted)' }}>طلب تحقق من هوية من</div>
-                      <div className="text-[12px] font-bold mt-1">{brandName} للتمويل</div>
-                      <div className="flex justify-center gap-3 mt-4">
-                        {['6', '7'].map(n => (
-                          <div key={n} className="w-12 h-12 rounded-xl flex items-center justify-center text-[22px] font-extrabold" style={{ border: '1.5px solid var(--border)' }}>{n}</div>
-                        ))}
-                      </div>
-                      <button className="mt-3 w-full py-2.5 rounded-xl text-[13px] font-bold text-white" style={{ background: '#0b8a5c', border: 'none' }}>موافقة</button>
-                      <button className="mt-2 w-full py-2.5 rounded-xl text-[13px] font-bold" style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--muted)', border: 'none' }}>رفض</button>
+            {/* Code + timer */}
+            <div className="flex gap-[20px] items-center shrink-0">
+              <div className="flex flex-col gap-[8px] items-center shrink-0">
+                <p className="text-[12px] leading-[16px] text-[#1d2d33] text-center whitespace-nowrap" style={almarai}>
+                  رقم التحقق
+                </p>
+                <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex h-[96px] items-center justify-center rounded-[16px] shrink-0 w-[120px]">
+                  <p className="text-[54px] leading-[58px] text-[#003e52] text-center uppercase whitespace-nowrap" style={{ fontFamily: "'Oxanium', sans-serif", fontWeight: 300 }}>
+                    67
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-[8px] items-center shrink-0">
+                <p className="text-[12px] leading-[16px] text-[#1d2d33] text-center whitespace-nowrap" style={almarai}>
+                  الوقت المتبقي
+                </p>
+                <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex gap-[8px] h-[96px] items-center justify-center rounded-[16px] shrink-0 w-[120px]">
+                  <div className="overflow-hidden shrink-0 size-[22px] relative">
+                    <div className="absolute inset-[8.33%]">
+                      <img alt="" className="block max-w-none size-full" src="/taas/icon-clock.svg" />
                     </div>
                   </div>
-
-                  {/* Security notes */}
-                  <div className="flex flex-col gap-4 flex-1">
-                    {[
-                      ['🪪', 'يتم التحقق من هويتك عبر نفاذ الرسمية.'],
-                      ['🔒', 'مشفر بالكامل'],
-                      ['🛡️', 'معلوماتك تُستخدم لهذه الرحلة فقط.'],
-                    ].map(([ic, txt]) => (
-                      <div key={txt} className="flex items-start gap-3 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: 'var(--highlight)' }}>{ic}</div>
-                        <span>{txt}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <p className="text-[32px] leading-[36px] text-[#1d2d33] uppercase whitespace-nowrap" style={oxanium}>
+                    {mins}:{ss}
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-end" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <Link href="/ceer-ar/05-mobile-verification" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>
-                متابعة ←
-              </Link>
+            {/* Waiting status */}
+            <div className="flex gap-[8px] items-center shrink-0">
+              <div className="bg-[#f79009] rounded-[5px] shrink-0 size-[10px]" />
+              <p className="text-[14px] leading-[23px] text-[#b54708] whitespace-nowrap" style={almarai}>
+                في انتظار موافقتك…
+              </p>
             </div>
           </div>
 
-          <CeerSidebarAr backHref="/ceer-ar/03-verify-id" backLabel="رجوع" />
+          {/* How to approve */}
+          <div className="border border-[rgba(48,63,70,0.2)] flex flex-col gap-[12px] items-start p-[20px] rounded-[14px] shrink-0 w-full">
+            <p className="text-[16px] leading-[22px] text-[#1d2d33] whitespace-nowrap" style={almarai}>
+              كيفية الاعتماد
+            </p>
+            {[
+              'افتح تطبيق نفاذ',
+              'راجع طلب التحقق من الهوية',
+              'اختر الرقم 67',
+              'اعتمد الطلب وعد إلى هنا',
+            ].map((step, i) => (
+              <div key={i} className="flex gap-[10px] items-center shrink-0">
+                <div className="bg-[#f4f5f3] flex items-center justify-center rounded-[12px] shrink-0 size-[24px]">
+                  <p className="text-[12px] leading-[16px] text-[#003e52] text-center whitespace-nowrap" style={saira}>
+                    {i + 1}
+                  </p>
+                </div>
+                <p className="text-[14px] leading-[23px] text-[#1d2d33] whitespace-nowrap" style={almarai}>{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
+        {/* Right column: Nafath phone mockup */}
+        <div className="bg-white flex flex-col items-center justify-center p-[8px] rounded-[40px] shrink-0">
+          <div className="bg-[#1d2d33] flex flex-col items-center p-[12px] rounded-[32px] shrink-0 w-[260px]">
+            <div className="bg-white flex flex-col gap-[14px] h-[511px] items-center justify-center px-[16px] py-[20px] rounded-[22px] shrink-0 w-[236px]">
+              <div className="h-[25.6px] shrink-0 w-[64px] relative">
+                <img alt="Nafath" className="absolute inset-0 max-w-none object-contain size-full" src="/taas/nafath-logo.png" />
+              </div>
+              <p className="text-[16px] leading-[22px] text-[#1d2d33] text-center w-full" style={almarai}>
+                تحقق من هويتك
+              </p>
+              <p className="text-[12px] leading-[16px] text-[#1d2d33] text-center w-full" style={almarai}>
+                طلب تحقق من تموّل للتمويل
+              </p>
+              <div className="bg-[#f4f5f3] flex items-center justify-center rounded-[42px] shrink-0 size-[84px]">
+                <p className="text-[32px] leading-[36px] text-[#0b7a4b] text-center uppercase whitespace-nowrap" style={oxanium}>
+                  67
+                </p>
+              </div>
+              <div className="bg-[#0b7a4b] flex h-[40px] items-center justify-center rounded-[10px] shrink-0 w-[204px]">
+                <p className="text-[14px] leading-[23px] text-center text-white whitespace-nowrap" style={almarai}>اعتماد</p>
+              </div>
+              <div className="border border-[rgba(48,63,70,0.2)] flex h-[40px] items-center justify-center rounded-[10px] shrink-0 w-[204px]">
+                <p className="text-[14px] leading-[23px] text-[#1d2d33] text-center whitespace-nowrap" style={almarai}>رفض</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-      `}</style>
-    </div>
+    </TaasPageLayout>
   );
 }

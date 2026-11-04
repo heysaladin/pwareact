@@ -1,168 +1,151 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
+import TaasPageLayout from '../../_components/TaasPageLayout';
 
-const consents = [
-  {
-    id: 'tamawal',
-    logoText: 'T',
-    logoColor: '#4f95ff',
-    title: 'موافقة تمول',
-    desc: 'الموافقة على قيام تمول بجمع واستخدام ومعالجة ومشاركة بياناتك الشخصية والمالية لأغراض تقييم التمويل.',
-    linkLabel: 'عرض التفاصيل',
-  },
-  {
-    id: 'simah',
-    logoText: 'سمة\nSIMAH',
-    logoColor: '#1db954',
-    title: 'موافقة سمة',
-    desc: 'الموافقة على قيام تمول بطلب معلوماتي الائتمانية ودرجة الائتمان من سمة (المكتب السعودي للائتمان).',
-    linkLabel: 'عرض التفاصيل',
-  },
-];
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
 
-const agreements = [
-  {
-    id: 'terms',
-    icon: '📄',
-    title: 'الشروط والأحكام لتمول',
-    desc: 'لقد اطلعت وفهمت ووافقت على الشروط والأحكام الخاصة بتمول.',
-    linkLabel: 'عرض الوثيقة',
-  },
-  {
-    id: 'sama',
-    icon: '🏛️',
-    title: 'إفصاحات التمويل لساما',
-    desc: 'لقد اطلعت ووافقت على إفصاحات التمويل المطلوبة من البنك المركزي السعودي (ساما).',
-    linkLabel: 'عرض الوثيقة',
-  },
-];
+function CheckedBox() {
+  return (
+    <div className="flex items-center justify-center py-[10px] shrink-0">
+      <div className="bg-[#003e52] border border-[#003e52] overflow-clip rounded-[6px] size-[20px] flex items-center justify-center">
+        <img alt="" className="size-[12px]" src="/taas/icon-checkbox-check.svg" />
+      </div>
+    </div>
+  );
+}
+
+function ConsentRow({ title, description, linkLabel }: { title: string; description: string; linkLabel: string }) {
+  return (
+    <div className="flex gap-[16px] items-start py-[10px] w-full">
+      <div className="flex flex-[1_0_0] gap-[12px] items-start min-w-px">
+        <CheckedBox />
+        <div className="flex flex-[1_0_0] flex-col gap-[2px] leading-[23px] min-w-px text-[#1d2d33] text-[14px]" style={almarai}>
+          <p className="w-full">{title}</p>
+          <p className="w-full">{description}</p>
+        </div>
+      </div>
+      <div className="flex gap-[6px] items-center shrink-0">
+        <img alt="" className="size-[14px]" src="/taas/icon-file.svg" />
+        <p className="text-[14px] text-[#003e52] leading-[23px] whitespace-nowrap" style={almarai}>{linkLabel}</p>
+      </div>
+    </div>
+  );
+}
 
 export default function ConsentsContractsArPage() {
-  const [dark, setDark] = useState(true);
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
-  const toggle = (id: string) => setChecked(p => ({ ...p, [id]: !p[id] }));
-  const allChecked = [...consents, ...agreements].every(i => checked[i.id]);
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center">
+        <img alt="" className="size-[16px]" src="/taas/icon-circle-info.svg" />
+        <p className="text-[12px] text-[rgba(48,63,70,0.7)] leading-[16px] whitespace-nowrap" style={almarai}>
+          يمكنك سحب موافقتك في أي وقت من حساب تموّل.
+        </p>
+      </div>
+      <div className="flex gap-[12px] items-center">
+        <button className="relative border border-[rgba(48,63,70,0.2)] flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+          <span className="absolute bg-white inset-0 rounded-[8px]" aria-hidden />
+          <span className="absolute inset-0 rounded-[8px] shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" aria-hidden />
+          <span className="relative text-[12px] uppercase text-[#1d2d33]" style={oxanium}>رجوع</span>
+        </button>
+        <Link
+          href="/ceer/ar/07-personal-details"
+          className="relative border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]"
+        >
+          <span className="absolute bg-[#003e52] inset-0 rounded-[8px]" aria-hidden />
+          <span className="absolute inset-0 rounded-[8px] shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" aria-hidden />
+          <span className="relative text-[12px] uppercase text-white whitespace-pre" style={oxanium}>{`قبول ومتابعة  →`}</span>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div dir="rtl" data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الواجهة مصممة للشاشات الواسعة.</p>
+    <TaasPageLayout currentStep={3} lang="AR" footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] w-full">
+        <p className="text-[32px] uppercase text-[#1d2d33] leading-[36px]" style={oxanium}>الموافقات والإفصاحات</p>
+        <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={almarai}>
+          يرجى مراجعة الموافقات والاتفاقيات المطلوبة وقبولها للمتابعة في طلبك.
+        </p>
       </div>
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebarAr backHref="/ceer-ar/05-mobile-verification" />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
 
-              {/* Logo row */}
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="تمول" className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer-ar/05-mobile-verification" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>رجوع →</Link>
-              </div>
-
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)' }}>الموافقات والعقود</h1>
-              <p className="text-[15px] mb-4" style={{ color: 'var(--muted)' }}>يرجى مراجعة الموافقات والاتفاقيات المطلوبة والقبول بها للمتابعة.</p>
-
-              <div className="flex items-center gap-2.5 rounded-[10px] px-4 py-3 mb-5" style={{ background: 'var(--highlight)', border: '1px solid var(--border)' }}>
-                <span>🔒</span>
-                <p className="text-[13px]" style={{ color: 'var(--muted)' }}>بياناتك آمنة وستُستخدم فقط لأغراض التمويل وفقاً للوائح ساما.</p>
-              </div>
-
-              {/* Required consents */}
-              <div className="rounded-[16px] overflow-hidden mb-4" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)' }}>الموافقات المطلوبة</h2>
-                </div>
-                {consents.map((item, i) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-4 px-5 py-4 cursor-pointer"
-                    style={{ borderBottom: i < consents.length - 1 ? '1px solid var(--border)' : 'none' }}
-                    onClick={() => toggle(item.id)}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 text-[10px] font-black text-center whitespace-pre leading-[13px]"
-                      style={{ background: `${item.logoColor}20`, color: item.logoColor, border: `1px solid ${item.logoColor}40` }}
-                    >
-                      {item.logoText}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[14px] font-semibold">{item.title}</div>
-                      <div className="text-[12.5px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.desc}</div>
-                    </div>
-                    <a href="#" className="text-[12px] font-semibold shrink-0" style={{ color: 'var(--blue)' }} onClick={e => e.stopPropagation()}>{item.linkLabel}</a>
-                    <div
-                      className="w-5 h-5 rounded-[5px] flex items-center justify-center shrink-0"
-                      style={{ background: checked[item.id] ? 'var(--blue)' : 'transparent', border: `2px solid ${checked[item.id] ? 'var(--blue)' : 'var(--border)'}` }}
-                    >
-                      {checked[item.id] && <span className="text-white text-[11px] font-bold">✓</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Agreements & Disclosures */}
-              <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--card)' }}>
-                <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
-                  <h2 className="text-[14px] font-bold" style={{ color: 'var(--heading)' }}>الاتفاقيات والإفصاحات</h2>
-                </div>
-                {agreements.map((item, i) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-4 px-5 py-4 cursor-pointer"
-                    style={{ borderBottom: i < agreements.length - 1 ? '1px solid var(--border)' : 'none' }}
-                    onClick={() => toggle(item.id)}
-                  >
-                    <div className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 text-xl" style={{ background: 'var(--highlight)' }}>{item.icon}</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[14px] font-semibold">{item.title}</div>
-                      <div className="text-[12.5px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.desc}</div>
-                    </div>
-                    <a href="#" className="text-[12px] font-semibold shrink-0" style={{ color: 'var(--blue)' }} onClick={e => e.stopPropagation()}>{item.linkLabel}</a>
-                    <div
-                      className="w-5 h-5 rounded-[5px] flex items-center justify-center shrink-0"
-                      style={{ background: checked[item.id] ? 'var(--blue)' : 'transparent', border: `2px solid ${checked[item.id] ? 'var(--blue)' : 'var(--border)'}` }}
-                    >
-                      {checked[item.id] && <span className="text-white text-[11px] font-bold">✓</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+      {/* Main content */}
+      <div className="flex gap-[24px] items-start w-full">
+        {/* Left column */}
+        <div className="flex flex-[1_0_0] flex-col gap-[20px] min-w-px">
+          {/* Required Consents */}
+          <div className="flex flex-col gap-[8px]">
+            <div className="flex items-center justify-between">
+              <p className="text-[12px] text-[rgba(48,63,70,0.7)] leading-[16px] whitespace-nowrap" style={almarai}>الموافقات المطلوبة</p>
+              <p className="text-[12px] text-[#12b76a] leading-[16px] whitespace-nowrap" style={almarai}>6 من 6 مقبولة</p>
             </div>
+            <div className="border border-[rgba(48,63,70,0.2)] flex flex-col px-[20px] py-[4px] rounded-[14px]">
+              <ConsentRow
+                title="موافقة تموّل"
+                description="أسمح لتموّل بجمع ومعالجة وتخزين بياناتي الشخصية لتقييم أهليتي."
+                linkLabel="عرض التفاصيل"
+              />
+              <div className="bg-[#f4f5f3] h-px w-full" />
+              <ConsentRow
+                title="موافقة SIMAH"
+                description="أسمح لتموّل بطلب تقرير الائتمان الخاص بي من SIMAH."
+                linkLabel="عرض التفاصيل"
+              />
+              <div className="bg-[#f4f5f3] h-px w-full" />
+              <ConsentRow
+                title="موافقة نفاذ"
+                description="أسمح بالتحقق من الهوية واسترداد بياناتي من الخدمات الحكومية."
+                linkLabel="عرض التفاصيل"
+              />
+              <div className="bg-[#f4f5f3] h-px w-full" />
+              <ConsentRow
+                title="موافقة GOSI"
+                description="أسمح باسترداد تفاصيل توظيفي ودخلي من GOSI."
+                linkLabel="عرض التفاصيل"
+              />
+            </div>
+          </div>
 
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                <span>🔒</span> تبقى معلوماتك آمنة ومشفرة طوال هذه العملية.
-              </div>
-              <Link
-                href="/ceer-ar/07-personal-details"
-                className="px-8 py-3 rounded-xl text-[15px] font-bold text-white"
-                style={{ background: allChecked ? 'var(--blue)' : 'var(--border)', pointerEvents: allChecked ? 'auto' : 'none' }}
-              >
-                متابعة ←
-              </Link>
+          {/* Agreements & Disclosures */}
+          <div className="flex flex-col gap-[8px]">
+            <p className="text-[12px] text-[rgba(48,63,70,0.7)] leading-[16px] whitespace-nowrap" style={almarai}>الاتفاقيات والإفصاحات</p>
+            <div className="border border-[rgba(48,63,70,0.2)] flex flex-col px-[20px] py-[4px] rounded-[14px]">
+              <ConsentRow
+                title="شروط وأحكام تموّل"
+                description="اطلعت على شروط وأحكام تموّل وأوافق عليها."
+                linkLabel="عرض الوثيقة"
+              />
+              <div className="bg-[#f4f5f3] h-px w-full" />
+              <ConsentRow
+                title="إفصاحات التمويل من ساما"
+                description="اطلعت على إفصاحات التمويل من البنك المركزي السعودي وأوافق عليها."
+                linkLabel="عرض الوثيقة"
+              />
             </div>
           </div>
         </div>
+
+        {/* Right sidebar */}
+        <div className="bg-[#f4f5f3] flex flex-col gap-[14px] p-[24px] rounded-[14px] shrink-0 w-[300px]">
+          <div className="bg-white flex items-center justify-center rounded-[12px] size-[44px]">
+            <img alt="" className="size-[22px]" src="/taas/icon-shield-22.svg" />
+          </div>
+          <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={almarai}>لماذا نحتاج موافقتك</p>
+          <p className="text-[14px] text-[#1d2d33] leading-[23px]" style={almarai}>
+            تتيح هذه الموافقات لتموّل استرداد والتحقق من معلوماتك من الجهات الحكومية والمالية بشكل آمن، حتى ترى فقط العروض التي تستحقها.
+          </p>
+          <div className="bg-[#f4f5f3] h-px w-full" />
+          <p className="text-[12px] text-[rgba(48,63,70,0.7)] leading-[16px] whitespace-nowrap" style={almarai}>مصادر البيانات</p>
+          <div className="flex gap-[8px] items-center flex-wrap">
+            {['SIMAH', 'GOSI', 'نفاذ', 'ELM'].map((src) => (
+              <div key={src} className="bg-white border border-[rgba(48,63,70,0.2)] flex items-center px-[10px] py-[4px] rounded-[999px]">
+                <p className="text-[12px] text-[#003e52] leading-[16px] whitespace-nowrap" style={saira}>{src}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-      `}</style>
-    </div>
+    </TaasPageLayout>
   );
 }

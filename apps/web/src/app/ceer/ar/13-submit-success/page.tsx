@@ -1,116 +1,72 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
+import TaasPageLayout from '../../_components/TaasPageLayout';
+
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
+
+const footer = (
+  <div className="flex items-center justify-center w-full">
+    <Link
+      href="/ceer/ar"
+      className="border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center px-[18px] py-[12px] rounded-[8px] shrink-0 relative overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-[#003e52] rounded-[8px]" />
+      <p className="relative text-[12px] leading-[19px] text-white uppercase" style={oxanium}>
+        العودة إلى قائمة المنتجات
+      </p>
+    </Link>
+  </div>
+);
 
 export default function SubmitSuccessArPage() {
-  const [dark, setDark] = useState(true);
-
   return (
-    <div data-theme={dark ? 'dark' : 'light'} dir="rtl" style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الواجهة مصممة للشاشات العريضة.</p>
-      </div>
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-          <CeerSidebarAr backHref="/ceer-ar/12-submit-order" backLabel="العودة للتأكيد" />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="تمول" className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer-ar/12-submit-order" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>رجوع →</Link>
-              </div>
+    <TaasPageLayout currentStep={6} lang="AR" footer={footer}>
+      {/* Success hero — centred */}
+      <div className="flex flex-[1_0_0] flex-col gap-[24px] items-center justify-center w-full py-[40px]">
+        {/* Illustration */}
+        <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex items-center justify-center rounded-full size-[96px] shrink-0">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 25l10 10 18-20" stroke="#12b76a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
 
-              <div className="flex-1 flex flex-col items-center justify-center text-center px-12">
-                {/* Animated success circle */}
-                <div className="success-circle w-[140px] h-[140px] rounded-full flex items-center justify-center mx-auto mb-8" style={{ background: 'var(--green)' }}>
-                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                    <path d="M14 34l14 14 22-28" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="100" strokeDashoffset="0" style={{ animation: 'checkDraw 0.6s 0.3s ease-out both' }} />
-                  </svg>
-                </div>
+        {/* Text */}
+        <div className="flex flex-col gap-[12px] items-center text-center max-w-[520px]">
+          <p className="text-[32px] leading-[36px] uppercase text-[#1d2d33]" style={oxanium}>
+            تم تقديم الطلب
+          </p>
+          <p className="text-[16px] leading-[24px] text-[rgba(48,63,70,0.7)]" style={almarai}>
+            تم إرسال طلب تمويلك إلى البنك الأهلي السعودي للمراجعة. ستتلقى إشعارًا خلال 1-2 يوم عمل بنتيجة طلبك.
+          </p>
+        </div>
 
-                <h1 className="text-[32px] font-extrabold mb-3" style={{ color: 'var(--heading)' }}>تم تقديم الطلب</h1>
-                <p className="text-[16px] leading-relaxed mb-6 max-w-[560px]" style={{ color: 'var(--muted)' }}>تهانينا! تم تقديم طلب التمويل الخاص بك بنجاح.</p>
-
-                {/* Order details card */}
-                <div className="rounded-[16px] p-6 mb-6 w-full max-w-[560px]" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                  {[
-                    ['رقم الطلب', 'AELG-2026-05-18-1123'],
-                    ['البنك', 'البنك الأهلي السعودي'],
-                    ['تاريخ التقديم', 'الأحد، 18 مايو 2026 — 14:37'],
-                  ].map(([k, v], i, arr) => (
-                    <div key={k} className="flex justify-between py-3 text-[13.5px]" style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                      <span style={{ color: 'var(--muted)' }}>{k}</span>
-                      <span className="font-bold">{v}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* What happens next */}
-                <div className="rounded-[16px] p-6 mb-6 w-full max-w-[560px] text-right" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                  <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)' }}>ماذا يحدث بعد ذلك؟</h3>
-                  {[
-                    { done: true, text: 'تم تقديم طلبك إلى البنك الأهلي السعودي' },
-                    { done: false, text: 'يراجع البنك طلبك خلال 1-2 يوم عمل' },
-                    { done: false, text: 'ستتلقى رسالة SMS وبريداً إلكترونياً بالنتيجة' },
-                    { done: false, text: 'عند الموافقة، يُرتَّب تسليم المركبة مع الوكيل' },
-                  ].map((step, i) => (
-                    <div key={i} className="flex items-start gap-3 mb-3">
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold shrink-0 mt-0.5"
-                        style={{ background: step.done ? 'var(--green)' : 'var(--highlight)', color: step.done ? '#fff' : 'var(--blue)', border: step.done ? 'none' : '1.5px solid var(--blue)' }}
-                      >
-                        {step.done ? '✓' : i + 1}
-                      </div>
-                      <span className="text-[13px] leading-[1.5]" style={{ color: step.done ? 'var(--text)' : 'var(--muted)' }}>{step.text}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <button
-                  className="w-full max-w-[560px] rounded-[12px] text-[16px] font-bold text-white mb-4"
-                  style={{ height: 57, background: 'var(--blue)', cursor: 'pointer' }}
-                >
-                  تتبع الطلب ←
-                </button>
-
-                <Link
-                  href="/ceer-ar"
-                  className="text-[14px] font-semibold mb-6"
-                  style={{ color: 'var(--blue)' }}
-                >
-                  العودة إلى الصفحة الرئيسية
-                </Link>
-
-                {/* Security note */}
-                <div className="flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                  <span>🛡️</span>
-                  <span>بياناتك آمنة ومحمية طوال عملية التمويل.</span>
-                </div>
-              </div>
+        {/* Reference box */}
+        <div className="border border-[rgba(48,63,70,0.2)] flex gap-[32px] items-center px-[32px] py-[20px] rounded-[14px] shrink-0">
+          <div className="flex flex-col gap-[4px]">
+            <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)] uppercase tracking-widest" style={almarai}>رقم مرجع الطلب</p>
+            <p className="text-[20px] leading-[24px] uppercase text-[#1d2d33]" style={oxanium}>AELG-2026-05-18-1123</p>
+          </div>
+          <div className="bg-[rgba(48,63,70,0.2)] h-[40px] w-px shrink-0" />
+          <div className="flex flex-col gap-[4px]">
+            <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)] uppercase tracking-widest" style={almarai}>البنك</p>
+            <p className="text-[16px] leading-[23px] text-[#1d2d33]" style={almarai}>البنك الأهلي السعودي</p>
+          </div>
+          <div className="bg-[rgba(48,63,70,0.2)] h-[40px] w-px shrink-0" />
+          <div className="flex flex-col gap-[4px]">
+            <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.7)] uppercase tracking-widest" style={almarai}>الحالة</p>
+            <div className="flex gap-[6px] items-center">
+              <div className="bg-[#12b76a] rounded-full size-[8px]" />
+              <p className="text-[16px] leading-[23px] text-[#12b76a]" style={almarai}>قيد المراجعة</p>
             </div>
           </div>
         </div>
+
+        {/* Confirmation note */}
+        <p className="text-[14px] leading-[23px] text-[rgba(48,63,70,0.7)] text-center" style={almarai}>
+          تم إرسال تأكيد إلى رقم جوالك وعنوان بريدك الإلكتروني المسجّلَين.
+        </p>
       </div>
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        a{text-decoration:none;}
-        @keyframes popIn{0%{transform:scale(0.5);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
-        @keyframes checkDraw{0%{stroke-dashoffset:100;}100%{stroke-dashoffset:0;}}
-        .success-circle{animation:popIn 0.6s ease-out forwards;}
-      `}</style>
-    </div>
+    </TaasPageLayout>
   );
 }

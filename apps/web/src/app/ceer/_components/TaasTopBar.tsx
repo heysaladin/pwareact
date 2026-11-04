@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export default function TaasTopBar({ lang = 'EN' }: { lang?: 'EN' | 'AR' }) {
-  const arHref = lang === 'EN' ? '/ceer/ar' : '/ceer';
+  const isAR = lang === 'AR';
 
   return (
     <div className="flex items-center justify-between w-full shrink-0">
@@ -21,8 +21,14 @@ export default function TaasTopBar({ lang = 'EN' }: { lang?: 'EN' | 'AR' }) {
       <div className="flex gap-[16px] items-center shrink-0">
         <div className="flex gap-[6px] items-center shrink-0">
           <img alt="" className="size-[16px]" src="/taas/icon-help.svg" />
-          <p className="text-[14px] leading-[23px] text-[#1d2d33] whitespace-nowrap" style={{ fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' }}>
-            Need help?
+          <p
+            className="text-[14px] leading-[23px] text-[#1d2d33] whitespace-nowrap"
+            style={isAR
+              ? { fontFamily: "'Almarai', sans-serif" }
+              : { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' }
+            }
+          >
+            {isAR ? 'تحتاج مساعدة؟' : 'Need help?'}
           </p>
         </div>
         <div className="bg-[#f4f5f3] flex gap-[2px] items-center p-[3px] rounded-[999px] shrink-0">

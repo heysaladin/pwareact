@@ -1,143 +1,148 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
-import CeerSidebarAr from '../_components/CeerSidebarAr';
+import TaasPageLayout from '../../_components/TaasPageLayout';
+
+const almarai: React.CSSProperties = { fontFamily: "'Almarai', sans-serif" };
+const oxanium: React.CSSProperties = { fontFamily: "'Oxanium', sans-serif", fontWeight: 400 };
+const saira: React.CSSProperties = { fontFamily: "'Saira', sans-serif", fontVariationSettings: '"wdth" 100' };
 
 export default function MobileVerificationArPage() {
-  const [dark, setDark] = useState(true);
+  const footer = (
+    <>
+      <div className="flex gap-[8px] items-center">
+        <div className="overflow-clip relative shrink-0 size-[16px]">
+          <img alt="" className="block size-full" src="/taas/icon-lock.svg" />
+        </div>
+        <p className="text-[12px] text-[rgba(48,63,70,0.7)] whitespace-nowrap" style={almarai}>
+          يستخدم قنوات حكومية آمنة فقط.
+        </p>
+      </div>
+      <div className="flex gap-[12px] items-center">
+        <button className="relative border border-[rgba(48,63,70,0.2)] flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+          <span className="absolute bg-white inset-0 rounded-[8px]" aria-hidden />
+          <span className="absolute inset-0 rounded-[8px] shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" aria-hidden />
+          <span className="relative text-[12px] uppercase text-[#1d2d33]" style={oxanium}>إلغاء</span>
+        </button>
+        <Link
+          href="/ceer/ar/06-consents-contracts"
+          className="relative border-2 border-[rgba(255,255,255,0.12)] flex gap-[6px] items-center justify-center min-w-[120px] overflow-clip px-[18px] py-[12px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]"
+        >
+          <span className="absolute bg-[#003e52] inset-0 rounded-[8px]" aria-hidden />
+          <span className="absolute inset-0 rounded-[8px] shadow-[inset_0px_0px_0px_1px_rgba(10,13,18,0.18),inset_0px_-2px_0px_0px_rgba(10,13,18,0.05)]" aria-hidden />
+          <span className="relative text-[12px] uppercase text-white whitespace-pre" style={oxanium}>{`متابعة  →`}</span>
+        </Link>
+      </div>
+    </>
+  );
 
   return (
-    <div dir="rtl" data-theme={dark ? 'dark' : 'light'} style={{ fontFamily: "'ceerBeta3Font', Arial, sans-serif" }}>
-
-      <div className="viewport-warning fixed inset-0 z-50 hidden flex-col items-center justify-center p-8 text-center">
-        <div className="text-4xl mb-4">🖥️</div>
-        <h2 className="text-[22px] font-extrabold" style={{ color: 'var(--text)' }}>الشاشة صغيرة جداً</h2>
-        <p className="mt-2.5 text-[15px] max-w-[420px] leading-relaxed" style={{ color: 'var(--muted)' }}>هذه الواجهة مصممة للشاشات الواسعة.</p>
+    <TaasPageLayout currentStep={2} lang="AR" footer={footer}>
+      {/* Page title */}
+      <div className="flex flex-col gap-[8px] w-full">
+        <p className="text-[32px] uppercase text-[#1d2d33] leading-[36px]" style={oxanium}>
+          التحقق من ملكية الجوال
+        </p>
+        <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={almarai}>
+          تم التحقق من هويتك. نقوم الآن بتأكيد أن رقم جوالك مسجّل باسمك عبر قناة حكومية آمنة.
+        </p>
       </div>
 
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="frame w-[1455px] h-[1015px] overflow-auto flex items-stretch" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-
-          <CeerSidebarAr backHref="/ceer-ar/04-nafath-approve" />
-
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex-1 flex flex-col p-6 overflow-y-auto">
-
-              {/* Logo row RTL: logo+toggle on LEFT (start), back link on RIGHT (end) */}
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <img src={dark ? '/logo-tamawal-web.svg' : '/logo-tamawal-web-blue.svg'} alt="تمول" className="h-8 w-auto" />
-                  <button onClick={() => setDark(d => !d)} className="relative flex items-center shrink-0" style={{ width: 44, height: 24 }}>
-                    <span className="absolute inset-0 rounded-full" style={{ background: dark ? '#2a3a4f' : '#dde3ec' }} />
-                    <span className="absolute w-[18px] h-[18px] rounded-full shadow" style={{ left: dark ? 23 : 3, top: 3, background: dark ? '#4f95ff' : '#2563eb' }} />
-                  </button>
-                </div>
-                <Link href="/ceer-ar/04-nafath-approve" className="text-[13px] font-semibold" style={{ color: 'var(--muted)' }}>رجوع →</Link>
+      {/* Main content */}
+      <div className="flex gap-[20px] items-start w-full">
+        {/* Left column */}
+        <div className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px">
+          {/* Verified ID card */}
+          <div className="border border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[16px] rounded-[12px]">
+            <div className="flex gap-[14px] items-center">
+              <div className="bg-[#f4f5f3] flex items-center justify-center rounded-[12px] size-[40px] shrink-0">
+                <img alt="" className="size-[20px]" src="/taas/icon-id.svg" />
               </div>
-
-              <h1 className="text-[28px] font-extrabold mb-1" style={{ color: 'var(--heading)' }}>التحقق من ملكية الجوال</h1>
-              <p className="text-[15px] mb-5" style={{ color: 'var(--muted)' }}>تم التحقق من هويتك بنجاح. نقوم الآن بتأكيد ملكية رقم جوالك.</p>
-
-              {/* Status bar */}
-              <div className="flex items-center gap-3 rounded-[12px] px-4 py-3 mb-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                <div className="flex items-center gap-2 flex-1">
-                  <span className="text-[13px]" style={{ color: 'var(--muted)' }}>تم التحقق من الهوية الوطنية / الإقامة</span>
-                  <span className="font-bold text-[13px]">١ •••• •••• ٣٤</span>
-                </div>
-                <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'rgba(29,185,84,0.12)', color: 'var(--green)' }}>✓ تم التحقق عبر نفاذ</span>
+              <div className="flex flex-col gap-[2px]">
+                <p className="text-[12px] text-[#1d2d33] leading-[16px]" style={almarai}>الهوية الوطنية / الإقامة المحققة</p>
+                <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={saira}>1 •••• •••• 34</p>
               </div>
-
-              <div className="flex gap-6">
-                {/* Left panel */}
-                <div className="flex-[1.4] min-w-0">
-                  <div className="rounded-[16px] p-8 flex items-center gap-8" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    {/* Spinning circle */}
-                    <div className="relative shrink-0" style={{ width: 130, height: 130 }}>
-                      <div className="spin-ring absolute inset-0 rounded-full" />
-                      <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 1 }}>
-                        <div className="w-12 h-12 rounded-[12px] flex items-center justify-center text-[24px]" style={{ background: 'var(--highlight)' }}>📱</div>
-                      </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="text-[14px]" style={{ color: 'var(--muted)' }}>التحقق من رقم الجوال</div>
-                      <div className="text-[24px] font-extrabold mt-2" style={{ letterSpacing: 2, direction: 'ltr', textAlign: 'right' }}>+966 *** *** 1634</div>
-                      <div className="flex items-center gap-3 mt-3">
-                        <span className="text-[14px] font-semibold" style={{ color: 'var(--blue)' }}>جارٍ التحقق من ملكية الجوال...</span>
-                        <span className="px-3 py-1 rounded-full text-[11px] font-semibold" style={{ background: 'var(--highlight)', color: 'var(--blue)' }}>قيد التنفيذ</span>
-                      </div>
-                      <div className="text-[12.5px] mt-2" style={{ color: 'var(--muted)' }}>هذا قد يستغرق بعض الوقت.</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--muted)' }}>
-                    <span>🔒</span>
-                    نستخدم قنوات آمنة للتحقق من رقم جوالك.
-                  </div>
-                </div>
-
-                {/* Right panel */}
-                <div className="flex-1 min-w-0 flex flex-col gap-4">
-                  {/* About this screen */}
-                  <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--heading)' }}>
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ border: '1px solid var(--blue)', color: 'var(--blue)' }}>i</span>
-                      عن هذه الشاشة
-                    </h3>
-                    <p className="text-[13px] leading-[1.6]" style={{ color: 'var(--muted)' }}>تمول تتحقق من أن رقم الجوال هذا ملك لك. هذا يحافظ على أمان حسابك.</p>
-                  </div>
-
-                  {/* What happens next */}
-                  <div className="rounded-[16px] p-5" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-                    <h3 className="text-[14px] font-bold mb-4" style={{ color: 'var(--heading)' }}>ماذا يحدث بعد ذلك</h3>
-                    {[
-                      { done: true, label: 'تم التحقق من الهوية عبر نفاذ', sub: 'مكتمل' },
-                      { active: true, label: 'تأكيد ملكية الجوال', sub: 'قيد التنفيذ' },
-                      { pending: true, label: 'متابعة التقييم المالي', sub: 'قيد الانتظار' },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-start gap-3 py-2 text-[13px]">
-                        {item.done
-                          ? <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5" style={{ background: 'var(--green)', color: '#fff' }}>✓</span>
-                          : item.active
-                          ? <span className="spinning-dot shrink-0 mt-0.5" />
-                          : <span className="w-4 h-4 rounded-full shrink-0 mt-0.5" style={{ border: '2px solid var(--border)' }} />
-                        }
-                        <div>
-                          <div className="font-semibold">{item.label}</div>
-                          <div className="text-[11px] mt-0.5" style={{ color: 'var(--muted)' }}>{item.sub}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
             </div>
-
-            {/* Footer */}
-            <div className="shrink-0 px-6 py-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--card)' }}>
-              <div className="text-[12.5px] flex items-center gap-2" style={{ color: 'var(--muted)' }}>
-                <span>🔔</span>
-                يمكنك مغادرة هذه الصفحة بأمان، وسنخطرك عند اكتمال التحقق.
-              </div>
-              <Link href="/ceer-ar/06-consents-contracts" className="px-8 py-3 rounded-xl text-[15px] font-bold text-white" style={{ background: 'var(--blue)' }}>
-                متابعة ←
-              </Link>
+            <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+              <p className="text-[12px] text-[#067647] leading-[16px] whitespace-nowrap" style={almarai}>محقق</p>
             </div>
           </div>
 
+          {/* Mobile number — in progress */}
+          <div className="bg-[#f4f5f3] border-[#003e52] border-[1.5px] flex flex-col gap-[14px] px-[20px] py-[16px] rounded-[12px]">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[14px] items-center">
+                <div className="bg-white flex items-center justify-center rounded-[12px] size-[40px] shrink-0">
+                  <img alt="" className="size-[20px]" src="/taas/icon-phone.svg" />
+                </div>
+                <div className="flex flex-col gap-[2px]">
+                  <p className="text-[12px] text-[#1d2d33] leading-[16px]" style={almarai}>رقم الجوال</p>
+                  <p className="text-[16px] text-[#1d2d33] leading-[22px]" style={saira}>+966 5• ••• 1634</p>
+                </div>
+              </div>
+              <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+                <p className="text-[12px] text-[#003e52] leading-[16px] whitespace-nowrap" style={almarai}>قيد التنفيذ</p>
+              </div>
+            </div>
+            <div className="bg-[#f4f5f3] h-[8px] overflow-clip rounded-[4px] w-full">
+              <div className="bg-[#003e52] h-[8px] rounded-[4px]" style={{ width: '62%' }} />
+            </div>
+            <p className="text-[12px] text-[#1d2d33] leading-[16px] whitespace-nowrap" style={almarai}>
+              جارٍ التحقق من ملكية الجوال… قد يستغرق بضع لحظات.
+            </p>
+          </div>
+
+          {/* What happens next */}
+          <div className="border border-[rgba(48,63,70,0.2)] flex flex-col gap-[14px] p-[20px] rounded-[14px]">
+            <p className="text-[16px] text-[#1d2d33] leading-[22px] whitespace-nowrap" style={almarai}>ماذا يحدث بعد ذلك؟</p>
+
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[12px] items-center">
+                <div className="bg-[#12b76a] flex items-center justify-center rounded-[12px] size-[24px] shrink-0">
+                  <img alt="" className="size-[12px]" src="/taas/icon-check-sm.svg" />
+                </div>
+                <p className="text-[14px] text-[#1d2d33] leading-[23px] whitespace-nowrap" style={almarai}>التحقق من الهوية عبر نفاذ</p>
+              </div>
+              <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+                <p className="text-[12px] text-[#067647] leading-[16px] whitespace-nowrap" style={almarai}>مكتمل</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[12px] items-center">
+                <div className="bg-[#003e52] flex items-center justify-center rounded-[12px] size-[24px] shrink-0">
+                  <p className="text-[12px] text-white leading-[16px] text-center" style={saira}>2</p>
+                </div>
+                <p className="text-[14px] text-[#1d2d33] leading-[23px] whitespace-nowrap" style={almarai}>تأكيد ملكية الجوال</p>
+              </div>
+              <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+                <p className="text-[12px] text-[#003e52] leading-[16px] whitespace-nowrap" style={almarai}>قيد التنفيذ</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[12px] items-center">
+                <div className="bg-white border border-[rgba(48,63,70,0.2)] flex items-center justify-center rounded-[12px] size-[24px] shrink-0">
+                  <p className="text-[12px] text-[#1d2d33] leading-[16px] text-center" style={saira}>3</p>
+                </div>
+                <p className="text-[14px] text-[#1d2d33] leading-[23px] whitespace-nowrap" style={almarai}>المتابعة إلى الموافقات والتحقق من البيانات</p>
+              </div>
+              <div className="bg-[#f4f5f3] flex items-center px-[10px] py-[3px] rounded-[999px]">
+                <p className="text-[12px] text-[#1d2d33] leading-[16px] whitespace-nowrap" style={almarai}>قيد الانتظار</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right sidebar card */}
+        <div className="bg-[#f4f5f3] flex flex-col gap-[12px] p-[24px] rounded-[14px] shrink-0 w-[300px]">
+          <div className="bg-white flex items-center justify-center rounded-[12px] size-[44px]">
+            <img alt="" className="size-[22px]" src="/taas/icon-shield-22.svg" />
+          </div>
+          <p className="text-[16px] text-[#1d2d33] leading-[22px] whitespace-nowrap" style={almarai}>عن هذه الخطوة</p>
+          <p className="text-[14px] text-[#1d2d33] leading-[23px]" style={almarai}>
+            تتحقق تموّل من أن رقم الجوال هذا مسجّل باسمك لدى الجهات الحكومية الرسمية. هذا يحمي حسابك وطلب تمويلك.
+          </p>
         </div>
       </div>
-
-      <style>{`
-        [data-theme="dark"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#1db954;--red:#e5484d;}
-        [data-theme="light"]{--bg:#030b10;--card:#0b1315;--border:rgba(189,189,189,0.2);--text:#dadada;--muted:rgba(189,189,189,0.6);--blue:#ff8204;--heading:#dadada;--highlight:#2e3f46;--green:#16a34a;--red:#dc2626;}
-        .viewport-warning{background:var(--bg);}
-        @media(max-width:1454px),(max-height:1014px){.frame{display:none;}.viewport-warning{display:flex!important;}}
-        @keyframes spin{to{transform:rotate(360deg);}}
-        .spin-ring{background:conic-gradient(var(--blue) 0deg 270deg,var(--highlight) 270deg 360deg);animation:spin 2.2s linear infinite;}
-        .spinning-dot{width:16px;height:16px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;}
-      `}</style>
-    </div>
+    </TaasPageLayout>
   );
 }

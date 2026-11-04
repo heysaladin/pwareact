@@ -6,9 +6,15 @@ type Step = {
   number?: string;
 };
 
-function TaasStep({ title, state, number = '1' }: Step) {
+function TaasStep({ title, state, number = '1', lang = 'EN' }: Step & { lang?: 'EN' | 'AR' }) {
   const isDone = state === 'Done';
   const isCurrent = state === 'Current';
+
+  const stateLabel = isDone
+    ? (lang === 'AR' ? 'مكتمل' : 'Completed')
+    : isCurrent
+      ? (lang === 'AR' ? 'قيد التنفيذ' : 'In progress')
+      : (lang === 'AR' ? 'قيد الانتظار' : 'Pending');
 
   return (
     <div className="flex gap-[10px] items-center shrink-0">
@@ -34,7 +40,7 @@ function TaasStep({ title, state, number = '1' }: Step) {
           className={isDone ? 'text-[#12b76a]' : isCurrent ? 'text-[#003e52]' : 'text-[rgba(48,63,70,0.7)]'}
           style={{ fontVariationSettings: '"wdth" 100' }}
         >
-          {isDone ? 'Completed' : isCurrent ? 'In progress' : 'Pending'}
+          {stateLabel}
         </p>
       </div>
     </div>
@@ -45,11 +51,11 @@ function Connector() {
   return <div className="bg-[#f4f5f3] flex-[1_0_0] h-[2px] min-w-0 rounded-[1px]" />;
 }
 
-export default function TaasStepper({ steps }: { steps: Step[] }) {
+export default function TaasStepper({ steps, lang = 'EN' }: { steps: Step[]; lang?: 'EN' | 'AR' }) {
   return (
     <div className="flex gap-[10px] items-center w-full shrink-0">
       {steps.flatMap((step, i) => [
-        <TaasStep key={i} {...step} number={String(i + 1)} />,
+        <TaasStep key={i} {...step} number={String(i + 1)} lang={lang} />,
         ...(i < steps.length - 1 ? [<Connector key={`c-${i}`} />] : []),
       ])}
     </div>
