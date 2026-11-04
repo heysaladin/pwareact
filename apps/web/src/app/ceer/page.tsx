@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CeerPage() {
@@ -19,12 +20,22 @@ export default function CeerPage() {
       </div>
 
       {/* CTA */}
-      <Link
-        href="/ceer/00-explore-financing"
-        className="w-full max-w-[480px] bg-white text-[#0C0C0C] text-[15px] font-semibold tracking-wide py-4 rounded-full text-center"
-      >
-        Continue
-      </Link>
+      <div className="flex flex-col items-center gap-4 w-full max-w-[480px]">
+        <Link
+          href="/ceer/00-explore-financing"
+          className="w-full bg-white text-[#0C0C0C] text-[15px] font-semibold tracking-wide py-4 rounded-full text-center"
+        >
+          Continue
+        </Link>
+
+        {/* QR row */}
+        <div className="flex items-center gap-4">
+          <Image src="/qr-code.svg" alt="QR Code" width={71} height={86} />
+          <p className="text-[13px] leading-snug text-white/60 max-w-[160px]">
+            Scan with app for quick Tamawal login!
+          </p>
+        </div>
+      </div>
 
     </div>
   );
