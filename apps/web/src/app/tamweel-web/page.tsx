@@ -48,6 +48,13 @@ const t = {
     findPurposes: ['Renovation & Home Improvements', 'Travel & Vacation', 'Education', 'Medical Expenses', 'Debt Consolidation', 'Wedding', 'Electronics & Appliances'],
     findContinue: 'Continue',
 
+    steps: [
+      { label: 'Step 01', title: 'Apply securely', sub: 'Verify with Nafath and share data only with your consent.', img: '/steps/step-nafath.png', bg: '#eef5ff' },
+      { label: 'Step 02', title: 'Compare offers', sub: 'Installment, APR and total cost — side by side.', img: '/steps/step-compare.png', bg: '#fff6d6' },
+      { label: 'Step 03', title: 'Get your money', sub: 'Sign digitally and receive funds in your account.', img: '/steps/step-money.png', bg: '#e9f7f1' },
+      { label: 'Step 04', title: 'Improve your score', sub: 'Track your SIMAH score and unlock better rates.', img: '/steps/step-score.png', bg: '#f1ecff' },
+    ],
+
     faqLabel: 'FAQ', faqTitle: 'Questions you might ask',
     faqs: [
       { q: 'What is Tamawal and how does it work?', a: 'Tamawal is a financing aggregator that makes finding the best loan simpler, smarter, and hassle-free. Fill your profile once, compare real offers from 15+ Saudi banks, and apply — all in one place.' },
@@ -105,6 +112,13 @@ const t = {
     findPurposeLabel: 'اختر الغرض من القرض',
     findPurposes: ['تجديد المنزل وتحسينه', 'السفر والإجازة', 'التعليم', 'النفقات الطبية', 'توحيد الديون', 'حفلات الزفاف', 'الإلكترونيات والأجهزة'],
     findContinue: 'متابعة',
+
+    steps: [
+      { label: 'الخطوة 01', title: 'قدّم طلبك بأمان', sub: 'تحقّق من هويتك عبر نفاذ، وشارك بياناتك بموافقتك فقط.', img: '/steps/step-nafath.png', bg: '#eef5ff' },
+      { label: 'الخطوة 02', title: 'قارن العروض', sub: 'القسط والنسبة السنوية والتكلفة الإجمالية — جنبًا إلى جنب.', img: '/steps/step-compare.png', bg: '#fff6d6' },
+      { label: 'الخطوة 03', title: 'استلم تمويلك', sub: 'وقّع إلكترونيًا واستلم المبلغ في حسابك.', img: '/steps/step-money.png', bg: '#e9f7f1' },
+      { label: 'الخطوة 04', title: 'حسّن سجلك الائتماني', sub: 'تابع درجتك في سمة واحصل على نسب أفضل.', img: '/steps/step-score.png', bg: '#f1ecff' },
+    ],
 
     faqLabel: 'الأسئلة الشائعة', faqTitle: 'أسئلة قد تخطر على بالك',
     faqs: [
@@ -167,7 +181,7 @@ export default function TamweelWebHome() {
 
       {/* ── Nav ─────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#eef1f6]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-        <div className="flex items-center justify-between px-[64px] py-[20px]">
+        <div className="flex items-center justify-between px-4 py-4 md:px-[64px] md:py-[20px]">
           <div className="flex items-center gap-[48px]">
             <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
             <nav className="hidden md:flex items-center gap-[32px]">
@@ -206,7 +220,7 @@ export default function TamweelWebHome() {
             <img src="/sparkle-md.svg" alt="" width={30} height={30} className="absolute -left-10 bottom-8 pointer-events-none" />
             <img src="/sparkle-sm.svg" alt="" width={18} height={18} className="absolute right-2 -bottom-4 pointer-events-none" />
             <h1
-              className="text-[96px] font-bold leading-[88px] tracking-[-2px] text-[#021945]"
+              className="text-[48px] md:text-[96px] font-bold leading-[1] md:leading-[88px] tracking-[-1px] md:tracking-[-2px] text-[#021945]"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
             >
               {c.heroTitle1}<br />
@@ -219,8 +233,8 @@ export default function TamweelWebHome() {
             {c.heroSub}
           </p>
 
-          {/* Get the app — QR + text */}
-          <div className="mt-10 flex items-center justify-center">
+          {/* Get the app — QR + text (desktop) */}
+          <div className="hidden md:flex mt-10 items-center justify-center">
             <div className="flex items-center gap-6">
               <Image src="/qr-code.svg" alt="QR Code" width={71} height={86} />
               <div className="text-left">
@@ -233,10 +247,18 @@ export default function TamweelWebHome() {
               </div>
             </div>
           </div>
+          {/* Get the app — store buttons (mobile) */}
+          <div className="md:hidden mt-8 flex flex-col items-center gap-3">
+            <p className="text-[16px] font-bold text-[#021945]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.heroGetApp}</p>
+            <div className="flex gap-3">
+              <Image src="/appstore.svg" alt="App Store" width={130} height={40} />
+              <Image src="/playstore.svg" alt="Google Play" width={130} height={40} />
+            </div>
+          </div>
         </div>
 
-        {/* Hero photo */}
-        <div className="relative w-full overflow-x-clip" style={{ height: 646 }}>
+        {/* Hero photo — desktop */}
+        <div className="hidden md:block relative w-full overflow-x-clip" style={{ height: 646 }}>
           {/* Left decorative gray box */}
           <div
             className="absolute rounded-[48px] bg-[#f5f5f5]"
@@ -259,6 +281,16 @@ export default function TamweelWebHome() {
           <div
             className="absolute rounded-[48px] bg-[#f5f5f5]"
             style={{ left: 1020, top: 245, width: 329, height: 346, zIndex: 0 }}
+          />
+        </div>
+        {/* Hero photo — mobile */}
+        <div className="md:hidden relative mt-6 mx-4 rounded-[24px] overflow-hidden" style={{ aspectRatio: '4/3' }}>
+          <Image
+            src="/hero-photo.png"
+            alt="Tamawal user with car and Riyadh skyline"
+            fill
+            className="object-cover"
+            priority
           />
         </div>
       </section>
@@ -286,9 +318,9 @@ export default function TamweelWebHome() {
       </div>
 
       {/* ── Statement ───────────────────────────────────────────────────── */}
-      <section className="bg-white px-[180px] pt-[96px] pb-[120px] text-center">
+      <section className="bg-white px-6 md:px-[180px] pt-[64px] md:pt-[96px] pb-[80px] md:pb-[120px] text-center">
         <p
-          className="text-[52px] font-bold leading-[58px] tracking-[-1px]"
+          className="text-[32px] md:text-[52px] font-bold leading-[1.2] md:leading-[58px] tracking-[-0.5px] md:tracking-[-1px]"
           style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
         >
           {isRtl ? (
@@ -316,7 +348,25 @@ export default function TamweelWebHome() {
       </section>
 
       {/* ── Product Image Grid ──────────────────────────────────────────── */}
-      <section className="relative bg-white overflow-x-clip" style={{ height: 1284 }}>
+      {/* Mobile 2×2 grid */}
+      <section className="md:hidden bg-white px-4 py-10">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
+            <img src="/products/grid-cards.png" alt="Credit cards" className="w-[90%] object-contain" />
+          </div>
+          <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
+            <img src="/products/grid-keys.png" alt="Property keys" className="w-full object-cover" />
+          </div>
+          <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
+            <img src="/products/grid-person.png" alt="Tamawal user" className="h-[90%] object-contain" />
+          </div>
+          <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-center justify-center">
+            <img src="/products/grid-car.png" alt="Car financing" className="w-[90%] object-contain" />
+          </div>
+        </div>
+      </section>
+      {/* Desktop absolute-position grid */}
+      <section className="hidden md:block relative bg-white overflow-x-clip" style={{ height: 1284 }}>
         <div className="relative mx-auto" style={{ width: 1440, height: 1284 }}>
 
           {/* Top-right: Credit cards (image 4) */}
@@ -380,13 +430,13 @@ export default function TamweelWebHome() {
         <div className="pt-[48px] pb-0 text-center">
           <div className="relative inline-block">
             <h2
-              className="text-[68px] font-bold leading-[66px] tracking-[-1.5px] text-[#021945] text-center"
+              className="text-[40px] md:text-[68px] font-bold leading-[1.1] md:leading-[66px] tracking-[-1px] md:tracking-[-1.5px] text-[#021945] text-center"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
             >
               {c.stepsLabel}<br />
               <span>{c.stepsTitle} </span>
               <span
-                className="italic text-[#0063f5] text-[76px]"
+                className="italic text-[#0063f5] text-[48px] md:text-[76px]"
                 style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
               >
                 {c.stepsTitleItalic}
@@ -398,7 +448,36 @@ export default function TamweelWebHome() {
             {c.stepsSub}
           </p>
         </div>
-        <PhoneFlip lang={lang} />
+        {/* Mobile step cards — vertical stack */}
+        <div className="md:hidden mt-8 pb-10 flex flex-col gap-3 px-5">
+          {c.steps.map((step) => (
+            <div
+              key={step.label}
+              className="relative flex flex-col gap-2 overflow-hidden rounded-[32px] w-full pt-[22px] px-[22px]"
+              style={{ background: step.bg, height: 420 }}
+            >
+              <div className="bg-white inline-flex items-start px-[10px] py-[5px] rounded-[128px] self-start">
+                <span className="text-[11px] font-bold text-[#021945] whitespace-nowrap" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {step.label}
+                </span>
+              </div>
+              <p className="text-[24px] font-bold leading-[26px] tracking-[-0.4px] text-[#021945]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}>
+                {step.title}
+              </p>
+              <p className="text-[13px] leading-[20px] text-[#5b6b86] max-w-[216px]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {step.sub}
+              </p>
+              <div className="absolute" style={{ left: 25.84, top: 190, width: 208.32, height: 363.94 }}>
+                <img src={step.img} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop PhoneFlip */}
+        <div className="hidden md:block">
+          <PhoneFlip lang={lang} />
+        </div>
       </div>
 
       {/* ── Download + Calculator ────────────────────────────────────────── */}
@@ -427,7 +506,7 @@ export default function TamweelWebHome() {
               </div>
             </div>
 
-            <div className="w-full lg:w-[601px] z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white" style={{ minHeight: 520 }}>
+            <div className="w-full z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white" style={{ minHeight: 520 }}>
               <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
                 <p className="text-[#021945] text-[20px] font-bold text-center">{c.findTitle}</p>
               </div>
@@ -544,7 +623,7 @@ export default function TamweelWebHome() {
       <section id="faq" className="py-[96px] bg-white">
         <div className="max-w-[896px] mx-auto px-6">
           <h2
-            className="text-[60px] font-bold text-[#101828] text-center mb-[64px] leading-[75px]"
+            className="text-[36px] md:text-[60px] font-bold text-[#101828] text-center mb-10 md:mb-[64px] leading-[1.2] md:leading-[75px]"
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
           >
             {c.faqTitle}
@@ -560,7 +639,7 @@ export default function TamweelWebHome() {
       {/* ── Footer ──────────────────────────────────────────────────────── */}
       <footer className="bg-black overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
         {/* Top links area */}
-        <div className="flex items-start justify-between pt-[48px] pb-[48px] px-6 max-w-[1152px] mx-auto gap-8">
+        <div className="flex flex-col md:flex-row items-start justify-between pt-[48px] pb-[48px] px-6 max-w-[1152px] mx-auto gap-8">
           {/* Brand */}
           <div className="flex flex-col gap-4 items-start shrink-0 max-w-[320px]">
             <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
@@ -570,7 +649,7 @@ export default function TamweelWebHome() {
           </div>
 
           {/* Links */}
-          <div className="flex gap-[64px] items-start shrink-0">
+          <div className="flex gap-10 md:gap-[64px] items-start shrink-0">
             <div className="flex flex-col gap-[10px] items-start">
               <p className="text-[12px] font-semibold text-[#101828] tracking-[0px] mb-2">{c.footerPlatform}</p>
               {c.footerPlatformLinks.map((item) => (

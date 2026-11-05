@@ -42,8 +42,28 @@ const offers = [
   },
 ];
 
+const PRODUCT_TYPES = [
+  { id: 'installment', label: 'Monthly installment', icon: '/taas/icon-product-installment.svg' },
+  { id: 'balloon',     label: 'Balloon',              icon: '/taas/icon-product-balloon.svg' },
+  { id: '5050',        label: '50/50',                icon: '/taas/icon-product-5050.svg' },
+  { id: 'lease',       label: 'Lease',                icon: '/taas/icon-product-lease.svg' },
+];
+
+const TERMS = [24, 36, 48, 60];
+
+const detailItems = [
+  { label: 'Product type',   value: 'Monthly installment', icon: '/taas/icon-det-product.svg' },
+  { label: 'Monthly salary', value: '⃁ 25,000',            icon: '/taas/icon-det-salary.svg' },
+  { label: 'Commitments',    value: '⃁ 3,500',             icon: '/taas/icon-det-commit.svg' },
+  { label: 'Down payment',   value: '20% · ⃁ 45,750',      icon: '/taas/icon-det-down.svg' },
+  { label: 'Term',           value: '60 months',           icon: '/taas/icon-det-term.svg' },
+];
+
 export default function PreliminaryOffersPage() {
   const [selected, setSelected] = useState('snb');
+  const [editing, setEditing] = useState(false);
+  const [editProductType, setEditProductType] = useState('installment');
+  const [editTerm, setEditTerm] = useState(60);
 
   const footer = (
     <>
@@ -98,26 +118,134 @@ export default function PreliminaryOffersPage() {
         </Link>
       </div>
 
-      {/* Your details bar */}
-      <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[14px] rounded-[12px] shrink-0 w-full">
-        <div className="flex gap-[32px] items-center shrink-0 text-[#1d2d33] whitespace-nowrap" style={saira}>
-          {[
-            { label: 'Monthly salary', value: '⃁ 25,000' },
-            { label: 'Commitments', value: '⃁ 3,500' },
-            { label: 'Down payment', value: '20% · ⃁ 45,750' },
-            { label: 'Term', value: '60 months' },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex flex-col gap-[2px] items-start shrink-0">
-              <p className="text-[12px] leading-[16px]" style={saira}>{label}</p>
-              <p className="text-[14px] leading-[23px]" style={saira}>{value}</p>
+      {/* Your details bar — view / edit */}
+      {!editing ? (
+        <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex items-center justify-between px-[20px] py-[14px] rounded-[12px] shrink-0 w-full">
+          <div className="flex gap-[14px] items-center shrink-0">
+            {detailItems.map(({ label, value, icon }, i) => (
+              <div key={label} className="flex gap-[14px] items-center shrink-0">
+                {i > 0 && <div className="bg-[rgba(48,63,70,0.15)] h-[36px] shrink-0 w-px" />}
+                <div className="flex gap-[10px] items-center shrink-0">
+                  <div className="bg-[rgba(0,62,82,0.07)] flex items-center justify-center rounded-[18px] shrink-0 size-[36px]">
+                    <img alt="" className="size-[20px]" src={icon} />
+                  </div>
+                  <div className="flex flex-col gap-[2px] items-start shrink-0 whitespace-nowrap text-[#1d2d33]" style={saira}>
+                    <p className="text-[12px] leading-[16px]">{label}</p>
+                    <p className="text-[14px] leading-[23px]">{value}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="flex gap-[6px] items-center shrink-0" onClick={() => setEditing(true)}>
+            <img alt="" className="size-[14px]" src="/taas/icon-det-edit.svg" />
+            <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={saira}>Edit details</p>
+          </button>
+        </div>
+      ) : (
+        <div className="bg-[#f4f5f3] border border-[rgba(48,63,70,0.2)] flex flex-col gap-[18px] items-start px-[20px] py-[18px] rounded-[12px] shrink-0 w-full">
+          {/* Header */}
+          <div className="flex items-center justify-between w-full whitespace-nowrap" style={saira}>
+            <p className="text-[14px] leading-[23px] text-[#1d2d33]">Edit your details</p>
+            <p className="text-[12px] leading-[16px] text-[rgba(48,63,70,0.6)]">Changes update your preliminary offers</p>
+          </div>
+          {/* Product type */}
+          <div className="flex flex-col gap-[12px] items-start w-full">
+            <div className="flex gap-[8px] items-center">
+              <p className="text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>Product type</p>
+              <img alt="" className="size-[18px]" src="/taas/icon-product-info.svg" />
             </div>
-          ))}
+            <div className="flex gap-[12px] items-center w-full">
+              {PRODUCT_TYPES.map(({ id, label, icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setEditProductType(id)}
+                  className="flex flex-[1_0_0] h-[48px] gap-[10px] items-center justify-center min-w-0 px-[12px] rounded-[10px]"
+                  style={editProductType === id
+                    ? { backgroundColor: 'white', border: '1.5px solid #003e52' }
+                    : { backgroundColor: 'white', border: '1px solid rgba(48,63,70,0.2)' }
+                  }
+                >
+                  <img alt="" className="size-[20px] shrink-0" src={icon} />
+                  <p className="text-[14px] leading-[23px] whitespace-nowrap" style={{ ...saira, color: editProductType === id ? '#003e52' : '#1d2d33' }}>
+                    {label}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* Input fields */}
+          <div className="flex gap-[16px] items-start w-full">
+            {/* Monthly salary */}
+            <div className="flex flex-[1_0_0] flex-col gap-[6px] items-start min-w-0">
+              <p className="text-[12px] leading-[16px] text-[#1d2d33]" style={saira}>Monthly salary</p>
+              <div className="bg-white border border-[rgba(48,63,70,0.2)] flex gap-[8px] h-[44px] items-center px-[12px] rounded-[10px] w-full">
+                <p className="text-[14px] leading-[23px] text-[rgba(48,63,70,0.6)]" style={saira}>⃁</p>
+                <div className="bg-[rgba(48,63,70,0.2)] h-[20px] shrink-0 w-px" />
+                <input type="text" defaultValue="25,000" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[14px] leading-[23px] text-[#1d2d33]" style={saira} />
+              </div>
+            </div>
+            {/* Commitments */}
+            <div className="flex flex-[1_0_0] flex-col gap-[6px] items-start min-w-0">
+              <div className="flex gap-[6px] items-center">
+                <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={saira}>Existing monthly credit commitments</p>
+                <img alt="" className="size-[14px] shrink-0" src="/taas/icon-det-help.svg" />
+              </div>
+              <div className="bg-white border border-[rgba(48,63,70,0.2)] flex gap-[8px] h-[44px] items-center px-[12px] rounded-[10px] w-full">
+                <p className="text-[14px] leading-[23px] text-[rgba(48,63,70,0.6)]" style={saira}>⃁</p>
+                <div className="bg-[rgba(48,63,70,0.2)] h-[20px] shrink-0 w-px" />
+                <input type="text" defaultValue="3,500" className="flex-1 min-w-0 bg-transparent border-none outline-none text-[14px] leading-[23px] text-[#1d2d33]" style={saira} />
+              </div>
+            </div>
+            {/* Down payment */}
+            <div className="flex flex-[1_0_0] flex-col gap-[6px] items-start min-w-0">
+              <p className="text-[12px] leading-[16px] text-[#1d2d33]" style={saira}>Down payment</p>
+              <div className="bg-white border border-[rgba(48,63,70,0.2)] flex gap-[8px] h-[44px] items-center px-[12px] rounded-[10px] w-full">
+                <p className="flex-1 min-w-0 text-[14px] leading-[23px] text-[#1d2d33]" style={saira}>20% · ⃁ 45,750</p>
+                <img alt="" className="size-[16px] shrink-0" src="/taas/icon-det-chev.svg" />
+              </div>
+            </div>
+          </div>
+          {/* Financing term + actions */}
+          <div className="flex gap-[16px] items-end w-full">
+            <div className="flex flex-col gap-[6px] items-start">
+              <p className="text-[12px] leading-[16px] text-[#1d2d33] whitespace-nowrap" style={saira}>Financing term</p>
+              <div className="flex gap-[8px] items-center">
+                {TERMS.map(m => (
+                  <button
+                    key={m}
+                    onClick={() => setEditTerm(m)}
+                    className="flex h-[44px] items-center justify-center rounded-[10px] shrink-0 w-[104px]"
+                    style={editTerm === m
+                      ? { backgroundColor: '#f4f5f3', border: '1.5px solid #003e52' }
+                      : { backgroundColor: 'white', border: '1px solid rgba(48,63,70,0.2)' }
+                    }
+                  >
+                    <p className="text-[14px] leading-[23px] whitespace-nowrap" style={{ ...saira, color: editTerm === m ? '#003e52' : '#1d2d33' }}>
+                      {m} months
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 min-w-0" />
+            <div className="flex gap-[12px] items-center shrink-0">
+              <button
+                onClick={() => setEditing(false)}
+                className="bg-white border border-[#1d2d33] flex h-[44px] items-center justify-center rounded-[8px] w-[120px]"
+              >
+                <p className="text-[12px] leading-[19px] text-[#1d2d33] uppercase" style={oxanium}>Cancel</p>
+              </button>
+              <button
+                onClick={() => setEditing(false)}
+                className="bg-[#003e52] flex h-[44px] items-center justify-center rounded-[8px] w-[120px]"
+              >
+                <p className="text-[12px] leading-[19px] text-white uppercase" style={oxanium}>Apply</p>
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-[6px] items-center shrink-0">
-          <img alt="" className="size-[14px]" src="/taas/icon-edit.svg" />
-          <p className="text-[14px] leading-[23px] text-[#003e52] whitespace-nowrap" style={saira}>Edit details</p>
-        </div>
-      </div>
+      )}
 
       {/* Count + sort */}
       <div className="flex items-center justify-between shrink-0 w-full">

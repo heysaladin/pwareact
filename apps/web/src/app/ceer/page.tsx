@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CeerPage() {
@@ -28,13 +27,6 @@ export default function CeerPage() {
           Continue
         </Link>
 
-        {/* QR row */}
-        <div className="flex items-center gap-4">
-          <Image src="/qr-code.svg" alt="QR Code" width={71} height={86} />
-          <p className="text-[13px] leading-snug text-white/60 max-w-[160px]">
-            Scan with app for quick Tamawal login!
-          </p>
-        </div>
       </div>
 
     </div>
