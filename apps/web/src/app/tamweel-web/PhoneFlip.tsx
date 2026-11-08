@@ -17,7 +17,7 @@ const COPY: Record<Lang, { sections: Section[] }> = {
   en: {
     sections: [
       { n: '01', h: 'Apply securely with Tamawal', p: 'Verify your identity with Nafath and share your data only with your consent.', li: ['Nafath identity check', 'Encrypted end to end', 'You control every consent'] },
-      { n: '02', h: 'Compare offers', p: 'Every eligible offer side by side: monthly installment, APR and total cost.', li: ['Ranked by total cost', 'Filter by tenure and amount', 'Save offers for later'] },
+      { n: '02', h: "Search, Find n' Compare offers", p: 'Every eligible offer side by side: monthly installment, APR and total cost.', li: ['Ranked by total cost', 'Filter by tenure and amount', 'Save offers for later'] },
       { n: '03', h: 'Get your money', p: 'Accept, sign digitally, and receive funds directly in your bank account.', li: ['Digital contract signing', 'Track every step live', 'Funds to your IBAN'] },
     ],
   },
@@ -339,7 +339,7 @@ export default function PhoneFlip({ lang }: { lang: Lang }) {
           return (
             <div key={i} className={`pf-panel pf-${sideCls}`}>
               <div className="pf-copy">
-                <div className="pf-num">{s.n}</div>
+                <div className="pf-num">STEP {s.n}</div>
                 <h2>{s.h}</h2>
                 <p>{s.p}</p>
                 <ul>{s.li.map((item, j) => <li key={j}>{item}</li>)}</ul>

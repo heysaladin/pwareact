@@ -1,0 +1,21 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="360" height="300" viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Shield Illustration">
+<path id="Vector" d="M180 300C262.843 300 330 293.732 330 286C330 278.268 262.843 272 180 272C97.1573 272 30 278.268 30 286C30 293.732 97.1573 300 180 300Z" fill="#021945" fill-opacity="0.18"/>
+<path id="Vector_2" d="M180 20L290 60V140C290 210 240 255 180 280C120 255 70 210 70 140V60L180 20Z" fill="url(#paint0_linear_5403_176043)"/>
+<path id="Vector_3" d="M180 52L262 82V142C262 194 226 228 180 248C134 228 98 194 98 142V82L180 52Z" fill="url(#paint1_linear_5403_176043)"/>
+<path id="Vector_4" d="M202 132H158C151.373 132 146 137.373 146 144V176C146 182.627 151.373 188 158 188H202C208.627 188 214 182.627 214 176V144C214 137.373 208.627 132 202 132Z" fill="#FFDD33"/>
+<path id="Vector_5" d="M158 132V116C158 103 168 94 180 94C192 94 202 103 202 116V132" stroke-width="10" stroke-linecap="round" stroke="#FFDD33"/>
+<path id="Vector_6" d="M180 163C183.866 163 187 159.866 187 156C187 152.134 183.866 149 180 149C176.134 149 173 152.134 173 156C173 159.866 176.134 163 180 163Z" fill="#021945"/>
+<path id="Vector_7" d="M183 161C183 159.343 181.657 158 180 158C178.343 158 177 159.343 177 161V171C177 172.657 178.343 174 180 174C181.657 174 183 172.657 183 171V161Z" fill="#021945"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_5403_176043" x1="70" y1="20" x2="326.414" y2="236.966" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#DCE8FF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_5403_176043" x1="98" y1="52" x2="98" y2="248" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0B3FB8"/>
+<stop offset="1" stop-color="#021945"/>
+</linearGradient>
+</defs>
+</svg>

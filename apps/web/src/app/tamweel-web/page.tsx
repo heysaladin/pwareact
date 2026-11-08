@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -7,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const PhoneFlip = dynamic(() => import('./PhoneFlip'), { ssr: false });
 const DownloadMockup = dynamic(() => import('./DownloadMockup'), { ssr: false });
+const CanvasSlider = dynamic(() => import('./CanvasSlider'), { ssr: false });
 
 type Lang = 'en' | 'ar';
 
@@ -15,9 +17,10 @@ const t = {
     navPersonal: 'Personal',
     navBusiness: 'Business',
     navHowItWorks: 'How it works',
+    navAction: 'Action',
     navFaq: 'FAQ',
     navSignIn: 'Sign in',
-    navGetStarted: 'Get Started',
+    navGetStarted: 'Join',
 
     heroTitle1: 'Compare. Apply.',
     heroTitle2: 'Get Funded.',
@@ -67,14 +70,34 @@ const t = {
       { q: 'Is my personal information secure with Tamawal?', a: 'Yes. All data is protected using bank-grade encryption and we are fully regulated by SAMA. You control every consent — your data is never shared without your explicit permission.' },
     ],
 
-    footerDesc: 'Licensed financial aggregator regulated by the Saudi Central Bank (SAMA).',
-    footerPlatform: 'PLATFORM',
-    footerCompany: 'COMPANY',
-    footerSupport: 'SUPPORT',
-    footerGetApp: 'GET THE APP',
-    footerPlatformLinks: ['Hub', 'How it Works', 'Download', 'Loan finder'],
-    footerCompanyLinks: ['About Us', 'Brand', 'Materials', 'Careers'],
-    footerSupportLinks: ['FAQ', 'Contact us', 'Privacy policy', 'Terms of use'],
+    footerAboutTitle: 'About us',
+    footerAboutLinks: ['Who we are', 'Our products', 'Our values'],
+    footerLegalTitle: 'Legal',
+    footerLegalLinks: ['Terms and Conditions', 'Data Protection and Privacy', 'Customer Protection Principles'],
+    footerActionsTitle: 'Take actions',
+    footerActionsLinks: ['Be a partner', 'Be a customer'],
+    footerCareTitle: 'Customer Care',
+    footerCareLinks: ['Suggestion', 'Complaint', 'Report a Violation', 'Report Financial Fraud'],
+    footerContactTitle: 'Contact us',
+    footerEmail: 'info@tamawal.sa',
+    footerPhone1: '011 512 3870',
+    footerPhone2: '800 100 0276',
+    footerAddressTitle: 'Address',
+    footerAddress: 'Al Olaya (403) street, Riyadh, Saudi Arabia',
+    footerHoursTitle: 'Working hours',
+    footerHours: '09:00 – 17:00',
+    footerDaysTitle: 'Working days',
+    footerDays: 'Sunday – Thursday',
+    footerSocialTitle: 'Social media',
+    footerFaqs: 'FAQs',
+    footerLicense: 'Tamawal® is supervised and regulated by the Saudi Central Bank under license No. 98/N M/202504',
+    gridCards: [
+      { eyebrow: 'CAR FINANCING', title: 'Drive away\nwith the best rate' },
+      { eyebrow: 'CREDIT CARDS', title: 'Cards that\nfit your lifestyle' },
+      { eyebrow: 'REAL ESTATE', title: 'Your dream home,\nfinanced' },
+      { eyebrow: 'PERSONAL LOANS', title: 'Approved in\nas little as 24h' },
+    ],
+
     copyright: '© 2026 Tamawal. All rights reserved.',
     regulated: 'Regulated by SAMA',
   },
@@ -82,9 +105,10 @@ const t = {
     navPersonal: 'أفراد',
     navBusiness: 'أعمال',
     navHowItWorks: 'كيف يعمل',
+    navAction: 'إجراءات',
     navFaq: 'الأسئلة الشائعة',
     navSignIn: 'تسجيل الدخول',
-    navGetStarted: 'ابدأ الآن',
+    navGetStarted: 'انضم',
 
     heroTitle1: 'قارن. قدّم.',
     heroTitle2: 'احصل على تمويلك.',
@@ -135,14 +159,34 @@ const t = {
       { q: 'هل معلوماتي الشخصية آمنة مع تامول؟', a: 'نعم، تامول يُولي أولوية قصوى لأمن وخصوصية جميع بياناتك الشخصية. جميع المعاملات والبيانات محمية بتشفير على مستوى البنوك، ونخضع لرقابة كاملة من ساما.' },
     ],
 
-    footerDesc: 'مجمّع تمويل مرخص يخضع لرقابة البنك المركزي السعودي (ساما).',
-    footerPlatform: 'المنصة',
-    footerCompany: 'الشركة',
-    footerSupport: 'الدعم',
-    footerGetApp: 'حمّل التطبيق',
-    footerPlatformLinks: ['المحور', 'كيف يعمل', 'تحميل', 'باحث القروض'],
-    footerCompanyLinks: ['من نحن', 'الهوية البصرية', 'المواد', 'وظائف'],
-    footerSupportLinks: ['الأسئلة الشائعة', 'تواصل معنا', 'سياسة الخصوصية', 'شروط الاستخدام'],
+    footerAboutTitle: 'من نحن',
+    footerAboutLinks: ['تعرّف علينا', 'منتجاتنا', 'قيمنا'],
+    footerLegalTitle: 'قانوني',
+    footerLegalLinks: ['الشروط والأحكام', 'حماية البيانات والخصوصية', 'مبادئ حماية العملاء'],
+    footerActionsTitle: 'اتخذ خطوة',
+    footerActionsLinks: ['كن شريكاً', 'كن عميلاً'],
+    footerCareTitle: 'خدمة العملاء',
+    footerCareLinks: ['اقتراح', 'شكوى', 'الإبلاغ عن مخالفة', 'الإبلاغ عن احتيال مالي'],
+    footerContactTitle: 'تواصل معنا',
+    footerEmail: 'info@tamawal.sa',
+    footerPhone1: '011 512 3870',
+    footerPhone2: '800 100 0276',
+    footerAddressTitle: 'العنوان',
+    footerAddress: 'شارع العليا (٤٠٣)، الرياض، المملكة العربية السعودية',
+    footerHoursTitle: 'ساعات العمل',
+    footerHours: '٠٩:٠٠ – ١٧:٠٠',
+    footerDaysTitle: 'أيام العمل',
+    footerDays: 'الأحد – الخميس',
+    footerSocialTitle: 'وسائل التواصل الاجتماعي',
+    footerFaqs: 'الأسئلة الشائعة',
+    footerLicense: 'تامول® يخضع للإشراف والتنظيم من قِبل البنك المركزي السعودي بموجب الترخيص رقم 98/N M/202504',
+    gridCards: [
+      { eyebrow: 'تمويل السيارات', title: 'انطلق بأفضل\nسعر تمويل' },
+      { eyebrow: 'بطاقات الائتمان', title: 'بطاقات تناسب\nأسلوب حياتك' },
+      { eyebrow: 'العقارات', title: 'منزل أحلامك\nبتمويل ميسّر' },
+      { eyebrow: 'القروض الشخصية', title: 'موافقة في أقل\nمن ٢٤ ساعة' },
+    ],
+
     copyright: '© 2026 تامول. جميع الحقوق محفوظة.',
     regulated: 'مرخص من ساما',
   },
@@ -169,18 +213,37 @@ export default function TamweelWebHome() {
   const [lang, setLang] = useState<Lang>('en');
   const [findProduct, setFindProduct] = useState(0);
   const [salary, setSalary] = useState(7000);
+  const [formTab, setFormTab] = useState<'form' | 'chat'>('form');
   const [hasActiveLoans, setHasActiveLoans] = useState<boolean | null>(null);
   const [loanPurpose, setLoanPurpose] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [headerFloating, setHeaderFloating] = useState(false);
+  const [downloadVisible, setDownloadVisible] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
+  const [gridVisible, setGridVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const isRtl = lang === 'ar';
   const c = t[lang];
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
+    const onScroll = () => {
+      setScrolled(window.scrollY > window.innerHeight * 0.6);
+      setHeaderFloating(window.scrollY > 80);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = document.getElementById('download');
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setDownloadVisible(entry.isIntersecting),
+      { threshold: 0.1 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   useEffect(() => {
@@ -194,18 +257,35 @@ export default function TamweelWebHome() {
     return () => obs.disconnect();
   }, []);
 
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setGridVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white font-sans" dir={isRtl ? 'rtl' : 'ltr'}>
 
-      {/* ── Nav ─────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#eef1f6]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+      {/* ── Header (sticky → floating pill on scroll) ───────────────────── */}
+
+      {/* Static bar — visible before scroll, scrolls with page */}
+      <header
+        className="relative z-10 bg-white border-b border-[#eef1f6]"
+        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", visibility: headerFloating ? 'hidden' : 'visible' }}
+      >
         <div className="flex items-center justify-between px-4 py-4 md:px-[64px] md:py-[20px]">
           <div className="flex items-center gap-[48px]">
-            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
+            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={123} height={32} />
             <nav className="hidden md:flex items-center gap-[32px]">
               <a href="#" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navPersonal}</a>
               <a href="#" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navBusiness}</a>
               <a href="#how-it-works" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navHowItWorks}</a>
+              <a href="#" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navAction}</a>
               <a href="#faq" className="text-[14px] font-semibold text-[#021945] hover:opacity-70 transition-opacity">{c.navFaq}</a>
             </nav>
           </div>
@@ -226,11 +306,57 @@ export default function TamweelWebHome() {
         </div>
       </header>
 
+      {/* Floating pill — visible after scroll */}
+      <div
+        className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4 transition-[opacity,transform] duration-300"
+        style={{ opacity: headerFloating ? 1 : 0, transform: headerFloating ? 'translateY(0)' : 'translateY(-8px)' }}
+      >
+        <div
+          className="relative flex items-center justify-between gap-[48px] rounded-[1000px] pointer-events-auto"
+          style={{
+            padding: '8px 8px 8px 20px',
+            pointerEvents: headerFloating ? 'auto' : 'none',
+            background: 'rgba(255,255,255,0.72)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            boxShadow: '0 0 0 0.5px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)',
+          }}
+        >
+          {/* no extra glass layers needed */}
+          {/* Left: Logo + Nav */}
+          <div className="relative flex items-center gap-[48px] shrink-0">
+            <Image src="/logo-tamawal-icon.svg" alt="Tamawal" width={32} height={32} />
+            <nav className="hidden md:flex items-center gap-[32px]">
+              <a href="#" className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">{c.navPersonal}</a>
+              <a href="#" className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">{c.navBusiness}</a>
+              <a href="#how-it-works" className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">{c.navHowItWorks}</a>
+              <a href="#" className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">{c.navAction}</a>
+              <a href="#faq" className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">{c.navFaq}</a>
+            </nav>
+          </div>
+          {/* Right: Lang + Sign in + Join */}
+          <div className="relative flex items-center gap-[24px] shrink-0">
+            <button
+              onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
+              className="text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap"
+            >
+              {lang === 'en' ? 'عربي' : 'EN'}
+            </button>
+            <a href="#" className="hidden md:block text-[14px] font-[590] text-[#021945] hover:opacity-70 transition-opacity whitespace-nowrap">
+              {c.navSignIn}
+            </a>
+            <Link href="/tamweel-web/hub" className="text-[14px] font-bold text-white bg-[#0063f5] px-[24px] py-[12px] rounded-[128px] hover:bg-[#0052cc] transition-colors whitespace-nowrap">
+              {c.navGetStarted}
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-white">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(0,99,245,0.06),transparent)]" />
 
-        {/* Headline + subtitle + QR widget */}
+        {/* Headline + subtitle + CTA row */}
         <div className="relative text-center pt-[62px] pb-16 px-6">
           {/* Headline with sparkles */}
           <div className="relative inline-block">
@@ -251,26 +377,21 @@ export default function TamweelWebHome() {
             {c.heroSub}
           </p>
 
-          {/* Get the app — QR + text (desktop) */}
-          <div className="hidden md:flex mt-10 items-center justify-center">
-            <div className="flex items-center gap-6">
-              <Image src="/qr-code.svg" alt="QR Code" width={71} height={86} />
-              <div className="text-left">
-                <p className="text-[20px] font-bold text-[#021945] leading-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {c.heroGetApp}
-                </p>
-                <p className="text-[14px] text-[#5b6b86] mt-1" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {c.heroScanText}
-                </p>
+          {/* CTA row — two pill buttons */}
+          <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
+            {/* Download the App */}
+            <div className="flex items-center gap-[8px] p-[5px] rounded-[8px] border border-[#f5f5f5]">
+              <div className="bg-[#f3f5f7] flex items-center justify-center p-[20px] rounded-[12px] shrink-0">
+                <Image src="/qr-code.svg" alt="QR Code" width={24} height={24} />
               </div>
+              <p className="text-[8.06px] font-[590] text-[#344054] tracking-[-0.13px] leading-[12px] w-[50px] text-left whitespace-pre-line">{c.heroCta2}</p>
             </div>
-          </div>
-          {/* Get the app — store buttons (mobile) */}
-          <div className="md:hidden mt-8 flex flex-col items-center gap-3">
-            <p className="text-[16px] font-bold text-[#021945]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.heroGetApp}</p>
-            <div className="flex gap-3">
-              <Image src="/appstore.svg" alt="App Store" width={130} height={40} />
-              <Image src="/playstore.svg" alt="Google Play" width={130} height={40} />
+            {/* Check live */}
+            <div className="flex items-center gap-[8px] p-[5px] rounded-[8px] border border-[#f5f5f5]">
+              <p className="text-[8.06px] font-[590] text-[#344054] tracking-[-0.13px] leading-[12px] w-[50px] text-right whitespace-pre-line">{isRtl ? 'تحقق من جودتك مباشرة' : 'Check your quality live'}</p>
+              <div className="bg-[#f3f5f7] flex items-center justify-center p-[20px] rounded-[12px] shrink-0">
+                <Image src="/icon-settings.svg" alt="" width={24} height={24} />
+              </div>
             </div>
           </div>
         </div>
@@ -284,13 +405,8 @@ export default function TamweelWebHome() {
           .hero-card-anim { opacity: 0; }
           .hero-card-anim.visible { animation: hero-card-up 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
         `}</style>
-        <div ref={heroRef} className="hidden md:block relative w-full overflow-x-clip" style={{ height: 646 }}>
+        <div ref={heroRef} className="hidden md:block relative w-full overflow-x-clip" style={{ height: 670 }}>
           <div className="relative mx-auto" style={{ width: 1349, height: 646 }}>
-            {/* Left decorative gray box */}
-            <div
-              className="absolute rounded-[48px] bg-[#f5f5f5]"
-              style={{ left: 96, top: 184, width: 194, height: 204, zIndex: 0 }}
-            />
             {/* Main photo */}
             <div
               className="absolute rounded-[40px] overflow-hidden"
@@ -304,24 +420,24 @@ export default function TamweelWebHome() {
                 priority
               />
             </div>
-            {/* Right decorative gray box */}
-            <div
-              className="absolute rounded-[48px] bg-[#f5f5f5]"
-              style={{ left: 1020, top: 245, width: 329, height: 346, zIndex: 0 }}
-            />
-            {/* Floating card — left (calendar) */}
+            {/* Floating panel — left */}
             <div
               className={`hero-card-anim${heroVisible ? ' visible' : ''} absolute`}
-              style={{ left: 46, top: 440, width: 172, zIndex: 3, animationDelay: '0.1s' }}
+              style={{ left: 96, top: 161, width: 259, height: 419, zIndex: 3, animationDelay: '0.1s' }}
             >
-              <Image src="/hero-card-left.png" alt="" width={172} height={190} className="w-full h-auto" />
+              <Image src="/hero-left.png" alt="" width={259} height={419} className="w-full h-auto" />
             </div>
-            {/* Floating card — right (deals) */}
+            {/* Floating panel — right */}
             <div
               className={`hero-card-anim${heroVisible ? ' visible' : ''} absolute`}
-              style={{ left: 1046, top: 190, width: 258, zIndex: 3, animationDelay: '0.25s' }}
+              style={{ left: 1002, top: 145, width: 297, height: 487, zIndex: 3, animationDelay: '0.25s' }}
             >
-              <Image src="/hero-card-right.png" alt="" width={258} height={340} className="w-full h-auto" />
+              <Image src="/hero-right.png" alt="" width={297} height={487} className="w-full h-auto" />
+            </div>
+            {/* SAMA badge */}
+            <div className="absolute pointer-events-none" style={{ left: 794, top: 511, width: 157, height: 157, zIndex: 4 }}>
+              <img src="/badge.svg" alt="" className="w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
+              <img src="/badge-center.svg" alt="Licensed by SAMA" className="absolute inset-0 w-full h-full" />
             </div>
           </div>
         </div>
@@ -342,17 +458,17 @@ export default function TamweelWebHome() {
         <p className="text-center text-[12px] font-bold tracking-[1.5px] text-[#5b6b86] mb-[20px]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {c.trustedLabel}
         </p>
-        <div className="w-full overflow-hidden automatic-horizontal-scroll py-[32px]">
-          <div className="flex items-center w-max animate-[scroll-partners_40s_linear_infinite] rtl:animate-[scroll-partners-rtl_40s_linear_infinite]">
+        <div className="w-full overflow-hidden automatic-horizontal-scroll py-6">
+          <div className="flex items-center w-max animate-[scroll-partners_30s_linear_infinite] rtl:animate-[scroll-partners-rtl_30s_linear_infinite]">
             {[0, 1].map((set) => (
               <div key={set} className="flex items-center">
-                <img alt="quara"    className="partner-logo mx-10" src="/partners/p1.svg" />
-                <img alt="alraedah" className="partner-logo mx-10" src="/partners/p2.svg" />
-                <img alt="nayifat"  className="partner-logo mx-10" src="/partners/p3.svg" />
-                <img alt="osoul"    className="partner-logo mx-10" src="/partners/p4.svg" />
-                <img alt="osoul"    className="partner-logo mx-10" src="/partners/p6.svg" />
-                <img alt="alraedah" className="partner-logo mx-10" src="/partners/partner-alraedah.png" />
-                <img alt="osoul"    className="partner-logo mx-10" src="/partners/partner-osoul.png" />
+                <img alt="quara"    className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/p1.svg" />
+                <img alt="alraedah" className="h-auto mx-6 max-w-[90px] w-[90px] object-contain grayscale opacity-50" src="/partners/p2.svg" />
+                <img alt="nayifat"  className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/p3.svg" />
+                <img alt="osoul"    className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/p4.svg" />
+                <img alt="osoul"    className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/p6.svg" />
+                <img alt="alraedah" className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/partner-alraedah.png" />
+                <img alt="osoul"    className="h-auto mx-6 max-w-[120px] w-[120px] object-contain grayscale opacity-50" src="/partners/partner-osoul.png" />
               </div>
             ))}
           </div>
@@ -394,73 +510,98 @@ export default function TamweelWebHome() {
       <section className="md:hidden bg-white px-4 py-10">
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
-            <img src="/products/grid-cards.png" alt="Credit cards" className="w-[90%] object-contain" />
+            <img src="/loan-type/card.png" alt="Credit cards" className="w-[90%] object-contain" />
           </div>
           <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
-            <img src="/products/grid-keys.png" alt="Property keys" className="w-full object-cover" />
+            <img src="/loan-type/real-estate.png" alt="Property keys" className="w-full object-cover" />
           </div>
           <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-end justify-center">
-            <img src="/products/grid-person.png" alt="Tamawal user" className="h-[90%] object-contain" />
+            <img src="/loan-type/personal.png" alt="Tamawal user" className="h-[90%] object-contain" />
           </div>
           <div className="rounded-[24px] overflow-hidden bg-[#f5f5f5] aspect-square flex items-center justify-center">
-            <img src="/products/grid-car.png" alt="Car financing" className="w-[90%] object-contain" />
+            <img src="/loan-type/car.png" alt="Car financing" className="w-[90%] object-contain" />
           </div>
         </div>
       </section>
       {/* Desktop absolute-position grid */}
-      <section className="hidden md:block relative bg-white overflow-x-clip" style={{ height: 1284 }}>
-        <div className="relative mx-auto" style={{ width: 1440, height: 1284 }}>
+      <section ref={gridRef} className="hidden md:block relative bg-white overflow-x-clip" style={{ height: 1340 }}>
+        <div className="relative mx-auto" style={{ width: 1440, height: 1340 }}>
 
-          {/* Top-right: Credit cards (image 4) */}
+          {/* Top-left: Car Financing (dark) */}
           <div
-            className="absolute overflow-hidden rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 752, top: 22, width: 439, height: 461 }}
+            className="absolute overflow-hidden rounded-[48px] transition-[opacity,transform] duration-700"
+            style={{ left: 248, top: 205, width: 439, height: 461, background: '#0a0a0a', opacity: gridVisible ? 1 : 0, transform: gridVisible ? 'none' : 'translateY(40px) translateX(-20px)', transitionDelay: '0ms' }}
           >
-            <img
-              src="/products/grid-cards.png"
-              alt="Credit cards"
-              className="absolute object-contain"
-              style={{ left: 19, top: 57, width: 375, height: 404 }}
-            />
+            <div className="absolute" style={{ left: 0, top: 189, width: 439, height: 272 }}>
+              <div className="absolute flex items-center justify-center" style={{ left: 0, top: 0, width: 439, height: 294 }}>
+                <div style={{ transform: 'scaleY(-1) rotate(180deg)', width: 439, height: 294, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+                  <img src="/loan-type/car-lucid.png" alt="" className="absolute max-w-none pointer-events-none" style={{ top: 0, left: 0, height: '100%', width: '123.52%' }} />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Top-left: Keys (image 3) */}
-          <div
-            className="absolute overflow-hidden rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 248, top: 176, width: 439, height: 461 }}
-          >
-            <img
-              src="/products/grid-keys.png"
-              alt="Property keys"
-              className="absolute object-contain"
-              style={{ bottom: 0, left: 0, width: 439, height: 294 }}
-            />
+          {/* Car Financing text — sibling so it isn't clipped by card overflow */}
+          <div className="absolute flex flex-col items-start pointer-events-none transition-[opacity,transform] duration-700" style={{ left: 283, top: 238, width: 369, gap: 20, opacity: gridVisible ? 1 : 0, transform: gridVisible ? 'none' : 'translateY(40px) translateX(-20px)', transitionDelay: '0ms' }}>
+            <div className="flex items-start overflow-hidden px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.12)' }}>
+              <span className="font-bold text-white text-[11px] tracking-[1.2px] whitespace-nowrap" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.gridCards[0].eyebrow}</span>
+            </div>
+            <div className="font-bold text-white text-[40px]" style={{ fontFamily: "'Clash Display', sans-serif", lineHeight: '40px' }}>
+              <p className="m-0">{c.gridCards[0].title}</p>
+            </div>
           </div>
 
-          {/* Middle-right: Person with phone (image 2) */}
-          <div
-            className="absolute overflow-hidden rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 752, top: 534, width: 440, height: 461 }}
-          >
-            <img
-              src="/products/grid-person.png"
-              alt="Tamawal user"
-              className="absolute object-cover"
-              style={{ left: 88, top: 67, width: 339, height: 394 }}
-            />
+          {/* Top-right: Credit Cards (light) */}
+          <div className="absolute overflow-hidden rounded-[48px] transition-[opacity,transform] duration-700" style={{ left: 752, top: 29, width: 439, height: 483, background: '#f3f5f7', opacity: gridVisible ? 1 : 0, transform: gridVisible ? 'none' : 'translateY(40px) translateX(20px)', transitionDelay: '100ms' }}>
+            <div className="absolute" style={{ left: 0, top: 0, width: 439, height: 328 }}>
+              <div className="absolute pointer-events-none" style={{ left: 67, top: -12, width: 375, height: 404 }}>
+                <img src="/loan-type/card.png" alt="" className="absolute inset-0 max-w-none object-cover size-full" />
+              </div>
+            </div>
+            <div className="absolute flex flex-col items-start" style={{ left: 45, top: 302, width: 340, gap: 20 }}>
+              <div className="flex items-start overflow-hidden px-3 py-1.5 rounded-full" style={{ background: 'rgba(2,25,69,0.08)' }}>
+                <span className="font-bold text-[#021945] text-[11px] tracking-[1.2px] whitespace-nowrap" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.gridCards[1].eyebrow}</span>
+              </div>
+              <div className="font-bold text-[#021945] text-[40px]" style={{ fontFamily: "'Clash Display', sans-serif", lineHeight: '40px' }}>
+                <p className="m-0">{c.gridCards[1].title}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Bottom-left: Car (image 5) */}
-          <div
-            className="absolute overflow-hidden rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 248, top: 710, width: 439, height: 461 }}
-          >
-            <img
-              src="/products/grid-car.png"
-              alt="Car financing"
-              className="absolute object-contain"
-              style={{ left: 45, top: 49, width: 357, height: 357 }}
-            />
+          {/* Bottom-left: Real Estate (light) */}
+          <div className="absolute overflow-hidden rounded-[48px] transition-[opacity,transform] duration-700" style={{ left: 248, top: 739, width: 439, height: 566, background: '#f3f5f7', opacity: gridVisible ? 1 : 0, transform: gridVisible ? 'none' : 'translateY(40px) translateX(-20px)', transitionDelay: '200ms' }}>
+            <div className="absolute" style={{ left: 0, top: 0, width: 439, height: 383 }}>
+              <div className="absolute pointer-events-none" style={{ left: 45, top: 26, width: 357, height: 357 }}>
+                <img src="/loan-type/real-estate.png" alt="" className="absolute inset-0 max-w-none object-cover size-full" />
+              </div>
+            </div>
+            <div className="absolute flex flex-col items-start" style={{ left: 40, top: 383, width: 362, gap: 20 }}>
+              <div className="flex items-start overflow-hidden px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,99,245,0.1)' }}>
+                <span className="font-bold text-[#021945] text-[11px] tracking-[1.2px] whitespace-nowrap" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.gridCards[2].eyebrow}</span>
+              </div>
+              <div className="font-bold text-[#021945] text-[40px]" style={{ fontFamily: "'Clash Display', sans-serif", lineHeight: '40px' }}>
+                <p className="m-0">{c.gridCards[2].title}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom-right: Personal Loans (dark teal) */}
+          <div className="absolute overflow-hidden rounded-[48px] transition-[opacity,transform] duration-700" style={{ left: 752, top: 573, width: 440, height: 572, background: '#2c404f', opacity: gridVisible ? 1 : 0, transform: gridVisible ? 'none' : 'translateY(40px) translateX(20px)', transitionDelay: '300ms' }}>
+            <div className="absolute" style={{ left: 0, top: 178, width: 440, height: 394 }}>
+              <div className="absolute" style={{ left: 88, top: 0, width: 339, height: 394 }}>
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <img src="/loan-type/personal-hijab.png" alt="" className="absolute max-w-none pointer-events-none" style={{ top: 0, height: '100%', left: '-98.33%', width: '208.67%' }} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute flex flex-col items-start" style={{ left: 34, top: 34, width: 351, gap: 20 }}>
+              <div className="flex items-start overflow-hidden px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.16)', width: 174 }}>
+                <span className="font-bold text-white text-[11px] tracking-[1.2px] whitespace-nowrap" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.gridCards[3].eyebrow}</span>
+              </div>
+              <div className="font-bold text-white text-[40px]" style={{ fontFamily: "'Clash Display', sans-serif", lineHeight: '40px' }}>
+                <p className="m-0">{c.gridCards[3].title}</p>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -469,24 +610,21 @@ export default function TamweelWebHome() {
       {/* ── Phone Flip (How It Works) ────────────────────────────────────── */}
       <div id="how-it-works" className="bg-white">
         {/* Section heading */}
-        <div className="pt-[48px] pb-0 text-center">
+        <div className="pt-[120px] pb-0 text-center">
           <div className="relative inline-block">
             <h2
-              className="text-[40px] md:text-[68px] font-bold leading-[1.1] md:leading-[66px] tracking-[-1px] md:tracking-[-1.5px] text-[#021945] text-center"
-              style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
+              className="text-[40px] md:text-[68px] font-bold leading-[1.1] md:leading-[66px] text-[#021945] text-center"
+              style={{ fontFamily: "'Clash Display', sans-serif", letterSpacing: '-0.02em' }}
             >
-              {c.stepsLabel}<br />
-              <span>{c.stepsTitle} </span>
-              <span
-                className="italic text-[#0063f5] text-[48px] md:text-[76px]"
-                style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-              >
-                {c.stepsTitleItalic}
+              <span className="block">{c.stepsLabel}</span>
+              <span>
+                {c.stepsTitle}{' '}
+                <span className="text-[#0063f5] text-[48px] md:text-[76px]">{c.stepsTitleItalic}</span>
               </span>
             </h2>
             <img src="/sparkle-md.svg" alt="" width={34} height={34} className="absolute -right-10 top-16 pointer-events-none" />
           </div>
-          <p className="mt-4 text-[18px] text-[#5b6b86] leading-[28px]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          <p className="mt-4 text-[18px] text-[#5b6b86] leading-[28px]" style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif" }}>
             {c.stepsSub}
           </p>
         </div>
@@ -523,169 +661,171 @@ export default function TamweelWebHome() {
       </div>
 
       {/* ── Download + Calculator ────────────────────────────────────────── */}
-      <section id="download" className="py-20 border-t border-[#eef1f6]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
-            <style>{`@keyframes badge-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
-            <div className="hidden lg:block absolute top-[395px] left-[515px] w-[157px] h-[157px] z-10 pointer-events-none">
-              <img src="/badge.svg" alt="" className="w-full h-full" style={{ animation: 'badge-spin 18s linear infinite' }} />
-              <img src="/badge-center.svg" alt="Licensed by SAMA" className="absolute inset-0 w-full h-full" />
-            </div>
+      <section id="download" className="bg-white px-8 md:px-[130px] py-[100px]">
+        <div
+          className="flex flex-col md:flex-row gap-[64px] items-center pl-8 pr-8 md:pl-[80px] md:pr-[72px] py-[72px] rounded-[40px] overflow-hidden"
+          style={{ background: 'linear-gradient(-30.56deg, rgb(234,242,255) 20.641%, rgb(248,251,255) 93.727%)' }}
+        >
 
-            <div className="bg-[#0063F5] rounded-[48px] p-10 flex flex-col justify-between overflow-hidden relative" style={{ minHeight: 520, paddingBottom: 0 }}>
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_80%_120%,rgba(255,255,255,0.08),transparent)]" />
-              <div className="relative">
-                <p className="text-xs font-semibold tracking-widest uppercase text-white/60 mb-4">{c.dlLabel}</p>
-                <h3 className="text-3xl font-bold text-white mb-4 leading-tight whitespace-pre-line">{c.dlTitle}</h3>
-                <p className="text-base text-white/70 mb-8 max-w-xs leading-relaxed">{c.dlSub}</p>
-                <div className="flex flex-col gap-3">
-                  <Image src="/appstore.svg" alt="App Store" width={140} height={44} />
-                  <Image src="/playstore.svg" alt="Google Play" width={140} height={44} />
-                </div>
-              </div>
-              <div className="relative mt-6 flex-1 min-h-[240px]">
-                <DownloadMockup />
-              </div>
-            </div>
+          {/* Left: Download */}
+          <div className="flex-1 flex flex-col gap-[40px] items-start min-w-0">
 
-            <div className="w-full z-[200] rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white" style={{ minHeight: 520 }}>
-              <div className="bg-[#F1F7FF] border-b border-[#EAECF0] px-6 py-5 rounded-t-[32px]">
-                <p className="text-[#021945] text-[20px] font-bold text-center">{c.findTitle}</p>
+            {/* Text + buttons group */}
+            <div className="flex flex-col gap-[20px] items-start">
+              <div className="border border-[#c0d8fa] px-3 py-1.5 rounded-full overflow-hidden">
+                <span className="text-[#0063f5] text-[11px] font-bold tracking-[1.2px]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.dlLabel.toUpperCase()}</span>
               </div>
 
-              <div className="px-10 py-10 flex flex-col items-center gap-[48px] bg-white">
+              <h2 className="text-[56px] md:text-[64px] font-bold text-[#021945] m-0" style={{ fontFamily: "'Clash Display', sans-serif", lineHeight: '58px' }}>
+                {c.dlTitle.replace('\n', ' ')}
+              </h2>
 
-                {/* Loan Type */}
-                <div className="flex flex-col items-center gap-2 w-full">
-                  <p className="text-[#475467] text-[13px]">{c.findLoanTypeLabel}</p>
-                  <div className="flex gap-2 items-center justify-center w-full flex-wrap">
-                    {c.findLoanTypes.map((type, i) => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => setFindProduct(i)}
-                        className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${findProduct === i ? 'bg-[#0063F5] border-[#D7E7FE] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              <p className="text-[#5b6b86] text-[16px] leading-[24px] max-w-[420px] m-0" style={{ fontFamily: "'SF Pro Display', sans-serif" }}>
+                {c.dlSub}
+              </p>
 
-                {/* Monthly Salary */}
-                <div className="flex flex-col items-center gap-2 w-full">
-                  <div className="flex gap-1 items-start">
-                    <p className="text-[#475467] text-[13px]">{c.findMonthlySalaryLabel}</p>
-                    <p className="text-[#d91c1c] text-[13px]">*</p>
-                  </div>
-                  <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6]">
-                    <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
-                    <span className="text-[#101828] text-[24px] font-bold">
-                      {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
-                    <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
-                      <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
-                    </span>
-                    <input
-                      type="range"
-                      min={1000}
-                      max={100000}
-                      step={500}
-                      value={salary}
-                      onChange={(e) => setSalary(Number(e.target.value))}
-                      className="flex-1 h-1 accent-[#2563EB] cursor-grab"
-                    />
-                    <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
-                      <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 100 K
-                    </span>
-                  </div>
-                </div>
-
-                {/* Active Loans */}
-                <div className="flex flex-col items-center gap-2 w-full">
-                  <p className="text-[#475467] text-[13px]">{c.findActiveLoansLabel}</p>
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setHasActiveLoans(true)}
-                      className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === true ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
-                    >
-                      {c.findYes}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHasActiveLoans(false)}
-                      className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === false ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
-                    >
-                      {c.findNo}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Loan Purpose */}
-                <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
-                  <p className="text-[#475467] text-[13px]">{c.findPurposeLabel}</p>
-                  <div className="relative w-full">
-                    <button
-                      type="button"
-                      onClick={() => setLoanPurpose((loanPurpose + 1) % c.findPurposes.length)}
-                      className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left"
-                    >
-                      <span className="text-[#101828] text-[18px] font-bold">{c.findPurposes[loanPurpose]}</span>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
-                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start">
-                <button
-                  disabled={hasActiveLoans === null}
-                  onClick={() => hasActiveLoans !== null && (window.location.href = '/tamweel-web/hub')}
-                  className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
-                >
-                  <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
-                    <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+              <div className="flex gap-3 items-center flex-wrap">
+                <button className="bg-[#021945] text-white px-[26px] py-[14px] rounded-full text-[15px] font-bold transition-opacity hover:opacity-80" style={{ fontFamily: "'SF Pro Display', sans-serif" }}>
+                  {isRtl ? 'انضم' : 'Join'}
+                </button>
+                <button className="border-[1.5px] border-[#021945] text-[#021945] px-[26px] py-[14px] rounded-full text-[15px] font-bold transition-opacity hover:opacity-70" style={{ fontFamily: "'SF Pro Display', sans-serif" }}>
+                  {isRtl ? 'حمّل التطبيق' : 'Download the app'}
                 </button>
               </div>
             </div>
 
+            <div className="flex gap-[20px] items-start">
+              {/* QR + scan label */}
+              <div className="flex flex-col gap-[12px] items-center shrink-0">
+                <div className="overflow-hidden rounded-[8px] shrink-0" style={{ width: 162, height: 162 }}>
+                  <img src="/qr-code.svg" alt="" className="w-full h-full" />
+                </div>
+                <p className="text-[13px] m-0" style={{ color: '#5b6b86', fontFamily: "'SF Pro Display', sans-serif" }}>
+                  {isRtl ? 'امسح للتحميل' : 'Scan for get the App'}
+                </p>
+              </div>
+              {/* Store badges */}
+              <div className="flex flex-col gap-[12px] shrink-0 pt-[30px]">
+                <Image src="/appstore.svg" alt="Download on the App Store" width={140} height={45} />
+                <Image src="/playstore.svg" alt="Get it on Google Play" width={140} height={45} />
+              </div>
+            </div>
           </div>
+
+          {/* Right: Loan Finder Form */}
+          <div className="w-full md:w-[520px] lg:w-[601px] shrink-0 rounded-[32px] shadow-[0px_4px_12px_rgba(0,0,0,0.08)] bg-white overflow-hidden">
+            {/* Form header */}
+            <div className="px-6 pt-6 pb-0 flex flex-col items-center gap-3 relative" style={{ background: 'linear-gradient(180deg, #EAF2FF 0%, #F8FBFF 100%)' }}>
+              {/* LIVE CHECK badge */}
+              <div className="border border-[#c0d8fa] px-3 py-1 rounded-full">
+                <span className="text-[#0063f5] text-[11px] font-bold tracking-[1.2px]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>LIVE CHECK</span>
+              </div>
+              {/* Title + sparkle */}
+              <div className="flex items-center gap-2">
+                <p className="text-[#021945] text-[20px] font-bold text-center m-0" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{c.findTitle}</p>
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L12.5 9.5L20 11L12.5 12.5L11 20L9.5 12.5L2 11L9.5 9.5L11 2Z" fill="#F5C518"/></svg>
+              </div>
+              {/* Form / Chat tabs — hanging out of header */}
+              <div className="flex items-center bg-white rounded-full p-1 gap-1 relative z-10 mb-[-20px] shadow-[0_2px_12px_rgba(0,99,245,0.10)] border border-[#e5edf8]">
+                <button
+                  onClick={() => setFormTab('form')}
+                  className={`px-6 py-2 rounded-full text-[14px] font-semibold transition-all ${formTab === 'form' ? 'bg-[#0063f5] text-white shadow-sm' : 'text-[#667085]'}`}
+                  style={{ fontFamily: "'SF Pro Display', sans-serif" }}
+                >
+                  {isRtl ? 'نموذج' : 'Form'}
+                </button>
+                <button
+                  onClick={() => setFormTab('chat')}
+                  className={`px-6 py-2 rounded-full text-[14px] font-semibold transition-all ${formTab === 'chat' ? 'bg-[#0063f5] text-white shadow-sm' : 'text-[#667085]'}`}
+                  style={{ fontFamily: "'SF Pro Display', sans-serif" }}
+                >
+                  {isRtl ? 'محادثة' : 'Chat'}
+                </button>
+              </div>
+            </div>
+
+            <div className="px-10 pt-[48px] pb-[48px] flex flex-col items-center gap-[36px] bg-white">
+
+              {/* Loan Type */}
+              <div className="flex flex-col items-center gap-2 w-full">
+                <p className="text-[#475467] text-[13px] m-0">{c.findLoanTypeLabel}</p>
+                <div className="flex gap-2 items-center justify-center w-full flex-wrap">
+                  {c.findLoanTypes.map((type, i) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setFindProduct(i)}
+                      className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${findProduct === i ? 'bg-[#0063F5] border-[#D7E7FE] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Monthly Salary */}
+              <div className="flex flex-col items-center gap-2 w-full">
+                <div className="flex gap-[4px] items-start">
+                  <p className="text-[#475467] text-[13px] m-0">{c.findMonthlySalaryLabel}</p>
+                  <p className="text-[#d91c1c] text-[13px] m-0">*</p>
+                </div>
+                <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6]">
+                  <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
+                  <span className="text-[#101828] text-[24px] font-bold">
+                    {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
+                  <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                    <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
+                  </span>
+                  <CanvasSlider value={salary} min={1000} max={100000} step={500} onChange={setSalary} />
+                  <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                    <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 100 K
+                  </span>
+                </div>
+              </div>
+
+              {/* Active Loans */}
+              <div className="flex flex-col items-center gap-2 w-full">
+                <p className="text-[#475467] text-[13px] m-0">{c.findActiveLoansLabel}</p>
+                <div className="flex gap-3">
+                  <button type="button" onClick={() => setHasActiveLoans(true)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === true ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findYes}</button>
+                  <button type="button" onClick={() => setHasActiveLoans(false)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === false ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findNo}</button>
+                </div>
+              </div>
+
+              {/* Loan Purpose */}
+              <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
+                <p className="text-[#475467] text-[13px] m-0">{c.findPurposeLabel}</p>
+                <div className="relative w-full">
+                  <button type="button" onClick={() => setLoanPurpose((loanPurpose + 1) % c.findPurposes.length)} className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left">
+                    <span className="text-[#101828] text-[18px] font-bold">{c.findPurposes[loanPurpose]}</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start">
+              <button
+                disabled={hasActiveLoans === null}
+                onClick={() => hasActiveLoans !== null && (window.location.href = '/tamweel-web/hub')}
+                className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
+              >
+                <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
+                  <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* ── Safety banner ───────────────────────────────────────────────── */}
-      <section className="px-4 md:px-[80px] pb-[96px] bg-white">
-        <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-b from-[#c9dcff] via-[#4c91ff] to-[#0063f5] flex flex-col items-center pt-[80px] px-6 md:px-[120px] gap-5">
-          {/* Eyebrow */}
-          <div className="bg-white/70 px-[14px] py-[8px] rounded-full">
-            <p className="text-[#021945] text-[11px] font-bold tracking-[1.2px] uppercase whitespace-nowrap">Licensed &amp; Regulated by SAMA</p>
-          </div>
-          {/* Headline */}
-          <p className="text-[#021945] text-[48px] md:text-[64px] font-bold tracking-[-1.5px] text-center leading-[1.1]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
-            Your safety, always on
-          </p>
-          {/* Subtitle */}
-          <p className="text-[#12306b] text-[18px] leading-[28px] text-center max-w-[620px]">
-            Bank-grade encryption, Nafath identity checks, and you control every consent. Checking your eligibility never affects your credit score.
-          </p>
-          <div className="h-6" />
-          {/* Shield */}
-          <Image src="/safety-shield.svg" alt="Security shield" width={360} height={300} className="relative z-10" />
-          {/* Sparkles */}
-          <Image src="/safety-sparkle-1.svg" alt="" width={48} height={48} className="absolute left-[14%] top-[120px]" aria-hidden />
-          <Image src="/safety-sparkle-2.svg" alt="" width={26} height={26} className="absolute right-[8%] top-[90px]" aria-hidden />
-          <Image src="/safety-sparkle-3.svg" alt="" width={36} height={36} className="absolute right-[5%] top-[300px]" aria-hidden />
-          <Image src="/safety-sparkle-4.svg" alt="" width={20} height={20} className="absolute left-[11%] top-[360px]" aria-hidden />
-        </div>
-      </section>
 
       {/* ── FAQ ─────────────────────────────────────────────────────────── */}
       <section id="faq" className="py-[96px] bg-white">
@@ -705,84 +845,191 @@ export default function TamweelWebHome() {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer className="bg-[#07122e] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-        {/* Top area */}
-        <div className="flex flex-col md:flex-row items-start justify-between pt-[80px] pb-[56px] px-6 md:px-[130px] gap-10 max-w-[1440px] mx-auto">
+      <footer className="bg-black overflow-hidden" style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif" }}>
 
-          {/* Brand */}
-          <div className="flex flex-col gap-4 items-start shrink-0 max-w-[220px]">
-            <div className="bg-white rounded-[14px] px-[14px] py-[10px] flex items-center">
-              <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
+        {/* Main content */}
+        <div className="flex flex-col items-center pb-4 pt-16">
+          <div className="flex gap-16 items-start w-full max-w-[1280px] px-6">
+
+            {/* Left: logo + SAMA */}
+            <div className="flex flex-col items-start justify-between self-stretch shrink-0 flex-1 min-w-0">
+              {/* Logo */}
+              <div className="flex items-center gap-2">
+                <img src="/footer/logo-mark.svg" alt="" width={40} height={40} />
+                <span
+                  className="text-white text-[29px] tracking-[-0.02em] leading-none"
+                  style={{ fontFamily: "'Clash Display', sans-serif", fontWeight: 700 }}
+                >
+                  Tamawal<span style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 100 }}>®</span>
+                </span>
+              </div>
+              {/* SAMA */}
+              <div className="flex flex-col gap-2 py-4">
+                <img src="/footer/sama-logo.svg" alt="Saudi Central Bank" width={238} height={89} />
+                <p className="text-[#e0e0e0] text-[14px] leading-6 max-w-[280px]">{c.footerLicense}</p>
+              </div>
             </div>
-            <p className="text-[#9fb2d6] text-[14px] leading-[22px]">{c.footerDesc}</p>
+
+            {/* Right: nav columns */}
+            <div className="flex flex-col gap-8 items-start shrink-0">
+
+              {/* Row 1: About, Legal, Take actions, Customer Care */}
+              <div className="flex gap-[30px] items-start">
+                {/* About us */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerAboutTitle}</p>
+                  <div className="flex flex-col gap-2">
+                    {c.footerAboutLinks.map((l) => (
+                      <a key={l} href="#" className="text-[16px] text-white/64 hover:text-white transition-colors leading-[1.72]">{l}</a>
+                    ))}
+                  </div>
+                </div>
+                {/* Legal */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerLegalTitle}</p>
+                  <div className="flex flex-col gap-2">
+                    {c.footerLegalLinks.map((l) => (
+                      <a key={l} href="#" className="text-[16px] text-white/64 hover:text-white transition-colors leading-[1.35]">{l}</a>
+                    ))}
+                  </div>
+                </div>
+                {/* Take actions */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerActionsTitle}</p>
+                  <div className="flex flex-col gap-2">
+                    {c.footerActionsLinks.map((l) => (
+                      <a key={l} href="#" className="text-[16px] text-white/64 hover:text-white transition-colors leading-[1.72]">{l}</a>
+                    ))}
+                  </div>
+                </div>
+                {/* Customer Care */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerCareTitle}</p>
+                  <div className="flex flex-col gap-2">
+                    {c.footerCareLinks.map((l) => (
+                      <a key={l} href="#" className="text-[16px] text-white/64 hover:text-white transition-colors leading-[1.72]">{l}</a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="w-full border-t border-[#535862]" />
+
+              {/* Row 2: Contact, Address, Hours/Days, Social */}
+              <div className="flex gap-[30px] items-start">
+                {/* Contact */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerContactTitle}</p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <img src="/footer/icon-email.svg" alt="" width={16} height={16} />
+                      <a href={`mailto:${c.footerEmail}`} className="text-[16px] text-white/64 hover:text-white transition-colors">{c.footerEmail}</a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img src="/footer/icon-phone.svg" alt="" width={16} height={16} />
+                      <a href={`tel:${c.footerPhone1}`} className="text-[16px] text-white/64 hover:text-white transition-colors">{c.footerPhone1}</a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img src="/footer/icon-phone.svg" alt="" width={16} height={16} />
+                      <a href={`tel:${c.footerPhone2}`} className="text-[16px] text-white/64 hover:text-white transition-colors">{c.footerPhone2}</a>
+                    </div>
+                  </div>
+                </div>
+                {/* Address */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerAddressTitle}</p>
+                  <div className="flex gap-2 items-start">
+                    <img src="/footer/icon-location.svg" alt="" width={13} height={13} className="mt-[3px] shrink-0" />
+                    <p className="text-[14px] text-white/64 leading-[1.45]">{c.footerAddress}</p>
+                  </div>
+                </div>
+                {/* Hours & Days */}
+                <div className="flex flex-col gap-3 w-[190px]">
+                  <div className="flex flex-col gap-1">
+                    <p className="font-bold text-white text-[16px]">{c.footerHoursTitle}</p>
+                    <p className="text-[14px] text-white/64">{c.footerHours}</p>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="font-bold text-white text-[16px]">{c.footerDaysTitle}</p>
+                    <p className="text-[14px] text-white/64">{c.footerDays}</p>
+                  </div>
+                </div>
+                {/* Social */}
+                <div className="flex flex-col gap-2 w-[190px]">
+                  <p className="font-bold text-white text-[16px] leading-[1.72]">{c.footerSocialTitle}</p>
+                  <div className="flex gap-2 items-center">
+                    <img src="/footer/icon-linkedin.svg" alt="LinkedIn" width={45} height={45} />
+                    <div className="relative size-[45px] border border-white/24 rounded-full flex items-center justify-center">
+                      <img src="/footer/icon-x.svg" alt="X" width={20} height={15} />
+                    </div>
+                  </div>
+                  <a href="#" className="flex items-center gap-1 text-[16px] text-white/86 hover:text-white transition-colors pt-2">
+                    {c.footerFaqs}
+                    <img src="/footer/icon-arrow.svg" alt="" width={24} height={24} />
+                  </a>
+                </div>
+              </div>
+
+            </div>
           </div>
-
-          {/* Nav columns */}
-          <div className="flex flex-wrap gap-10 md:gap-[72px] items-start shrink-0">
-            <div className="flex flex-col gap-[14px] items-start">
-              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerPlatform}</p>
-              {c.footerPlatformLinks.map((item) => (
-                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
-              ))}
-            </div>
-            <div className="flex flex-col gap-[14px] items-start">
-              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerCompany}</p>
-              {c.footerCompanyLinks.map((item) => (
-                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
-              ))}
-            </div>
-            <div className="flex flex-col gap-[14px] items-start">
-              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerSupport}</p>
-              {c.footerSupportLinks.map((item) => (
-                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
-              ))}
-            </div>
-          </div>
-
-          {/* App badges */}
-          <div className="flex flex-col gap-[12px] items-start shrink-0">
-            <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerGetApp}</p>
-            <Image src="/appstore.svg" alt="Download on the App Store" width={140} height={45} />
-            <Image src="/playstore.svg" alt="Get it on Google Play" width={140} height={45} />
-          </div>
-
         </div>
 
-        {/* Giant wordmark */}
-        <div className="overflow-hidden">
-          <p
-            className="select-none pointer-events-none text-center leading-none whitespace-nowrap"
-            style={{
-              fontSize: 'clamp(80px, 22vw, 324px)',
-              fontFamily: "'Bricolage Grotesque', sans-serif",
-              fontWeight: 800,
-              color: '#ffffff',
-              letterSpacing: '-0.03em',
-            }}
-          >
-            tamawal
-          </p>
+        {/* Giant watermark */}
+        <div className="flex items-start justify-center">
+          <div className="w-[1280px] relative h-[375px]">
+            <p
+              className="absolute select-none pointer-events-none whitespace-nowrap leading-none left-1/2 -translate-x-1/2 top-0"
+              style={{
+                fontFamily: "'Clash Display', sans-serif",
+                fontWeight: 700,
+                fontSize: 373,
+                color: '#1e242b',
+                letterSpacing: '-0.025em',
+              }}
+            >
+              Tamawal<span style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 100 }}>®</span>
+            </p>
+          </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 py-6 px-6 md:px-[130px] max-w-[1440px] mx-auto flex items-center justify-between">
-          <p className="text-[13px] text-[#7f93ba]">{c.copyright}</p>
-          <p className="text-[13px] font-semibold text-[#7f93ba]">{c.regulated}</p>
+        <div className="border-t border-[#535862]">
+          <div className="flex items-center justify-between h-12 max-w-[1280px] mx-auto px-6">
+            <p className="text-[12px] text-[#9aa4b2] leading-4">{c.copyright}</p>
+            <p className="text-[12px] text-[#9aa4b2] leading-4">{c.regulated}</p>
+          </div>
         </div>
+
       </footer>
 
-      {/* ── Floating QR / App download ───────────────────────────────────── */}
-      <div className={`la-qr-float${scrolled ? ' la-qr-float--visible' : ''}`} dir="ltr">
-        <div className="la-app-download_component wait-load la-hide-qr-float show">
-          <div className="la-app-download-qrcode-wrapper">
-            <Image loading="lazy" src="/qr-code.svg" alt="" className="qrcode-image" width={108} height={108} />
-            <div className="text-block-39">{c.heroCta2}</div>
-          </div>
-          <div className="la-app-download-ios-wrapper">
-            <Image src="/appstore.svg" alt="App Store" width={140} height={44} />
-            <Image src="/playstore.svg" alt="Google Play" width={140} height={44} />
-          </div>
+      {/* ── FAB (Figma 5422:105591) ──────────────────────────────────────── */}
+      <div
+        dir="ltr"
+        className={`hidden md:flex fixed bottom-[35px] right-7 z-[100] flex-col items-center gap-[8px] rounded-[8px] transition-[opacity,transform] duration-300 ${scrolled && !downloadVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+        style={{
+          width: 101,
+          padding: '7px 2px 5px 2px',
+          background: 'rgba(255,255,255,0.72)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          boxShadow: '0 0 0 0.5px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9)',
+        }}
+      >
+        {/* QR card */}
+        <div className="bg-white border border-[#f5f5f5] rounded-[8px] p-[4px] w-[87px] h-[87px] flex items-center justify-center shrink-0">
+          <Image loading="lazy" src="/qr-code.svg" alt="QR Code" width={79} height={79} />
         </div>
+        {/* Check live button */}
+        <button
+          onClick={() => document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })}
+          className="flex items-center justify-between w-[93px] h-[26px] bg-[#0063f5] rounded-[6px] px-[10px] cursor-pointer"
+        >
+          <span className="text-[11px] font-semibold text-white leading-none">{isRtl ? 'تحقق' : 'Check live'}</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M5 2.08v5.84M2.08 5L5 7.92 7.92 5" stroke="white" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
 
     </div>
