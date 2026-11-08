@@ -9,6 +9,8 @@ import { useState, useEffect, useRef } from 'react';
 const PhoneFlip = dynamic(() => import('./PhoneFlip'), { ssr: false });
 const DownloadMockup = dynamic(() => import('./DownloadMockup'), { ssr: false });
 const CanvasSlider = dynamic(() => import('./CanvasSlider'), { ssr: false });
+const ChatWidget = dynamic(() => import('./ChatWidget'), { ssr: false });
+const TrustOrbit = dynamic(() => import('./TrustOrbit'), { ssr: false });
 
 type Lang = 'en' | 'ar';
 
@@ -221,8 +223,12 @@ export default function TamweelWebHome() {
   const [downloadVisible, setDownloadVisible] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
+  const [trustVisible, setTrustVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const trustRef = useRef<HTMLDivElement>(null);
+  const orbitSectionRef = useRef<HTMLElement>(null);
+  const fixedLogoRef = useRef<HTMLDivElement>(null);
   const isRtl = lang === 'ar';
   const c = t[lang];
 
@@ -266,6 +272,21 @@ export default function TamweelWebHome() {
     );
     obs.observe(el);
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = trustRef.current;
+    if (!el) return;
+    const check = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.88) {
+        setTrustVisible(true);
+        window.removeEventListener('scroll', check);
+      }
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    return () => window.removeEventListener('scroll', check);
   }, []);
 
   return (
@@ -660,6 +681,35 @@ export default function TamweelWebHome() {
         </div>
       </div>
 
+      {/* ── Trust arc (5422:104247) ──────────────────────────────────────── */}
+      <section className="hidden md:block bg-white relative">
+        <TrustOrbit lang={lang} />
+      </section>
+
+      {/* ── Financing you can trust (5422:104262) ───────────────────────── */}
+      <section ref={trustRef} className="hidden md:block bg-white overflow-hidden">
+        <div className="flex flex-col items-center px-[130px] pb-[25px] pt-[560px] relative">
+          {/* Logo handled by TrustOrbit fixed overlay — no logo here */}
+          <div className="flex flex-col gap-[24px] items-center relative z-10">
+            <div
+              className="relative flex items-start transition-[opacity,transform] duration-700 ease-out"
+              style={{ opacity: trustVisible ? 1 : 0, transform: trustVisible ? 'none' : 'translateY(32px)' }}
+            >
+              <p className="font-bold text-[#021945] text-[68px] text-center m-0 leading-[1]" style={{ fontFamily: "'Clash Display', sans-serif" }}>
+                {isRtl ? 'تمويل يمكنك الوثوق به' : 'Financing you can trust'}
+              </p>
+              <img alt="" src="/trust/sparkle.svg" className="w-[34px] h-[34px] shrink-0 mt-1 ml-1" />
+            </div>
+            <p
+              className="text-[#5b6b86] text-[18px] text-center m-0 leading-[28px] transition-[opacity,transform] duration-700"
+              style={{ fontFamily: "'SF Pro Display', sans-serif", opacity: trustVisible ? 1 : 0, transform: trustVisible ? 'none' : 'translateY(20px)', transitionDelay: '150ms' }}
+            >
+              {isRtl ? 'جاهز عندما تكون أنت جاهزاً. حمّل التطبيق، أو اكتشف ما تستحق أدناه!' : 'Ready when you are. Get the app, or see what you qualify for below!'}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Download + Calculator ────────────────────────────────────────── */}
       <section id="download" className="bg-white px-8 md:px-[130px] py-[100px]">
         <div
@@ -744,83 +794,94 @@ export default function TamweelWebHome() {
               </div>
             </div>
 
-            <div className="px-10 pt-[48px] pb-[48px] flex flex-col items-center gap-[36px] bg-white">
+            {formTab === 'form' ? (
+              <>
+                <div className="px-10 pt-[48px] pb-[48px] flex flex-col items-center gap-[36px] bg-white">
 
-              {/* Loan Type */}
-              <div className="flex flex-col items-center gap-2 w-full">
-                <p className="text-[#475467] text-[13px] m-0">{c.findLoanTypeLabel}</p>
-                <div className="flex gap-2 items-center justify-center w-full flex-wrap">
-                  {c.findLoanTypes.map((type, i) => (
-                    <button
-                      key={type}
-                      type="button"
-                      onClick={() => setFindProduct(i)}
-                      className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${findProduct === i ? 'bg-[#0063F5] border-[#D7E7FE] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  {/* Loan Type */}
+                  <div className="flex flex-col items-center gap-2 w-full">
+                    <p className="text-[#475467] text-[13px] m-0">{c.findLoanTypeLabel}</p>
+                    <div className="flex gap-2 items-center justify-center w-full flex-wrap">
+                      {c.findLoanTypes.map((type, i) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setFindProduct(i)}
+                          className={`px-5 py-3 rounded-[32px] text-[12px] font-semibold border transition-colors ${findProduct === i ? 'bg-[#0063F5] border-[#D7E7FE] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Monthly Salary */}
-              <div className="flex flex-col items-center gap-2 w-full">
-                <div className="flex gap-[4px] items-start">
-                  <p className="text-[#475467] text-[13px] m-0">{c.findMonthlySalaryLabel}</p>
-                  <p className="text-[#d91c1c] text-[13px] m-0">*</p>
-                </div>
-                <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6]">
-                  <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
-                  <span className="text-[#101828] text-[24px] font-bold">
-                    {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
-                  <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
-                    <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
-                  </span>
-                  <CanvasSlider value={salary} min={1000} max={100000} step={500} onChange={setSalary} />
-                  <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
-                    <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 100 K
-                  </span>
-                </div>
-              </div>
+                  {/* Monthly Salary */}
+                  <div className="flex flex-col items-center gap-2 w-full">
+                    <div className="flex gap-[4px] items-start">
+                      <p className="text-[#475467] text-[13px] m-0">{c.findMonthlySalaryLabel}</p>
+                      <p className="text-[#d91c1c] text-[13px] m-0">*</p>
+                    </div>
+                    <div className="border rounded-[8px] px-4 py-3 flex items-center gap-2 cursor-text border-[#EEF1F6]">
+                      <img src="/SAR.svg" alt="SAR" className="w-6 h-6 object-contain flex-shrink-0" />
+                      <span className="text-[#101828] text-[24px] font-bold">
+                        {salary.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 w-full" style={{ userSelect: 'none', marginTop: '0.65rem' }}>
+                      <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                        <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 1 K
+                      </span>
+                      <CanvasSlider value={salary} min={1000} max={100000} step={500} onChange={setSalary} />
+                      <span className="flex items-center gap-1 text-[#101828] text-[16px] font-bold whitespace-nowrap">
+                        <img src="/SAR.svg" alt="SAR" className="w-4 h-4 object-contain" /> 100 K
+                      </span>
+                    </div>
+                  </div>
 
-              {/* Active Loans */}
-              <div className="flex flex-col items-center gap-2 w-full">
-                <p className="text-[#475467] text-[13px] m-0">{c.findActiveLoansLabel}</p>
-                <div className="flex gap-3">
-                  <button type="button" onClick={() => setHasActiveLoans(true)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === true ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findYes}</button>
-                  <button type="button" onClick={() => setHasActiveLoans(false)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === false ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findNo}</button>
-                </div>
-              </div>
+                  {/* Active Loans */}
+                  <div className="flex flex-col items-center gap-2 w-full">
+                    <p className="text-[#475467] text-[13px] m-0">{c.findActiveLoansLabel}</p>
+                    <div className="flex gap-3">
+                      <button type="button" onClick={() => setHasActiveLoans(true)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === true ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findYes}</button>
+                      <button type="button" onClick={() => setHasActiveLoans(false)} className={`rounded-[8px] px-12 py-3 text-[18px] font-semibold transition-colors border ${hasActiveLoans === false ? 'bg-[#0063F5] border-[#0063F5] text-white' : 'bg-[#F5F9FF] border-[#D7E7FE] text-[#202A39]'}`}>{c.findNo}</button>
+                    </div>
+                  </div>
 
-              {/* Loan Purpose */}
-              <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
-                <p className="text-[#475467] text-[13px] m-0">{c.findPurposeLabel}</p>
-                <div className="relative w-full">
-                  <button type="button" onClick={() => setLoanPurpose((loanPurpose + 1) % c.findPurposes.length)} className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left">
-                    <span className="text-[#101828] text-[18px] font-bold">{c.findPurposes[loanPurpose]}</span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
-                      <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  {/* Loan Purpose */}
+                  <div className="flex flex-col items-center gap-2 w-full px-4 lg:px-12">
+                    <p className="text-[#475467] text-[13px] m-0">{c.findPurposeLabel}</p>
+                    <div className="relative w-full">
+                      <button type="button" onClick={() => setLoanPurpose((loanPurpose + 1) % c.findPurposes.length)} className="w-full border border-[#EEF1F6] rounded-[8px] px-4 py-3 flex items-center justify-between bg-white cursor-pointer focus:outline-none focus:border-[#0063F5] text-left">
+                        <span className="text-[#101828] text-[18px] font-bold">{c.findPurposes[loanPurpose]}</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+                          <path d="M5 7.5L10 12.5L15 7.5" stroke="#101828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start">
+                  <button
+                    disabled={hasActiveLoans === null}
+                    onClick={() => hasActiveLoans !== null && (window.location.href = '/tamweel-web/hub')}
+                    className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
+                  >
+                    <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
+                      <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
                 </div>
+              </>
+            ) : (
+              <div className="bg-white rounded-b-[32px] overflow-hidden pt-5">
+                <ChatWidget
+                  lang={lang}
+                  onComplete={() => { window.location.href = '/tamweel-web/hub'; }}
+                />
               </div>
-            </div>
-
-            <div className="bg-white px-6 pb-[40px] pt-4 rounded-b-[32px] flex justify-center items-start">
-              <button
-                disabled={hasActiveLoans === null}
-                onClick={() => hasActiveLoans !== null && (window.location.href = '/tamweel-web/hub')}
-                className={`rounded-[56px] px-6 py-4 flex items-center justify-center gap-2 w-[240px] transition-colors ${hasActiveLoans !== null ? 'bg-[#0063F5] cursor-pointer' : 'bg-[#E2E9F3] cursor-not-allowed'}`}
-              >
-                <span className={`text-[16px] font-semibold ${hasActiveLoans !== null ? 'text-white' : 'text-[#9AA4B2]'}`}>{c.findContinue}</span>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={isRtl ? 'rotate-180' : ''}>
-                  <path d="M4.166 10h11.667M10 15.833L15.833 10 10 4.167" stroke={hasActiveLoans !== null ? 'white' : '#9AA4B2'} strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
+            )}
           </div>
 
         </div>
