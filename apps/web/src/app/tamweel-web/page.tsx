@@ -224,8 +224,10 @@ export default function TamweelWebHome() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
   const [trustVisible, setTrustVisible] = useState(false);
+  const [stmtVisible, setStmtVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const stmtRef = useRef<HTMLElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
   const orbitSectionRef = useRef<HTMLElement>(null);
   const fixedLogoRef = useRef<HTMLDivElement>(null);
@@ -289,8 +291,74 @@ export default function TamweelWebHome() {
     return () => window.removeEventListener('scroll', check);
   }, []);
 
+  useEffect(() => {
+    const el = stmtRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setStmtVisible(true); obs.disconnect(); } },
+      { threshold: 0.3 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  /* ── Fixed logo bridge: orbit grow → financing section ─────────────── */
+  useEffect(() => {
+    const ORBIT_EXTRA = 480;
+    const LOGO_TOP = 150;   // fixed logo top from viewport top (matches Figma pt-[150px])
+    const LOGO_H = 560;
+
+    const onScroll = () => {
+      const orbitSec  = orbitSectionRef.current;
+      const fixedLogo = fixedLogoRef.current;
+      const trustSec  = trustRef.current;
+      if (!orbitSec || !fixedLogo) return;
+
+      const totalH   = orbitSec.offsetHeight;
+      const vh       = window.innerHeight;
+      const scrolled = -orbitSec.getBoundingClientRect().top;
+      const extraStart = totalH - ORBIT_EXTRA - vh;
+      const p = Math.max(0, Math.min(1, (scrolled - extraStart) / ORBIT_EXTRA));
+
+      /* fade in as orbit logo fades out at p > 0.75 */
+      let alpha = p > 0.75 ? Math.min(1, (p - 0.75) / 0.25) : 0;
+
+      /* fade out as financing section text scrolls over the logo */
+      if (trustSec) {
+        const textY = trustSec.getBoundingClientRect().top + LOGO_TOP + LOGO_H - 40;
+        if (textY < LOGO_TOP + LOGO_H + 50) {
+          alpha = Math.min(alpha, Math.max(0, (textY - LOGO_TOP) / LOGO_H));
+        }
+      }
+
+      fixedLogo.style.opacity = String(alpha);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white font-sans" dir={isRtl ? 'rtl' : 'ltr'}>
+
+      {/* ── Fixed logo bridge (orbit grow → financing section) ──────────── */}
+      <div
+        ref={fixedLogoRef}
+        className="hidden md:block pointer-events-none"
+        aria-hidden="true"
+        style={{ position: 'fixed', top: 150, left: '50%', transform: 'translateX(-50%)', width: 560, height: 560, opacity: 0, zIndex: 10 }}
+      >
+        <svg width="560" height="560" viewBox="0 0 200 200" fill="none">
+          <defs>
+            <linearGradient id="fixed-orbit-lm" x1="99.999" y1="0" x2="99.999" y2="199.998" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#0063F5" stopOpacity="0.35"/>
+              <stop offset="1" stopColor="#0063F5" stopOpacity="0.08"/>
+            </linearGradient>
+          </defs>
+          <path d="M141.013 60.3545C138.172 69.5197 136.354 78.9336 135.558 88.417C127.484 90.2198 119.3 91.4078 111.082 91.9834V148.641C136.735 151.107 161.718 162.164 181.363 181.811L163.175 200C148.489 185.313 129.962 176.809 110.827 174.487L85.5469 150.786V174.899H86.2031C68.1316 177.71 50.7565 186.077 36.834 200L18.6455 181.811C37.3793 163.076 60.9663 152.154 85.3594 149.041V91.7832C78.0133 91.1538 70.7012 90.0348 63.4766 88.4229C62.6792 78.9396 60.8607 69.5261 58.0195 60.3613C84.9992 68.771 114.034 68.7688 141.013 60.3545ZM18.1875 18.6475C63.1205 63.5825 63.1206 136.437 18.1875 181.372L-0.000976562 163.183C34.8867 128.293 34.8867 71.7263 -0.000976562 36.8369L18.1875 18.6475ZM199.997 36.8281C165.109 71.7175 165.109 128.284 199.997 163.174L181.809 181.363C136.876 136.428 136.876 63.5737 181.809 18.6387L199.997 36.8281ZM181.343 18.1895C136.41 63.1245 63.5581 63.1245 18.625 18.1895L36.8135 0C71.7013 34.8894 128.266 34.8894 163.154 0L181.343 18.1895Z" fill="url(#fixed-orbit-lm)"/>
+        </svg>
+      </div>
 
       {/* ── Header (sticky → floating pill on scroll) ───────────────────── */}
 
@@ -386,7 +454,7 @@ export default function TamweelWebHome() {
             <img src="/sparkle-sm.svg" alt="" width={18} height={18} className="absolute right-2 -bottom-4 pointer-events-none" />
             <h1
               className="text-[48px] md:text-[96px] font-bold leading-[1] md:leading-[88px] tracking-[-1px] md:tracking-[-2px] text-[#021945]"
-              style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
+              style={{ fontFamily: "'Clash Display', sans-serif" }}
             >
               {c.heroTitle1}<br />
               <span style={{ color: '#0063F5' }}>{c.heroTitle2}</span>
@@ -402,10 +470,10 @@ export default function TamweelWebHome() {
           <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
             {/* Download the App */}
             <div className="flex items-center gap-[8px] p-[5px] rounded-[8px] border border-[#f5f5f5]">
-              <div className="bg-[#f3f5f7] flex items-center justify-center p-[20px] rounded-[12px] shrink-0">
-                <Image src="/qr-code.svg" alt="QR Code" width={24} height={24} />
+              <div className="bg-[#f3f5f7] flex items-center justify-center p-[5px] rounded-[8px] shrink-0">
+                <Image src="/qr-code.svg" alt="QR Code" width={64} height={64} />
               </div>
-              <p className="text-[8.06px] font-[590] text-[#344054] tracking-[-0.13px] leading-[12px] w-[50px] text-left whitespace-pre-line">{c.heroCta2}</p>
+              <p className="text-[11px] font-[590] text-[#344054] tracking-[-0.1px] leading-[15px] w-[50px] text-left whitespace-pre-line">{c.heroCta2}</p>
             </div>
             {/* Check live */}
             <div className="flex items-center gap-[8px] p-[5px] rounded-[8px] border border-[#f5f5f5]">
@@ -497,32 +565,53 @@ export default function TamweelWebHome() {
       </div>
 
       {/* ── Statement ───────────────────────────────────────────────────── */}
-      <section className="bg-white px-6 md:px-[180px] pt-[64px] md:pt-[96px] pb-[80px] md:pb-[120px] text-center">
+      <section ref={stmtRef as React.RefObject<HTMLElement>} className="bg-white px-6 md:px-[180px] pt-[64px] md:pt-[96px] pb-[80px] md:pb-[120px] text-center">
         <p
           className="text-[32px] md:text-[52px] font-bold leading-[1.2] md:leading-[58px] tracking-[-0.5px] md:tracking-[-1px]"
-          style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontVariationSettings: '"opsz" 14, "wdth" 100' }}
+          style={{ fontFamily: "'Clash Display', sans-serif" }}
         >
-          {isRtl ? (
-            <>
-              <span style={{ color: '#c3d3ee' }}>تامول يجعل التمويل </span>
-              <span style={{ color: '#021945' }}>سهلاً</span>
-              <span style={{ color: '#c3d3ee' }}>. مبني على الثقة، </span>
-              <span style={{ color: '#021945' }}>مرخّص من ساما</span>
-              <span style={{ color: '#c3d3ee' }}>، ومصمّم لتتمكن من مقارنة </span>
-              <span style={{ color: '#021945' }}>عروض حقيقية في دقائق</span>
-              <span style={{ color: '#c3d3ee' }}> — أينما كنت.</span>
-            </>
-          ) : (
-            <>
-              <span style={{ color: '#c3d3ee' }}>Tamawal makes financing </span>
-              <span style={{ color: '#021945' }}>effortless</span>
-              <span style={{ color: '#c3d3ee' }}>. Built on trust, </span>
-              <span style={{ color: '#021945' }}>regulated by SAMA</span>
-              <span style={{ color: '#c3d3ee' }}>, and designed so you can compare </span>
-              <span style={{ color: '#021945' }}>real offers in minutes</span>
-              <span style={{ color: '#c3d3ee' }}> — wherever life takes you.</span>
-            </>
-          )}
+          {(() => {
+            const chunks = isRtl ? [
+              { text: 'تامول يجعل التمويل ', color: '#c3d3ee' },
+              { text: 'سهلاً', color: '#021945' },
+              { text: '. مبني على الثقة، ', color: '#c3d3ee' },
+              { text: 'مرخّص من ساما', color: '#021945' },
+              { text: '، ومصمّم لتتمكن من مقارنة ', color: '#c3d3ee' },
+              { text: 'عروض حقيقية في دقائق', color: '#021945' },
+              { text: ' — أينما كنت.', color: '#c3d3ee' },
+            ] : [
+              { text: 'Tamawal makes financing ', color: '#c3d3ee' },
+              { text: 'effortless', color: '#021945' },
+              { text: '. Built on trust, ', color: '#c3d3ee' },
+              { text: 'regulated by SAMA', color: '#021945' },
+              { text: ', and designed so you can compare ', color: '#c3d3ee' },
+              { text: 'real offers in minutes', color: '#021945' },
+              { text: ' — wherever life takes you.', color: '#c3d3ee' },
+            ];
+            let wordIdx = 0;
+            return chunks.map((chunk, ci) => {
+              const parts = chunk.text.split(/(\s+)/);
+              return parts.map((part, pi) => {
+                if (/^\s+$/.test(part)) return <span key={`${ci}-${pi}`}>{part}</span>;
+                const delay = wordIdx++ * 65;
+                return (
+                  <span
+                    key={`${ci}-${pi}`}
+                    style={{
+                      color: chunk.color,
+                      display: 'inline-block',
+                      opacity: stmtVisible ? 1 : 0,
+                      transform: stmtVisible ? 'none' : 'translateY(16px)',
+                      transition: 'opacity 0.55s ease, transform 0.55s ease',
+                      transitionDelay: `${delay}ms`,
+                    }}
+                  >
+                    {part}
+                  </span>
+                );
+              });
+            });
+          })()}
         </p>
       </section>
 
@@ -682,14 +771,14 @@ export default function TamweelWebHome() {
       </div>
 
       {/* ── Trust arc (5422:104247) ──────────────────────────────────────── */}
-      <section className="hidden md:block bg-white relative">
+      <section ref={orbitSectionRef as React.RefObject<HTMLElement>} className="hidden md:block bg-white relative">
         <TrustOrbit lang={lang} />
       </section>
 
       {/* ── Financing you can trust (5422:104262) ───────────────────────── */}
       <section ref={trustRef} className="hidden md:block bg-white overflow-hidden">
-        <div className="flex flex-col items-center px-[130px] pb-[25px] pt-[560px] relative">
-          {/* Logo handled by TrustOrbit fixed overlay — no logo here */}
+        <div className="flex flex-col items-center px-[130px] pb-[25px] relative" style={{ paddingTop: 670 }}>
+          {/* Logo is the fixed overlay from orbit — no static logo here */}
           <div className="flex flex-col gap-[24px] items-center relative z-10">
             <div
               className="relative flex items-start transition-[opacity,transform] duration-700 ease-out"
