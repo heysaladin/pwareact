@@ -2,6 +2,88 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ── Söhne ───────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Extraleicht-BF663d89cd3f5c5.otf") format("opentype");
+  font-weight: 200; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-ExtraleichtKursiv-BF663d89cd3f0d1.otf") format("opentype");
+  font-weight: 200; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Leicht-BF663d89cd4952e.otf") format("opentype");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-LeichtKursiv-BF663d89cd9a361.otf") format("opentype");
+  font-weight: 300; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Buch-BF663d89cd32e6a.otf") format("opentype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-BuchKursiv-BF663d89cd3e887.otf") format("opentype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Kraftig-BF663d89cd37e26.otf") format("opentype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-KraftigKursiv-BF663d89cd2bd4b.otf") format("opentype");
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Halbfett-BF663d89cd2d67b.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-HalbfettKursiv-BF663d89cd41624.otf") format("opentype");
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Dreiviertelfett-BF663d89ccc5f66.otf") format("opentype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-DreiviertelfettKursiv-BF663d89cd2f687.otf") format("opentype");
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Fett-BF663d89cca89ff.otf") format("opentype");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-FettKursiv-BF663d89cc64878.otf") format("opentype");
+  font-weight: 800; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-Extrafett-BF663d89cc9f2c0.otf") format("opentype");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Sohne";
+  src: url("/fonts/sohne/TestSohne-ExtrafettKursiv-BF663d89ccb8000.otf") format("opentype");
+  font-weight: 900; font-style: italic; font-display: swap;
+}
+
 @font-face {
   font-family: "ceerBeta3Font";
   src: url("/fonts/ceer/ceerBeta3-Light.woff2") format("woff2");

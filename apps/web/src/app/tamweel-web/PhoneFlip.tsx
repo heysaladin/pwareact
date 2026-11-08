@@ -70,6 +70,34 @@ function buildScene(
   const key = new THREE.DirectionalLight(0xffffff, 0.6);
   key.position.set(3, 4, 5); scene.add(key);
 
+  // ── Screen textures ───────────────────────────────────────────────────
+  const texLoader = new THREE.TextureLoader();
+  function loadTex(name: string): THREE.Texture {
+    const t = texLoader.load(`/mockup/${name}-${lang}.png`);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.flipY = false;
+    return t;
+  }
+  const texStep1 = loadTex('01');
+  const texStep2 = loadTex('02-b');
+  const texStep3 = loadTex('03');
+
+  function applyScreen(mesh: THREE.Mesh, tex: THREE.Texture) {
+    if (!Array.isArray(mesh.material)) mesh.material.dispose();
+    mesh.material = new THREE.MeshStandardMaterial({
+      color: 0x000000,
+      emissiveMap: tex,
+      emissive: new THREE.Color(1, 1, 1),
+      emissiveIntensity: 1.0,
+      roughness: 0.05,
+      metalness: 0,
+    });
+  }
+
+  let proScreen: THREE.Mesh | null = null;
+  const duoScreens: THREE.Mesh[] = [];
+  let duoCover: THREE.Mesh | null = null;
+
   // ── Phone models (GLB) ────────────────────────────────────────────────
   // section index → model group (0 = batangan/pro, 1 = duo/fold)
   const MODEL_MAP = [0, 1, 1];
@@ -99,11 +127,26 @@ function buildScene(
 
   gltfLoader.loadAsync('/models/iphone-pro.glb').then(gltf => {
     fitModel(gltf.scene, 1.55);
+    gltf.scene.traverse(obj => {
+      if (obj instanceof THREE.Mesh && obj.name === 'Front_Screen') {
+        proScreen = obj;
+        applyScreen(obj, texStep1);
+      }
+    });
     batanganGroup.add(gltf.scene);
   });
 
   gltfLoader.loadAsync('/models/iphone-duo.glb').then(gltf => {
     fitModel(gltf.scene, 1.6);
+    gltf.scene.traverse(obj => {
+      if (obj instanceof THREE.Mesh) {
+        if (['Front_Screen', 'Back_Screen_Display'].includes(obj.name)) {
+          duoScreens.push(obj);
+          applyScreen(obj, texStep2);
+        }
+        if (obj.name === 'Back_Screen') { duoCover = obj; applyScreen(obj, texStep3); }
+      }
+    });
     duoGroup.add(gltf.scene);
     if (gltf.animations.length) {
       duoMixer = new THREE.AnimationMixer(gltf.scene);
@@ -233,6 +276,13 @@ function buildScene(
     if (ap !== activePanel) {
       activePanel = ap;
       panelsEl.querySelectorAll('.pf-panel').forEach((p, k) => p.classList.toggle('pf-on', k === ap));
+      if (ap === 1) {
+        duoScreens.forEach(m => applyScreen(m, texStep2));
+        if (duoCover) applyScreen(duoCover, texStep3);
+      } else if (ap === 2) {
+        duoScreens.forEach(m => applyScreen(m, texStep3));
+        if (duoCover) applyScreen(duoCover, texStep3);
+      }
     }
 
     const v = new THREE.Vector3().copy(phone.position).project(camera);
@@ -254,6 +304,9 @@ function buildScene(
     window.removeEventListener('pointermove', onPointer);
     st.kill();
     renderer.dispose();
+    texStep1.dispose();
+    texStep2.dispose();
+    texStep3.dispose();
   };
 }
 

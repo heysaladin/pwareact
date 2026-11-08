@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const PhoneFlip = dynamic(() => import('./PhoneFlip'), { ssr: false });
 const DownloadMockup = dynamic(() => import('./DownloadMockup'), { ssr: false });
@@ -57,22 +57,24 @@ const t = {
 
     faqLabel: 'FAQ', faqTitle: 'Questions you might ask',
     faqs: [
-      { q: 'What is Tamawal and how does it work?', a: 'Tamawal is a financing aggregator that makes finding the best loan simpler, smarter, and hassle-free. Fill your profile once, compare real offers from 15+ Saudi banks, and apply — all in one place.' },
-      { q: 'Where can I use Tamawal?', a: 'Tamawal is available online at tamawal.sa and through the Tamawal mobile app on iOS and Android, serving customers across Saudi Arabia.' },
-      { q: 'Can I apply for financing both online and via the app?', a: 'Yes, Tamawal is fully available on web and mobile, giving you access to real financing offers wherever you are.' },
-      { q: 'How do I sign up for Tamawal?', a: 'Signing up is simple! Download the Tamawal app or visit tamawal.sa, verify your identity, fill in your profile, and start comparing financing offers right away.' },
-      { q: 'What financing products are available on Tamawal?', a: 'Tamawal offers a wide range of products including car financing, personal loans, real estate financing, and credit cards — all from SAMA-licensed banks and financial institutions.' },
+      { q: 'What types of financial services does Tamawal offer?', a: 'Tamawal offers personal loans, car financing, real estate financing, and credit card products — all sourced from 15+ SAMA-licensed banks and financial institutions in Saudi Arabia.' },
+      { q: 'Can you provide an overview of Tamawal\'s product range?', a: 'Our platform covers the full spectrum of retail financing: personal loans for any purpose, auto financing for new and used cars, mortgage and real estate financing, and credit card comparisons — with more products on the way.' },
+      { q: 'How does Tamawal assist customers in obtaining financing?', a: 'You fill your profile once, verify your identity with Nafath, and Tamawal instantly surfaces every eligible offer ranked by total cost. Pick the best deal, sign digitally, and funds reach your account — no branch visits required.' },
+      { q: 'Is Tamawal\'s financing model compliant with Sharia law?', a: 'Yes. All financing products on Tamawal are provided by SAMA-regulated banks and financial institutions that offer Sharia-compliant products. You can filter offers to see only Islamic financing structures.' },
       { q: 'Will checking my eligibility affect my credit score?', a: 'No. Our eligibility check is a soft inquiry and does not impact your credit score in any way. You can check your options completely risk-free.' },
-      { q: 'How do I complete my financing application?', a: 'After comparing offers on Tamawal, select your preferred offer and complete your application digitally. You\'ll receive real-time status updates every step of the way.' },
+      { q: 'How do I sign up for Tamawal?', a: 'Download the Tamawal app or visit tamawal.sa, verify your identity with Nafath, fill in your profile, and start comparing financing offers right away.' },
       { q: 'What happens if my application is not approved?', a: 'If one bank declines your application, you can still apply to other available offers on Tamawal. We work with 15+ partners to maximize your chances of approval.' },
-      { q: 'Is my personal information secure with Tamawal?', a: 'Yes, Tamawal prioritizes the security and privacy of all your personal data. All transactions and data are protected using bank-grade encryption, and we are fully regulated by SAMA.' },
+      { q: 'Is my personal information secure with Tamawal?', a: 'Yes. All data is protected using bank-grade encryption and we are fully regulated by SAMA. You control every consent — your data is never shared without your explicit permission.' },
     ],
 
     footerDesc: 'Licensed financial aggregator regulated by the Saudi Central Bank (SAMA).',
     footerPlatform: 'PLATFORM',
     footerCompany: 'COMPANY',
-    footerPlatformLinks: ['Hub', 'How it Works', 'Download'],
-    footerCompanyLinks: ['About Us', 'Brand', 'Materials'],
+    footerSupport: 'SUPPORT',
+    footerGetApp: 'GET THE APP',
+    footerPlatformLinks: ['Hub', 'How it Works', 'Download', 'Loan finder'],
+    footerCompanyLinks: ['About Us', 'Brand', 'Materials', 'Careers'],
+    footerSupportLinks: ['FAQ', 'Contact us', 'Privacy policy', 'Terms of use'],
     copyright: '© 2026 Tamawal. All rights reserved.',
     regulated: 'Regulated by SAMA',
   },
@@ -136,8 +138,11 @@ const t = {
     footerDesc: 'مجمّع تمويل مرخص يخضع لرقابة البنك المركزي السعودي (ساما).',
     footerPlatform: 'المنصة',
     footerCompany: 'الشركة',
-    footerPlatformLinks: ['المحور', 'كيف يعمل', 'تحميل'],
-    footerCompanyLinks: ['من نحن', 'الهوية البصرية', 'المواد'],
+    footerSupport: 'الدعم',
+    footerGetApp: 'حمّل التطبيق',
+    footerPlatformLinks: ['المحور', 'كيف يعمل', 'تحميل', 'باحث القروض'],
+    footerCompanyLinks: ['من نحن', 'الهوية البصرية', 'المواد', 'وظائف'],
+    footerSupportLinks: ['الأسئلة الشائعة', 'تواصل معنا', 'سياسة الخصوصية', 'شروط الاستخدام'],
     copyright: '© 2026 تامول. جميع الحقوق محفوظة.',
     regulated: 'مرخص من ساما',
   },
@@ -167,6 +172,8 @@ export default function TamweelWebHome() {
   const [hasActiveLoans, setHasActiveLoans] = useState<boolean | null>(null);
   const [loanPurpose, setLoanPurpose] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
   const isRtl = lang === 'ar';
   const c = t[lang];
 
@@ -174,6 +181,17 @@ export default function TamweelWebHome() {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setHeroVisible(true); obs.disconnect(); } },
+      { threshold: 0.15 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -258,30 +276,54 @@ export default function TamweelWebHome() {
         </div>
 
         {/* Hero photo — desktop */}
-        <div className="hidden md:block relative w-full overflow-x-clip" style={{ height: 646 }}>
-          {/* Left decorative gray box */}
-          <div
-            className="absolute rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 96, top: 184, width: 194, height: 204, zIndex: 0 }}
-          />
-          {/* Main photo */}
-          <div
-            className="absolute rounded-[40px] overflow-hidden"
-            style={{ left: 202, top: 0, width: 1000, height: 646, zIndex: 1 }}
-          >
-            <Image
-              src="/hero-photo.png"
-              alt="Tamawal user with car and Riyadh skyline"
-              fill
-              className="object-cover"
-              priority
+        <style>{`
+          @keyframes hero-card-up {
+            from { opacity: 0; transform: translateY(60px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .hero-card-anim { opacity: 0; }
+          .hero-card-anim.visible { animation: hero-card-up 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+        `}</style>
+        <div ref={heroRef} className="hidden md:block relative w-full overflow-x-clip" style={{ height: 646 }}>
+          <div className="relative mx-auto" style={{ width: 1349, height: 646 }}>
+            {/* Left decorative gray box */}
+            <div
+              className="absolute rounded-[48px] bg-[#f5f5f5]"
+              style={{ left: 96, top: 184, width: 194, height: 204, zIndex: 0 }}
             />
+            {/* Main photo */}
+            <div
+              className="absolute rounded-[40px] overflow-hidden"
+              style={{ left: 202, top: 0, width: 1000, height: 646, zIndex: 1 }}
+            >
+              <Image
+                src="/hero-photo.png"
+                alt="Tamawal user with car and Riyadh skyline"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            {/* Right decorative gray box */}
+            <div
+              className="absolute rounded-[48px] bg-[#f5f5f5]"
+              style={{ left: 1020, top: 245, width: 329, height: 346, zIndex: 0 }}
+            />
+            {/* Floating card — left (calendar) */}
+            <div
+              className={`hero-card-anim${heroVisible ? ' visible' : ''} absolute`}
+              style={{ left: 46, top: 440, width: 172, zIndex: 3, animationDelay: '0.1s' }}
+            >
+              <Image src="/hero-card-left.png" alt="" width={172} height={190} className="w-full h-auto" />
+            </div>
+            {/* Floating card — right (deals) */}
+            <div
+              className={`hero-card-anim${heroVisible ? ' visible' : ''} absolute`}
+              style={{ left: 1046, top: 190, width: 258, zIndex: 3, animationDelay: '0.25s' }}
+            >
+              <Image src="/hero-card-right.png" alt="" width={258} height={340} className="w-full h-auto" />
+            </div>
           </div>
-          {/* Right decorative gray box */}
-          <div
-            className="absolute rounded-[48px] bg-[#f5f5f5]"
-            style={{ left: 1020, top: 245, width: 329, height: 346, zIndex: 0 }}
-          />
         </div>
         {/* Hero photo — mobile */}
         <div className="md:hidden relative mt-6 mx-4 rounded-[24px] overflow-hidden" style={{ aspectRatio: '4/3' }}>
@@ -619,6 +661,32 @@ export default function TamweelWebHome() {
         </div>
       </section>
 
+      {/* ── Safety banner ───────────────────────────────────────────────── */}
+      <section className="px-4 md:px-[80px] pb-[96px] bg-white">
+        <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-b from-[#c9dcff] via-[#4c91ff] to-[#0063f5] flex flex-col items-center pt-[80px] px-6 md:px-[120px] gap-5">
+          {/* Eyebrow */}
+          <div className="bg-white/70 px-[14px] py-[8px] rounded-full">
+            <p className="text-[#021945] text-[11px] font-bold tracking-[1.2px] uppercase whitespace-nowrap">Licensed &amp; Regulated by SAMA</p>
+          </div>
+          {/* Headline */}
+          <p className="text-[#021945] text-[48px] md:text-[64px] font-bold tracking-[-1.5px] text-center leading-[1.1]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+            Your safety, always on
+          </p>
+          {/* Subtitle */}
+          <p className="text-[#12306b] text-[18px] leading-[28px] text-center max-w-[620px]">
+            Bank-grade encryption, Nafath identity checks, and you control every consent. Checking your eligibility never affects your credit score.
+          </p>
+          <div className="h-6" />
+          {/* Shield */}
+          <Image src="/safety-shield.svg" alt="Security shield" width={360} height={300} className="relative z-10" />
+          {/* Sparkles */}
+          <Image src="/safety-sparkle-1.svg" alt="" width={48} height={48} className="absolute left-[14%] top-[120px]" aria-hidden />
+          <Image src="/safety-sparkle-2.svg" alt="" width={26} height={26} className="absolute right-[8%] top-[90px]" aria-hidden />
+          <Image src="/safety-sparkle-3.svg" alt="" width={36} height={36} className="absolute right-[5%] top-[300px]" aria-hidden />
+          <Image src="/safety-sparkle-4.svg" alt="" width={20} height={20} className="absolute left-[11%] top-[360px]" aria-hidden />
+        </div>
+      </section>
+
       {/* ── FAQ ─────────────────────────────────────────────────────────── */}
       <section id="faq" className="py-[96px] bg-white">
         <div className="max-w-[896px] mx-auto px-6">
@@ -637,32 +705,47 @@ export default function TamweelWebHome() {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer className="bg-black overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-        {/* Top links area */}
-        <div className="flex flex-col md:flex-row items-start justify-between pt-[48px] pb-[48px] px-6 max-w-[1152px] mx-auto gap-8">
+      <footer className="bg-[#07122e] overflow-hidden" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        {/* Top area */}
+        <div className="flex flex-col md:flex-row items-start justify-between pt-[80px] pb-[56px] px-6 md:px-[130px] gap-10 max-w-[1440px] mx-auto">
+
           {/* Brand */}
-          <div className="flex flex-col gap-4 items-start shrink-0 max-w-[320px]">
-            <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
-            <p className="text-white text-[12px] leading-[16px]">
-              {c.footerDesc}
-            </p>
+          <div className="flex flex-col gap-4 items-start shrink-0 max-w-[220px]">
+            <div className="bg-white rounded-[14px] px-[14px] py-[10px] flex items-center">
+              <Image src="/logo-tamawal-web-blue.svg" alt="Tamawal" width={100} height={30} />
+            </div>
+            <p className="text-[#9fb2d6] text-[14px] leading-[22px]">{c.footerDesc}</p>
           </div>
 
-          {/* Links */}
-          <div className="flex gap-10 md:gap-[64px] items-start shrink-0">
-            <div className="flex flex-col gap-[10px] items-start">
-              <p className="text-[12px] font-semibold text-[#101828] tracking-[0px] mb-2">{c.footerPlatform}</p>
+          {/* Nav columns */}
+          <div className="flex flex-wrap gap-10 md:gap-[72px] items-start shrink-0">
+            <div className="flex flex-col gap-[14px] items-start">
+              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerPlatform}</p>
               {c.footerPlatformLinks.map((item) => (
-                <a key={item} href="#" className="text-[12px] text-white hover:text-white/70 transition-colors">{item}</a>
+                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
               ))}
             </div>
-            <div className="flex flex-col gap-[10px] items-start">
-              <p className="text-[12px] font-semibold text-[#101828] tracking-[0px] mb-2">{c.footerCompany}</p>
+            <div className="flex flex-col gap-[14px] items-start">
+              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerCompany}</p>
               {c.footerCompanyLinks.map((item) => (
-                <a key={item} href="#" className="text-[12px] text-white hover:text-white/70 transition-colors">{item}</a>
+                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
+              ))}
+            </div>
+            <div className="flex flex-col gap-[14px] items-start">
+              <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerSupport}</p>
+              {c.footerSupportLinks.map((item) => (
+                <a key={item} href="#" className="text-[14px] text-[#9fb2d6] hover:text-white transition-colors">{item}</a>
               ))}
             </div>
           </div>
+
+          {/* App badges */}
+          <div className="flex flex-col gap-[12px] items-start shrink-0">
+            <p className="text-[12px] font-bold text-white tracking-[1.2px]">{c.footerGetApp}</p>
+            <Image src="/appstore.svg" alt="Download on the App Store" width={140} height={45} />
+            <Image src="/playstore.svg" alt="Get it on Google Play" width={140} height={45} />
+          </div>
+
         </div>
 
         {/* Giant wordmark */}
@@ -670,21 +753,21 @@ export default function TamweelWebHome() {
           <p
             className="select-none pointer-events-none text-center leading-none whitespace-nowrap"
             style={{
-              fontSize: 'clamp(80px, 18vw, 259px)',
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 700,
-              color: '#676767',
-              letterSpacing: '-0.025em',
+              fontSize: 'clamp(80px, 22vw, 324px)',
+              fontFamily: "'Bricolage Grotesque', sans-serif",
+              fontWeight: 800,
+              color: '#ffffff',
+              letterSpacing: '-0.03em',
             }}
           >
-            Tamawal®
+            tamawal
           </p>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-[#535862] py-3 px-6 max-w-[1152px] mx-auto flex items-center justify-between">
-          <p className="text-[12px] text-[#9aa4b2]">{c.copyright}</p>
-          <p className="text-[12px] text-[#9aa4b2]">{c.regulated}</p>
+        <div className="border-t border-white/10 py-6 px-6 md:px-[130px] max-w-[1440px] mx-auto flex items-center justify-between">
+          <p className="text-[13px] text-[#7f93ba]">{c.copyright}</p>
+          <p className="text-[13px] font-semibold text-[#7f93ba]">{c.regulated}</p>
         </div>
       </footer>
 
