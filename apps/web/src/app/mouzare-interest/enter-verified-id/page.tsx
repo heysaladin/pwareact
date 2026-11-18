@@ -5,6 +5,14 @@ import { useState } from 'react';
 export default function EnterVerifiedIdPage() {
   const [phone, setPhone] = useState('');
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+    let formatted = digits;
+    if (digits.length > 2) formatted = digits.slice(0, 2) + ' ' + digits.slice(2);
+    if (digits.length > 5) formatted = digits.slice(0, 2) + ' ' + digits.slice(2, 5) + ' ' + digits.slice(5);
+    setPhone(formatted);
+  };
+
   return (
     <div
       className="h-screen flex flex-col overflow-hidden bg-[#fafafa]"
@@ -17,10 +25,36 @@ export default function EnterVerifiedIdPage() {
       `}</style>
 
       {/* Header */}
-      <header className="bg-white border-b border-[#e5e7eb] flex items-center justify-end px-8 py-5 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <img src="/logo-tamawal-icon.svg" alt="" className="h-8 w-8" />
-          <img src="/logo-tamawal-web.svg" alt="Tamawal" className="h-8 w-auto" />
+      <header className="bg-white border-b border-[#E5E7EB] h-16 flex items-center px-8 relative z-50 flex-shrink-0">
+        <div className="grid grid-cols-3 items-center w-full">
+          <div className="flex items-center">
+            <img src="/mouzare-logo.png" alt="Mouzare" className="h-9 w-auto" />
+          </div>
+          <nav className="flex items-center justify-center gap-8">
+            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24]">الرئيسية</a>
+            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24]">المتجر</a>
+            <a href="#" className="text-[#1B3A24] text-sm font-medium">طلباتي</a>
+          </nav>
+          <div className="flex items-center gap-6 justify-end">
+            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24]">
+              <div className="relative">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                <span className="absolute -top-1.5 -left-1.5 bg-[#2C5E1A] text-white text-[9px] rounded-full w-[17px] h-[17px] flex items-center justify-center font-bold">3</span>
+              </div>
+              <span className="text-sm">سلة التسوق</span>
+            </button>
+            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <span className="text-sm">حسابي</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -71,13 +105,14 @@ export default function EnterVerifiedIdPage() {
               <div className="relative w-full">
                 <input
                   type="text"
+                  inputMode="numeric"
                   placeholder="5X XXX XXXX"
                   value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  dir="auto"
-                  className="w-full bg-white border border-[#d1d5db] rounded-lg px-3.5 py-[10px] pr-10 text-[13px] text-[#111827] text-right placeholder-[#9ca3af] outline-none focus:border-[#1b3a24] shadow-[0_1px_1px_rgba(10,13,18,0.05)]"
+                  onChange={handlePhoneChange}
+                  dir="ltr"
+                  className="w-full bg-white border border-[#d1d5db] rounded-lg px-4 py-3.5 pr-12 text-[26px] text-[#111827] text-right placeholder-[#9ca3af] outline-none focus:border-[#1b3a24] shadow-[0_1px_1px_rgba(10,13,18,0.05)] tracking-widest"
                 />
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5">
                     <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
                   </svg>

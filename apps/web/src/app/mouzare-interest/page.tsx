@@ -117,7 +117,7 @@ export default function MouzarePage() {
 
           {/* Logo (RTL start = right side visually) */}
           <div className="flex items-center">
-            <img src="/mouzare-logo.png" alt="فـزارع Mouzare" className="h-9 w-auto" />
+            <a href="/mouzare-interest"><img src="/mouzare-logo.png" alt="فـزارع Mouzare" className="h-9 w-auto" /></a>
           </div>
 
           {/* Nav links (center) */}

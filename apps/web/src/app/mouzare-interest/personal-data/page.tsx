@@ -68,7 +68,7 @@ export default function PersonalDataPage() {
       <header className="bg-white border-b border-[#E5E7EB] h-16 flex items-center px-8 relative z-50 flex-shrink-0">
         <div className="grid grid-cols-3 items-center w-full">
           <div className="flex items-center">
-            <img src="/mouzare-logo.png" alt="فـزارع Mouzare" className="h-9 w-auto" />
+            <a href="/mouzare-interest"><img src="/mouzare-logo.png" alt="فـزارع Mouzare" className="h-9 w-auto" /></a>
           </div>
           <nav className="flex items-center justify-center gap-8">
             <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24] transition-colors">الرئيسية</a>
