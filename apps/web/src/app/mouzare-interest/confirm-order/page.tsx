@@ -3,7 +3,23 @@
 import { useState } from 'react';
 
 export default function ConfirmOrderPage() {
-  const [otp] = useState(['4', '8', '2', '']);
+  const [otp, setOtp] = useState(['4', '8', '2', '']);
+
+  function handleChange(val: string, i: number) {
+    if (!/^\d?$/.test(val)) return;
+    const next = [...otp];
+    next[i] = val;
+    setOtp(next);
+    if (val && i < 3) {
+      (document.getElementById(`otp-${i + 1}`) as HTMLInputElement)?.focus();
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>, i: number) {
+    if (e.key === 'Backspace' && !otp[i] && i > 0) {
+      (document.getElementById(`otp-${i - 1}`) as HTMLInputElement)?.focus();
+    }
+  }
 
   return (
     <div
@@ -19,16 +35,8 @@ export default function ConfirmOrderPage() {
       {/* Header */}
       <header className="bg-white border-b border-[#E5E7EB] h-16 flex items-center px-8 relative z-50 flex-shrink-0">
         <div className="grid grid-cols-3 items-center w-full">
-          <div className="flex items-center">
-            <img src="/mouzare-logo.png" alt="Mouzare" className="h-9 w-auto" />
-          </div>
-          <nav className="flex items-center justify-center gap-8">
-            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24]">الرئيسية</a>
-            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24]">المتجر</a>
-            <a href="#" className="text-[#1B3A24] text-sm font-medium">طلباتي</a>
-          </nav>
-          <div className="flex items-center gap-6 justify-end">
-            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24]">
+          <div className="flex items-center gap-6">
+            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24] transition-colors">
               <div className="relative">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
@@ -39,13 +47,23 @@ export default function ConfirmOrderPage() {
               </div>
               <span className="text-sm">سلة التسوق</span>
             </button>
-            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24]">
+            <button className="flex items-center gap-2 text-[#374151] hover:text-[#1B3A24] transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
               <span className="text-sm">حسابي</span>
             </button>
+          </div>
+          <nav className="flex items-center justify-center gap-8">
+            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24] transition-colors">الرئيسية</a>
+            <a href="#" className="text-[#374151] text-sm hover:text-[#1B3A24] transition-colors">المتجر</a>
+            <a href="#" className="text-[#374151] text-sm font-medium text-[#1B3A24] hover:text-[#1B3A24] transition-colors">طلباتي</a>
+          </nav>
+          <div className="flex items-center justify-end">
+            <a href="/mouzare-interest">
+              <img src="/mouzare-logo.png" alt="فـزارع Mouzare" className="h-9 w-auto" />
+            </a>
           </div>
         </div>
       </header>
@@ -82,18 +100,23 @@ export default function ConfirmOrderPage() {
           {/* OTP boxes */}
           <div className="flex gap-3 items-center">
             {otp.map((digit, i) => (
-              <div
+              <input
                 key={i}
-                className="flex items-center justify-center rounded-xl"
+                id={`otp-${i}`}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={e => handleChange(e.target.value, i)}
+                onKeyDown={e => handleKeyDown(e, i)}
+                className="flex items-center justify-center rounded-xl text-[24px] font-bold text-[#111827] text-center outline-none"
                 style={{
                   width: '64px',
                   height: '72px',
                   background: 'white',
                   border: i === 3 ? '2px solid #1b3a24' : '1px solid #e5e7eb',
                 }}
-              >
-                <span className="text-[24px] font-bold text-[#111827]">{digit}</span>
-              </div>
+              />
             ))}
           </div>
 
